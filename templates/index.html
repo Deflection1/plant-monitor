@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+
+<html lang="de">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Pflanzenschrank
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css?v=8"
+    >
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div>
+
+            <p class="eyebrow">
+                RASPBERRY PI · ENVIRO+
+            </p>
+
+            <h1>
+                🌿 Pflanzenschrank
+            </h1>
+
+            <p class="subtitle">
+                Klima, Licht und Wachstum auf einen Blick
+            </p>
+
+        </div>
+
+
+        <div
+            class="status"
+            id="systemStatus"
+        >
+
+            <span class="status-dot"></span>
+
+            <span>
+                Online
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- SENSOR CARDS -->
+
+    <section class="sensor-grid">
+
+
+        <article class="sensor-card">
+
+            <div class="sensor-header">
+
+                <span>
+                    🌡️
+                </span>
+
+                <span>
+                    Temperatur
+                </span>
+
+            </div>
+
+
+            <div class="sensor-value">
+
+                <span id="temperature">
+                    --
+                </span>
+
+                <small>
+                    °C
+                </small>
+
+            </div>
+
+
+            <div class="sensor-note">
+                korrigierter Wert
+            </div>
+
+        </article>
+
+
+        <article class="sensor-card">
+
+            <div class="sensor-header">
+
+                <span>
+                    💧
+                </span>
+
+                <span>
+                    Luftfeuchtigkeit
+                </span>
+
+            </div>
+
+
+            <div class="sensor-value">
+
+                <span id="humidity">
+                    --
+                </span>
+
+                <small>
+                    %
+                </small>
+
+            </div>
+
+
+            <div class="sensor-note">
+                relative Feuchte
+            </div>
+
+        </article>
+
+
+        <article class="sensor-card">
+
+            <div class="sensor-header">
+
+                <span>
+                    🍃
+                </span>
+
+                <span>
+                    VPD
+                </span>
+
+            </div>
+
+
+            <div class="sensor-value">
+
+                <span id="vpd">
+                    --
+                </span>
+
+                <small>
+                    kPa
+                </small>
+
+            </div>
+
+
+            <div class="sensor-note">
+                berechnet
+            </div>
+
+        </article>
+
+
+        <article class="sensor-card">
+
+            <div class="sensor-header">
+
+                <span>
+                    ☀️
+                </span>
+
+                <span>
+                    Licht
+                </span>
+
+            </div>
+
+
+            <div class="sensor-value">
+
+                <span id="lux">
+                    --
+                </span>
+
+                <small>
+                    Lux
+                </small>
+
+            </div>
+
+
+            <div
+                class="sensor-note"
+                id="lightStatus"
+            >
+                Lichtstatus wird geladen
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- KAMERA + SYSTEM -->
+
+    <section class="main-grid">
+
+
+        <!-- KAMERA -->
+
+        <article class="panel camera-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        KAMERA
+                    </p>
+
+                    <h2>
+                        Pflanzenansicht
+                    </h2>
+
+                </div>
+
+
+                <span class="badge">
+                    Kamera
+                </span>
+
+            </div>
+
+
+            <div
+                class="camera-placeholder"
+                id="cameraArea"
+            >
+
+                <div>
+
+                    <span class="camera-icon">
+                        📷
+                    </span>
+
+                    <h3>
+                        Kamera wird später verbunden
+                    </h3>
+
+                    <p>
+                        Hier erscheint später das aktuelle Bild
+                        deiner Pflanzen.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="button-row">
+
+                <button
+                    class="primary"
+                    disabled
+                >
+                    📷 Foto aufnehmen
+                </button>
+
+                <button disabled>
+                    Galerie
+                </button>
+
+                <button disabled>
+                    Vollbild
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- SYSTEM -->
+
+        <article class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        SYSTEM
+                    </p>
+
+                    <h2>
+                        Aktuelle Messung
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Letzte Aktualisierung
+                </span>
+
+                <strong id="lastUpdate">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    CPU Temperatur
+                </span>
+
+                <strong>
+
+                    <span id="cpuTemperature">
+                        --
+                    </span>
+
+                    °C
+
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Sensor Rohwert
+                </span>
+
+                <strong>
+
+                    <span id="rawTemperature">
+                        --
+                    </span>
+
+                    °C
+
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Roh-Feuchte
+                </span>
+
+                <strong>
+
+                    <span id="rawHumidity">
+                        --
+                    </span>
+
+                    %
+
+                </strong>
+
+            </div>
+
+
+            <div class="api-state">
+
+                <span class="status-dot"></span>
+
+                Enviro+ verbunden
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- HISTORY -->
+
+    <section class="panel history-panel">
+
+        <div class="panel-header history-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    HISTORY
+                </p>
+
+                <h2>
+                    Klima-Verlauf
+                </h2>
+
+            </div>
+
+
+            <div class="range-buttons">
+
+                <button class="range active">
+                    24h
+                </button>
+
+                <button class="range">
+                    7 Tage
+                </button>
+
+                <button class="range">
+                    30 Tage
+                </button>
+
+                <button class="range">
+                    1 Jahr
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="history-charts">
+
+
+            <div class="chart-box">
+
+                <div class="chart-title">
+                    🌡️ Temperatur
+                </div>
+
+                <div class="chart-canvas">
+
+                    <canvas
+                        id="temperatureChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-box">
+
+                <div class="chart-title">
+                    💧 Luftfeuchtigkeit
+                </div>
+
+                <div class="chart-canvas">
+
+                    <canvas
+                        id="humidityChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-box">
+
+                <div class="chart-title">
+                    🍃 VPD
+                </div>
+
+                <div class="chart-canvas">
+
+                    <canvas
+                        id="vpdChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-box">
+
+                <div class="chart-title">
+                    ☀️ Licht
+                </div>
+
+                <div class="chart-canvas">
+
+                    <canvas
+                        id="luxChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- UNTEN -->
+
+    <section class="bottom-grid">
+
+
+        <!-- LICHT -->
+
+        <article class="panel">
+
+            <p class="eyebrow">
+                LICHT
+            </p>
+
+            <h2>
+                Beleuchtung
+            </h2>
+
+
+            <div class="big-status">
+
+                <span id="lightIcon">
+                    🌙
+                </span>
+
+
+                <div>
+
+                    <strong id="lightText">
+                        Aus
+                    </strong>
+
+                    <small id="lightValue">
+                        0 Lux
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="light-stats">
+
+
+                <div class="light-stat">
+
+                    <span>
+                        PPFD Sensor
+                    </span>
+
+                    <strong id="ppfdSensor">
+                        --
+                    </strong>
+
+                    <small>
+                        µmol/m²/s
+                    </small>
+
+                </div>
+
+
+                <div class="light-stat">
+
+                    <span>
+                        PPFD Pflanzenmitte
+                    </span>
+
+                    <strong id="ppfdCenter">
+                        --
+                    </strong>
+
+                    <small>
+                        µmol/m²/s
+                    </small>
+
+                </div>
+
+
+                <div class="light-stat">
+
+                    <span>
+                        Heute beleuchtet
+                    </span>
+
+                    <strong id="lightDuration">
+                        --
+                    </strong>
+
+                    <small>
+                        Dauer
+                    </small>
+
+                </div>
+
+
+                <div class="light-stat">
+
+                    <span>
+                        DLI heute
+                    </span>
+
+                    <strong id="dliToday">
+                        --
+                    </strong>
+
+                    <small>
+                        mol/m²/Tag · Mitte
+                    </small>
+
+                </div>
+
+
+                <div class="light-stat">
+
+                    <span>
+                        Maximum heute
+                    </span>
+
+                    <strong id="lightMax">
+                        --
+                    </strong>
+
+                    <small>
+                        Lux
+                    </small>
+
+                </div>
+
+
+                <div class="light-stat">
+
+                    <span>
+                        PPFD Max Mitte
+                    </span>
+
+                    <strong id="ppfdMaxCenter">
+                        --
+                    </strong>
+
+                    <small>
+                        µmol/m²/s
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <p class="estimate-note">
+
+                PPFD und DLI sind aus Lux geschätzt.
+                Kalibrierung: 52,5 Lux pro µmol/m²/s.
+                Pflanzenmitte × 1,72.
+                Unsicherheit ungefähr ±20 %.
+
+            </p>
+
+        </article>
+
+
+        <!-- KLIMA -->
+
+        <article class="panel">
+
+            <p class="eyebrow">
+                UMGEBUNG
+            </p>
+
+            <h2>
+                Pflanzenklima
+            </h2>
+
+
+            <div
+                class="climate-state"
+                id="climateState"
+            >
+                Messwerte werden geladen …
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        Raspberry Pi 4
+        · Enviro+
+        · Nginx
+        · FastAPI
+        · SQLite
+
+    </footer>
+
+</div>
+
+
+<script
+    src="/static/chart.umd.min.js?v=1"
+></script>
+
+<script
+    src="/static/app.js?v=8"
+></script>
+
+</body>
+
+</html>

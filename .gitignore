@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtuelle Umgebungen
+.venv/
+venv/
+
+# Messdaten
+data/*.db
+data/*.db-*
+
+# Fotos
+photos/*
+!photos/.gitkeep
+
+# Sonstiges
+.DS_Store
+*.log
