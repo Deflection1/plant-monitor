@@ -58,6 +58,7 @@ BASE_DIR = (
 PHOTO_DIR = BASE_DIR / "photos"
 LATEST_PHOTO = PHOTO_DIR / "latest.jpg"
 TIMELAPSE_CONFIG_FILE = BASE_DIR / "data" / "timelapse.json"
+SOIL_CONFIG_FILE = BASE_DIR / "data" / "soil_moisture.json"
 TIMELAPSE_DEFAULT_INTERVAL_MINUTES = 720
 
 CAMERA_STREAM_SIZE = (1280, 720)
@@ -184,6 +185,187 @@ def photo_info(
                 + path.name
             )
     }
+
+
+# =====================================================
+# BODENFEUCHTE KONFIGURATION
+# =====================================================
+
+def default_soil_config():
+
+    return {
+        "pots": [
+            {
+                "id": 1,
+                "name": "Topf 1",
+                "channel": "A0",
+                "dry_raw": None,
+                "wet_raw": None
+            },
+            {
+                "id": 2,
+                "name": "Topf 2",
+                "channel": "A1",
+                "dry_raw": None,
+                "wet_raw": None
+            }
+        ]
+    }
+
+
+def load_soil_config():
+
+    default = default_soil_config()
+
+    if not SOIL_CONFIG_FILE.exists():
+        return default
+
+    try:
+
+        data = json.loads(
+            SOIL_CONFIG_FILE.read_text()
+        )
+
+        pots = data.get(
+            "pots",
+            []
+        )
+
+        if len(pots) != 2:
+            return default
+
+        result = default_soil_config()
+
+        for index in range(2):
+
+            source = pots[index]
+            target = result["pots"][index]
+
+            target["name"] = str(
+                source.get(
+                    "name",
+                    target["name"]
+                )
+            )[:40]
+
+            for key in (
+                "dry_raw",
+                "wet_raw"
+            ):
+
+                value = source.get(key)
+
+                if value is None:
+                    target[key] = None
+
+                else:
+                    target[key] = float(value)
+
+        return result
+
+    except Exception:
+
+        return default
+
+
+def save_soil_config(
+    config
+):
+
+    SOIL_CONFIG_FILE.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    SOIL_CONFIG_FILE.write_text(
+        json.dumps(
+            config,
+            indent=2
+        )
+    )
+
+
+SOIL_CONFIG = load_soil_config()
+
+
+def raw_to_soil_percent(
+    raw_value,
+    dry_raw,
+    wet_raw
+):
+
+    if (
+        raw_value is None
+        or dry_raw is None
+        or wet_raw is None
+        or dry_raw == wet_raw
+    ):
+        return None
+
+    value = (
+        (
+            float(raw_value)
+            - float(dry_raw)
+        )
+        /
+        (
+            float(wet_raw)
+            - float(dry_raw)
+        )
+        * 100.0
+    )
+
+    return round(
+        max(
+            0.0,
+            min(
+                100.0,
+                value
+            )
+        ),
+        1
+    )
+
+
+def add_soil_values(
+    data
+):
+
+    data.setdefault(
+        "soil_raw_1",
+        None
+    )
+
+    data.setdefault(
+        "soil_raw_2",
+        None
+    )
+
+    for index in range(2):
+
+        number = index + 1
+
+        pot = SOIL_CONFIG[
+            "pots"
+        ][index]
+
+        data[
+            "soil_moisture_"
+            + str(number)
+        ] = raw_to_soil_percent(
+            data.get(
+                "soil_raw_"
+                + str(number)
+            ),
+            pot.get(
+                "dry_raw"
+            ),
+            pot.get(
+                "wet_raw"
+            )
+        )
+
+    return data
 
 
 # =====================================================
@@ -521,6 +703,10 @@ async def measurement_worker():
                 read_sensors
             )
 
+            data = add_soil_values(
+                data
+            )
+
             insert_measurement(
                 data
             )
@@ -661,6 +847,10 @@ def status():
 def current():
 
     data = read_sensors()
+
+    data = add_soil_values(
+        data
+    )
 
     return add_light_values(
         data
@@ -989,4 +1179,180 @@ def camera_timelapse_update(
             "ok",
 
         **TIMELAPSE_CONFIG
+    }
+
+
+
+# =====================================================
+# BODENFEUCHTE API
+# =====================================================
+
+@app.get(
+    "/api/soil/config"
+)
+def soil_config():
+
+    return SOIL_CONFIG
+
+
+@app.post(
+    "/api/soil/config"
+)
+def soil_config_update(
+    payload: dict = Body(...)
+):
+
+    pots = payload.get(
+        "pots"
+    )
+
+    if (
+        not isinstance(
+            pots,
+            list
+        )
+        or len(pots) != 2
+    ):
+
+        return {
+            "status":
+                "error",
+
+            "message":
+                "Genau zwei Topf-Konfigurationen erwartet"
+        }
+
+
+    updated = default_soil_config()
+
+
+    for index in range(2):
+
+        source = pots[index]
+        target = updated[
+            "pots"
+        ][index]
+
+        target["name"] = str(
+            source.get(
+                "name",
+                target["name"]
+            )
+        )[:40]
+
+
+        for key in (
+            "dry_raw",
+            "wet_raw"
+        ):
+
+            value = source.get(
+                key
+            )
+
+            if (
+                value is None
+                or value == ""
+            ):
+
+                target[key] = None
+
+            else:
+
+                try:
+
+                    target[key] = float(
+                        value
+                    )
+
+                except (
+                    TypeError,
+                    ValueError
+                ):
+
+                    return {
+                        "status":
+                            "error",
+
+                        "message":
+                            (
+                                "Ungültiger Kalibrierwert "
+                                + key
+                            )
+                    }
+
+
+    SOIL_CONFIG.clear()
+
+    SOIL_CONFIG.update(
+        updated
+    )
+
+    save_soil_config(
+        SOIL_CONFIG
+    )
+
+
+    return {
+        "status":
+            "ok",
+
+        **SOIL_CONFIG
+    }
+
+
+@app.get(
+    "/api/soil/status"
+)
+def soil_status():
+
+    data = add_soil_values(
+        read_sensors()
+    )
+
+    return {
+        "connected":
+            (
+                data.get(
+                    "soil_raw_1"
+                )
+                is not None
+                or data.get(
+                    "soil_raw_2"
+                )
+                is not None
+            ),
+
+        "pots": [
+            {
+                **SOIL_CONFIG[
+                    "pots"
+                ][0],
+
+                "raw":
+                    data.get(
+                        "soil_raw_1"
+                    ),
+
+                "moisture_percent":
+                    data.get(
+                        "soil_moisture_1"
+                    )
+            },
+            {
+                **SOIL_CONFIG[
+                    "pots"
+                ][1],
+
+                "raw":
+                    data.get(
+                        "soil_raw_2"
+                    ),
+
+                "moisture_percent":
+                    data.get(
+                        "soil_moisture_2"
+                    )
+            }
+        ]
     }
