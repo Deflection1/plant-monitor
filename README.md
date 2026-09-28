@@ -69,13 +69,30 @@ Browser
 Aktuelles Setup:
 
 - Raspberry Pi 4
-- Pimoroni Enviro+
+- Pimoroni Enviro+ direkt als HAT auf dem 40-Pin-Header
 - BME280 für Temperatur / Luftfeuchtigkeit / Luftdruck
 - LTR-559 für Helligkeit
-- Pflanzenlampe
-- Kamera geplant
+- Raspberry Pi Camera Module v2.1 / IMX219 in Vorbereitung
+- dimmbare Pflanzenlampe mit Mean Well XLG-150-H-AB
+- zwei Noctua 4-Pin-PWM-Lüfter
+  - Zuluft unten
+  - Abluft oben
+- Noctua NA-FC1 als aktuelle manuelle PWM-Lüftersteuerung
 
-Die aktuelle Installation verwendet das Enviro+ direkt auf dem Raspberry Pi. Dadurch wird der Temperatursensor durch die Abwärme des Raspberry Pi beeinflusst.
+Der Raspberry Pi mit Enviro+ soll an der linken Schrankwand montiert werden. Das Enviro+ bleibt dabei direkt auf dem Raspberry Pi, da es als Pi-HAT ausgeführt ist.
+
+Die direkte Montage des Enviro+ auf dem Raspberry Pi beeinflusst insbesondere die BME280-Temperaturmessung durch die Abwärme des Pi. Die aktuelle Temperaturkorrektur ist deshalb nur eine Näherung und soll später mit einem externen Referenzsensor kalibriert werden.
+
+Geplante zusätzliche Hardware:
+
+- ADS1115 als externer 4-Kanal-ADC
+- 2× DFRobot SEN0308 wasserdichter kapazitiver Bodenfeuchtesensor
+- Tank-Füllstandssensor / Schwimmerschalter
+- 2× 12-V-Peristaltikpumpe, je eine pro Topf
+- 2-Kanal-MOSFET-Treiber für die Pumpen
+- separates 12-V-Netzteil für Pumpen
+- DFRobot GP8600 bzw. kompatibler I²C-zu-0–10-V-DAC für die Lampendimmung
+- später direkte PWM-Steuerung der beiden Noctua-Lüfter über den Raspberry Pi
 
 ---
 
@@ -914,6 +931,238 @@ Geplante Funktionen:
 
 ---
 
+
+# Geplante Automatisierung
+
+Die nächsten Ausbaustufen sollen Monitoring und Steuerung in einem gemeinsamen Dashboard zusammenführen.
+
+## Bodenfeuchtigkeit
+
+Für die zwei Töpfe sind zwei getrennte Sensoren vorgesehen:
+
+```text
+Topf 1 SEN0308 ──> ADS1115 A0
+Topf 2 SEN0308 ──> ADS1115 A1
+```
+
+Der ADS1115 wird parallel zu den bestehenden Enviro+-Geräten am I²C-Bus betrieben.
+
+Geplante Anzeige:
+
+```text
+Topf 1 Feuchtigkeit:  xx %
+Topf 2 Feuchtigkeit:  xx %
+```
+
+Jeder Sensor soll separat kalibriert werden, da Rohwerte zwischen Sensoren und Substraten abweichen können.
+
+## Wassertank
+
+Zusätzlich ist ein Tank-Sensor vorgesehen.
+
+Minimalziel:
+
+```text
+Tank: OK / LEER
+```
+
+Der Tankstatus soll später als Sicherheitsbedingung für die automatische Bewässerung dienen. Bei leerem Tank werden Pumpenbefehle blockiert.
+
+## Bewässerung
+
+Die Bewässerung soll vollständig außerhalb des Pflanzenschranks aufgebaut werden. Im Schrank befinden sich nur die Sensoren und die Steuerleitungen zum Raspberry Pi.
+
+Geplanter Aufbau:
+
+```text
+Wassertank
+   ├── Pumpe 1 ──> Topf 1
+   └── Pumpe 2 ──> Topf 2
+
+12-V-Netzteil
+   └── 2-Kanal-MOSFET-Treiber
+        ├── Kanal 1 ──> Pumpe 1
+        └── Kanal 2 ──> Pumpe 2
+
+Raspberry Pi
+   ├── GPIO ──> Pumpenkanal 1
+   ├── GPIO ──> Pumpenkanal 2
+   └── GND / Steuerschnittstelle
+```
+
+Vorgesehene Pumpen:
+
+- 2× Kamoer / BerryBase 12-V-Peristaltikpumpe PPFL-1 oder vergleichbar
+- eine Pumpe pro Topf
+- passende Silikonschläuche
+- optional Rückschlagventile und Tropfer / Bewässerungsringe
+
+Die Pumpen werden niemals direkt vom Raspberry Pi versorgt. Der Pi liefert nur das Steuersignal; die Pumpen erhalten ihre Leistung aus einem separaten 12-V-Netzteil.
+
+Geplante Sicherheitslogik:
+
+- maximale Pumpdauer pro Vorgang
+- Mindestpause zwischen zwei Bewässerungen
+- Tank-leer-Sperre
+- manueller Not-Aus / Override
+- getrennte Steuerung pro Topf
+- Protokollierung jeder Bewässerung
+- spätere Kalibrierung von ml/s pro Pumpe
+
+## Lampensteuerung
+
+Das vorhandene Netzteil ist ein:
+
+```text
+Mean Well XLG-150-H-AB
+```
+
+Die Lampe soll nicht über die 230-V-Seite geschaltet oder gedimmt werden, sondern über den vorgesehenen Dimm-Eingang:
+
+```text
+DIM+ / DIM-
+```
+
+Der vorhandene manuelle Dimmer soll später durch einen Raspberry-Pi-gesteuerten 0–10-V-DAC ersetzt werden.
+
+Geplanter Aufbau:
+
+```text
+Raspberry Pi
+   │
+   └── I²C
+        │
+        ▼
+GP8600 / 0–10-V-DAC
+        │
+        ├── OUT+ ──> Mean Well DIM+
+        └── OUT- ──> Mean Well DIM-
+```
+
+Die vorhandene Dimmleitung im Schrank kann dafür weiterverwendet werden.
+
+### Lichtprofile
+
+Im Dashboard sollen zwei speicherbare Lichtprofile vorhanden sein:
+
+```text
+Wachstumsphase
+- Licht an
+- Licht aus
+- Leistung in %
+
+Blütephase
+- Licht an
+- Licht aus
+- Leistung in %
+```
+
+Zusätzlich:
+
+- Umschalter Wachstum / Blüte
+- Anzeige des aktiven Profils
+- aktueller Sollwert in %
+- nächste geplante Umschaltung
+- manueller Override
+- manueller AUS-Schalter
+- Zeitpläne über Mitternacht
+- Wiederherstellung des zuletzt aktiven Profils nach einem Neustart
+
+Geplante API-Struktur:
+
+```text
+GET  /api/light/config
+POST /api/light/config
+POST /api/light/mode
+POST /api/light/override
+GET  /api/light/status
+```
+
+## Lüftersteuerung
+
+Aktuell sind zwei Noctua 4-Pin-PWM-Lüfter vorhanden:
+
+```text
+Zuluft unten
+Abluft oben
+```
+
+Beide werden derzeit über einen Noctua NA-FC1 geregelt.
+
+Langfristig soll der NA-FC1 durch den Raspberry Pi ersetzt werden. Die Lüfter bleiben separat mit 12 V versorgt; der Pi erzeugt nur die PWM-Steuersignale.
+
+Für 4-Pin-PC-Lüfter ist ein geeigneter Open-Collector-/Open-Drain-Treiber vorgesehen, statt den PWM-Pin direkt mit einem GPIO zu treiben.
+
+Geplant:
+
+```text
+Raspberry Pi
+├── PWM Kanal 1 ──> Zuluft
+└── PWM Kanal 2 ──> Abluft
+```
+
+Dashboard:
+
+```text
+Zuluft
+AUS | AUTO | MANUELL
+Leistung: xx %
+
+Abluft
+AUS | AUTO | MANUELL
+Leistung: xx %
+```
+
+Mögliche Automatiksignale:
+
+- Temperatur
+- relative Luftfeuchtigkeit
+- VPD
+- Lichtstatus
+- Tag-/Nachtmodus
+- Mindestdrehzahl
+
+Optional kann später statt oder zusätzlich zur Noctua-Abluft ein 230-V-Rohrlüfter verwendet werden. Dieser würde zunächst nur über ein dafür geeignetes, galvanisch getrenntes Relais bzw. Schütz geschaltet. Eine Drehzahlregelung hängt vom konkreten Motortyp ab.
+
+## Gemeinsamer I²C-Bus
+
+Die geplanten I²C-Erweiterungen können parallel betrieben werden, sofern ihre Adressen kollisionsfrei gewählt werden:
+
+```text
+Raspberry Pi / Enviro+
+   │
+   ├── bestehende Enviro+-Sensoren
+   ├── Enviro+-ADC
+   ├── ADS1115
+   │    ├── A0 ──> Feuchte Topf 1
+   │    └── A1 ──> Feuchte Topf 2
+   └── GP8600
+        └── 0–10 V ──> Lampendimmung
+```
+
+Die am Enviro+ herausgeführten Pads für 3V3, GND, SDA und SCL können für die externen I²C-Module genutzt werden.
+
+## Geplanter Dashboard-Ausbau
+
+Langfristig soll das Dashboard zusätzlich anzeigen bzw. steuern:
+
+- Feuchtigkeit Topf 1
+- Feuchtigkeit Topf 2
+- Tankstatus
+- letzte Bewässerung je Topf
+- manuelle Bewässerung je Topf
+- Pumpenstatus
+- Lampenleistung 0–100 %
+- aktives Lichtprofil
+- Wachstums-/Blüte-Timer
+- Zuluftleistung
+- Abluftleistung
+- Automatik-/Manuell-Modi
+- Kamera-Livebild / aktuelles Foto
+- Timelapse
+
+---
+
 # Mögliche Erweiterungen
 
 Geplant bzw. sinnvoll:
@@ -921,6 +1170,15 @@ Geplant bzw. sinnvoll:
 - Kamera via Picamera2
 - automatische Pflanzenfotos
 - Timelapse
+- 2× Bodenfeuchtigkeit über ADS1115
+- Tank-Füllstand
+- 2× getrennte automatische Bewässerung
+- Bewässerungs-History
+- Lampendimmung über 0–10 V
+- konfigurierbare Lichtprofile Wachstum / Blüte
+- manueller Licht-Override
+- getrennte PWM-Steuerung für Zuluft und Abluft
+- optionaler 230-V-Abluftlüfter über Relais / Schütz
 - Min / Max / Durchschnitt je Zeitraum
 - frei konfigurierbare Zielbereiche
 - visuelle Warnungen für Temperatur / RH / VPD
@@ -930,7 +1188,7 @@ Geplant bzw. sinnvoll:
 - Export als CSV
 - Backup der SQLite-Datenbank
 - Benachrichtigungen bei Grenzwertüberschreitungen
-- Kalibrierungsseite für Temperatur, RH und Licht
+- Kalibrierungsseite für Temperatur, RH, Licht und Bodenfeuchte
 
 ---
 
@@ -994,7 +1252,14 @@ Aktuell funktionsfähig:
 ✅ PPFD-Schätzung
 ✅ DLI
 ✅ tägliche Beleuchtungsdauer
-⬜ Kamera
+🟨 Kamera-Hardware / Picamera2 in Einrichtung
+⬜ aktuelles Kamerabild im Dashboard
 ⬜ Timelapse
+⬜ 2× Bodenfeuchtesensor
+⬜ Tank-Sensor
+⬜ 2× automatische Bewässerung
+⬜ 0–10-V-Lampendimmung
+⬜ Lichtprofile Wachstum / Blüte
+⬜ Pi-PWM-Steuerung Zuluft / Abluft
 ⬜ Alarmierung
 ```
