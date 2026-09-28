@@ -1510,3 +1510,94 @@ footer {
         flex: 1 1 160px;
     }
 }
+
+
+/* BODENFEUCHTE */
+
+.soil-panel {
+    margin-bottom: 16px;
+}
+
+.soil-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.soil-card {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.soil-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.soil-details strong {
+    color: var(--text);
+}
+
+.soil-config {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.soil-config summary {
+    cursor: pointer;
+    color: var(--green-light);
+    font-weight: 600;
+}
+
+.soil-config-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.soil-config-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.soil-config-card label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.soil-config-card input {
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel-light);
+    color: var(--text);
+    font: inherit;
+}
+
+@media (max-width: 700px) {
+    .soil-grid,
+    .soil-config-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .soil-details {
+        flex-direction: column;
+    }
+}
