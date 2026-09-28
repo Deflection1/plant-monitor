@@ -83,16 +83,20 @@ Der Raspberry Pi mit Enviro+ soll an der linken Schrankwand montiert werden. Das
 
 Die direkte Montage des Enviro+ auf dem Raspberry Pi beeinflusst insbesondere die BME280-Temperaturmessung durch die Abwärme des Pi. Die aktuelle Temperaturkorrektur ist deshalb nur eine Näherung und soll später mit einem externen Referenzsensor kalibriert werden.
 
-Geplante zusätzliche Hardware:
+Zusätzliche Hardware wurde am 28.09.2026 bestellt und wird nach Lieferung schrittweise integriert:
 
-- ADS1115 als externer 4-Kanal-ADC
+- Soldered ADS1115 16-Bit / 4-Kanal-ADC, I²C, 3,3 V
 - 2× DFRobot SEN0308 wasserdichter kapazitiver Bodenfeuchtesensor
-- Tank-Füllstandssensor / Schwimmerschalter
-- 2× 12-V-Peristaltikpumpe, je eine pro Topf
-- 2-Kanal-MOSFET-Treiber für die Pumpen
-- separates 12-V-Netzteil für Pumpen
-- DFRobot GP8600 bzw. kompatibler I²C-zu-0–10-V-DAC für die Lampendimmung
-- später direkte PWM-Steuerung der beiden Noctua-Lüfter über den Raspberry Pi
+- vertikaler Schwimmerschalter für Tankstatus
+- 2× 12-V-Peristaltikpumpe PPFL-1, je eine pro Topf
+- 2× einzelne 15-A-/400-W-MOSFET-Treiber für die Pumpen
+- Mean Well GST36E12-P1J, 12 V / 3 A, als separates Pumpennetzteil
+- DFRobot GP8600 als I²C/PWM-zu-0–10-V-DAC für die Lampendimmung
+- 3/5-mm-Silikonschlauch und passende Verbinder
+- Sicherungshalter, Sicherungssortiment, 12-V-Hauptschalter und Gehäuse
+- 0,14-mm² Litze für Sensorik/Steuerung und 0,75-mm² Litze für 12-V-Leistung
+- Kamerahalter für das Raspberry Pi Camera Module
+- für die Lüfter wird zunächst der vorhandene Noctua NA-FC1 über seinen PWM-Eingang vom Raspberry Pi getestet
 
 ---
 
@@ -907,9 +911,8 @@ Wassertank
    └── Pumpe 2 ──> Topf 2
 
 12-V-Netzteil
-   └── 2-Kanal-MOSFET-Treiber
-        ├── Kanal 1 ──> Pumpe 1
-        └── Kanal 2 ──> Pumpe 2
+   ├── Sicherung 1 ──> MOSFET-Treiber 1 ──> Pumpe 1
+   └── Sicherung 2 ──> MOSFET-Treiber 2 ──> Pumpe 2
 
 Raspberry Pi
    ├── GPIO ──> Pumpenkanal 1
@@ -919,10 +922,11 @@ Raspberry Pi
 
 Vorgesehene Pumpen:
 
-- 2× Kamoer / BerryBase 12-V-Peristaltikpumpe PPFL-1 oder vergleichbar
+- 2× BerryBase PPFL-1 12-V-Peristaltikpumpe
 - eine Pumpe pro Topf
-- passende Silikonschläuche
-- optional Rückschlagventile und Tropfer / Bewässerungsringe
+- 3 mm Innendurchmesser / 5 mm Außendurchmesser Silikonschlauch
+- getrennte Wasserleitung pro Topf
+- Rückschlagventile sind aktuell nicht vorgesehen
 
 Die Pumpen werden niemals direkt vom Raspberry Pi versorgt. Der Pi liefert nur das Steuersignal; die Pumpen erhalten ihre Leistung aus einem separaten 12-V-Netzteil.
 
@@ -1016,17 +1020,23 @@ Abluft oben
 
 Beide werden derzeit über einen Noctua NA-FC1 geregelt.
 
-Langfristig soll der NA-FC1 durch den Raspberry Pi ersetzt werden. Die Lüfter bleiben separat mit 12 V versorgt; der Pi erzeugt nur die PWM-Steuersignale.
+Als erster Schritt soll der vorhandene NA-FC1 weiterverwendet werden. Der Raspberry Pi liefert ein ca. 25-kHz-PWM-Signal an den PWM-Eingang des NA-FC1; die Lüfter bleiben separat mit 12 V versorgt.
 
-Für 4-Pin-PC-Lüfter ist ein geeigneter Open-Collector-/Open-Drain-Treiber vorgesehen, statt den PWM-Pin direkt mit einem GPIO zu treiben.
+Damit kann zunächst getestet werden, ob die vorhandene NA-FC1-Elektronik trotz des beschädigten Drehreglers zuverlässig mit dem Raspberry-Pi-PWM-Signal arbeitet. Ein zusätzlicher Pegelwandler oder Lüftertreiber wird deshalb vorerst nicht beschafft.
 
 Geplant:
 
 ```text
-Raspberry Pi
-├── PWM Kanal 1 ──> Zuluft
-└── PWM Kanal 2 ──> Abluft
+Raspberry Pi GPIO PWM
+        │
+        ├── GND ──> NA-FC1 GND
+        └── PWM ──> NA-FC1 PWM-Eingang
+
+NA-FC1
+   └── 4-Pin-PWM-Ausgang ──> Noctua-Lüfter
 ```
+
+Falls der defekte Regler das PWM-Signal beeinflusst, wird die NA-FC1-Elektronik später geprüft bzw. angepasst.
 
 Dashboard:
 
@@ -1104,24 +1114,53 @@ Stand: 28.09.2026. Preise und Verfügbarkeit können sich ändern.
 - Noctua NA-FC1 als aktuelle manuelle Lüftersteuerung
 - LED-Pflanzenlampe
 
-## Noch zu beschaffen
+## Bestellt am 28.09.2026
 
-| Bereich | Komponente | Menge | Bevorzugter Anbieter | Alternative Anbieter | Hinweis |
-|---|---|---:|---|---|---|
-| Bodenfeuchte | DFRobot SEN0308, wasserdichter kapazitiver Bodenfeuchtesensor | 2 | Bastelgarage Schweiz | Farnell Schweiz, DFRobot direkt | 3,3–5,5 V, analog 0–ca. 3 V, 1,5-m-Kabel |
-| Analogmessung | ADS1115, 16 Bit, 4 Kanäle, I²C | 1 | BerryBase Schweiz | Farnell, weitere Elektronikhändler | A0 = Topf 1, A1 = Topf 2 |
-| Lampendimmung | DFRobot GP8600, 1-Kanal I²C/PWM zu 0–10 V | 1 | DFRobot direkt / Händler | GP8403 / DFR0971 als Alternative | bevorzugtes Modul für die Mean-Well-Dimmung; ersetzt den manuellen Dimmer |
-| Bewässerung | Kamoer PPFL-1 Peristaltikpumpe, 12 V | 2 | BerryBase Schweiz | andere Kamoer-Händler | eine Pumpe pro Topf |
-| Pumpenversorgung | Mean Well 12 V / 3 A Netzteil, z. B. GST36E12-P1J | 1 | BerryBase Schweiz | Digitec/Galaxus, Distrelec/Farnell | nur für Pumpen / 12-V-Verbraucher |
-| Pumpentreiber | 2-Kanal-MOSFET-Treiber für 3,3-V-GPIO | 1 | BerryBase / Bastelgarage, sofern passend verfügbar | Elektronikfachhandel | muss 3,3-V-Logik sicher erkennen und Pumpenanlaufstrom vertragen |
-| Tankstatus | Schwimmerschalter oder kontaktloser Füllstandssensor | 1 | Bastelgarage / BerryBase | Farnell / Distrelec | zunächst nur Tank OK / LEER |
-| Bewässerung | Silikonschlauch passend zur Pumpe | ca. 3–4 m | BerryBase Schweiz | Bastelgarage | Schlauchmaß an Pumpenkopf prüfen |
-| Bewässerung | Rückschlagventile | 2 | Bastelgarage / Aquaristikhandel | BerryBase, falls passend | eines pro Bewässerungsleitung |
-| Bewässerung | Tropfer oder Bewässerungsring | 2 | Bastelgarage / Gartenhandel | Aquaristik-/Bewässerungshandel | je Topf ein Ausgang |
-| Verkabelung | JST-XH / geeignete Steckverbinder | nach Bedarf | BerryBase Schweiz | Bastelgarage, Farnell | für lösbare Sensor- und Steuerleitungen |
-| Verkabelung | Aderendhülsen, Klemmen, Schrumpfschlauch | nach Bedarf | BerryBase / Bastelgarage | Baumarkt / Elektronikhandel | für saubere feste Installation |
-| Verkabelung | Kabelkanal, Kabelverschraubungen, Zugentlastung | nach Bedarf | Baumarkt / Elektrohandel | BerryBase / Bastelgarage | Elektronik und Wasser sauber trennen |
-| Lüfter | Open-Collector-/Open-Drain-PWM-Treiber | 2 Kanäle | noch festzulegen | BerryBase / Bastelgarage / Farnell | für direkte Pi-Steuerung der Noctua-Lüfter |
+Die Hardware für die nächsten Ausbaustufen ist bestellt. Verbindungsklemmen und weiteres Montagematerial werden bei Bedarf lokal im Baumarkt ergänzt.
+
+### BerryBase Schweiz
+
+| Bereich | Komponente | Menge |
+|---|---|---:|
+| Analogmessung | Soldered ADS1115 16-Bit, 4 Kanäle, Qwiic/I²C, 3,3 V | 1 |
+| Kamera | KKSB Kamerahalter, 2-Achsen-Rotation, Metall | 1 |
+| Bewässerung | PPFL-1 Peristaltikpumpe 12 V | 2 |
+| Bewässerung | Silikonschlauch 3 mm ID / 5 mm OD, 1 m | 4 |
+| Bewässerung | Adafruit Schlauchverbinder für 2–3-mm-Schläuche | 1 Pack |
+| Bewässerung | Adafruit T-Connector für 3-mm-ID-Schläuche | 1 Pack |
+| Tankstatus | vertikaler Schwimmerschalter WLSW1 | 1 |
+| Pumpenversorgung | Mean Well GST36E12-P1J, 12 V / 3 A | 1 |
+| Pumpenversorgung | DC-Einbaubuchse 5,5 × 2,1 mm, Metall | 1 |
+| Absicherung | PROFFUSE Sicherungshalter 5×20 mm | 2 |
+| Absicherung | 160-teiliges Sicherungssortiment 500 mA–10 A | 1 |
+| Aufbau | Mini-Breadboard 170 Kontakte | 2 |
+| Aufbau | Dupont Male–Female 50 cm | 1 Satz |
+| Aufbau | Dupont Male–Male 10 cm | 1 Satz |
+| Aufbau | Stiftleiste 1×7, RM 2,54 mm | 1 |
+| Verkabelung | Kupferlitze 0,14 mm², 10 Farben × 10 m | 1 Set |
+| Verkabelung | Kupferlitze 0,75 mm² schwarz, 10 m | 1 |
+| Verkabelung | Kupferlitze 0,75 mm² rot, 10 m | 1 |
+| Gehäuse | Modulgehäuse 45 × 45 × 18 mm | 2 |
+| Gehäuse | Universalgehäuse 205 × 180 × 70 mm | 1 |
+| Bedienung | Kippschalter mit Schutzkappe und LED, 12 V / 20 A | 1 |
+| Isolation | Schrumpfschlauch-Set, 100-teilig | 1 |
+
+BerryBase-Bestellung: 22 Positionen / 29 Einzelartikel.
+
+### Bastelgarage Schweiz
+
+| Bereich | Komponente | Menge |
+|---|---|---:|
+| Bodenfeuchte | DFRobot SEN0308 wasserdichter kapazitiver Bodenfeuchtesensor | 2 |
+| Pumpensteuerung | 15-A-/400-W-MOSFET-Treiber, 5–36 V DC, 3,3-V-steuerbar | 2 |
+| Lampendimmung | DFRobot GP8600, 1-Kanal I²C/PWM zu 0–10 V | 1 |
+
+### Nicht mehr vorgesehen
+
+- separater TXS0104E-Level-Converter für die Noctua-Lüfter
+- zusätzlicher Lüftertreiber vor dem ersten NA-FC1-Test
+- Rückschlagventile
+- separate Verbindungsklemmen aus dem Elektronikshop; diese werden lokal beschafft
 
 ## Verifizierte Bezugsquellen
 
@@ -1165,15 +1204,19 @@ Shop:
 Shop:
 `https://www.dfrobot.com/`
 
-## Empfohlene Einkaufsreihenfolge
+## Beschaffungsstatus
 
-1. 2× SEN0308 + 1× ADS1115
-2. GP8600 für die Lampendimmung
-3. 2× PPFL-1 + 12-V-Netzteil + Schlauch
-4. passender 2-Kanal-MOSFET-Treiber
-5. Tank-Sensor + Rückschlagventile + Tropfer
-6. Stecker, Klemmen, Kabelkanal und Beschriftungsmaterial
-7. später 2-Kanal-PWM-Treiber für Zuluft und Abluft
+Die Hauptkomponenten für Kamera, Bodenfeuchte, Lampendimmung und Bewässerung sind bestellt.
+
+Nach Lieferung erfolgt die Umsetzung weiterhin in dieser Reihenfolge:
+
+1. Kamera fertig testen und montieren
+2. ADS1115 + 2× SEN0308 installieren und kalibrieren
+3. GP8600 + Mean-Well-Dimmeingang testen
+4. Pumpengehäuse mit Netzteil, Sicherungen, 2× MOSFET und 2× PPFL-1 aufbauen
+5. Schwimmerschalter und Bewässerungslogik integrieren
+6. NA-FC1 mit Raspberry-Pi-PWM testen
+7. Verkabelung und Montage finalisieren
 
 ---
 
@@ -1228,12 +1271,12 @@ Die Umsetzung soll schrittweise erfolgen, damit jede Hardware-Erweiterung einzel
 
 - [ ] zwei 12-V-Peristaltikpumpen außerhalb des Schranks montieren
 - [ ] separates 12-V-Netzteil für die Pumpen installieren
-- [ ] 2-Kanal-MOSFET-Treiber anschließen
+- [ ] zwei einzelne MOSFET-Treiber anschließen
 - [ ] Steuerleitungen vom Raspberry Pi nach außen führen
 - [ ] Pumpe 1 und Pumpe 2 einzeln manuell testen
 - [ ] Schlauch zu Topf 1 verlegen
 - [ ] Schlauch zu Topf 2 verlegen
-- [ ] Rückschlagventile / Tropfer bzw. Bewässerungsringe montieren
+- [ ] Schlauchführung und Wasserauslass je Topf montieren
 - [ ] Tank-Sensor installieren
 - [ ] Tankstatus in FastAPI und Dashboard integrieren
 - [ ] Pumpenlaufzeit gegen reale Wassermenge kalibrieren
@@ -1249,11 +1292,11 @@ Die Umsetzung soll schrittweise erfolgen, damit jede Hardware-Erweiterung einzel
 - [ ] aktuelle Noctua-Verkabelung dokumentieren
 - [ ] Zuluft unten eindeutig kennzeichnen
 - [ ] Abluft oben eindeutig kennzeichnen
-- [ ] zwei geeignete Open-Collector-/Open-Drain-PWM-Treiber aufbauen
+- [ ] NA-FC1-PWM-Eingang mit Raspberry-Pi-GPIO bei ca. 25 kHz testen
 - [ ] 12-V-Versorgung der Lüfter beibehalten
-- [ ] PWM-Kanal für Zuluft testen
-- [ ] PWM-Kanal für Abluft testen
-- [ ] NA-FC1 nach erfolgreichem Test ersetzen
+- [ ] prüfen, ob der beschädigte Drehregler das externe PWM-Signal beeinflusst
+- [ ] Lüfterregelung über den vorhandenen NA-FC1 testen
+- [ ] nur bei Bedarf alternative Treiber-/Pufferlösung aufbauen
 - [ ] manuelle Lüfterleistung im Dashboard ergänzen
 - [ ] Modi AUS / AUTO / MANUELL ergänzen
 - [ ] Mindestdrehzahl festlegen
@@ -1353,14 +1396,15 @@ Aktuell funktionsfähig:
 ✅ PPFD-Schätzung
 ✅ DLI
 ✅ tägliche Beleuchtungsdauer
+📦 Hardware für Kamera-/Sensor-/Bewässerungs-/Dimm-Ausbau bestellt
 🟨 Kamera-Hardware / Picamera2 in Einrichtung
 ⬜ aktuelles Kamerabild im Dashboard
 ⬜ Timelapse
-⬜ 2× Bodenfeuchtesensor
-⬜ Tank-Sensor
-⬜ 2× automatische Bewässerung
-⬜ 0–10-V-Lampendimmung
+📦 2× SEN0308 + ADS1115 bestellt
+📦 Tank-Schwimmerschalter bestellt
+📦 2× PPFL-1 + Netzteil + MOSFET-Treiber bestellt
+📦 GP8600 für 0–10-V-Lampendimmung bestellt
 ⬜ Lichtprofile Wachstum / Blüte
-⬜ Pi-PWM-Steuerung Zuluft / Abluft
+⬜ Pi-PWM-Test über vorhandenen NA-FC1
 ⬜ Alarmierung
 ```
