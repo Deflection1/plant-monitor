@@ -21,7 +21,7 @@
     >
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=6">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=7">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -436,6 +436,260 @@
                     id="soilConfigMessage"
                 >
                     Noch nicht kalibriert
+                </span>
+
+            </div>
+
+        </details>
+
+    </section>
+
+
+
+    <!-- LAMPENSTEUERUNG -->
+
+    <section class="panel lamp-control-panel">
+
+        <div class="panel-header">
+
+            <div class="lamp-control-heading">
+
+                <span class="glass-icon glass-icon--lamp-control" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" class="glass-glyph" focusable="false">
+                        <defs>
+                            <linearGradient id="glass-lamp-control-body" x1="0" y1="0" x2="1" y2="1">
+                                <stop stop-color="#fff2b6"/>
+                                <stop offset=".5" stop-color="#ffc954"/>
+                                <stop offset="1" stop-color="#f08a35"/>
+                            </linearGradient>
+                            <linearGradient id="glass-lamp-control-slider" x1="0" y1="0" x2="1" y2="1">
+                                <stop stop-color="#ffe8a0"/>
+                                <stop offset=".55" stop-color="#ffbf47"/>
+                                <stop offset="1" stop-color="#f19d32"/>
+                            </linearGradient>
+                        </defs>
+
+                        <rect x="9" y="8" width="30" height="9" rx="4.5"
+                              fill="url(#glass-lamp-control-body)"
+                              stroke="#fff4c7" stroke-opacity=".7" stroke-width="1.2"/>
+
+                        <path d="M14 8V5M34 8V5"
+                              stroke="#ffd978" stroke-width="1.8" stroke-linecap="round"/>
+
+                        <path d="M16 21L13 29M24 21V31M32 21L35 29"
+                              stroke="#ffd46b" stroke-width="2.2" stroke-linecap="round"/>
+
+                        <rect x="11" y="35" width="26" height="4" rx="2"
+                              fill="rgba(255,255,255,.12)"
+                              stroke="rgba(255,241,195,.35)" stroke-width="1"/>
+
+                        <circle cx="29" cy="37" r="4"
+                                fill="url(#glass-lamp-control-slider)"
+                                stroke="#fff1c0" stroke-opacity=".75" stroke-width="1.2"/>
+                    </svg>
+                </span>
+
+                <div>
+                    <p class="eyebrow">
+                        LAMPENSTEUERUNG
+                    </p>
+
+                    <h2 id="lampControlName">
+                        Pflanzenlampe
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <span
+                class="badge"
+                id="lampControlStatus"
+            >
+                Hardware ausstehend
+            </span>
+
+        </div>
+
+
+        <div class="lamp-control-grid">
+
+            <article class="lamp-control-card">
+
+                <span class="lamp-control-label">
+                    Leistung
+                </span>
+
+                <strong id="lampPowerPreview">
+                    0 %
+                </strong>
+
+                <small>
+                    Zielwert · noch nicht ausgegeben
+                </small>
+
+            </article>
+
+
+            <article class="lamp-control-card">
+
+                <span class="lamp-control-label">
+                    Zeitplan
+                </span>
+
+                <strong id="lampSchedulePreview">
+                    Aus
+                </strong>
+
+                <small id="lampScheduleTimes">
+                    08:00 – 20:00
+                </small>
+
+            </article>
+
+
+            <article class="lamp-control-card">
+
+                <span class="lamp-control-label">
+                    Profil
+                </span>
+
+                <strong id="lampProfilePreview">
+                    Benutzerdefiniert
+                </strong>
+
+                <small>
+                    persistent gespeichert
+                </small>
+
+            </article>
+
+        </div>
+
+
+        <details class="lamp-config">
+
+            <summary>
+                Konfiguration
+            </summary>
+
+            <p class="estimate-note">
+                Die Einstellungen werden bereits persistent auf dem Raspberry Pi gespeichert.
+                Solange der GP8600 noch nicht angebunden ist, wird kein 0–10-V-Ausgang angesteuert.
+            </p>
+
+
+            <div class="lamp-config-grid">
+
+                <div class="lamp-config-card">
+
+                    <strong>
+                        Lampe
+                    </strong>
+
+                    <label>
+                        Name
+                        <input
+                            id="lampNameInput"
+                            type="text"
+                            maxlength="40"
+                            value="Pflanzenlampe"
+                        >
+                    </label>
+
+                    <label>
+                        Profil
+                        <select id="lampProfileInput">
+                            <option value="custom">Benutzerdefiniert</option>
+                            <option value="growth">Wachstum</option>
+                            <option value="flower">Blüte</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Leistung
+                        <div class="lamp-range-row">
+                            <input
+                                id="lampPowerInput"
+                                type="range"
+                                min="0"
+                                max="100"
+                                step="1"
+                                value="0"
+                            >
+                            <output
+                                id="lampPowerOutput"
+                                for="lampPowerInput"
+                            >
+                                0 %
+                            </output>
+                        </div>
+                    </label>
+
+                </div>
+
+
+                <div class="lamp-config-card">
+
+                    <strong>
+                        Zeitplan
+                    </strong>
+
+                    <label class="lamp-toggle-row">
+                        <input
+                            id="lampScheduleEnabled"
+                            type="checkbox"
+                        >
+                        <span>
+                            Zeitplan aktivieren
+                        </span>
+                    </label>
+
+                    <div class="lamp-time-grid">
+
+                        <label>
+                            Einschalten
+                            <input
+                                id="lampOnTime"
+                                type="time"
+                                value="08:00"
+                            >
+                        </label>
+
+                        <label>
+                            Ausschalten
+                            <input
+                                id="lampOffTime"
+                                type="time"
+                                value="20:00"
+                            >
+                        </label>
+
+                    </div>
+
+                    <p class="lamp-safety-note">
+                        Sicher vorbereitet: Standardmässig 0 % und Zeitplan aus.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="button-row">
+
+                <button
+                    class="primary"
+                    id="saveLampConfigButton"
+                >
+                    Einstellungen speichern
+                </button>
+
+                <span
+                    class="camera-meta"
+                    id="lampConfigMessage"
+                >
+                    Hardware noch nicht verbunden
                 </span>
 
             </div>
@@ -1154,7 +1408,7 @@
 ></script>
 
 <script
-    src="/static/app.js?v=15"
+    src="/static/app.js?v=16"
 ></script>
 
 <script src="/static/overview.js?v=6"></script>
