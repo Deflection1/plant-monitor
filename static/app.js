@@ -83,6 +83,30 @@ function formatDuration(
 
 
 // =====================================================
+// LICHTSTATUS ICONS
+// =====================================================
+
+function setLightStateIcons(
+    isOn
+) {
+
+    document
+        .querySelectorAll(
+            ".js-light-state-icon"
+        )
+        .forEach(
+            function(icon) {
+
+                icon.dataset.state =
+                    isOn
+                        ? "on"
+                        : "off";
+            }
+        );
+}
+
+
+// =====================================================
 // AKTUELLE SENSORWERTE
 // =====================================================
 
@@ -234,8 +258,9 @@ async function loadCurrent() {
                 "An";
 
 
-            $("lightIcon").dataset.state =
-                "on";
+            setLightStateIcons(
+                true
+            );
 
         } else {
 
@@ -247,8 +272,9 @@ async function loadCurrent() {
                 "Aus";
 
 
-            $("lightIcon").dataset.state =
-                "off";
+            setLightStateIcons(
+                false
+            );
         }
 
 
