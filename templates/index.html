@@ -21,7 +21,7 @@
     >
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=7">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=8">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -548,19 +548,66 @@
             </article>
 
 
-            <article class="lamp-control-card">
+            <article
+                class="lamp-control-card lamp-profile-card"
+                id="lampProfileCard"
+                data-profile="custom"
+            >
 
                 <span class="lamp-control-label">
                     Profil
                 </span>
 
-                <strong id="lampProfilePreview">
-                    Benutzerdefiniert
-                </strong>
+                <div class="lamp-profile-display">
 
-                <small>
-                    persistent gespeichert
-                </small>
+                    <img
+                        id="lampProfileImage"
+                        class="lamp-profile-image"
+                        src="/static/profile-flower.webp?v=1"
+                        alt=""
+                        hidden
+                    >
+
+                    <span
+                        id="lampProfilePlaceholder"
+                        class="lamp-profile-placeholder"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 48 48"
+                            focusable="false"
+                        >
+                            <path
+                                d="M11 35C4 17 25 11 39 8c0 15-5 29-22 31"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M10 41c6-13 14-21 25-27"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                    </span>
+
+                    <div class="lamp-profile-copy">
+
+                        <strong id="lampProfilePreview">
+                            Benutzerdefiniert
+                        </strong>
+
+                        <small>
+                            persistent gespeichert
+                        </small>
+
+                    </div>
+
+                </div>
 
             </article>
 
@@ -1408,7 +1455,7 @@
 ></script>
 
 <script
-    src="/static/app.js?v=16"
+    src="/static/app.js?v=17"
 ></script>
 
 <script src="/static/overview.js?v=6"></script>
