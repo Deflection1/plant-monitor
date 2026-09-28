@@ -1,4 +1,5 @@
 import asyncio
+import json
 import shutil
 import threading
 
@@ -14,6 +15,7 @@ from contextlib import (
 from pathlib import Path
 
 from fastapi import (
+    Body,
     FastAPI,
     Query
 )
@@ -54,12 +56,129 @@ BASE_DIR = (
 
 PHOTO_DIR = BASE_DIR / "photos"
 LATEST_PHOTO = PHOTO_DIR / "latest.jpg"
+TIMELAPSE_CONFIG_FILE = BASE_DIR / "data" / "timelapse.json"
+TIMELAPSE_DEFAULT_INTERVAL_MINUTES = 30
 CAMERA_LOCK = threading.Lock()
 
 PHOTO_DIR.mkdir(
     parents=True,
     exist_ok=True
 )
+
+
+# =====================================================
+# FOTO-HISTORY / ZEITRAFFER KONFIGURATION
+# =====================================================
+
+def load_timelapse_config():
+
+    default = {
+        "enabled":
+            False,
+
+        "interval_minutes":
+            TIMELAPSE_DEFAULT_INTERVAL_MINUTES
+    }
+
+    if not TIMELAPSE_CONFIG_FILE.exists():
+        return default
+
+    try:
+
+        data = json.loads(
+            TIMELAPSE_CONFIG_FILE.read_text()
+        )
+
+        interval = int(
+            data.get(
+                "interval_minutes",
+                TIMELAPSE_DEFAULT_INTERVAL_MINUTES
+            )
+        )
+
+        return {
+            "enabled":
+                bool(
+                    data.get(
+                        "enabled",
+                        False
+                    )
+                ),
+
+            "interval_minutes":
+                max(
+                    1,
+                    interval
+                )
+        }
+
+    except Exception:
+
+        return default
+
+
+def save_timelapse_config(
+    config
+):
+
+    TIMELAPSE_CONFIG_FILE.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    TIMELAPSE_CONFIG_FILE.write_text(
+        json.dumps(
+            config,
+            indent=2
+        )
+    )
+
+
+TIMELAPSE_CONFIG = load_timelapse_config()
+
+
+def photo_files():
+
+    return sorted(
+        [
+            path
+            for path in PHOTO_DIR.glob(
+                "plant-*.jpg"
+            )
+            if path.is_file()
+        ],
+        key=lambda path:
+            path.stat().st_mtime,
+        reverse=True
+    )
+
+
+def photo_info(
+    path
+):
+
+    stat = path.stat()
+
+    return {
+        "filename":
+            path.name,
+
+        "captured_at":
+            datetime.fromtimestamp(
+                stat.st_mtime
+            ).isoformat(
+                timespec="seconds"
+            ),
+
+        "size_bytes":
+            stat.st_size,
+
+        "url":
+            (
+                "/api/camera/photos/"
+                + path.name
+            )
+    }
 
 
 # =====================================================
@@ -242,6 +361,67 @@ def capture_photo():
         }
 
 
+async def timelapse_worker():
+
+    while True:
+
+        config = TIMELAPSE_CONFIG.copy()
+
+        if not config.get(
+            "enabled",
+            False
+        ):
+
+            await asyncio.sleep(
+                5
+            )
+
+            continue
+
+
+        interval_seconds = max(
+            60,
+            int(
+                config.get(
+                    "interval_minutes",
+                    TIMELAPSE_DEFAULT_INTERVAL_MINUTES
+                )
+            )
+            * 60
+        )
+
+
+        await asyncio.sleep(
+            interval_seconds
+        )
+
+
+        if not TIMELAPSE_CONFIG.get(
+            "enabled",
+            False
+        ):
+            continue
+
+
+        try:
+
+            result = await asyncio.to_thread(
+                capture_photo
+            )
+
+            print(
+                "Zeitraffer-Foto gespeichert:",
+                result["filename"]
+            )
+
+        except Exception as error:
+
+            print(
+                "Zeitraffer-Fehler:",
+                error
+            )
+
+
 # =====================================================
 # LICHTWERTE ERWEITERN
 # =====================================================
@@ -375,14 +555,24 @@ async def lifespan(
         measurement_worker()
     )
 
+    timelapse_task = asyncio.create_task(
+        timelapse_worker()
+    )
+
     yield
 
     worker.cancel()
+    timelapse_task.cancel()
 
     with suppress(
         asyncio.CancelledError
     ):
         await worker
+
+    with suppress(
+        asyncio.CancelledError
+    ):
+        await timelapse_task
 
     await asyncio.to_thread(
         stop_camera
@@ -613,4 +803,175 @@ async def camera_capture():
             "ok",
 
         **result
+    }
+
+
+
+# =====================================================
+# FOTO-HISTORY / ZEITRAFFER API
+# =====================================================
+
+@app.get(
+    "/api/camera/photos"
+)
+def camera_photos(
+    limit: int = Query(
+        default=100,
+        ge=1,
+        le=1000
+    )
+):
+
+    files = photo_files()
+
+    return {
+        "count":
+            len(files),
+
+        "photos":
+            [
+                photo_info(
+                    path
+                )
+                for path in files[:limit]
+            ]
+    }
+
+
+@app.get(
+    "/api/camera/photos/{filename}"
+)
+def camera_photo(
+    filename: str
+):
+
+    if (
+        "/" in filename
+        or "\\" in filename
+        or not filename.startswith(
+            "plant-"
+        )
+        or not filename.endswith(
+            ".jpg"
+        )
+    ):
+
+        return {
+            "available":
+                False,
+
+            "message":
+                "Ungültiger Dateiname"
+        }
+
+
+    path = (
+        PHOTO_DIR
+        / filename
+    )
+
+
+    if not path.exists():
+
+        return {
+            "available":
+                False,
+
+            "message":
+                "Bild nicht gefunden"
+        }
+
+
+    return FileResponse(
+        path,
+        media_type="image/jpeg",
+        headers={
+            "Cache-Control":
+                "private, max-age=31536000"
+        }
+    )
+
+
+@app.get(
+    "/api/camera/timelapse"
+)
+def camera_timelapse_status():
+
+    return {
+        **TIMELAPSE_CONFIG,
+
+        "photo_count":
+            len(
+                photo_files()
+            )
+    }
+
+
+@app.post(
+    "/api/camera/timelapse"
+)
+def camera_timelapse_update(
+    payload: dict = Body(...)
+):
+
+    enabled = bool(
+        payload.get(
+            "enabled",
+            TIMELAPSE_CONFIG.get(
+                "enabled",
+                False
+            )
+        )
+    )
+
+    try:
+
+        interval = int(
+            payload.get(
+                "interval_minutes",
+                TIMELAPSE_CONFIG.get(
+                    "interval_minutes",
+                    TIMELAPSE_DEFAULT_INTERVAL_MINUTES
+                )
+            )
+        )
+
+    except (
+        TypeError,
+        ValueError
+    ):
+
+        interval = (
+            TIMELAPSE_DEFAULT_INTERVAL_MINUTES
+        )
+
+
+    interval = max(
+        1,
+        min(
+            interval,
+            1440
+        )
+    )
+
+
+    TIMELAPSE_CONFIG.update({
+        "enabled":
+            enabled,
+
+        "interval_minutes":
+            interval
+    })
+
+
+    save_timelapse_config(
+        TIMELAPSE_CONFIG
+    )
+
+
+    return {
+        "status":
+            "ok",
+
+        **TIMELAPSE_CONFIG
     }
