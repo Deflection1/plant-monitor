@@ -17,7 +17,7 @@
 
     <link
         rel="stylesheet"
-        href="/static/style.css?v=10"
+        href="/static/style.css?v=11"
     >
 
 </head>
@@ -290,6 +290,18 @@
                 </button>
 
                 <button
+                    id="galleryButton"
+                >
+                    🖼️ Bilder
+                </button>
+
+                <button
+                    id="timelapseButton"
+                >
+                    ⏱️ Zeitraffer
+                </button>
+
+                <button
                     id="fullscreenButton"
                     disabled
                 >
@@ -408,6 +420,117 @@
             </div>
 
         </article>
+
+    </section>
+
+
+    <!-- FOTO-HISTORY / ZEITRAFFER -->
+
+    <section
+        class="panel photo-history-panel"
+        id="photoHistoryPanel"
+        hidden
+    >
+
+        <div class="panel-header history-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    KAMERA-ARCHIV
+                </p>
+
+                <h2>
+                    Bilder & Zeitraffer
+                </h2>
+
+            </div>
+
+            <button
+                id="closePhotoHistoryButton"
+            >
+                Schließen
+            </button>
+
+        </div>
+
+
+        <div class="timelapse-controls">
+
+            <label>
+                Automatische Aufnahme
+
+                <select id="timelapseInterval">
+                    <option value="5">alle 5 Minuten</option>
+                    <option value="15">alle 15 Minuten</option>
+                    <option value="30" selected>alle 30 Minuten</option>
+                    <option value="60">jede Stunde</option>
+                    <option value="180">alle 3 Stunden</option>
+                    <option value="360">alle 6 Stunden</option>
+                </select>
+            </label>
+
+            <button
+                class="primary"
+                id="timelapseToggleButton"
+            >
+                Zeitraffer starten
+            </button>
+
+            <button
+                id="timelapsePlayButton"
+            >
+                ▶ Bilder abspielen
+            </button>
+
+            <span
+                class="camera-meta"
+                id="timelapseStatus"
+            >
+                Wird geladen …
+            </span>
+
+        </div>
+
+
+        <div
+            class="timelapse-player"
+            id="timelapsePlayer"
+            hidden
+        >
+
+            <img
+                id="timelapseImage"
+                alt="Zeitraffer"
+            >
+
+            <div class="timelapse-player-meta">
+
+                <span id="timelapsePlayerDate">
+                    --
+                </span>
+
+                <button id="timelapseStopButton">
+                    Stop
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="photo-grid"
+            id="photoGrid"
+        ></div>
+
+        <p
+            class="estimate-note"
+            id="photoHistoryEmpty"
+            hidden
+        >
+            Noch keine gespeicherten Bilder vorhanden.
+        </p>
 
     </section>
 
@@ -733,7 +856,7 @@
 ></script>
 
 <script
-    src="/static/app.js?v=10"
+    src="/static/app.js?v=11"
 ></script>
 
 </body>
