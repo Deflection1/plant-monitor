@@ -6,6 +6,7 @@
         const controls = view === 'controls';
         el('overviewView').hidden = controls;
         el('controlsView').hidden = !controls;
+        el(controls ? 'controlsCameraSlot' : 'overviewLiveSlot').append(el('cameraArea'));
         document.querySelectorAll('[data-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
         if (controls) requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
     }
@@ -16,6 +17,9 @@
     }));
     window.addEventListener('hashchange', route);
     route();
+    el('overviewLiveExpand').addEventListener('click', () => {
+        if (!el('cameraImage').hidden) el('fullscreenButton').click();
+    });
     el('overviewGalleryButton').addEventListener('click', () => {
         location.hash = 'steuerung'; route();
         el('timelapseButton').scrollIntoView({behavior: 'smooth', block: 'center'});
@@ -49,6 +53,7 @@
     el('overviewPhoto').addEventListener('error', () => {
         el('overviewPhoto').hidden = true; el('overviewPhotoEmpty').hidden = false;
         el('overviewPhotoDate').textContent = 'Bild konnte nicht geladen werden'; photoSignature = null;
+        el('overviewPhotoLink').removeAttribute('href');
     });
     async function refreshPhotos() {
         try {
@@ -62,7 +67,8 @@
             photoSignature = signature;
             el('overviewThumbnails').replaceChildren();
             el('overviewPhoto').hidden = !photos.length; el('overviewPhotoEmpty').hidden = !!photos.length;
-            if (!photos.length) { el('overviewPhotoDate').textContent = 'Noch keine Aufnahme'; return; }
+            if (!photos.length) { el('overviewPhotoLink').removeAttribute('href'); el('overviewPhotoDate').textContent = 'Noch keine Aufnahme'; return; }
+            el('overviewPhotoLink').href = photos[0].url;
             el('overviewPhoto').src = photos[0].url;
             el('overviewPhotoDate').textContent = 'Aufnahme · ' + dateText(photos[0].captured_at);
             for (const photo of photos) {
