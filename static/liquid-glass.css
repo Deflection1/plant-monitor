@@ -657,3 +657,109 @@ footer { color: #a9c5b8; }
         grid-template-columns: 1fr;
     }
 }
+
+
+/* LAMP PROFILE ARTWORK */
+
+.lamp-profile-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.lamp-profile-display {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 72px;
+}
+
+.lamp-profile-image,
+.lamp-profile-placeholder {
+    width: 68px;
+    height: 68px;
+    flex: 0 0 68px;
+    border-radius: 22px;
+}
+
+.lamp-profile-image {
+    display: block;
+    object-fit: cover;
+    border: 1px solid rgba(242,235,255,.34);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        0 7px 20px rgba(13,7,22,.24),
+        0 0 18px rgba(191,145,255,.08);
+}
+
+.lamp-profile-image[hidden] {
+    display: none;
+}
+
+.lamp-profile-placeholder {
+    display: grid;
+    place-items: center;
+    color: #b9ead0;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.14),
+            rgba(116,220,165,.08) 55%,
+            rgba(116,220,165,.16)
+        );
+    border: 1px solid rgba(196,255,224,.18);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.13),
+        0 5px 15px rgba(0,0,0,.1);
+}
+
+.lamp-profile-placeholder[hidden] {
+    display: none;
+}
+
+.lamp-profile-placeholder svg {
+    width: 38px;
+    height: 38px;
+}
+
+.lamp-profile-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.lamp-profile-card[data-profile="flower"] {
+    border-color: rgba(221,190,255,.23);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(211,177,255,.08),
+            rgba(255,199,171,.025)
+        ),
+        rgba(7,28,24,.24);
+}
+
+.lamp-profile-card[data-profile="growth"] .lamp-profile-placeholder {
+    color: #b9f6bd;
+    border-color: rgba(170,245,178,.23);
+}
+
+.lamp-profile-card[data-profile="custom"] .lamp-profile-placeholder {
+    color: #ffe09a;
+    border-color: rgba(255,218,132,.2);
+}
+
+@media (max-width: 600px) {
+    .lamp-profile-image,
+    .lamp-profile-placeholder {
+        width: 60px;
+        height: 60px;
+        flex-basis: 60px;
+        border-radius: 19px;
+    }
+
+    .lamp-profile-placeholder svg {
+        width: 34px;
+        height: 34px;
+    }
+}
