@@ -29,7 +29,7 @@ Das System erfasst Klima-, Licht- und später Bodenfeuchtedaten, speichert Messw
 
 ## In Arbeit / Hardware bestellt
 
-- 🟨 Raspberry Pi Camera Module v2.1 / IMX219
+- ✅ Raspberry Pi Camera Module v2.1 / IMX219
 - 📦 ADS1115 + 2× DFRobot SEN0308 für Bodenfeuchte
 - 📦 DFRobot GP8600 für 0–10-V-Lampendimmung
 - 📦 2× PPFL-1 Peristaltikpumpe
@@ -493,7 +493,7 @@ History:
 - aktives Lichtprofil
 - Zuluft-/Abluftleistung
 - Automatik-/Manuell-Modi
-- Kamerabild / Galerie / Timelapse
+- Kamera-Livestream / Bild-History / Zeitraffer
 
 ---
 
@@ -501,14 +501,14 @@ History:
 
 Verwendet wird das Raspberry Pi Camera Module v2.1 / IMX219.
 
-Geplant:
+Umgesetzt:
 
 - Picamera2-Erkennung
-- aktuelles Bild im Dashboard
+- MJPEG-Livestream im Dashboard
 - manueller Foto-Button
-- Galerie
-- automatische Fotos
-- Timelapse
+- Bild-History / Galerie
+- automatische Zeitraffer-Aufnahmen mit wählbarem Intervall
+- Zeitraffer-Wiedergabe direkt im Browser
 
 ---
 
@@ -717,14 +717,16 @@ Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet wer
 
 ## Phase 1 – Kamera
 
-- [ ] neuen Raspberry-Pi-Kernel booten und prüfen
-- [ ] IMX219 mit `rpicam-hello --list-cameras` testen
-- [ ] Picamera2-Erkennung prüfen
-- [ ] Testfoto speichern
-- [ ] Kamera-Endpunkte in FastAPI ergänzen
-- [ ] Kamerabild im Dashboard anzeigen
-- [ ] Foto-Button ergänzen
-- [ ] Galerie / Timelapse ergänzen
+- [x] neuen Raspberry-Pi-Kernel booten und prüfen
+- [x] IMX219 mit `rpicam-hello --list-cameras` testen
+- [x] Picamera2-Erkennung prüfen
+- [x] Testfoto speichern
+- [x] Kamera-Endpunkte in FastAPI ergänzen
+- [x] MJPEG-Livestream im Dashboard anzeigen
+- [x] Foto-Button ergänzen
+- [x] Bild-History / Galerie ergänzen
+- [x] automatische Zeitraffer-Aufnahmen ergänzen
+- [x] Zeitraffer-Wiedergabe im Browser ergänzen
 
 ## Phase 2 – Bodenfeuchtigkeit
 
