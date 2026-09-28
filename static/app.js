@@ -9,6 +9,8 @@ let temperatureChart;
 let humidityChart;
 let vpdChart;
 let luxChart;
+let soilMoisture1Chart;
+let soilMoisture2Chart;
 
 let photoHistory = [];
 let timelapsePlaying = false;
@@ -150,6 +152,49 @@ async function loadCurrent() {
             number(
                 data.raw_humidity
             );
+
+
+        $("soilMoisture1").textContent =
+            number(
+                data.soil_moisture_1,
+                1
+            );
+
+        $("soilMoisture2").textContent =
+            number(
+                data.soil_moisture_2,
+                1
+            );
+
+        $("soilRaw1").textContent =
+            data.soil_raw_1 === null
+            || data.soil_raw_1 === undefined
+                ? "--"
+                : number(
+                    data.soil_raw_1,
+                    0
+                );
+
+        $("soilRaw2").textContent =
+            data.soil_raw_2 === null
+            || data.soil_raw_2 === undefined
+                ? "--"
+                : number(
+                    data.soil_raw_2,
+                    0
+                );
+
+        $("soilStatus").textContent =
+            (
+                data.soil_raw_1 !== null
+                && data.soil_raw_1 !== undefined
+            )
+            || (
+                data.soil_raw_2 !== null
+                && data.soil_raw_2 !== undefined
+            )
+                ? "Sensoren verbunden"
+                : "Hardware ausstehend";
 
 
         $("lastUpdate").textContent =
@@ -510,6 +555,22 @@ function createCharts() {
             "Lux",
             "#f1dc78"
         );
+
+
+    soilMoisture1Chart =
+        makeChart(
+            "soilMoisture1Chart",
+            "%",
+            "#74c69d"
+        );
+
+
+    soilMoisture2Chart =
+        makeChart(
+            "soilMoisture2Chart",
+            "%",
+            "#95d5b2"
+        );
 }
 
 
@@ -690,6 +751,44 @@ async function loadHistory() {
                 );
 
 
+        soilMoisture1Chart
+            .data
+            .labels =
+                labels;
+
+        soilMoisture1Chart
+            .data
+            .datasets[0]
+            .data =
+                points.map(
+                    function(point) {
+
+                        return (
+                            point.soil_moisture_1
+                        );
+                    }
+                );
+
+
+        soilMoisture2Chart
+            .data
+            .labels =
+                labels;
+
+        soilMoisture2Chart
+            .data
+            .datasets[0]
+            .data =
+                points.map(
+                    function(point) {
+
+                        return (
+                            point.soil_moisture_2
+                        );
+                    }
+                );
+
+
         temperatureChart.update();
 
         humidityChart.update();
@@ -697,6 +796,10 @@ async function loadHistory() {
         vpdChart.update();
 
         luxChart.update();
+
+        soilMoisture1Chart.update();
+
+        soilMoisture2Chart.update();
 
 
     } catch (error) {
@@ -788,6 +891,247 @@ function setupRangeButtons() {
                 );
             }
         );
+}
+
+
+// =====================================================
+// BODENFEUCHTE
+// =====================================================
+
+function soilInputValue(
+    value
+) {
+
+    return (
+        value === null
+        || value === undefined
+    )
+        ? ""
+        : String(value);
+}
+
+
+async function loadSoilConfig() {
+
+    try {
+
+        const response = await fetch(
+            "/api/soil/config",
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        const pots =
+            data.pots || [];
+
+        if (pots.length !== 2) {
+            return;
+        }
+
+
+        $("soilName1").textContent =
+            pots[0].name;
+
+        $("soilName2").textContent =
+            pots[1].name;
+
+        $("soilNameInput1").value =
+            pots[0].name;
+
+        $("soilNameInput2").value =
+            pots[1].name;
+
+        $("soilDry1").value =
+            soilInputValue(
+                pots[0].dry_raw
+            );
+
+        $("soilWet1").value =
+            soilInputValue(
+                pots[0].wet_raw
+            );
+
+        $("soilDry2").value =
+            soilInputValue(
+                pots[1].dry_raw
+            );
+
+        $("soilWet2").value =
+            soilInputValue(
+                pots[1].wet_raw
+            );
+
+
+        const calibrated =
+            pots.every(
+                function(pot) {
+
+                    return (
+                        pot.dry_raw !== null
+                        && pot.wet_raw !== null
+                    );
+                }
+            );
+
+        $("soilConfigMessage").textContent =
+            calibrated
+                ? "Kalibrierung gespeichert"
+                : "Kalibrierung noch unvollständig";
+
+    } catch (error) {
+
+        console.error(
+            "Soil config error:",
+            error
+        );
+
+        $("soilConfigMessage").textContent =
+            "Konfiguration konnte nicht geladen werden.";
+    }
+}
+
+
+function nullableNumberFromInput(
+    id
+) {
+
+    const value =
+        $(id).value.trim();
+
+    if (value === "") {
+        return null;
+    }
+
+    return Number(value);
+}
+
+
+async function saveSoilConfig() {
+
+    const button =
+        $("saveSoilConfigButton");
+
+    button.disabled =
+        true;
+
+    $("soilConfigMessage").textContent =
+        "Speichere …";
+
+    try {
+
+        const payload = {
+            pots: [
+                {
+                    name:
+                        $("soilNameInput1").value.trim()
+                        || "Topf 1",
+
+                    dry_raw:
+                        nullableNumberFromInput(
+                            "soilDry1"
+                        ),
+
+                    wet_raw:
+                        nullableNumberFromInput(
+                            "soilWet1"
+                        )
+                },
+                {
+                    name:
+                        $("soilNameInput2").value.trim()
+                        || "Topf 2",
+
+                    dry_raw:
+                        nullableNumberFromInput(
+                            "soilDry2"
+                        ),
+
+                    wet_raw:
+                        nullableNumberFromInput(
+                            "soilWet2"
+                        )
+                }
+            ]
+        };
+
+
+        const response = await fetch(
+            "/api/soil/config",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body:
+                    JSON.stringify(
+                        payload
+                    )
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        if (data.status === "error") {
+            throw new Error(
+                data.message
+                || "Konfigurationsfehler"
+            );
+        }
+
+        await loadSoilConfig();
+
+        $("soilConfigMessage").textContent =
+            "Gespeichert · bleibt nach Neustart erhalten";
+
+        await loadCurrent();
+
+    } catch (error) {
+
+        console.error(
+            "Soil config save error:",
+            error
+        );
+
+        $("soilConfigMessage").textContent =
+            "Speichern fehlgeschlagen";
+
+    } finally {
+
+        button.disabled =
+            false;
+    }
+}
+
+
+function setupSoilMoisture() {
+
+    $("saveSoilConfigButton")
+        .addEventListener(
+            "click",
+            saveSoilConfig
+        );
+
+    loadSoilConfig();
 }
 
 
@@ -1470,6 +1814,8 @@ document.addEventListener(
         setupCamera();
 
         setupPhotoHistory();
+
+        setupSoilMoisture();
 
 
         createCharts();
