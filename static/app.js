@@ -787,6 +787,213 @@ function setupRangeButtons() {
 
 
 // =====================================================
+// KAMERA
+// =====================================================
+
+function showCameraImage() {
+
+    const image =
+        $("cameraImage");
+
+    const empty =
+        $("cameraEmpty");
+
+    image.src =
+        "/api/camera/image?t="
+        + Date.now();
+
+    image.hidden =
+        false;
+
+    empty.hidden =
+        true;
+
+    $("fullscreenButton").disabled =
+        false;
+}
+
+
+async function loadCameraStatus() {
+
+    try {
+
+        const response = await fetch(
+            "/api/camera/status",
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        if (!data.available) {
+
+            $("captureButton").disabled =
+                true;
+
+            $("cameraMessage").textContent =
+                "Keine Kamera erkannt.";
+
+            $("cameraMeta").textContent =
+                "Kamera offline";
+
+            return;
+        }
+
+        $("captureButton").disabled =
+            false;
+
+        const camera =
+            (
+                data.cameras
+                && data.cameras.length
+            )
+                ? data.cameras[0]
+                : null;
+
+        $("cameraMeta").textContent =
+            camera
+                ? (
+                    "Bereit · "
+                    + (
+                        camera.Model
+                        || "Kamera"
+                    )
+                )
+                : "Kamera bereit";
+
+        if (data.has_image) {
+            showCameraImage();
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Camera status error:",
+            error
+        );
+
+        $("captureButton").disabled =
+            true;
+
+        $("cameraMessage").textContent =
+            "Kamerastatus konnte nicht geladen werden.";
+
+        $("cameraMeta").textContent =
+            "Kamera offline";
+    }
+}
+
+
+async function capturePhoto() {
+
+    const button =
+        $("captureButton");
+
+    button.disabled =
+        true;
+
+    button.textContent =
+        "⏳ Aufnahme …";
+
+    $("cameraMeta").textContent =
+        "Kamera nimmt auf …";
+
+    try {
+
+        const response = await fetch(
+            "/api/camera/capture",
+            {
+                method: "POST",
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        showCameraImage();
+
+        $("cameraMeta").textContent =
+            "Aufgenommen "
+            + new Date(
+                data.captured_at
+            )
+            .toLocaleTimeString(
+                "de-CH",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                }
+            );
+
+    } catch (error) {
+
+        console.error(
+            "Camera capture error:",
+            error
+        );
+
+        $("cameraMeta").textContent =
+            "Aufnahme fehlgeschlagen";
+
+    } finally {
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "📷 Foto aufnehmen";
+    }
+}
+
+
+function setupCamera() {
+
+    $("captureButton")
+        .addEventListener(
+            "click",
+            capturePhoto
+        );
+
+    $("fullscreenButton")
+        .addEventListener(
+            "click",
+            function() {
+
+                const image =
+                    $("cameraImage");
+
+                if (
+                    image
+                    && image.requestFullscreen
+                ) {
+                    image.requestFullscreen();
+                }
+            }
+        );
+
+    loadCameraStatus();
+}
+
+
+// =====================================================
 // START
 // =====================================================
 
@@ -804,6 +1011,8 @@ document.addEventListener(
         loadCurrent();
 
         loadLightToday();
+
+        setupCamera();
 
 
         createCharts();
