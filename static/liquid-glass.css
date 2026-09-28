@@ -315,13 +315,13 @@ footer { color: #a9c5b8; }
     height: 44px;
 }
 
-.light-state-icon[data-state="on"] .light-state-moon,
-.light-state-icon[data-state="off"] .light-state-sun {
+.js-light-state-icon[data-state="on"] .light-state-moon,
+.js-light-state-icon[data-state="off"] .light-state-sun {
     display: none;
 }
 
-.light-state-icon[data-state="on"] .light-state-sun,
-.light-state-icon[data-state="off"] .light-state-moon {
+.js-light-state-icon[data-state="on"] .light-state-sun,
+.js-light-state-icon[data-state="off"] .light-state-moon {
     display: block;
 }
 
@@ -443,4 +443,33 @@ footer { color: #a9c5b8; }
         width: 29px;
         height: 29px;
     }
+}
+
+
+/* GLOBAL DYNAMIC LIGHT STATE */
+
+.js-light-state-icon {
+    transition:
+        opacity .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+.js-light-state-icon[data-state="off"] {
+    --icon-color: 123, 151, 176;
+    opacity: .82;
+}
+
+.js-light-state-icon[data-state="on"] {
+    --icon-color: 255, 205, 92;
+    opacity: 1;
+}
+
+.sensor-header .js-light-state-icon[data-state="on"],
+.overview-stat .js-light-state-icon[data-state="on"] {
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,.16),
+        inset -1px -1px 0 rgba(255,205,92,.18),
+        0 4px 14px rgba(244,181,46,.12);
 }
