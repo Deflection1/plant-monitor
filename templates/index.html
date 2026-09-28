@@ -21,7 +21,7 @@
     >
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=1">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=2">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -258,7 +258,11 @@
             <article class="soil-card">
 
                 <div class="sensor-header">
-                    🌱 <span id="soilName1">Topf 1</span>
+                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-soil-1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9fff0"/><stop offset=".5" stop-color="#69ddb1"/><stop offset="1" stop-color="#2c8d72"/></linearGradient></defs><path d="M12 32h24l-3 10H15l-3-10Z" fill="url(#glass-soil-1)" stroke="#d9fff0" stroke-opacity=".62" stroke-width="1.2"/><path d="M24 33V18" fill="none" stroke="#efffe9" stroke-width="2" stroke-linecap="round"/><path d="M24 25c-8 0-11-5-11-10 7 0 11 3 11 10Zm0-4c0-7 4-11 11-11 0 7-4 11-11 11Z" fill="url(#glass-soil-1)" stroke="#e4ffd8" stroke-opacity=".7" stroke-width="1.2"/><path d="M10 36h28" stroke="#b8e7cf" stroke-opacity=".7" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+
+                    <span id="soilName1">
+                        Topf 1
+                    </span>
                 </div>
 
                 <div class="sensor-value">
@@ -290,7 +294,11 @@
             <article class="soil-card">
 
                 <div class="sensor-header">
-                    🌱 <span id="soilName2">Topf 2</span>
+                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-soil-2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9fff0"/><stop offset=".5" stop-color="#69ddb1"/><stop offset="1" stop-color="#2c8d72"/></linearGradient></defs><path d="M12 32h24l-3 10H15l-3-10Z" fill="url(#glass-soil-2)" stroke="#d9fff0" stroke-opacity=".62" stroke-width="1.2"/><path d="M24 33V18" fill="none" stroke="#efffe9" stroke-width="2" stroke-linecap="round"/><path d="M24 25c-8 0-11-5-11-10 7 0 11 3 11 10Zm0-4c0-7 4-11 11-11 0 7-4 11-11 11Z" fill="url(#glass-soil-2)" stroke="#e4ffd8" stroke-opacity=".7" stroke-width="1.2"/><path d="M10 36h28" stroke="#b8e7cf" stroke-opacity=".7" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+
+                    <span id="soilName2">
+                        Topf 2
+                    </span>
                 </div>
 
                 <div class="sensor-value">
@@ -437,112 +445,12 @@
     </section>
 
 
-    <!-- KAMERA + SYSTEM -->
+    <!-- SYSTEM -->
 
-    <section class="main-grid">
+    <section class="main-grid system-only-grid">
 
 
         <!-- KAMERA -->
-
-        <div id="controlsCameraSlot" class="camera-panel-slot"><article class="panel camera-panel" id="sharedCameraPanel">
-
-            <div class="panel-header">
-
-                <div>
-
-                    <p class="eyebrow">
-                        KAMERA
-                    </p>
-
-                    <h2>
-                        Pflanzenansicht
-                    </h2>
-
-                </div>
-
-
-                <span class="badge">
-                    Kamera
-                </span>
-
-            </div>
-
-
-            <div
-                class="camera-placeholder"
-                id="cameraArea"
-            >
-
-                <div
-                    class="camera-empty"
-                    id="cameraEmpty"
-                >
-
-                    <span class="camera-icon">
-                        📷
-                    </span>
-
-                    <h3>
-                        Kamera bereit
-                    </h3>
-
-                    <p id="cameraMessage">
-                        Livestream wird gestartet …
-                    </p>
-
-                </div>
-
-                <img
-                    id="cameraImage"
-                    class="camera-image"
-                    alt="Aktuelle Pflanzenansicht"
-                    hidden
-                >
-
-            </div>
-
-
-            <div class="button-row">
-
-                <button
-                    class="primary"
-                    id="captureButton"
-                >
-                    📷 Foto aufnehmen
-                </button>
-
-                <button
-                    id="galleryButton"
-                >
-                    🖼️ Bilder
-                </button>
-
-                <button
-                    id="timelapseButton"
-                >
-                    ⏱️ Zeitraffer
-                </button>
-
-                <button
-                    id="fullscreenButton"
-                    disabled
-                >
-                    Vollbild
-                </button>
-
-                <span
-                    class="camera-meta"
-                    id="cameraMeta"
-                >
-                    Kamera wird geprüft …
-                </span>
-
-            </div>
-
-        </article>
-
-
-        </div>
 
         <!-- SYSTEM -->
 
@@ -649,7 +557,6 @@
 
 
     <!-- FOTO-HISTORY / ZEITRAFFER -->
-    <div id="controlsHistorySlot"></div>
 
     <section
         class="panel photo-history-panel"
@@ -1092,6 +999,113 @@
         </article>
 
     </section>
+
+
+    <!-- KAMERA GANZ UNTEN -->
+
+    <div class="controls-camera-bottom">
+        <div id="controlsCameraSlot" class="camera-panel-slot"><article class="panel camera-panel" id="sharedCameraPanel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        KAMERA
+                    </p>
+
+                    <h2>
+                        Pflanzenansicht
+                    </h2>
+
+                </div>
+
+
+                <span class="badge">
+                    Kamera
+                </span>
+
+            </div>
+
+
+            <div
+                class="camera-placeholder"
+                id="cameraArea"
+            >
+
+                <div
+                    class="camera-empty"
+                    id="cameraEmpty"
+                >
+
+                    <span class="camera-icon">
+                        📷
+                    </span>
+
+                    <h3>
+                        Kamera bereit
+                    </h3>
+
+                    <p id="cameraMessage">
+                        Livestream wird gestartet …
+                    </p>
+
+                </div>
+
+                <img
+                    id="cameraImage"
+                    class="camera-image"
+                    alt="Aktuelle Pflanzenansicht"
+                    hidden
+                >
+
+            </div>
+
+
+            <div class="button-row">
+
+                <button
+                    class="primary"
+                    id="captureButton"
+                >
+                    📷 Foto aufnehmen
+                </button>
+
+                <button
+                    id="galleryButton"
+                >
+                    🖼️ Bilder
+                </button>
+
+                <button
+                    id="timelapseButton"
+                >
+                    ⏱️ Zeitraffer
+                </button>
+
+                <button
+                    id="fullscreenButton"
+                    disabled
+                >
+                    Vollbild
+                </button>
+
+                <span
+                    class="camera-meta"
+                    id="cameraMeta"
+                >
+                    Kamera wird geprüft …
+                </span>
+
+            </div>
+
+        </article>
+
+
+        </div>
+    </div>
+
+    <div id="controlsHistorySlot"></div>
 
 
 </div>
