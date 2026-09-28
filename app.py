@@ -59,6 +59,7 @@ PHOTO_DIR = BASE_DIR / "photos"
 LATEST_PHOTO = PHOTO_DIR / "latest.jpg"
 TIMELAPSE_CONFIG_FILE = BASE_DIR / "data" / "timelapse.json"
 SOIL_CONFIG_FILE = BASE_DIR / "data" / "soil_moisture.json"
+LAMP_CONFIG_FILE = BASE_DIR / "data" / "lamp_control.json"
 TIMELAPSE_DEFAULT_INTERVAL_MINUTES = 720
 
 CAMERA_STREAM_SIZE = (1280, 720)
@@ -366,6 +367,194 @@ def add_soil_values(
         )
 
     return data
+
+
+# =====================================================
+# LAMPENSTEUERUNG KONFIGURATION
+# =====================================================
+
+def default_lamp_config():
+
+    return {
+        "name":
+            "Pflanzenlampe",
+
+        "profile":
+            "custom",
+
+        "schedule_enabled":
+            False,
+
+        "on_time":
+            "08:00",
+
+        "off_time":
+            "20:00",
+
+        # Sicherer Startwert: solange die Hardware noch nicht
+        # angebunden ist, wird nur die Vorgabe gespeichert.
+        "power_percent":
+            0
+    }
+
+
+def valid_clock_time(
+    value
+):
+
+    try:
+
+        datetime.strptime(
+            str(value),
+            "%H:%M"
+        )
+
+        return True
+
+    except (
+        TypeError,
+        ValueError
+    ):
+
+        return False
+
+
+def load_lamp_config():
+
+    default = default_lamp_config()
+
+    if not LAMP_CONFIG_FILE.exists():
+        return default
+
+    try:
+
+        data = json.loads(
+            LAMP_CONFIG_FILE.read_text()
+        )
+
+        profile = str(
+            data.get(
+                "profile",
+                default["profile"]
+            )
+        )
+
+        if profile not in (
+            "custom",
+            "growth",
+            "flower"
+        ):
+            profile = "custom"
+
+        on_time = str(
+            data.get(
+                "on_time",
+                default["on_time"]
+            )
+        )
+
+        off_time = str(
+            data.get(
+                "off_time",
+                default["off_time"]
+            )
+        )
+
+        if not valid_clock_time(
+            on_time
+        ):
+            on_time = default[
+                "on_time"
+            ]
+
+        if not valid_clock_time(
+            off_time
+        ):
+            off_time = default[
+                "off_time"
+            ]
+
+        try:
+
+            power_percent = int(
+                data.get(
+                    "power_percent",
+                    default[
+                        "power_percent"
+                    ]
+                )
+            )
+
+        except (
+            TypeError,
+            ValueError
+        ):
+
+            power_percent = default[
+                "power_percent"
+            ]
+
+        return {
+            "name":
+                str(
+                    data.get(
+                        "name",
+                        default["name"]
+                    )
+                )[:40],
+
+            "profile":
+                profile,
+
+            "schedule_enabled":
+                bool(
+                    data.get(
+                        "schedule_enabled",
+                        default[
+                            "schedule_enabled"
+                        ]
+                    )
+                ),
+
+            "on_time":
+                on_time,
+
+            "off_time":
+                off_time,
+
+            "power_percent":
+                max(
+                    0,
+                    min(
+                        100,
+                        power_percent
+                    )
+                )
+        }
+
+    except Exception:
+
+        return default
+
+
+def save_lamp_config(
+    config
+):
+
+    LAMP_CONFIG_FILE.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    LAMP_CONFIG_FILE.write_text(
+        json.dumps(
+            config,
+            indent=2
+        )
+    )
+
+
+LAMP_CONFIG = load_lamp_config()
 
 
 # =====================================================
@@ -910,6 +1099,182 @@ def light_today():
 
     return stats
 
+
+
+# =====================================================
+# LAMPENSTEUERUNG API
+# =====================================================
+
+@app.get(
+    "/api/light/config"
+)
+def lamp_config():
+
+    return LAMP_CONFIG
+
+
+@app.post(
+    "/api/light/config"
+)
+def lamp_config_update(
+    payload: dict = Body(...)
+):
+
+    updated = default_lamp_config()
+
+    updated["name"] = str(
+        payload.get(
+            "name",
+            updated["name"]
+        )
+    )[:40]
+
+    profile = str(
+        payload.get(
+            "profile",
+            updated["profile"]
+        )
+    )
+
+    if profile not in (
+        "custom",
+        "growth",
+        "flower"
+    ):
+
+        return {
+            "status":
+                "error",
+
+            "message":
+                "Ungültiges Lichtprofil"
+        }
+
+    updated["profile"] = profile
+
+    updated["schedule_enabled"] = bool(
+        payload.get(
+            "schedule_enabled",
+            False
+        )
+    )
+
+    on_time = str(
+        payload.get(
+            "on_time",
+            updated["on_time"]
+        )
+    )
+
+    off_time = str(
+        payload.get(
+            "off_time",
+            updated["off_time"]
+        )
+    )
+
+    if (
+        not valid_clock_time(
+            on_time
+        )
+        or not valid_clock_time(
+            off_time
+        )
+    ):
+
+        return {
+            "status":
+                "error",
+
+            "message":
+                "Ungültige Schaltzeit"
+        }
+
+    updated["on_time"] = on_time
+    updated["off_time"] = off_time
+
+    try:
+
+        power_percent = int(
+            payload.get(
+                "power_percent",
+                0
+            )
+        )
+
+    except (
+        TypeError,
+        ValueError
+    ):
+
+        return {
+            "status":
+                "error",
+
+            "message":
+                "Ungültige Lampenleistung"
+        }
+
+    if not (
+        0
+        <= power_percent
+        <= 100
+    ):
+
+        return {
+            "status":
+                "error",
+
+            "message":
+                "Lampenleistung muss zwischen 0 und 100 % liegen"
+        }
+
+    updated[
+        "power_percent"
+    ] = power_percent
+
+    LAMP_CONFIG.clear()
+
+    LAMP_CONFIG.update(
+        updated
+    )
+
+    save_lamp_config(
+        LAMP_CONFIG
+    )
+
+    return {
+        "status":
+            "ok",
+
+        **LAMP_CONFIG
+    }
+
+
+@app.get(
+    "/api/light/status"
+)
+def lamp_status():
+
+    return {
+        "hardware_connected":
+            False,
+
+        "controller":
+            "DFRobot GP8600",
+
+        "output_available":
+            False,
+
+        "output_percent":
+            None,
+
+        "message":
+            "GP8600 noch nicht angebunden",
+
+        "config":
+            LAMP_CONFIG
+    }
 
 
 # =====================================================
