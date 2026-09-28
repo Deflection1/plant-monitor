@@ -10,6 +10,11 @@ let humidityChart;
 let vpdChart;
 let luxChart;
 
+let photoHistory = [];
+let timelapsePlaying = false;
+let timelapseTimer = null;
+let timelapseIndex = 0;
+
 
 // =====================================================
 // FORMAT
@@ -991,6 +996,432 @@ function setupCamera() {
 
 
 // =====================================================
+// FOTO-HISTORY / ZEITRAFFER
+// =====================================================
+
+function formatPhotoDate(
+    value
+) {
+
+    return new Date(
+        value
+    ).toLocaleString(
+        "de-CH",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+}
+
+
+async function loadPhotoHistory() {
+
+    try {
+
+        const response = await fetch(
+            "/api/camera/photos?limit=200",
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        photoHistory =
+            data.photos || [];
+
+        const grid =
+            $("photoGrid");
+
+        grid.innerHTML =
+            "";
+
+        $("photoHistoryEmpty").hidden =
+            photoHistory.length > 0;
+
+
+        photoHistory.forEach(
+            function(photo) {
+
+                const item =
+                    document.createElement(
+                        "button"
+                    );
+
+                item.className =
+                    "photo-thumb";
+
+                item.innerHTML =
+                    '<img loading="lazy" src="'
+                    + photo.url
+                    + '" alt="Pflanzenfoto">'
+                    + '<span>'
+                    + formatPhotoDate(
+                        photo.captured_at
+                    )
+                    + '</span>';
+
+                item.addEventListener(
+                    "click",
+                    function() {
+
+                        window.open(
+                            photo.url,
+                            "_blank"
+                        );
+                    }
+                );
+
+                grid.appendChild(
+                    item
+                );
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Photo history error:",
+            error
+        );
+    }
+}
+
+
+async function loadTimelapseStatus() {
+
+    try {
+
+        const response = await fetch(
+            "/api/camera/timelapse",
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        $("timelapseInterval").value =
+            String(
+                data.interval_minutes
+                || 30
+            );
+
+        $("timelapseToggleButton").textContent =
+            data.enabled
+                ? "Zeitraffer stoppen"
+                : "Zeitraffer starten";
+
+        $("timelapseStatus").textContent =
+            data.enabled
+                ? (
+                    "Aktiv · alle "
+                    + data.interval_minutes
+                    + " min · "
+                    + data.photo_count
+                    + " Bilder"
+                )
+                : (
+                    "Aus · "
+                    + data.photo_count
+                    + " Bilder gespeichert"
+                );
+
+    } catch (error) {
+
+        console.error(
+            "Timelapse status error:",
+            error
+        );
+    }
+}
+
+
+async function toggleTimelapse() {
+
+    const statusResponse =
+        await fetch(
+            "/api/camera/timelapse",
+            {
+                cache: "no-store"
+            }
+        );
+
+    const status =
+        await statusResponse.json();
+
+    const enabled =
+        !status.enabled;
+
+    const interval =
+        Number(
+            $("timelapseInterval").value
+        );
+
+    const response = await fetch(
+        "/api/camera/timelapse",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+            body: JSON.stringify({
+                enabled:
+                    enabled,
+
+                interval_minutes:
+                    interval
+            })
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "HTTP "
+            + response.status
+        );
+    }
+
+    await loadTimelapseStatus();
+}
+
+
+function stopTimelapsePlayback() {
+
+    timelapsePlaying =
+        false;
+
+    if (timelapseTimer) {
+
+        clearInterval(
+            timelapseTimer
+        );
+
+        timelapseTimer =
+            null;
+    }
+
+    $("timelapsePlayer").hidden =
+        true;
+}
+
+
+function playTimelapse() {
+
+    if (
+        !photoHistory
+        || photoHistory.length < 2
+    ) {
+
+        $("timelapseStatus").textContent =
+            "Für die Wiedergabe werden mindestens 2 Bilder benötigt.";
+
+        return;
+    }
+
+
+    stopTimelapsePlayback();
+
+    const frames =
+        [...photoHistory].reverse();
+
+    timelapsePlaying =
+        true;
+
+    timelapseIndex =
+        0;
+
+    $("timelapsePlayer").hidden =
+        false;
+
+
+    function showFrame() {
+
+        const photo =
+            frames[
+                timelapseIndex
+            ];
+
+        $("timelapseImage").src =
+            photo.url;
+
+        $("timelapsePlayerDate").textContent =
+            formatPhotoDate(
+                photo.captured_at
+            );
+
+        timelapseIndex +=
+            1;
+
+        if (
+            timelapseIndex
+            >= frames.length
+        ) {
+            timelapseIndex =
+                0;
+        }
+    }
+
+
+    showFrame();
+
+    timelapseTimer =
+        setInterval(
+            showFrame,
+            350
+        );
+}
+
+
+function openPhotoHistory() {
+
+    $("photoHistoryPanel").hidden =
+        false;
+
+    loadPhotoHistory();
+
+    loadTimelapseStatus();
+
+    $("photoHistoryPanel")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+}
+
+
+function setupPhotoHistory() {
+
+    $("galleryButton")
+        .addEventListener(
+            "click",
+            openPhotoHistory
+        );
+
+    $("timelapseButton")
+        .addEventListener(
+            "click",
+            openPhotoHistory
+        );
+
+    $("closePhotoHistoryButton")
+        .addEventListener(
+            "click",
+            function() {
+
+                stopTimelapsePlayback();
+
+                $("photoHistoryPanel").hidden =
+                    true;
+            }
+        );
+
+    $("timelapseToggleButton")
+        .addEventListener(
+            "click",
+            async function() {
+
+                try {
+
+                    await toggleTimelapse();
+
+                } catch (error) {
+
+                    console.error(
+                        "Timelapse toggle error:",
+                        error
+                    );
+
+                    $("timelapseStatus").textContent =
+                        "Zeitraffer konnte nicht geändert werden.";
+                }
+            }
+        );
+
+    $("timelapseInterval")
+        .addEventListener(
+            "change",
+            async function() {
+
+                const response = await fetch(
+                    "/api/camera/timelapse",
+                    {
+                        cache: "no-store"
+                    }
+                );
+
+                const status =
+                    await response.json();
+
+                if (!status.enabled) {
+                    return;
+                }
+
+                await fetch(
+                    "/api/camera/timelapse",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body: JSON.stringify({
+                            enabled:
+                                true,
+
+                            interval_minutes:
+                                Number(
+                                    $("timelapseInterval").value
+                                )
+                        })
+                    }
+                );
+
+                loadTimelapseStatus();
+            }
+        );
+
+    $("timelapsePlayButton")
+        .addEventListener(
+            "click",
+            async function() {
+
+                await loadPhotoHistory();
+
+                playTimelapse();
+            }
+        );
+
+    $("timelapseStopButton")
+        .addEventListener(
+            "click",
+            stopTimelapsePlayback
+        );
+}
+
+
+// =====================================================
 // START
 // =====================================================
 
@@ -1010,6 +1441,8 @@ document.addEventListener(
         loadLightToday();
 
         setupCamera();
+
+        setupPhotoHistory();
 
 
         createCharts();
