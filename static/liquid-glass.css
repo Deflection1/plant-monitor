@@ -340,3 +340,43 @@ footer { color: #a9c5b8; }
         height: 38px;
     }
 }
+
+
+/* LIGHT PANEL: one clear visual focus, no duplicate sun icon */
+
+.big-status--light {
+    margin-top: 22px;
+    align-items: center;
+}
+
+.big-status--light .light-state-icon {
+    width: 58px;
+    height: 62px;
+    border-radius: 20px;
+}
+
+.big-status--light .light-state-icon .glass-glyph {
+    width: 39px;
+    height: 39px;
+}
+
+.big-status--light strong {
+    font-size: 1.45rem;
+}
+
+.big-status--light small {
+    color: #c2d6ce;
+}
+
+@media (max-width: 600px) {
+    .big-status--light .light-state-icon {
+        width: 52px;
+        height: 56px;
+        border-radius: 18px;
+    }
+
+    .big-status--light .light-state-icon .glass-glyph {
+        width: 35px;
+        height: 35px;
+    }
+}
