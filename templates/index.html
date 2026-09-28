@@ -20,6 +20,7 @@
         href="/static/style.css?v=12"
     >
 
+<link rel="stylesheet" href="/static/overview.css?v=1">
 </head>
 
 
@@ -57,13 +58,39 @@
             <span class="status-dot"></span>
 
             <span>
-                Online
+                Verbinde …
             </span>
 
         </div>
 
     </header>
 
+
+<nav class="view-switch" aria-label="Dashboard-Ansicht">
+    <button type="button" data-view="overview" aria-pressed="true">Übersicht</button>
+    <button type="button" data-view="controls" aria-pressed="false">Steuerung</button>
+</nav>
+<div class="overview-freshness" id="overviewFreshness" role="status">Verbindung wird geprüft …</div>
+<main id="overviewView" aria-label="Pflanzenübersicht">
+    <div class="overview-heading"><div><p class="eyebrow">DEIN KLEINES ÖKOSYSTEM</p><h2>Raum zum Wachsen.</h2></div><p>Ein Blick auf deine Pflanzen.</p></div>
+    <section class="overview-layout">
+        <figure class="plant-hero">
+            <img id="overviewPhoto" alt="Letzte Aufnahme aus deinem Pflanzenschrank" hidden>
+            <div id="overviewPhotoEmpty" class="photo-empty"><span aria-hidden="true">☘</span><h3>Hier wächst deine Geschichte.</h3><p>Dein erstes Foto erscheint hier.<br>Eine Aufnahme startest du unter Steuerung.</p></div>
+            <figcaption><span>DEIN PFLANZENSCHRANK</span><time id="overviewPhotoDate">Noch keine Aufnahme</time></figcaption>
+        </figure>
+        <aside class="overview-side" aria-label="Klima und Licht">
+            <div class="overview-stat"><span>Temperatur</span><strong><span id="ovTemperature">—</span><small> °C</small></strong><p>Im Pflanzenschrank</p></div>
+            <div class="overview-stat"><span>Luftfeuchtigkeit</span><strong><span id="ovHumidity">—</span><small> %</small></strong><p>Relative Luftfeuchte</p></div>
+            <div class="overview-stat"><span>Licht</span><strong id="ovLight">—</strong><p><span id="ovLux">—</span> Lux am Sensor</p></div>
+        </aside>
+    </section>
+    <section class="overview-pots" aria-label="Deine Pflanzen">
+<article class="overview-pot"><div class="pot-symbol" aria-hidden="true">♧</div><div><p class="eyebrow">PFLANZE 01</p><h3 id="ovName1">Topf 1</h3><p id="ovSoilNote1">Messwert ausstehend</p></div><strong id="ovSoil1">—</strong><progress id="ovProgress1" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 1" hidden></progress></article><article class="overview-pot"><div class="pot-symbol" aria-hidden="true">♧</div><div><p class="eyebrow">PFLANZE 02</p><h3 id="ovName2">Topf 2</h3><p id="ovSoilNote2">Messwert ausstehend</p></div><strong id="ovSoil2">—</strong><progress id="ovProgress2" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 2" hidden></progress></article>
+    </section>
+    <section class="overview-journal" aria-label="Fotochronik"><div class="journal-heading"><div><p class="eyebrow">MOMENTE FESTHALTEN</p><h2>Wachstum in Bildern</h2></div><button type="button" id="overviewGalleryButton">Galerie & Zeitraffer →</button></div><p id="overviewJournalNote">Fotochronik wird geladen …</p><div id="overviewThumbnails" class="overview-thumbnails"></div></section>
+</main>
+<div id="controlsView" hidden>
 
     <!-- SENSOR CARDS -->
 
@@ -1081,6 +1108,7 @@
     </section>
 
 
+</div>
     <!-- FOOTER -->
 
     <footer>
@@ -1101,9 +1129,11 @@
 ></script>
 
 <script
-    src="/static/app.js?v=12"
+    src="/static/app.js?v=13"
 ></script>
 
+<script src="/static/overview.js?v=1"></script>
 </body>
 
 </html>
+

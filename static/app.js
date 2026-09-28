@@ -204,6 +204,8 @@ async function loadCurrent() {
             );
 
 
+        window.dispatchEvent(new CustomEvent("plant:current", {detail: data}));
+
         // PPFD
 
         $("ppfdSensor").textContent =
@@ -297,6 +299,8 @@ async function loadCurrent() {
             error
         );
 
+
+        window.dispatchEvent(new Event("plant:offline"));
 
         $("systemStatus").innerHTML =
 
@@ -934,6 +938,8 @@ async function loadSoilConfig() {
 
         const pots =
             data.pots || [];
+
+        window.dispatchEvent(new CustomEvent("plant:pots", {detail: pots}));
 
         if (pots.length !== 2) {
             return;
@@ -1846,3 +1852,4 @@ document.addEventListener(
         );
     }
 );
+
