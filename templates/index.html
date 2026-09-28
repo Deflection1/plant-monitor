@@ -20,7 +20,7 @@
         href="/static/style.css?v=12"
     >
 
-<link rel="stylesheet" href="/static/overview.css?v=1">
+<link rel="stylesheet" href="/static/overview.css?v=2">
 </head>
 
 
@@ -40,7 +40,7 @@
             </p>
 
             <h1>
-                🌿 Pflanzenschrank
+                <svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8m0 4c-5 0-8-3-8-7 5 0 8 2 8 7Zm0-3c0-5 3-8 8-8 0 5-3 8-8 8Z"/><path d="M9 21h6"/></svg> Pflanzenschrank
             </h1>
 
             <p class="subtitle">
@@ -67,29 +67,13 @@
 
 
 <nav class="view-switch" aria-label="Dashboard-Ansicht">
-    <button type="button" data-view="overview" aria-pressed="true">Übersicht</button>
-    <button type="button" data-view="controls" aria-pressed="false">Steuerung</button>
+    <button type="button" data-view="overview" aria-pressed="true"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Übersicht</button>
+    <button type="button" data-view="controls" aria-pressed="false"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h6m4 0h6M4 17h10m4 0h2"/><circle cx="12" cy="7" r="2"/><circle cx="16" cy="17" r="2"/></svg>Steuerung</button>
 </nav>
 <div class="overview-freshness" id="overviewFreshness" role="status">Verbindung wird geprüft …</div>
 <main id="overviewView" aria-label="Pflanzenübersicht">
-    <div class="overview-heading"><div><p class="eyebrow">DEIN KLEINES ÖKOSYSTEM</p><h2>Raum zum Wachsen.</h2></div><p>Ein Blick auf deine Pflanzen.</p></div>
-    <section class="overview-layout">
-        <figure class="plant-hero">
-            <img id="overviewPhoto" alt="Letzte Aufnahme aus deinem Pflanzenschrank" hidden>
-            <div id="overviewPhotoEmpty" class="photo-empty"><span aria-hidden="true">☘</span><h3>Hier wächst deine Geschichte.</h3><p>Dein erstes Foto erscheint hier.<br>Eine Aufnahme startest du unter Steuerung.</p></div>
-            <figcaption><span>DEIN PFLANZENSCHRANK</span><time id="overviewPhotoDate">Noch keine Aufnahme</time></figcaption>
-        </figure>
-        <aside class="overview-side" aria-label="Klima und Licht">
-            <div class="overview-stat"><span>Temperatur</span><strong><span id="ovTemperature">—</span><small> °C</small></strong><p>Im Pflanzenschrank</p></div>
-            <div class="overview-stat"><span>Luftfeuchtigkeit</span><strong><span id="ovHumidity">—</span><small> %</small></strong><p>Relative Luftfeuchte</p></div>
-            <div class="overview-stat"><span>Licht</span><strong id="ovLight">—</strong><p><span id="ovLux">—</span> Lux am Sensor</p></div>
-        </aside>
-    </section>
-    <section class="overview-pots" aria-label="Deine Pflanzen">
-<article class="overview-pot"><div class="pot-symbol" aria-hidden="true">♧</div><div><p class="eyebrow">PFLANZE 01</p><h3 id="ovName1">Topf 1</h3><p id="ovSoilNote1">Messwert ausstehend</p></div><strong id="ovSoil1">—</strong><progress id="ovProgress1" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 1" hidden></progress></article><article class="overview-pot"><div class="pot-symbol" aria-hidden="true">♧</div><div><p class="eyebrow">PFLANZE 02</p><h3 id="ovName2">Topf 2</h3><p id="ovSoilNote2">Messwert ausstehend</p></div><strong id="ovSoil2">—</strong><progress id="ovProgress2" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 2" hidden></progress></article>
-    </section>
-    <section class="overview-journal" aria-label="Fotochronik"><div class="journal-heading"><div><p class="eyebrow">MOMENTE FESTHALTEN</p><h2>Wachstum in Bildern</h2></div><button type="button" id="overviewGalleryButton">Galerie & Zeitraffer →</button></div><p id="overviewJournalNote">Fotochronik wird geladen …</p><div id="overviewThumbnails" class="overview-thumbnails"></div></section>
-</main>
+<div class="overview-heading"><div><p class="eyebrow">DEIN PFLANZENSCHRANK</p><h2>Alles wächst. Du behältst den Blick.</h2></div><p>Pflanzen · Klima · Wachstum</p></div>
+<section class="overview-pots" aria-label="Deine Pflanzen"><article class="overview-pot"><div class="pot-symbol"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8m0 4c-5 0-8-3-8-7 5 0 8 2 8 7Zm0-3c0-5 3-8 8-8 0 5-3 8-8 8Z"/><path d="M9 21h6"/></svg></div><div class="pot-title"><p class="eyebrow">PFLANZE 01</p><h3 id="ovName1">Topf 1</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil1">—</strong><p id="ovSoilNote1">Messwert ausstehend</p><progress id="ovProgress1" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 1" hidden></progress></div></article><article class="overview-pot"><div class="pot-symbol"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8m0 4c-5 0-8-3-8-7 5 0 8 2 8 7Zm0-3c0-5 3-8 8-8 0 5-3 8-8 8Z"/><path d="M9 21h6"/></svg></div><div class="pot-title"><p class="eyebrow">PFLANZE 02</p><h3 id="ovName2">Topf 2</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil2">—</strong><p id="ovSoilNote2">Messwert ausstehend</p><progress id="ovProgress2" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 2" hidden></progress></div></article></section><section class="overview-climate" aria-label="Klima und Licht"><article class="overview-stat"><span class="stat-symbol"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14.5V5a3 3 0 0 1 6 0v9.5a5 5 0 1 1-6 0Z"/><path d="M12 8v9m5-10h3m-3 4h2"/></svg></span><div><span class="reading-label">Temperatur</span><strong><span id="ovTemperature">—</span><small> °C</small></strong><p>Im Pflanzenschrank</p></div></article><article class="overview-stat"><span class="stat-symbol"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg></span><div><span class="reading-label">Luftfeuchtigkeit</span><strong><span id="ovHumidity">—</span><small> %</small></strong><p>Relative Luftfeuchte</p></div></article><article class="overview-stat"><span class="stat-symbol"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></span><div><span class="reading-label">Licht</span><strong><span id="ovLight">—</span></strong><p><span id="ovLux">—</span> Lux am Sensor</p></div></article></section><section class="overview-growth" aria-label="Wachstum in Bildern"><div class="journal-heading"><div><p class="eyebrow">MOMENTE FESTHALTEN</p><h2>Wachstum in Bildern</h2></div><button type="button" id="overviewGalleryButton">Galerie & Zeitraffer <svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button></div><div class="growth-content"><figure class="plant-hero"><img id="overviewPhoto" alt="Letzte Aufnahme aus deinem Pflanzenschrank" hidden><div id="overviewPhotoEmpty" class="photo-empty"><span class="empty-symbol"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="4"/></svg></span><h3>Dein nächster Moment.</h3><p>Starte eine Aufnahme unter Steuerung.<br>Deine Fotos erscheinen hier.</p></div><figcaption><span>LETZTE AUFNAHME</span><time id="overviewPhotoDate">Noch keine Aufnahme</time></figcaption></figure><div class="overview-journal"><p id="overviewJournalNote">Fotochronik wird geladen …</p><div id="overviewThumbnails" class="overview-thumbnails"></div></div></div></section></main>
 <div id="controlsView" hidden>
 
     <!-- SENSOR CARDS -->
