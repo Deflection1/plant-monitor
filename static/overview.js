@@ -22,6 +22,7 @@
         const data = event.detail;
         el('ovTemperature').textContent = valueText(data.temperature);
         el('ovHumidity').textContent = valueText(data.humidity);
+        el('ovVpd').textContent = valid(data.vpd) ? data.vpd.toLocaleString('de-CH', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '—';
         el('ovLight').textContent = data.light_on === true ? 'An' : data.light_on === false ? 'Aus' : '—';
         el('ovLux').textContent = valueText(data.lux);
         el('overviewFreshness').textContent = 'Verbunden · letzte Messung ' + new Date().toLocaleTimeString('de-CH');
@@ -35,7 +36,7 @@
     });
     window.addEventListener('plant:offline', () => {
         el('overviewFreshness').textContent = 'Keine aktuellen Messwerte · Verbindung prüfen';
-        for (const id of ['ovTemperature', 'ovHumidity', 'ovLux', 'ovLight', 'ovSoil1', 'ovSoil2']) el(id).textContent = '—';
+        for (const id of ['ovTemperature', 'ovHumidity', 'ovVpd', 'ovLux', 'ovLight', 'ovSoil1', 'ovSoil2']) el(id).textContent = '—';
         for (const i of [1, 2]) { el('ovProgress' + i).hidden = true; el('ovSoilNote' + i).textContent = 'Messwerte nicht verfügbar'; }
     });
     window.addEventListener('plant:pots', event => event.detail.slice(0, 2).forEach((pot, index) => {

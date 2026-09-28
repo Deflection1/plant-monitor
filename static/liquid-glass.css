@@ -1,0 +1,220 @@
+/* Liquid Glass-inspired theme. Local SVGs and static lighting keep the Pi UI lightweight. */
+:root {
+    color-scheme: dark;
+    --background: #0c2223;
+    --panel: #173a37;
+    --panel-light: #23483f;
+    --text: #f6faf8;
+    --muted: #b8cec8;
+    --green: #9ce3c3;
+    --green-light: #d2f6de;
+    --green-soft: rgba(157, 227, 193, .14);
+    --border: rgba(227, 255, 244, .19);
+    --radius: 26px;
+    --glass-shadow: inset 0 1px 0 rgba(255,255,255,.26), inset 0 -1px 0 rgba(255,255,255,.035), 0 12px 36px rgba(2,17,19,.22);
+}
+html { background: #0c2223; }
+body {
+    background: #0c2223;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    isolation: isolate;
+}
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 3% 3%, rgba(83,157,135,.5), transparent 48%),
+        radial-gradient(ellipse at 95% 20%, rgba(78,123,166,.38), transparent 46%),
+        radial-gradient(ellipse at 15% 85%, rgba(52,124,96,.32), transparent 45%),
+        radial-gradient(ellipse at 75% 98%, rgba(129,135,78,.2), transparent 42%),
+        linear-gradient(135deg, #0f292b, #102b2b 55%, #162d26);
+}
+.page { width: min(1280px, calc(100% - 48px)); padding: 36px 0; }
+.header { margin-bottom: 26px; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 650; letter-spacing: -.05em; }
+.header h1 > .line-icon { color: #c4f2d3; }
+.subtitle { color: #c1d7d0; font-size: .88rem; }
+.eyebrow { color: #b5e9d0; letter-spacing: .14em; font-size: .65rem; }
+.overview-heading h2 { font-size: clamp(1.45rem, 3vw, 2rem); font-weight: 550; }
+.overview-heading > p { color: #bed1cc; }
+.overview-freshness { color: #c0d6ce; margin: 14px 0 28px; font-size: .76rem; }
+/* Solid base is the fallback when backdrop-filter is unavailable. */
+.panel, .sensor-card, .overview-pot, .overview-stat {
+    background: linear-gradient(145deg, rgba(255,255,255,.085), rgba(255,255,255,.015)), #193c37;
+    border: 1px solid var(--border);
+    border-top-color: rgba(242,255,250,.31);
+    border-radius: 26px;
+    box-shadow: var(--glass-shadow);
+    color: var(--text);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .panel, .sensor-card, .overview-pot, .overview-stat {
+        background: linear-gradient(145deg, rgba(225,255,240,.11), rgba(225,255,250,.025) 65%), rgba(13,40,35,.59);
+        -webkit-backdrop-filter: blur(18px) saturate(135%);
+        backdrop-filter: blur(18px) saturate(135%);
+    }
+    .view-switch, .status {
+        -webkit-backdrop-filter: blur(16px) saturate(140%);
+        backdrop-filter: blur(16px) saturate(140%);
+    }
+}
+.view-switch {
+    padding: 5px;
+    border-radius: 999px;
+    border: 1px solid rgba(236,255,247,.23);
+    background: rgba(192,237,221,.09);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.17), 0 6px 22px rgba(0,0,0,.13);
+}
+.view-switch button { border-radius: 999px; padding: 12px 24px; color: #d7e9e2; }
+.view-switch button[aria-pressed='true'] {
+    background: linear-gradient(160deg, rgba(255,255,255,.92), rgba(217,243,230,.8));
+    color: #19372f;
+    box-shadow: inset 0 1px 0 #fff, 0 3px 10px rgba(0,0,0,.14);
+}
+.status, .badge {
+    background: rgba(149,230,190,.11);
+    border: 1px solid rgba(196,255,224,.19);
+    border-radius: 999px;
+    color: #d2f6df;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+}
+.status-dot { background: #a4efc2; box-shadow: 0 0 9px rgba(127,232,176,.3); }
+/* Colored glass capsules contain vector artwork, with highlights away from labels. */
+.glass-icon {
+    --icon-color: 110,220,166;
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 54px;
+    height: 58px;
+    border-radius: 19px;
+    overflow: hidden;
+    background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(var(--icon-color),.12) 50%, rgba(var(--icon-color),.25));
+    border: 1px solid rgba(var(--icon-color),.35);
+    border-top-color: rgba(255,255,255,.48);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,.14), inset -1px -1px 0 rgba(var(--icon-color),.17), 0 5px 14px rgba(0,0,0,.15);
+}
+.glass-icon::after {
+    content: '';
+    position: absolute;
+    width: 85%; height: 45%;
+    top: -21%; left: -12%;
+    border-radius: 50%;
+    background: rgba(255,255,255,.22);
+    transform: rotate(-25deg);
+    pointer-events: none;
+}
+.glass-icon--temperature { --icon-color: 255,147,118; }
+.glass-icon--humidity { --icon-color: 107,216,255; }
+.glass-icon--vpd, .glass-icon--plant { --icon-color: 130,231,161; }
+.glass-icon--light { --icon-color: 255,210,108; }
+.glass-glyph { width: 38px; height: 38px; overflow: visible; filter: drop-shadow(0 2px 2px rgba(0,0,0,.16)); }
+.overview-pot > .glass-icon { width: 68px; height: 76px; border-radius: 30px 30px 22px 22px; }
+.overview-pot > .glass-icon .glass-glyph { width: 48px; height: 48px; }
+.overview-pots { gap: 18px; margin: 18px 0; }
+.overview-pot { padding: 25px; gap: 18px; }
+.pot-title h3 { font-size: 1.35rem; color: #f6faf7; }
+.pot-reading { border-top-color: rgba(223,248,234,.15); padding-top: 18px; }
+.pot-reading > strong { font-size: 2.65rem; font-weight: 550; font-variant-numeric: tabular-nums; }
+.pot-reading p, .reading-label { color: #c3d7ce; }
+.pot-reading progress { background: rgba(201,246,221,.13); }
+.pot-reading progress::-webkit-progress-bar { background: rgba(201,246,221,.13); }
+.pot-reading progress::-webkit-progress-value { background: linear-gradient(90deg, #77cda9, #d2f1c3); }
+.pot-reading progress::-moz-progress-bar { background: #b4e9c8; }
+.overview-climate {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+}
+.overview-stat { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 22px; }
+.overview-stat:last-child { border-right: 1px solid var(--border); }
+.overview-stat > div { width: 100%; min-width: 0; }
+.overview-stat .reading-label { font-size: .8rem; }
+.overview-stat strong { font-size: clamp(1.7rem, 3vw, 2.7rem); font-weight: 550; margin: 10px 0 8px; color: #f8fbf9; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.overview-stat small { font-size: .85rem; color: #c4d8d0; letter-spacing: 0; font-weight: 450; }
+.overview-stat p { color: #bbd1c7; font-size: .73rem; }
+/* The same glass treatment carries through the functional controls. */
+.sensor-header { color: #d6e8e0; gap: 13px; }
+.sensor-header .glass-icon { width: 46px; height: 50px; border-radius: 16px; }
+.sensor-header .glass-glyph { width: 32px; height: 32px; }
+.sensor-value { color: #f8fbf9; font-variant-numeric: tabular-nums; }
+.sensor-note, .sensor-value small, .camera-meta, .estimate-note { color: #bfd3cb; }
+button, .range, .timelapse-controls select {
+    background: linear-gradient(150deg, rgba(255,255,255,.12), rgba(255,255,255,.035));
+    border: 1px solid rgba(231,255,243,.2);
+    border-top-color: rgba(255,255,255,.29);
+    border-radius: 13px;
+    color: #eff8f3;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 3px 10px rgba(0,0,0,.07);
+    transition: background-color .16s, border-color .16s, box-shadow .16s;
+}
+button.primary, .range.active {
+    background: linear-gradient(150deg, #c2efd6, #82cdae);
+    color: #123c2b;
+    border: 1px solid rgba(239,255,246,.65);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 4px 14px rgba(56,156,117,.15);
+}
+@media (hover:hover) {
+    button:hover:not(:disabled) { border-color: rgba(243,255,250,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.24), 0 3px 13px rgba(0,0,0,.12); }
+}
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid #b1e4ff; outline-offset: 4px; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.soil-card, .soil-config-card, .chart-box, .light-stat {
+    background: rgba(7,28,24,.24);
+    border: 1px solid rgba(227,255,238,.12);
+    border-radius: 18px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.055);
+}
+.soil-config-card input { background: rgba(7,28,24,.5); color: #f4faf7; border: 1px solid rgba(228,255,242,.24); border-radius: 10px; }
+select option { background: #173a32; color: #f4faf7; }
+.info-row, .soil-config { border-color: rgba(227,255,238,.13); }
+#cameraArea { max-width: 320px; border: 1px solid rgba(235,255,244,.24); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); }
+#cameraArea .camera-image { object-fit: contain; }
+#sharedCameraPanel .button-row { gap: 9px; }
+.photo-thumb, .timelapse-player { border: 1px solid rgba(225,255,240,.19); background: rgba(4,25,18,.4); }
+.photo-thumb span, .timelapse-player-meta { color: #c9dfd3; }
+footer { color: #a9c5b8; }
+@media (max-width: 1000px) {
+    .overview-climate { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .overview-stat { flex-direction: row; align-items: center; gap: 16px; }
+    .overview-stat strong { font-size: 2rem; }
+}
+@media (max-width: 600px) {
+    .page { width: calc(100% - 28px); padding: 24px 0; }
+    .header { gap: 16px; }
+    .overview-heading { margin-bottom: 16px; }
+    .overview-pots { grid-template-columns: 1fr; gap: 14px; }
+    .overview-pot { padding: 22px; }
+    .overview-climate { gap: 12px; }
+    .overview-stat { flex-direction: column; align-items: flex-start; gap: 12px; padding: 17px; border-bottom: 1px solid var(--border); }
+    .overview-stat > div { display: block; }
+    .overview-stat:last-child { border-bottom: 1px solid var(--border); }
+    .overview-stat strong { font-size: 1.65rem; white-space: normal; }
+    .overview-stat small { font-size: .72rem; }
+    .overview-stat .reading-label { font-size: .73rem; }
+    .glass-icon { width: 46px; height: 50px; border-radius: 16px; }
+    .glass-glyph { width: 33px; height: 33px; }
+    .view-switch button { padding: 11px 19px; }
+    .panel { padding: 20px; }
+    .panel, .sensor-card, .overview-pot, .overview-stat { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+}
+@media (prefers-reduced-transparency: reduce) {
+    .panel, .sensor-card, .overview-pot, .overview-stat, .status, .view-switch { -webkit-backdrop-filter: none; backdrop-filter: none; background: #1c3c32; }
+}
+@media (prefers-reduced-motion: reduce) { button, .range { transition: none; } }
+@media (forced-colors: active) {
+    body::before { display: none; }
+    .panel, .sensor-card, .overview-pot, .overview-stat, .glass-icon { background: Canvas; border: 1px solid CanvasText; box-shadow: none; }
+    .glass-glyph * { fill: Canvas; stroke: CanvasText; }
+    .view-switch button[aria-pressed='true'], .range.active { outline: 2px solid Highlight; }
+}
