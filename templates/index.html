@@ -17,7 +17,7 @@
 
     <link
         rel="stylesheet"
-        href="/static/style.css?v=11"
+        href="/static/style.css?v=12"
     >
 
 </head>
@@ -211,6 +211,218 @@
             </div>
 
         </article>
+
+    </section>
+
+
+    <!-- BODENFEUCHTE -->
+
+    <section class="panel soil-panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    BODENFEUCHTE
+                </p>
+
+                <h2>
+                    Töpfe
+                </h2>
+
+            </div>
+
+            <span
+                class="badge"
+                id="soilStatus"
+            >
+                Hardware ausstehend
+            </span>
+
+        </div>
+
+
+        <div class="soil-grid">
+
+            <article class="soil-card">
+
+                <div class="sensor-header">
+                    🌱 <span id="soilName1">Topf 1</span>
+                </div>
+
+                <div class="sensor-value">
+
+                    <span id="soilMoisture1">
+                        --
+                    </span>
+
+                    <small>%</small>
+
+                </div>
+
+                <div class="soil-details">
+
+                    <span>
+                        ADS1115 A0
+                    </span>
+
+                    <span>
+                        Rohwert:
+                        <strong id="soilRaw1">--</strong>
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <article class="soil-card">
+
+                <div class="sensor-header">
+                    🌱 <span id="soilName2">Topf 2</span>
+                </div>
+
+                <div class="sensor-value">
+
+                    <span id="soilMoisture2">
+                        --
+                    </span>
+
+                    <small>%</small>
+
+                </div>
+
+                <div class="soil-details">
+
+                    <span>
+                        ADS1115 A1
+                    </span>
+
+                    <span>
+                        Rohwert:
+                        <strong id="soilRaw2">--</strong>
+                    </span>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <details class="soil-config">
+
+            <summary>
+                Kalibrierung & Namen
+            </summary>
+
+            <p class="estimate-note">
+                Die Werte werden persistent auf dem Raspberry Pi gespeichert.
+                Trocken- und Nass-Rohwert werden für jeden SEN0308 separat kalibriert.
+            </p>
+
+            <div class="soil-config-grid">
+
+                <div class="soil-config-card">
+
+                    <strong>
+                        Sensor 1 · A0
+                    </strong>
+
+                    <label>
+                        Name
+                        <input
+                            id="soilNameInput1"
+                            type="text"
+                            maxlength="40"
+                            value="Topf 1"
+                        >
+                    </label>
+
+                    <label>
+                        Rohwert trocken · 0 %
+                        <input
+                            id="soilDry1"
+                            type="number"
+                            step="any"
+                            placeholder="noch nicht kalibriert"
+                        >
+                    </label>
+
+                    <label>
+                        Rohwert nass · 100 %
+                        <input
+                            id="soilWet1"
+                            type="number"
+                            step="any"
+                            placeholder="noch nicht kalibriert"
+                        >
+                    </label>
+
+                </div>
+
+
+                <div class="soil-config-card">
+
+                    <strong>
+                        Sensor 2 · A1
+                    </strong>
+
+                    <label>
+                        Name
+                        <input
+                            id="soilNameInput2"
+                            type="text"
+                            maxlength="40"
+                            value="Topf 2"
+                        >
+                    </label>
+
+                    <label>
+                        Rohwert trocken · 0 %
+                        <input
+                            id="soilDry2"
+                            type="number"
+                            step="any"
+                            placeholder="noch nicht kalibriert"
+                        >
+                    </label>
+
+                    <label>
+                        Rohwert nass · 100 %
+                        <input
+                            id="soilWet2"
+                            type="number"
+                            step="any"
+                            placeholder="noch nicht kalibriert"
+                        >
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="button-row">
+
+                <button
+                    class="primary"
+                    id="saveSoilConfigButton"
+                >
+                    Einstellungen speichern
+                </button>
+
+                <span
+                    class="camera-meta"
+                    id="soilConfigMessage"
+                >
+                    Noch nicht kalibriert
+                </span>
+
+            </div>
+
+        </details>
 
     </section>
 
@@ -647,6 +859,39 @@
 
             </div>
 
+            <div class="chart-box">
+
+                <div class="chart-title">
+                    🌱 Bodenfeuchte Topf 1
+                </div>
+
+                <div class="chart-canvas">
+
+                    <canvas
+                        id="soilMoisture1Chart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-box">
+
+                <div class="chart-title">
+                    🌱 Bodenfeuchte Topf 2
+                </div>
+
+                <div class="chart-canvas">
+
+                    <canvas
+                        id="soilMoisture2Chart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
         </div>
 
     </section>
@@ -856,7 +1101,7 @@
 ></script>
 
 <script
-    src="/static/app.js?v=11"
+    src="/static/app.js?v=12"
 ></script>
 
 </body>
