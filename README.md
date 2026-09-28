@@ -1190,48 +1190,6 @@ BerryBase-Bestellung: 22 Positionen / 29 Einzelartikel.
 - Rückschlagventile
 - separate Verbindungsklemmen aus dem Elektronikshop; diese werden lokal beschafft
 
-## Verifizierte Bezugsquellen
-
-### BerryBase Schweiz
-
-- Kamoer PPFL-1 12-V-Peristaltikpumpe
-- ADS1115-Breakout; alternativ Soldered ADS1115
-- DFRobot GP8600 0–10-V-DAC (bevorzugt)
-- Mean Well GST36E12-P1J 12 V / 3 A
-- Silikonschlauch, Steckverbinder und diverses Installationsmaterial
-
-Shop:
-`https://www.berrybase.ch/`
-
-### Bastelgarage Schweiz
-
-- DFRobot SEN0308 wasserdichter kapazitiver Bodenfeuchtesensor
-- alternative Bodenfeuchtesensoren
-- Bewässerungs-/Pumpen-/Ventil-Zubehör
-- Kabel, Module und allgemeines Elektronikzubehör
-
-Shop:
-`https://www.bastelgarage.ch/`
-
-### Farnell Schweiz
-
-- DFRobot SEN0308
-- ADS1115- und andere professionelle Elektronikmodule
-- Steckverbinder, Relais, MOSFETs und Installationskomponenten
-
-Shop:
-`https://ch.farnell.com/`
-
-### DFRobot direkt
-
-- SEN0308
-- GP8600
-- GP8403 / DFR0971 als mögliche Alternative
-- technische Dokumentation und Ersatzbeschaffung
-
-Shop:
-`https://www.dfrobot.com/`
-
 ## Beschaffungsstatus
 
 Die Hauptkomponenten für Kamera, Bodenfeuchte, Lampendimmung und Bewässerung sind bestellt. Der kombinierte Gravity-Umgebungssensor als Enviro+-Ersatz soll separat nachbestellt werden.
