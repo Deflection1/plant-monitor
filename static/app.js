@@ -1231,6 +1231,37 @@ function updateLampControlPreview() {
         lampProfileLabel(
             profile
         );
+
+
+    const profileCard =
+        $("lampProfileCard");
+
+    const profileImage =
+        $("lampProfileImage");
+
+    const profilePlaceholder =
+        $("lampProfilePlaceholder");
+
+
+    profileCard.dataset.profile =
+        profile;
+
+    if (profile === "flower") {
+
+        profileImage.hidden =
+            false;
+
+        profilePlaceholder.hidden =
+            true;
+
+    } else {
+
+        profileImage.hidden =
+            true;
+
+        profilePlaceholder.hidden =
+            false;
+    }
 }
 
 
