@@ -1,4 +1,9 @@
 import asyncio
+import shutil
+import threading
+
+from datetime import datetime
+from time import sleep
 
 from contextlib import (
     asynccontextmanager,
@@ -13,6 +18,7 @@ from fastapi import (
 )
 
 from fastapi.responses import (
+    FileResponse,
     HTMLResponse
 )
 
@@ -22,6 +28,7 @@ from fastapi.staticfiles import (
 
 
 from sensor import read_sensors
+from picamera2 import Picamera2
 
 from database import (
     init_db,
@@ -40,6 +47,89 @@ BASE_DIR = (
     .resolve()
     .parent
 )
+
+PHOTO_DIR = BASE_DIR / "photos"
+LATEST_PHOTO = PHOTO_DIR / "latest.jpg"
+CAMERA_LOCK = threading.Lock()
+
+PHOTO_DIR.mkdir(
+    parents=True,
+    exist_ok=True
+)
+
+
+# =====================================================
+# KAMERA
+# =====================================================
+
+def capture_photo():
+
+    with CAMERA_LOCK:
+
+        timestamp = datetime.now()
+
+        filename = (
+            "plant-"
+            + timestamp.strftime("%Y%m%d-%H%M%S")
+            + ".jpg"
+        )
+
+        photo_path = PHOTO_DIR / filename
+
+        camera = Picamera2()
+
+        try:
+
+            config = camera.create_still_configuration(
+                main={
+                    "size": (
+                        1640,
+                        1232
+                    )
+                }
+            )
+
+            camera.configure(
+                config
+            )
+
+            camera.start()
+
+            # Automatische Belichtung und Weißabgleich
+            # kurz stabilisieren lassen.
+            sleep(1.5)
+
+            camera.capture_file(
+                str(photo_path)
+            )
+
+        finally:
+
+            with suppress(Exception):
+                camera.stop()
+
+            with suppress(Exception):
+                camera.close()
+
+
+        shutil.copyfile(
+            photo_path,
+            LATEST_PHOTO
+        )
+
+
+        return {
+            "filename":
+                filename,
+
+            "captured_at":
+                timestamp.isoformat(
+                    timespec="seconds"
+                ),
+
+            "image_url":
+                "/api/camera/image"
+        }
 
 
 # =====================================================
@@ -296,3 +386,70 @@ def light_today():
     })
 
     return stats
+
+
+
+# =====================================================
+# KAMERA API
+# =====================================================
+
+@app.get(
+    "/api/camera/status"
+)
+def camera_status():
+
+    cameras = Picamera2.global_camera_info()
+
+    return {
+        "available":
+            bool(cameras),
+
+        "cameras":
+            cameras,
+
+        "has_image":
+            LATEST_PHOTO.exists()
+    }
+
+
+@app.get(
+    "/api/camera/image"
+)
+def camera_image():
+
+    if not LATEST_PHOTO.exists():
+
+        return {
+            "available":
+                False,
+
+            "message":
+                "Noch kein Kamerabild vorhanden"
+        }
+
+
+    return FileResponse(
+        LATEST_PHOTO,
+        media_type="image/jpeg",
+        headers={
+            "Cache-Control":
+                "no-store, no-cache, must-revalidate"
+        }
+    )
+
+
+@app.post(
+    "/api/camera/capture"
+)
+async def camera_capture():
+
+    result = await asyncio.to_thread(
+        capture_photo
+    )
+
+    return {
+        "status":
+            "ok",
+
+        **result
+    }
