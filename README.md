@@ -188,7 +188,10 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 │   └── chart.umd.min.js
 ├── photos/
 └── data/
-    └── plant.db
+    ├── plant.db
+    ├── soil_moisture.json
+    ├── timelapse.json
+    └── lamp_control.json
 ```
 
 ---
@@ -622,28 +625,39 @@ GP8600 0–10-V-DAC
 
 Der vorhandene manuelle Dimmer soll durch den GP8600 ersetzt werden.
 
-Geplante Funktionen:
+Die Software-Seite ist jetzt wie bei der Bodenfeuchte bereits vorbereitet, obwohl der GP8600 noch nicht angeschlossen ist.
 
-- manuelle Leistung 0–100 %
-- speicherbare Lichtprofile
-- Ein-/Ausschaltzeiten
-- Anzeige des aktiven Profils
-- nächste Umschaltung
-- manueller Override
-- manueller AUS-Modus
-- Zeitpläne über Mitternacht
-- Wiederherstellung nach Neustart
-- Kalibrierung von Dimmwert zu Lux / PPFD
+Bereits umgesetzt:
 
-Geplante API:
+- eigenes Liquid-Glass-Panel für die Lampensteuerung
+- persistenter Lampenname
+- vorbereitete Profile: Benutzerdefiniert / Wachstum / Blüte
+- persistenter Zielwert 0–100 %
+- vorbereiteter Ein-/Ausschaltzeitplan
+- Zeitplan kann vorab aktiviert/deaktiviert und gespeichert werden
+- Speicherung in `data/lamp_control.json`
+- sicherer Standard: **0 % Leistung und Zeitplan AUS**
+- Status zeigt weiterhin **Hardware ausstehend**
+- solange der GP8600 nicht angebunden ist, wird **kein 0–10-V-Ausgang angesteuert**
+
+Bereits verfügbare API:
 
 ```text
 GET  /api/light/config
 POST /api/light/config
-POST /api/light/mode
-POST /api/light/override
 GET  /api/light/status
 ```
+
+Für die spätere Hardwareintegration vorgesehen:
+
+- tatsächliche 0–100-%-Ausgabe über GP8600
+- nächste Umschaltung
+- manueller Override
+- manueller AUS-Modus
+- Zeitpläne über Mitternacht
+- sichere Wiederherstellung nach Neustart
+- Kalibrierung von Dimmwert zu Lux / PPFD
+- spätere Endpunkte `POST /api/light/mode` und `POST /api/light/override`
 
 ---
 
@@ -766,8 +780,10 @@ Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet wer
 - [ ] vorhandenen manuellen Dimmer dokumentieren und abklemmen
 - [ ] GP8600 mit DIM+ / DIM− verbinden
 - [ ] 0–100-%-Steuerung testen
-- [ ] Dashboard-Steuerung ergänzen
-- [ ] Lichtprofile und Timer ergänzen
+- [x] Dashboard-Steuerung vorbereiten
+- [x] persistente Konfigurations-API vorbereiten
+- [ ] GP8600-Ausgabe an Dashboard-Steuerung anbinden
+- [ ] Lichtprofile und Timer aktiv ausführen
 - [ ] Override / AUS ergänzen
 - [ ] Konfiguration nach Neustart wiederherstellen
 - [ ] Dimmwert gegen Lux / PPFD kalibrieren
