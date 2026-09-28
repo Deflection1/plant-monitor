@@ -380,3 +380,67 @@ footer { color: #a9c5b8; }
         height: 35px;
     }
 }
+
+
+/* LIGHT PANEL: dynamic state icon lives in the heading */
+
+.light-panel-heading {
+    align-items: center;
+}
+
+.light-heading-icon {
+    width: 44px;
+    height: 48px;
+    border-radius: 16px;
+}
+
+.light-heading-icon .glass-glyph {
+    width: 31px;
+    height: 31px;
+}
+
+.light-heading-icon[data-state="off"] {
+    --icon-color: 123, 151, 176;
+    opacity: .82;
+}
+
+.light-heading-icon[data-state="on"] {
+    --icon-color: 255, 205, 92;
+    opacity: 1;
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,.18),
+        inset -1px -1px 0 rgba(255,205,92,.2),
+        0 5px 16px rgba(244,181,46,.16);
+}
+
+.big-status--light-text {
+    margin-top: 22px;
+    margin-bottom: 24px;
+    gap: 0;
+}
+
+.big-status--light-text > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.big-status--light-text strong {
+    font-size: 1.45rem;
+}
+
+.big-status--light-text small {
+    color: #c2d6ce;
+}
+
+@media (max-width: 600px) {
+    .light-heading-icon {
+        width: 42px;
+        height: 46px;
+        border-radius: 15px;
+    }
+
+    .light-heading-icon .glass-glyph {
+        width: 29px;
+        height: 29px;
+    }
+}
