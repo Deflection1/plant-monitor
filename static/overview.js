@@ -6,7 +6,8 @@
         const controls = view === 'controls';
         el('overviewView').hidden = controls;
         el('controlsView').hidden = !controls;
-        el(controls ? 'controlsCameraSlot' : 'overviewLiveSlot').append(el('cameraArea'));
+        el(controls ? 'controlsCameraSlot' : 'overviewCameraSlot').append(el('sharedCameraPanel'));
+        el(controls ? 'controlsHistorySlot' : 'overviewHistorySlot').append(el('photoHistoryPanel'));
         document.querySelectorAll('[data-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
         if (controls) requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
     }
@@ -17,12 +18,8 @@
     }));
     window.addEventListener('hashchange', route);
     route();
-    el('overviewLiveExpand').addEventListener('click', () => {
-        if (!el('cameraImage').hidden) el('fullscreenButton').click();
-    });
     el('overviewGalleryButton').addEventListener('click', () => {
-        location.hash = 'steuerung'; route();
-        el('timelapseButton').scrollIntoView({behavior: 'smooth', block: 'center'});
+        el('galleryButton').click();
     });
     window.addEventListener('plant:current', event => {
         const data = event.detail;

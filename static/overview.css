@@ -34,7 +34,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid #c5e5bd; outline-offs
 .overview-growth { padding: 28px; border: 1px solid var(--border); border-radius: 24px; background: #111c15; }
 .journal-heading h2 { font-size: 1.25rem; font-weight: 500; }
 .journal-heading button { border: 1px solid var(--border); color: #d0e1ce; font-size: .8rem; }
-.growth-content { display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 280px) minmax(0, 1fr); gap: 20px; align-items: start; }
+.growth-content { display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 1fr); gap: 20px; align-items: start; }
 .plant-hero { margin: 0; min-width: 0; position: relative; height: 210px; overflow: hidden; border-radius: 18px; background: #192b1e; border: 1px solid var(--border); }
 .photo-open img { width: 100%; height: 100%; object-fit: contain; background: #0a110c; }
 .plant-hero figcaption { position: absolute; inset: auto 0 0; display: flex; justify-content: space-between; gap: 12px; padding: 30px 18px 16px; background: linear-gradient(transparent, #071109eb); font-size: .65rem; color: #d5e0d5; }
@@ -54,17 +54,13 @@ button:focus-visible, a:focus-visible { outline: 2px solid #c5e5bd; outline-offs
 .overview-stat:last-child { border-right: 0; }
 .photo-open { display: block; height: 100%; }
 .plant-hero figcaption { pointer-events: none; }
-.overview-live { max-width: 280px; width: 100%; border: 1px solid var(--border); border-radius: 18px; overflow: hidden; background: #102016; }
 #cameraArea { width: 100%; max-width: 320px; min-height: 0; height: auto; aspect-ratio: 16 / 9; padding: 0; overflow: hidden; }
 #cameraArea .camera-image { width: 100%; height: 100%; min-height: 0; max-height: 180px; object-fit: contain; }
-#overviewLiveSlot #cameraArea { max-width: 280px; margin: 0; border: 0; border-radius: 0; }
 #cameraArea .camera-empty { padding: 12px; }
 #cameraArea .camera-empty h3 { font-size: .9rem; margin: 4px 0; }
 #cameraArea .camera-empty p { font-size: .75rem; margin: 0; }
 #cameraArea .camera-icon { font-size: 1.2rem; }
 #cameraArea .camera-image:fullscreen { max-width: none; max-height: none; width: 100vw; height: 100vh; }
-.live-caption { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px; font-size: .72rem; color: #b1c3b3; }
-.live-caption button { padding: 5px; border: 0; background: transparent; color: #d0e0c6; font: inherit; cursor: pointer; }
 .photo-empty { position: absolute; inset: 0; pointer-events: none; }
 .photo-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 160px)); }
 .timelapse-player { max-width: 320px; }
@@ -77,3 +73,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid #c5e5bd; outline-offs
  .overview-stat strong { font-size: 2rem; }
  .overview-climate { gap: 0; }
 }
+
+/* One complete camera card and archive, shared across both views. */
+.camera-panel-slot { display: contents; }
+#overviewCameraSlot .camera-panel { margin-bottom: 24px; }
+#overviewHistorySlot .photo-history-panel { margin-bottom: 24px; }
+#sharedCameraPanel .button-row { flex-wrap: wrap; }
+#sharedCameraPanel .camera-meta { overflow-wrap: anywhere; }
+#controlsHistorySlot:empty, #overviewHistorySlot:empty { display: none; }
