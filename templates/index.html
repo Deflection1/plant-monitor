@@ -17,7 +17,7 @@
 
     <link
         rel="stylesheet"
-        href="/static/style.css?v=8"
+        href="/static/style.css?v=9"
     >
 
 </head>
@@ -251,22 +251,31 @@
                 id="cameraArea"
             >
 
-                <div>
+                <div
+                    class="camera-empty"
+                    id="cameraEmpty"
+                >
 
                     <span class="camera-icon">
                         📷
                     </span>
 
                     <h3>
-                        Kamera wird später verbunden
+                        Kamera bereit
                     </h3>
 
-                    <p>
-                        Hier erscheint später das aktuelle Bild
-                        deiner Pflanzen.
+                    <p id="cameraMessage">
+                        Noch kein Bild aufgenommen.
                     </p>
 
                 </div>
+
+                <img
+                    id="cameraImage"
+                    class="camera-image"
+                    alt="Aktuelle Pflanzenansicht"
+                    hidden
+                >
 
             </div>
 
@@ -275,18 +284,24 @@
 
                 <button
                     class="primary"
-                    disabled
+                    id="captureButton"
                 >
                     📷 Foto aufnehmen
                 </button>
 
-                <button disabled>
-                    Galerie
-                </button>
-
-                <button disabled>
+                <button
+                    id="fullscreenButton"
+                    disabled
+                >
                     Vollbild
                 </button>
+
+                <span
+                    class="camera-meta"
+                    id="cameraMeta"
+                >
+                    Kamera wird geprüft …
+                </span>
 
             </div>
 
@@ -718,7 +733,7 @@
 ></script>
 
 <script
-    src="/static/app.js?v=8"
+    src="/static/app.js?v=9"
 ></script>
 
 </body>
