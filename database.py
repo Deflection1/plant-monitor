@@ -94,6 +94,30 @@ def init_db():
             )
         """)
 
+        columns = {
+            row["name"]
+            for row in db.execute(
+                "PRAGMA table_info(measurements)"
+            ).fetchall()
+        }
+
+        for column in (
+            "soil_raw_1",
+            "soil_raw_2",
+            "soil_moisture_1",
+            "soil_moisture_2"
+        ):
+
+            if column not in columns:
+
+                db.execute(
+                    "ALTER TABLE measurements "
+                    "ADD COLUMN "
+                    + column
+                    + " REAL"
+                )
+
+
         db.execute("""
             CREATE INDEX IF NOT EXISTS
             idx_measurements_timestamp
@@ -120,9 +144,13 @@ def insert_measurement(data):
                 lux,
                 raw_temperature,
                 raw_humidity,
-                cpu_temperature
+                cpu_temperature,
+                soil_raw_1,
+                soil_raw_2,
+                soil_moisture_1,
+                soil_moisture_2
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             timestamp,
 
@@ -152,6 +180,22 @@ def insert_measurement(data):
 
             data.get(
                 "cpu_temperature"
+            ),
+
+            data.get(
+                "soil_raw_1"
+            ),
+
+            data.get(
+                "soil_raw_2"
+            ),
+
+            data.get(
+                "soil_moisture_1"
+            ),
+
+            data.get(
+                "soil_moisture_2"
             )
         ))
 
@@ -194,7 +238,13 @@ def get_history(
                     AS vpd,
 
                 AVG(lux)
-                    AS lux
+                    AS lux,
+
+                AVG(soil_moisture_1)
+                    AS soil_moisture_1,
+
+                AVG(soil_moisture_2)
+                    AS soil_moisture_2
 
             FROM measurements
 
@@ -253,6 +303,24 @@ def get_history(
                     1
                 )
                 if row["lux"]
+                is not None
+                else None,
+
+            "soil_moisture_1":
+                round(
+                    row["soil_moisture_1"],
+                    1
+                )
+                if row["soil_moisture_1"]
+                is not None
+                else None,
+
+            "soil_moisture_2":
+                round(
+                    row["soil_moisture_2"],
+                    1
+                )
+                if row["soil_moisture_2"]
                 is not None
                 else None
         }
