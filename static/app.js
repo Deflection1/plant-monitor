@@ -1168,6 +1168,324 @@ function setupSoilMoisture() {
 
 
 // =====================================================
+// LAMPENSTEUERUNG
+// =====================================================
+
+function lampProfileLabel(
+    profile
+) {
+
+    if (profile === "growth") {
+        return "Wachstum";
+    }
+
+    if (profile === "flower") {
+        return "Blüte";
+    }
+
+    return "Benutzerdefiniert";
+}
+
+
+function updateLampControlPreview() {
+
+    const power = Number(
+        $("lampPowerInput").value
+        || 0
+    );
+
+    const enabled =
+        $("lampScheduleEnabled").checked;
+
+    const onTime =
+        $("lampOnTime").value
+        || "--:--";
+
+    const offTime =
+        $("lampOffTime").value
+        || "--:--";
+
+    const profile =
+        $("lampProfileInput").value;
+
+
+    $("lampPowerOutput").textContent =
+        power
+        + " %";
+
+    $("lampPowerPreview").textContent =
+        power
+        + " %";
+
+    $("lampSchedulePreview").textContent =
+        enabled
+            ? "Aktiv"
+            : "Aus";
+
+    $("lampScheduleTimes").textContent =
+        onTime
+        + " – "
+        + offTime;
+
+    $("lampProfilePreview").textContent =
+        lampProfileLabel(
+            profile
+        );
+}
+
+
+async function loadLampConfig() {
+
+    try {
+
+        const response = await fetch(
+            "/api/light/config",
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+
+        $("lampControlName").textContent =
+            data.name
+            || "Pflanzenlampe";
+
+        $("lampNameInput").value =
+            data.name
+            || "Pflanzenlampe";
+
+        $("lampProfileInput").value =
+            data.profile
+            || "custom";
+
+        $("lampScheduleEnabled").checked =
+            Boolean(
+                data.schedule_enabled
+            );
+
+        $("lampOnTime").value =
+            data.on_time
+            || "08:00";
+
+        $("lampOffTime").value =
+            data.off_time
+            || "20:00";
+
+        $("lampPowerInput").value =
+            String(
+                Number(
+                    data.power_percent
+                    || 0
+                )
+            );
+
+        updateLampControlPreview();
+
+        $("lampConfigMessage").textContent =
+            "Konfiguration geladen · Hardware noch nicht verbunden";
+
+    } catch (error) {
+
+        console.error(
+            "Lamp config error:",
+            error
+        );
+
+        $("lampConfigMessage").textContent =
+            "Konfiguration konnte nicht geladen werden.";
+    }
+}
+
+
+async function loadLampStatus() {
+
+    try {
+
+        const response = await fetch(
+            "/api/light/status",
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        $("lampControlStatus").textContent =
+            data.hardware_connected
+                ? "GP8600 verbunden"
+                : "Hardware ausstehend";
+
+    } catch (error) {
+
+        console.error(
+            "Lamp status error:",
+            error
+        );
+
+        $("lampControlStatus").textContent =
+            "Status unbekannt";
+    }
+}
+
+
+async function saveLampConfig() {
+
+    const button =
+        $("saveLampConfigButton");
+
+    button.disabled =
+        true;
+
+    $("lampConfigMessage").textContent =
+        "Speichere …";
+
+    try {
+
+        const payload = {
+            name:
+                $("lampNameInput").value.trim()
+                || "Pflanzenlampe",
+
+            profile:
+                $("lampProfileInput").value,
+
+            schedule_enabled:
+                $("lampScheduleEnabled").checked,
+
+            on_time:
+                $("lampOnTime").value,
+
+            off_time:
+                $("lampOffTime").value,
+
+            power_percent:
+                Number(
+                    $("lampPowerInput").value
+                    || 0
+                )
+        };
+
+
+        const response = await fetch(
+            "/api/light/config",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body:
+                    JSON.stringify(
+                        payload
+                    )
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        if (data.status === "error") {
+            throw new Error(
+                data.message
+                || "Konfigurationsfehler"
+            );
+        }
+
+        await loadLampConfig();
+        await loadLampStatus();
+
+        $("lampConfigMessage").textContent =
+            "Gespeichert · bleibt nach Neustart erhalten";
+
+    } catch (error) {
+
+        console.error(
+            "Lamp config save error:",
+            error
+        );
+
+        $("lampConfigMessage").textContent =
+            "Speichern fehlgeschlagen";
+
+    } finally {
+
+        button.disabled =
+            false;
+    }
+}
+
+
+function setupLampControl() {
+
+    [
+        "lampPowerInput",
+        "lampScheduleEnabled",
+        "lampOnTime",
+        "lampOffTime",
+        "lampProfileInput"
+    ].forEach(
+        function(id) {
+
+            $(id).addEventListener(
+                "input",
+                updateLampControlPreview
+            );
+
+            $(id).addEventListener(
+                "change",
+                updateLampControlPreview
+            );
+        }
+    );
+
+    $("lampNameInput")
+        .addEventListener(
+            "input",
+            function() {
+
+                $("lampControlName").textContent =
+                    $("lampNameInput").value.trim()
+                    || "Pflanzenlampe";
+            }
+        );
+
+    $("saveLampConfigButton")
+        .addEventListener(
+            "click",
+            saveLampConfig
+        );
+
+    loadLampConfig();
+    loadLampStatus();
+}
+
+
+// =====================================================
 // KAMERA
 // =====================================================
 
@@ -1848,6 +2166,8 @@ document.addEventListener(
         setupPhotoHistory();
 
         setupSoilMoisture();
+
+        setupLampControl();
 
 
         createCharts();
