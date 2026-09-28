@@ -18,9 +18,6 @@
     }));
     window.addEventListener('hashchange', route);
     route();
-    el('overviewGalleryButton').addEventListener('click', () => {
-        el('galleryButton').click();
-    });
     window.addEventListener('plant:current', event => {
         const data = event.detail;
         el('ovTemperature').textContent = valueText(data.temperature);
@@ -45,37 +42,4 @@
         el('ovName' + (index + 1)).textContent = pot.name;
         el('ovProgress' + (index + 1)).setAttribute('aria-label', 'Bodenfeuchtigkeit ' + pot.name);
     }));
-    let photoSignature = null;
-    const dateText = value => new Date(value).toLocaleString('de-CH', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'});
-    el('overviewPhoto').addEventListener('error', () => {
-        el('overviewPhoto').hidden = true; el('overviewPhotoEmpty').hidden = false;
-        el('overviewPhotoDate').textContent = 'Bild konnte nicht geladen werden'; photoSignature = null;
-        el('overviewPhotoLink').removeAttribute('href');
-    });
-    async function refreshPhotos() {
-        try {
-            const response = await fetch('/api/camera/photos?limit=6', {cache: 'no-store'});
-            if (!response.ok) throw new Error('Photos unavailable');
-            const data = await response.json();
-            const photos = data.photos || [];
-            el('overviewJournalNote').textContent = photos.length ? 'Die letzten Aufnahmen · Bild öffnen für volle Auflösung' : 'Mit deinem ersten Foto beginnt die Chronik.';
-            const signature = JSON.stringify(photos);
-            if (signature === photoSignature) return;
-            photoSignature = signature;
-            el('overviewThumbnails').replaceChildren();
-            el('overviewPhoto').hidden = !photos.length; el('overviewPhotoEmpty').hidden = !!photos.length;
-            if (!photos.length) { el('overviewPhotoLink').removeAttribute('href'); el('overviewPhotoDate').textContent = 'Noch keine Aufnahme'; return; }
-            el('overviewPhotoLink').href = photos[0].url;
-            el('overviewPhoto').src = photos[0].url;
-            el('overviewPhotoDate').textContent = 'Aufnahme · ' + dateText(photos[0].captured_at);
-            for (const photo of photos) {
-                const link = document.createElement('a'); link.href = photo.url; link.target = '_blank'; link.rel = 'noopener';
-                const image = document.createElement('img'); image.src = photo.url; image.loading = 'lazy'; image.alt = 'Pflanzenaufnahme ' + dateText(photo.captured_at);
-                const caption = document.createElement('span'); caption.textContent = dateText(photo.captured_at);
-                link.append(image, caption); el('overviewThumbnails').append(link);
-            }
-        } catch { el('overviewJournalNote').textContent = 'Fotochronik momentan nicht erreichbar.'; }
-    }
-    refreshPhotos();
-    setInterval(refreshPhotos, 60000);
 })();
