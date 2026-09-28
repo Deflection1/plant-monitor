@@ -506,8 +506,9 @@ Umgesetzt:
 - Picamera2-Erkennung
 - MJPEG-Livestream im Dashboard
 - manueller Foto-Button
+- gespeicherte Fotos in voller IMX219-Auflösung 3280 × 2464 (8 MP), unabhängig vom 1280 × 720-Livestream
 - Bild-History / Galerie
-- automatische Zeitraffer-Aufnahmen mit wählbarem Intervall
+- automatische Zeitraffer-Aufnahmen mit wählbarem Intervall; Standard 12 Stunden / 2 Bilder pro Tag
 - Zeitraffer-Wiedergabe direkt im Browser
 
 ---
