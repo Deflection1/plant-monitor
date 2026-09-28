@@ -2,8 +2,9 @@ import asyncio
 import shutil
 import threading
 
+from io import BufferedIOBase
+
 from datetime import datetime
-from time import sleep
 
 from contextlib import (
     asynccontextmanager,
@@ -19,7 +20,8 @@ from fastapi import (
 
 from fastapi.responses import (
     FileResponse,
-    HTMLResponse
+    HTMLResponse,
+    StreamingResponse
 )
 
 from fastapi.staticfiles import (
@@ -29,6 +31,8 @@ from fastapi.staticfiles import (
 
 from sensor import read_sensors
 from picamera2 import Picamera2
+from picamera2.encoders import JpegEncoder
+from picamera2.outputs import FileOutput
 
 from database import (
     init_db,
@@ -62,55 +66,161 @@ PHOTO_DIR.mkdir(
 # KAMERA
 # =====================================================
 
+class StreamingOutput(BufferedIOBase):
+
+    def __init__(self):
+
+        self.frame = None
+        self.condition = threading.Condition()
+
+
+    def write(
+        self,
+        buf
+    ):
+
+        frame = bytes(buf)
+
+        with self.condition:
+
+            self.frame = frame
+            self.condition.notify_all()
+
+        return len(buf)
+
+
+CAMERA = None
+CAMERA_OUTPUT = StreamingOutput()
+CAMERA_LOCK = threading.Lock()
+
+
+def start_camera():
+
+    global CAMERA
+
+    if CAMERA is not None:
+        return
+
+    camera = Picamera2()
+
+    config = camera.create_video_configuration(
+        main={
+            "size": (
+                1280,
+                720
+            ),
+            "format":
+                "RGB888"
+        },
+        controls={
+            "FrameRate":
+                15
+        }
+    )
+
+    camera.configure(
+        config
+    )
+
+    camera.start_recording(
+        JpegEncoder(
+            q=85
+        ),
+        FileOutput(
+            CAMERA_OUTPUT
+        )
+    )
+
+    CAMERA = camera
+
+    print(
+        "Kamera-Livestream gestartet"
+    )
+
+
+def stop_camera():
+
+    global CAMERA
+
+    if CAMERA is None:
+        return
+
+    with suppress(Exception):
+        CAMERA.stop_recording()
+
+    with suppress(Exception):
+        CAMERA.close()
+
+    CAMERA = None
+
+
+def get_camera_frame(
+    wait=True
+):
+
+    with CAMERA_OUTPUT.condition:
+
+        if (
+            wait
+            or CAMERA_OUTPUT.frame is None
+        ):
+            CAMERA_OUTPUT.condition.wait(
+                timeout=2
+            )
+
+        return CAMERA_OUTPUT.frame
+
+
+def mjpeg_stream():
+
+    while True:
+
+        frame = get_camera_frame()
+
+        if frame is None:
+            continue
+
+        yield (
+            b"--frame\r\n"
+            b"Content-Type: image/jpeg\r\n"
+            b"Cache-Control: no-cache\r\n\r\n"
+            + frame
+            + b"\r\n"
+        )
+
+
 def capture_photo():
 
     with CAMERA_LOCK:
+
+        frame = get_camera_frame()
+
+        if frame is None:
+
+            raise RuntimeError(
+                "Kein Kameraframe verfügbar"
+            )
+
 
         timestamp = datetime.now()
 
         filename = (
             "plant-"
-            + timestamp.strftime("%Y%m%d-%H%M%S")
+            + timestamp.strftime(
+                "%Y%m%d-%H%M%S"
+            )
             + ".jpg"
         )
 
-        photo_path = PHOTO_DIR / filename
+        photo_path = (
+            PHOTO_DIR
+            / filename
+        )
 
-        camera = Picamera2()
 
-        try:
-
-            config = camera.create_still_configuration(
-                main={
-                    "size": (
-                        1640,
-                        1232
-                    )
-                }
-            )
-
-            camera.configure(
-                config
-            )
-
-            camera.start()
-
-            # Automatische Belichtung und Weißabgleich
-            # kurz stabilisieren lassen.
-            sleep(1.5)
-
-            camera.capture_file(
-                str(photo_path)
-            )
-
-        finally:
-
-            with suppress(Exception):
-                camera.stop()
-
-            with suppress(Exception):
-                camera.close()
-
+        photo_path.write_bytes(
+            frame
+        )
 
         shutil.copyfile(
             photo_path,
@@ -247,6 +357,20 @@ async def lifespan(
 
     init_db()
 
+    try:
+
+        await asyncio.to_thread(
+            start_camera
+        )
+
+    except Exception as error:
+
+        print(
+            "Kamera-Startfehler:",
+            error
+        )
+
+
     worker = asyncio.create_task(
         measurement_worker()
     )
@@ -259,6 +383,10 @@ async def lifespan(
         asyncio.CancelledError
     ):
         await worker
+
+    await asyncio.to_thread(
+        stop_camera
+    )
 
 
 # =====================================================
@@ -402,7 +530,11 @@ def camera_status():
 
     return {
         "available":
-            bool(cameras),
+            CAMERA is not None
+            and bool(cameras),
+
+        "streaming":
+            CAMERA is not None,
 
         "cameras":
             cameras,
@@ -410,6 +542,35 @@ def camera_status():
         "has_image":
             LATEST_PHOTO.exists()
     }
+
+
+@app.get(
+    "/api/camera/stream"
+)
+def camera_stream():
+
+    if CAMERA is None:
+
+        return {
+            "available":
+                False,
+
+            "message":
+                "Kamera ist nicht gestartet"
+        }
+
+
+    return StreamingResponse(
+        mjpeg_stream(),
+        media_type=(
+            "multipart/x-mixed-replace;"
+            " boundary=frame"
+        ),
+        headers={
+            "Cache-Control":
+                "no-store, no-cache, must-revalidate"
+        }
+    )
 
 
 @app.get(
