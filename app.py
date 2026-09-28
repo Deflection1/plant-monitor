@@ -6,6 +6,7 @@ import threading
 from io import BufferedIOBase
 
 from datetime import datetime
+from time import sleep
 
 from contextlib import (
     asynccontextmanager,
@@ -57,7 +58,11 @@ BASE_DIR = (
 PHOTO_DIR = BASE_DIR / "photos"
 LATEST_PHOTO = PHOTO_DIR / "latest.jpg"
 TIMELAPSE_CONFIG_FILE = BASE_DIR / "data" / "timelapse.json"
-TIMELAPSE_DEFAULT_INTERVAL_MINUTES = 360
+TIMELAPSE_DEFAULT_INTERVAL_MINUTES = 720
+
+CAMERA_STREAM_SIZE = (1280, 720)
+CAMERA_PHOTO_SIZE = (3280, 2464)
+CAMERA_STREAM_FPS = 15
 CAMERA_LOCK = threading.Lock()
 
 PHOTO_DIR.mkdir(
@@ -213,6 +218,26 @@ CAMERA_OUTPUT = StreamingOutput()
 CAMERA_LOCK = threading.Lock()
 
 
+def start_camera_stream(camera):
+
+    config = camera.create_video_configuration(
+        main={
+            "size": CAMERA_STREAM_SIZE,
+            "format": "RGB888"
+        },
+        controls={
+            "FrameRate": CAMERA_STREAM_FPS
+        }
+    )
+
+    camera.configure(config)
+
+    camera.start_recording(
+        JpegEncoder(q=85),
+        FileOutput(CAMERA_OUTPUT)
+    )
+
+
 def start_camera():
 
     global CAMERA
@@ -222,33 +247,7 @@ def start_camera():
 
     camera = Picamera2()
 
-    config = camera.create_video_configuration(
-        main={
-            "size": (
-                1280,
-                720
-            ),
-            "format":
-                "RGB888"
-        },
-        controls={
-            "FrameRate":
-                15
-        }
-    )
-
-    camera.configure(
-        config
-    )
-
-    camera.start_recording(
-        JpegEncoder(
-            q=85
-        ),
-        FileOutput(
-            CAMERA_OUTPUT
-        )
-    )
+    start_camera_stream(camera)
 
     CAMERA = camera
 
@@ -310,16 +309,12 @@ def mjpeg_stream():
 
 def capture_photo():
 
+    if CAMERA is None:
+        raise RuntimeError(
+            "Kamera ist nicht gestartet"
+        )
+
     with CAMERA_LOCK:
-
-        frame = get_camera_frame()
-
-        if frame is None:
-
-            raise RuntimeError(
-                "Kein Kameraframe verfügbar"
-            )
-
 
         timestamp = datetime.now()
 
@@ -331,33 +326,53 @@ def capture_photo():
             + ".jpg"
         )
 
-        photo_path = (
-            PHOTO_DIR
-            / filename
-        )
+        photo_path = PHOTO_DIR / filename
 
+        # Gespeicherte Fotos werden in voller IMX219-Auflösung
+        # aufgenommen. Der 720p-Livestream pausiert dafür kurz.
+        CAMERA.stop_recording()
 
-        photo_path.write_bytes(
-            frame
-        )
+        try:
+
+            still_config = CAMERA.create_still_configuration(
+                main={
+                    "size": CAMERA_PHOTO_SIZE,
+                    "format": "RGB888"
+                }
+            )
+
+            CAMERA.configure(still_config)
+            CAMERA.start()
+
+            # AE/AWB nach dem Moduswechsel kurz stabilisieren.
+            sleep(1.0)
+
+            CAMERA.capture_file(
+                str(photo_path)
+            )
+
+        finally:
+
+            with suppress(Exception):
+                CAMERA.stop()
+
+            start_camera_stream(
+                CAMERA
+            )
 
         shutil.copyfile(
             photo_path,
             LATEST_PHOTO
         )
 
-
         return {
-            "filename":
-                filename,
-
-            "captured_at":
-                timestamp.isoformat(
-                    timespec="seconds"
-                ),
-
-            "image_url":
-                "/api/camera/image"
+            "filename": filename,
+            "captured_at": timestamp.isoformat(
+                timespec="seconds"
+            ),
+            "width": CAMERA_PHOTO_SIZE[0],
+            "height": CAMERA_PHOTO_SIZE[1],
+            "image_url": "/api/camera/image"
         }
 
 
@@ -950,7 +965,7 @@ def camera_timelapse_update(
         1,
         min(
             interval,
-            1440
+            10080
         )
     )
 
