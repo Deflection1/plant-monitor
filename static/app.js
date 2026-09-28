@@ -1364,41 +1364,68 @@ function setupPhotoHistory() {
             "change",
             async function() {
 
-                const response = await fetch(
-                    "/api/camera/timelapse",
-                    {
-                        cache: "no-store"
+                try {
+
+                    const statusResponse =
+                        await fetch(
+                            "/api/camera/timelapse",
+                            {
+                                cache: "no-store"
+                            }
+                        );
+
+                    if (!statusResponse.ok) {
+                        throw new Error(
+                            "HTTP "
+                            + statusResponse.status
+                        );
                     }
-                );
 
-                const status =
-                    await response.json();
+                    const status =
+                        await statusResponse.json();
 
-                if (!status.enabled) {
-                    return;
+
+                    const response = await fetch(
+                        "/api/camera/timelapse",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+                            body: JSON.stringify({
+                                enabled:
+                                    Boolean(
+                                        status.enabled
+                                    ),
+
+                                interval_minutes:
+                                    Number(
+                                        $("timelapseInterval").value
+                                    )
+                            })
+                        }
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(
+                            "HTTP "
+                            + response.status
+                        );
+                    }
+
+                    await loadTimelapseStatus();
+
+                } catch (error) {
+
+                    console.error(
+                        "Timelapse interval save error:",
+                        error
+                    );
+
+                    $("timelapseStatus").textContent =
+                        "Intervall konnte nicht gespeichert werden.";
                 }
-
-                await fetch(
-                    "/api/camera/timelapse",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-                        body: JSON.stringify({
-                            enabled:
-                                true,
-
-                            interval_minutes:
-                                Number(
-                                    $("timelapseInterval").value
-                                )
-                        })
-                    }
-                );
-
-                loadTimelapseStatus();
             }
         );
 
