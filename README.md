@@ -960,7 +960,7 @@ Raspberry Pi
    └── I²C
         │
         ▼
-GP8600 / 0–10-V-DAC
+GP8600 0–10-V-DAC
         │
         ├── OUT+ ──> Mean Well DIM+
         └── OUT- ──> Mean Well DIM-
@@ -1110,7 +1110,7 @@ Stand: 28.09.2026. Preise und Verfügbarkeit können sich ändern.
 |---|---|---:|---|---|---|
 | Bodenfeuchte | DFRobot SEN0308, wasserdichter kapazitiver Bodenfeuchtesensor | 2 | Bastelgarage Schweiz | Farnell Schweiz, DFRobot direkt | 3,3–5,5 V, analog 0–ca. 3 V, 1,5-m-Kabel |
 | Analogmessung | ADS1115, 16 Bit, 4 Kanäle, I²C | 1 | BerryBase Schweiz | Farnell, weitere Elektronikhändler | A0 = Topf 1, A1 = Topf 2 |
-| Lampendimmung | DFRobot DFR0971 / GP8403, 2-Kanal-I²C-DAC, 0–10 V | 1 | BerryBase Schweiz | DFRobot direkt | ersetzt den manuellen Dimmer am Mean-Well-DIM-Eingang |
+| Lampendimmung | DFRobot GP8600, 1-Kanal I²C/PWM zu 0–10 V | 1 | DFRobot direkt / Händler | GP8403 / DFR0971 als Alternative | bevorzugtes Modul für die Mean-Well-Dimmung; ersetzt den manuellen Dimmer |
 | Bewässerung | Kamoer PPFL-1 Peristaltikpumpe, 12 V | 2 | BerryBase Schweiz | andere Kamoer-Händler | eine Pumpe pro Topf |
 | Pumpenversorgung | Mean Well 12 V / 3 A Netzteil, z. B. GST36E12-P1J | 1 | BerryBase Schweiz | Digitec/Galaxus, Distrelec/Farnell | nur für Pumpen / 12-V-Verbraucher |
 | Pumpentreiber | 2-Kanal-MOSFET-Treiber für 3,3-V-GPIO | 1 | BerryBase / Bastelgarage, sofern passend verfügbar | Elektronikfachhandel | muss 3,3-V-Logik sicher erkennen und Pumpenanlaufstrom vertragen |
@@ -1129,7 +1129,7 @@ Stand: 28.09.2026. Preise und Verfügbarkeit können sich ändern.
 
 - Kamoer PPFL-1 12-V-Peristaltikpumpe
 - ADS1115-Breakout; alternativ Soldered ADS1115
-- DFRobot DFR0971 / GP8403 0–10-V-DAC
+- DFRobot GP8600 0–10-V-DAC (bevorzugt)
 - Mean Well GST36E12-P1J 12 V / 3 A
 - Silikonschlauch, Steckverbinder und diverses Installationsmaterial
 
@@ -1158,7 +1158,8 @@ Shop:
 ### DFRobot direkt
 
 - SEN0308
-- DFR0971 / GP8403
+- GP8600
+- GP8403 / DFR0971 als mögliche Alternative
 - technische Dokumentation und Ersatzbeschaffung
 
 Shop:
@@ -1167,7 +1168,7 @@ Shop:
 ## Empfohlene Einkaufsreihenfolge
 
 1. 2× SEN0308 + 1× ADS1115
-2. DFR0971 / GP8403 für die Lampendimmung
+2. GP8600 für die Lampendimmung
 3. 2× PPFL-1 + 12-V-Netzteil + Schlauch
 4. passender 2-Kanal-MOSFET-Treiber
 5. Tank-Sensor + Rückschlagventile + Tropfer
@@ -1207,7 +1208,7 @@ Die Umsetzung soll schrittweise erfolgen, damit jede Hardware-Erweiterung einzel
 
 ## Phase 3 – Lampensteuerung
 
-- [ ] GP8600 bzw. 0–10-V-DAC anschließen
+- [ ] GP8600 0–10-V-DAC anschließen
 - [ ] I²C-Adresse prüfen
 - [ ] 0–10-V-Ausgang ohne angeschlossene Lampe testen
 - [ ] vorhandenen manuellen Dimmer dokumentieren und abklemmen
