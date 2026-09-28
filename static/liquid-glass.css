@@ -250,3 +250,93 @@ footer { color: #a9c5b8; }
     .glass-glyph * { fill: Canvas; stroke: CanvasText; }
     .view-switch button[aria-pressed='true'], .range.active { outline: 2px solid Highlight; }
 }
+
+
+/* CONSISTENT HISTORY + LOWER PANEL ICONS */
+
+.chart-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-title-icon {
+    width: 17px;
+    height: 17px;
+    flex: none;
+}
+
+.chart-title--temperature .chart-title-icon {
+    color: #ff9476;
+}
+
+.chart-title--humidity .chart-title-icon {
+    color: #6bd8ff;
+}
+
+.chart-title--vpd .chart-title-icon,
+.chart-title--soil .chart-title-icon {
+    color: #82e7a1;
+}
+
+.chart-title--light .chart-title-icon {
+    color: #ffd26c;
+}
+
+.bottom-panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.bottom-panel-heading .eyebrow {
+    margin-bottom: 5px;
+}
+
+.bottom-panel-icon {
+    width: 46px;
+    height: 50px;
+    border-radius: 16px;
+}
+
+.bottom-panel-icon .glass-glyph {
+    width: 32px;
+    height: 32px;
+}
+
+.light-state-icon {
+    width: 64px;
+    height: 68px;
+    border-radius: 23px;
+}
+
+.light-state-icon .glass-glyph {
+    width: 44px;
+    height: 44px;
+}
+
+.light-state-icon[data-state="on"] .light-state-moon,
+.light-state-icon[data-state="off"] .light-state-sun {
+    display: none;
+}
+
+.light-state-icon[data-state="on"] .light-state-sun,
+.light-state-icon[data-state="off"] .light-state-moon {
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .bottom-panel-heading {
+        gap: 12px;
+    }
+
+    .light-state-icon {
+        width: 54px;
+        height: 58px;
+    }
+
+    .light-state-icon .glass-glyph {
+        width: 38px;
+        height: 38px;
+    }
+}
