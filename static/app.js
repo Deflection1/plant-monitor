@@ -234,8 +234,8 @@ async function loadCurrent() {
                 "An";
 
 
-            $("lightIcon").textContent =
-                "☀️";
+            $("lightIcon").dataset.state =
+                "on";
 
         } else {
 
@@ -247,8 +247,8 @@ async function loadCurrent() {
                 "Aus";
 
 
-            $("lightIcon").textContent =
-                "🌙";
+            $("lightIcon").dataset.state =
+                "off";
         }
 
 
