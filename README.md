@@ -1090,6 +1090,92 @@ Langfristig soll das Dashboard zusätzlich anzeigen bzw. steuern:
 
 ---
 
+# Komponenten und Bezugsquellen
+
+Stand: 28.09.2026. Preise und Verfügbarkeit können sich ändern.
+
+## Bereits vorhanden
+
+- Raspberry Pi 4
+- Pimoroni Enviro+ HAT
+- Raspberry Pi Camera Module v2.1 / IMX219
+- Mean Well XLG-150-H-AB LED-Netzteil
+- 2× Noctua 4-Pin-PWM-Lüfter
+- Noctua NA-FC1 als aktuelle manuelle Lüftersteuerung
+- LED-Pflanzenlampe
+
+## Noch zu beschaffen
+
+| Bereich | Komponente | Menge | Bevorzugter Anbieter | Alternative Anbieter | Hinweis |
+|---|---|---:|---|---|---|
+| Bodenfeuchte | DFRobot SEN0308, wasserdichter kapazitiver Bodenfeuchtesensor | 2 | Bastelgarage Schweiz | Farnell Schweiz, DFRobot direkt | 3,3–5,5 V, analog 0–ca. 3 V, 1,5-m-Kabel |
+| Analogmessung | ADS1115, 16 Bit, 4 Kanäle, I²C | 1 | BerryBase Schweiz | Farnell, weitere Elektronikhändler | A0 = Topf 1, A1 = Topf 2 |
+| Lampendimmung | DFRobot DFR0971 / GP8403, 2-Kanal-I²C-DAC, 0–10 V | 1 | BerryBase Schweiz | DFRobot direkt | ersetzt den manuellen Dimmer am Mean-Well-DIM-Eingang |
+| Bewässerung | Kamoer PPFL-1 Peristaltikpumpe, 12 V | 2 | BerryBase Schweiz | andere Kamoer-Händler | eine Pumpe pro Topf |
+| Pumpenversorgung | Mean Well 12 V / 3 A Netzteil, z. B. GST36E12-P1J | 1 | BerryBase Schweiz | Digitec/Galaxus, Distrelec/Farnell | nur für Pumpen / 12-V-Verbraucher |
+| Pumpentreiber | 2-Kanal-MOSFET-Treiber für 3,3-V-GPIO | 1 | BerryBase / Bastelgarage, sofern passend verfügbar | Elektronikfachhandel | muss 3,3-V-Logik sicher erkennen und Pumpenanlaufstrom vertragen |
+| Tankstatus | Schwimmerschalter oder kontaktloser Füllstandssensor | 1 | Bastelgarage / BerryBase | Farnell / Distrelec | zunächst nur Tank OK / LEER |
+| Bewässerung | Silikonschlauch passend zur Pumpe | ca. 3–4 m | BerryBase Schweiz | Bastelgarage | Schlauchmaß an Pumpenkopf prüfen |
+| Bewässerung | Rückschlagventile | 2 | Bastelgarage / Aquaristikhandel | BerryBase, falls passend | eines pro Bewässerungsleitung |
+| Bewässerung | Tropfer oder Bewässerungsring | 2 | Bastelgarage / Gartenhandel | Aquaristik-/Bewässerungshandel | je Topf ein Ausgang |
+| Verkabelung | JST-XH / geeignete Steckverbinder | nach Bedarf | BerryBase Schweiz | Bastelgarage, Farnell | für lösbare Sensor- und Steuerleitungen |
+| Verkabelung | Aderendhülsen, Klemmen, Schrumpfschlauch | nach Bedarf | BerryBase / Bastelgarage | Baumarkt / Elektronikhandel | für saubere feste Installation |
+| Verkabelung | Kabelkanal, Kabelverschraubungen, Zugentlastung | nach Bedarf | Baumarkt / Elektrohandel | BerryBase / Bastelgarage | Elektronik und Wasser sauber trennen |
+| Lüfter | Open-Collector-/Open-Drain-PWM-Treiber | 2 Kanäle | noch festzulegen | BerryBase / Bastelgarage / Farnell | für direkte Pi-Steuerung der Noctua-Lüfter |
+
+## Verifizierte Bezugsquellen
+
+### BerryBase Schweiz
+
+- Kamoer PPFL-1 12-V-Peristaltikpumpe
+- ADS1115-Breakout; alternativ Soldered ADS1115
+- DFRobot DFR0971 / GP8403 0–10-V-DAC
+- Mean Well GST36E12-P1J 12 V / 3 A
+- Silikonschlauch, Steckverbinder und diverses Installationsmaterial
+
+Shop:
+`https://www.berrybase.ch/`
+
+### Bastelgarage Schweiz
+
+- DFRobot SEN0308 wasserdichter kapazitiver Bodenfeuchtesensor
+- alternative Bodenfeuchtesensoren
+- Bewässerungs-/Pumpen-/Ventil-Zubehör
+- Kabel, Module und allgemeines Elektronikzubehör
+
+Shop:
+`https://www.bastelgarage.ch/`
+
+### Farnell Schweiz
+
+- DFRobot SEN0308
+- ADS1115- und andere professionelle Elektronikmodule
+- Steckverbinder, Relais, MOSFETs und Installationskomponenten
+
+Shop:
+`https://ch.farnell.com/`
+
+### DFRobot direkt
+
+- SEN0308
+- DFR0971 / GP8403
+- technische Dokumentation und Ersatzbeschaffung
+
+Shop:
+`https://www.dfrobot.com/`
+
+## Empfohlene Einkaufsreihenfolge
+
+1. 2× SEN0308 + 1× ADS1115
+2. DFR0971 / GP8403 für die Lampendimmung
+3. 2× PPFL-1 + 12-V-Netzteil + Schlauch
+4. passender 2-Kanal-MOSFET-Treiber
+5. Tank-Sensor + Rückschlagventile + Tropfer
+6. Stecker, Klemmen, Kabelkanal und Beschriftungsmaterial
+7. später 2-Kanal-PWM-Treiber für Zuluft und Abluft
+
+---
+
 # Arbeitsplan / Roadmap
 
 Die Umsetzung soll schrittweise erfolgen, damit jede Hardware-Erweiterung einzeln getestet werden kann.
