@@ -96,7 +96,14 @@ Zusätzliche Hardware wurde am 28.09.2026 bestellt und wird nach Lieferung schri
 - Sicherungshalter, Sicherungssortiment, 12-V-Hauptschalter und Gehäuse
 - 0,14-mm² Litze für Sensorik/Steuerung und 0,75-mm² Litze für 12-V-Leistung
 - Kamerahalter für das Raspberry Pi Camera Module
+- 2× Modulgehäuse 45 × 45 × 18 mm für kleine Elektronikmodule
 - für die Lüfter wird zunächst der vorhandene Noctua NA-FC1 über seinen PWM-Eingang vom Raspberry Pi getestet
+
+Geplante Architekturänderung:
+- das Pimoroni Enviro+ soll perspektivisch durch einen modularen Umgebungssensor ersetzt werden
+- bevorzugt wird der DFRobot Gravity Umgebungssensor mit Temperatur, Luftfeuchte, Luftdruck, UV und Helligkeit
+- dadurch wird der 40-Pin-Header des Raspberry Pi wieder frei und zusätzliche GPIOs stehen für Pumpen, Schwimmerschalter und PWM-Steuerung zur Verfügung
+- das lokale Display soll später durch ein separates E-Ink-Display außen am Schrank ersetzt werden
 
 ---
 
@@ -155,9 +162,22 @@ pip install fastapi uvicorn jinja2
 
 # Sensoren
 
+## Aktueller Zustand
+
+Derzeit stammen Temperatur, Luftfeuchtigkeit und Lux noch vom Pimoroni Enviro+.
+
+Perspektivisch soll das Enviro+ ersetzt werden durch einen DFRobot Gravity Umgebungssensor mit:
+- Temperatur
+- Luftfeuchtigkeit
+- Luftdruck
+- UV
+- Helligkeit
+
+Der neue Umgebungssensor soll räumlich vom Raspberry Pi getrennt und auf sinnvoller Messhöhe montiert werden. Dadurch entfällt langfristig die temperaturabhängige Korrektur wegen der Pi-Abwärme.
+
 ## Temperatur
 
-Der BME280 befindet sich direkt auf dem Enviro+ und damit sehr nah am Raspberry Pi.
+Der BME280 befindet sich aktuell direkt auf dem Enviro+ und damit sehr nah am Raspberry Pi.
 
 Dadurch ist die rohe Temperatur deutlich zu hoch.
 
@@ -1022,6 +1042,8 @@ Beide werden derzeit über einen Noctua NA-FC1 geregelt.
 
 Als erster Schritt soll der vorhandene NA-FC1 weiterverwendet werden. Der Raspberry Pi liefert ein ca. 25-kHz-PWM-Signal an den PWM-Eingang des NA-FC1; die Lüfter bleiben separat mit 12 V versorgt.
 
+Durch den geplanten Wegfall des Enviro+ stehen am Raspberry Pi deutlich mehr GPIOs zur Verfügung, sodass die PWM-Ansteuerung der Lüfter ohne zusätzlichen GPIO-Expander vorgesehen werden kann.
+
 Damit kann zunächst getestet werden, ob die vorhandene NA-FC1-Elektronik trotz des beschädigten Drehreglers zuverlässig mit dem Raspberry-Pi-PWM-Signal arbeitet. Ein zusätzlicher Pegelwandler oder Lüftertreiber wird deshalb vorerst nicht beschafft.
 
 Geplant:
@@ -1066,10 +1088,14 @@ Optional kann später statt oder zusätzlich zur Noctua-Abluft ein 230-V-Rohrlü
 Die geplanten I²C-Erweiterungen können parallel betrieben werden, sofern ihre Adressen kollisionsfrei gewählt werden:
 
 ```text
-Raspberry Pi / Enviro+
+Raspberry Pi
    │
-   ├── bestehende Enviro+-Sensoren
-   ├── Enviro+-ADC
+   ├── DFRobot Gravity Umgebungssensor
+   │    ├── Temperatur
+   │    ├── Luftfeuchtigkeit
+   │    ├── Luftdruck
+   │    ├── UV
+   │    └── Helligkeit
    ├── ADS1115
    │    ├── A0 ──> Feuchte Topf 1
    │    └── A1 ──> Feuchte Topf 2
@@ -1077,7 +1103,7 @@ Raspberry Pi / Enviro+
         └── 0–10 V ──> Lampendimmung
 ```
 
-Die am Enviro+ herausgeführten Pads für 3V3, GND, SDA und SCL können für die externen I²C-Module genutzt werden.
+Mit dem geplanten Wegfall des Enviro+ wird der 40-Pin-Header wieder frei. Dadurch können zusätzliche GPIOs direkt für Pumpen, Schwimmerschalter und PWM-Steuerung verwendet werden.
 
 ## Geplanter Dashboard-Ausbau
 
@@ -1154,11 +1180,13 @@ BerryBase-Bestellung: 22 Positionen / 29 Einzelartikel.
 | Bodenfeuchte | DFRobot SEN0308 wasserdichter kapazitiver Bodenfeuchtesensor | 2 |
 | Pumpensteuerung | 15-A-/400-W-MOSFET-Treiber, 5–36 V DC, 3,3-V-steuerbar | 2 |
 | Lampendimmung | DFRobot GP8600, 1-Kanal I²C/PWM zu 0–10 V | 1 |
+| Umgebungssensor | DFRobot Gravity Umgebungssensor für Temperatur, Feuchte, Luftdruck, UV und Helligkeit | 1 zusätzliche Bestellung geplant |
 
 ### Nicht mehr vorgesehen
 
 - separater TXS0104E-Level-Converter für die Noctua-Lüfter
 - zusätzlicher Lüftertreiber vor dem ersten NA-FC1-Test
+- GPIO-Expander, sofern das Enviro+ wie geplant entfällt
 - Rückschlagventile
 - separate Verbindungsklemmen aus dem Elektronikshop; diese werden lokal beschafft
 
@@ -1206,7 +1234,7 @@ Shop:
 
 ## Beschaffungsstatus
 
-Die Hauptkomponenten für Kamera, Bodenfeuchte, Lampendimmung und Bewässerung sind bestellt.
+Die Hauptkomponenten für Kamera, Bodenfeuchte, Lampendimmung und Bewässerung sind bestellt. Der kombinierte Gravity-Umgebungssensor als Enviro+-Ersatz soll separat nachbestellt werden.
 
 Nach Lieferung erfolgt die Umsetzung weiterhin in dieser Reihenfolge:
 
@@ -1216,7 +1244,9 @@ Nach Lieferung erfolgt die Umsetzung weiterhin in dieser Reihenfolge:
 4. Pumpengehäuse mit Netzteil, Sicherungen, 2× MOSFET und 2× PPFL-1 aufbauen
 5. Schwimmerschalter und Bewässerungslogik integrieren
 6. NA-FC1 mit Raspberry-Pi-PWM testen
-7. Verkabelung und Montage finalisieren
+7. Enviro+ durch den kombinierten Umgebungssensor ersetzen und GPIO-Belegung finalisieren
+8. separates E-Ink-Statusdisplay außen am Schrank planen
+9. Verkabelung und Montage finalisieren
 
 ---
 
@@ -1312,6 +1342,8 @@ Die Umsetzung soll schrittweise erfolgen, damit jede Hardware-Erweiterung einzel
 Geplant bzw. sinnvoll:
 
 - Kamera via Picamera2
+- Enviro+ durch modularen Gravity-Umgebungssensor ersetzen
+- E-Ink-Statusdisplay außen am Schrank, idealerweise in Holzrahmen
 - automatische Pflanzenfotos
 - Timelapse
 - 2× Bodenfeuchtigkeit über ADS1115
@@ -1397,6 +1429,8 @@ Aktuell funktionsfähig:
 ✅ DLI
 ✅ tägliche Beleuchtungsdauer
 📦 Hardware für Kamera-/Sensor-/Bewässerungs-/Dimm-Ausbau bestellt
+🟨 Gravity-Umgebungssensor als Enviro+-Ersatz separat geplant
+🟨 E-Ink-Statusdisplay außen am Schrank als spätere Anzeige geplant
 🟨 Kamera-Hardware / Picamera2 in Einrichtung
 ⬜ aktuelles Kamerabild im Dashboard
 ⬜ Timelapse
