@@ -790,7 +790,7 @@ function setupRangeButtons() {
 // KAMERA
 // =====================================================
 
-function showCameraImage() {
+function showCameraStream() {
 
     const image =
         $("cameraImage");
@@ -799,7 +799,7 @@ function showCameraImage() {
         $("cameraEmpty");
 
     image.src =
-        "/api/camera/image?t="
+        "/api/camera/stream?t="
         + Date.now();
 
     image.hidden =
@@ -862,17 +862,16 @@ async function loadCameraStatus() {
         $("cameraMeta").textContent =
             camera
                 ? (
-                    "Bereit · "
+                    "LIVE · "
                     + (
                         camera.Model
                         || "Kamera"
                     )
+                    + " · 1280×720 · 15 fps"
                 )
-                : "Kamera bereit";
+                : "LIVE";
 
-        if (data.has_image) {
-            showCameraImage();
-        }
+        showCameraStream();
 
     } catch (error) {
 
@@ -902,10 +901,10 @@ async function capturePhoto() {
         true;
 
     button.textContent =
-        "⏳ Aufnahme …";
+        "⏳ Speichern …";
 
     $("cameraMeta").textContent =
-        "Kamera nimmt auf …";
+        "Aktuellen Frame speichern …";
 
     try {
 
@@ -927,10 +926,8 @@ async function capturePhoto() {
         const data =
             await response.json();
 
-        showCameraImage();
-
         $("cameraMeta").textContent =
-            "Aufgenommen "
+            "LIVE · Foto gespeichert "
             + new Date(
                 data.captured_at
             )
