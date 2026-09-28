@@ -520,15 +520,31 @@ SEN0308 Topf 1 -> ADS1115 A0
 SEN0308 Topf 2 -> ADS1115 A1
 ```
 
-Jeder Sensor wird separat kalibriert.
+Die Software-Seite ist bereits vorbereitet, obwohl ADS1115 und SEN0308 noch nicht angeschlossen sind.
 
-Geplant sind:
+Bereits umgesetzt:
 
-- Rohwerte
-- Prozentwerte
-- Datenbank-History
-- Anzeige im Dashboard
-- spätere Nutzung als Eingang für die Bewässerungslogik
+- Dashboard-Bereich für Topf 1 und Topf 2
+- Anzeige von Rohwert und Bodenfeuchte in %
+- persistente Namen und Kalibrierwerte je Sensor
+- separate Trocken-/Nass-Kalibrierung je Topf
+- Speicherung der Konfiguration in `data/soil_moisture.json`
+- Datenbankspalten für Rohwerte und Prozentwerte
+- Bodenfeuchte-History in den bestehenden Zeiträumen
+- API für Konfiguration und Status
+- Prozentberechnung automatisch aus Rohwert + Kalibrierung
+
+Sobald die Hardware angeschlossen ist, muss `sensor.py` nur noch `soil_raw_1` und `soil_raw_2` liefern. Die Prozentberechnung, Speicherung, API und Dashboard-Anzeige sind bereits vorbereitet.
+
+API:
+
+```text
+GET  /api/soil/config
+POST /api/soil/config
+GET  /api/soil/status
+```
+
+Die Konfiguration bleibt nach Browser-Neuladen und Raspberry-Pi-Neustart erhalten.
 
 ---
 
@@ -738,9 +754,9 @@ Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet wer
 - [ ] Rohwerte testen
 - [ ] beide Sensoren separat kalibrieren
 - [ ] Prozentwerte berechnen
-- [ ] Datenbank erweitern
-- [ ] API erweitern
-- [ ] Dashboard und History erweitern
+- [x] Datenbank für Bodenfeuchte vorbereiten
+- [x] persistente Konfigurations-API vorbereiten
+- [x] Dashboard und History vorbereiten
 
 ## Phase 3 – Lampensteuerung
 
