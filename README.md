@@ -1163,6 +1163,93 @@ Langfristig soll das Dashboard zusätzlich anzeigen bzw. steuern:
 
 ---
 
+# Arbeitsplan / Roadmap
+
+Die Umsetzung soll schrittweise erfolgen, damit jede Hardware-Erweiterung einzeln getestet werden kann.
+
+## Phase 1 – Kamera fertigstellen
+
+- [ ] neuen Raspberry-Pi-Kernel booten und prüfen
+- [ ] IMX219 mit `rpicam-hello --list-cameras` testen
+- [ ] Picamera2-Erkennung prüfen
+- [ ] Testfoto speichern
+- [ ] Kamera-Endpunkte in FastAPI ergänzen
+- [ ] aktuelles Kamerabild im Dashboard anzeigen
+- [ ] Foto-Button ergänzen
+- [ ] später Galerie und Timelapse ergänzen
+
+## Phase 2 – Bodenfeuchtigkeit
+
+- [ ] ADS1115 anschließen
+- [ ] I²C-Adresse prüfen
+- [ ] SEN0308 für Topf 1 an A0 anschließen
+- [ ] SEN0308 für Topf 2 an A1 anschließen
+- [ ] Rohwerte beider Sensoren testen
+- [ ] beide Sensoren separat kalibrieren
+- [ ] Prozentwerte aus den Rohwerten berechnen
+- [ ] Datenbank um Bodenfeuchte erweitern
+- [ ] API um Feuchtewerte erweitern
+- [ ] Dashboard um Topf 1 / Topf 2 erweitern
+- [ ] History für Bodenfeuchte ergänzen
+
+## Phase 3 – Lampensteuerung
+
+- [ ] GP8600 bzw. 0–10-V-DAC anschließen
+- [ ] I²C-Adresse prüfen
+- [ ] 0–10-V-Ausgang ohne angeschlossene Lampe testen
+- [ ] vorhandenen manuellen Dimmer dokumentieren und abklemmen
+- [ ] vorhandene DIM+ / DIM−-Leitung weiterverwenden
+- [ ] Mean Well XLG-150-H-AB mit dem DAC verbinden
+- [ ] manuelle Leistungssteuerung 0–100 % testen
+- [ ] Lichtstatus und Sollwert im Dashboard anzeigen
+- [ ] Wachstum-Profil speichern
+- [ ] Blüte-Profil speichern
+- [ ] Umschalter Wachstum / Blüte ergänzen
+- [ ] Ein-/Ausschaltzeiten pro Profil ergänzen
+- [ ] manuellen Override und AUS-Schalter ergänzen
+- [ ] aktive Konfiguration nach Neustart wiederherstellen
+- [ ] tatsächliche Lux-/PPFD-Reaktion auf Dimmwerte kalibrieren
+
+## Phase 4 – Bewässerung
+
+- [ ] zwei 12-V-Peristaltikpumpen außerhalb des Schranks montieren
+- [ ] separates 12-V-Netzteil für die Pumpen installieren
+- [ ] 2-Kanal-MOSFET-Treiber anschließen
+- [ ] Steuerleitungen vom Raspberry Pi nach außen führen
+- [ ] Pumpe 1 und Pumpe 2 einzeln manuell testen
+- [ ] Schlauch zu Topf 1 verlegen
+- [ ] Schlauch zu Topf 2 verlegen
+- [ ] Rückschlagventile / Tropfer bzw. Bewässerungsringe montieren
+- [ ] Tank-Sensor installieren
+- [ ] Tankstatus in FastAPI und Dashboard integrieren
+- [ ] Pumpenlaufzeit gegen reale Wassermenge kalibrieren
+- [ ] manuellen Bewässerungs-Button pro Topf ergänzen
+- [ ] maximale Pumpdauer pro Vorgang festlegen
+- [ ] Mindestpause zwischen Bewässerungen festlegen
+- [ ] Tank-leer-Sperre einbauen
+- [ ] Bewässerungsereignisse protokollieren
+- [ ] automatische Bewässerung erst nach erfolgreicher Kalibrierung aktivieren
+
+## Phase 5 – Lüftersteuerung
+
+- [ ] aktuelle Noctua-Verkabelung dokumentieren
+- [ ] Zuluft unten eindeutig kennzeichnen
+- [ ] Abluft oben eindeutig kennzeichnen
+- [ ] zwei geeignete Open-Collector-/Open-Drain-PWM-Treiber aufbauen
+- [ ] 12-V-Versorgung der Lüfter beibehalten
+- [ ] PWM-Kanal für Zuluft testen
+- [ ] PWM-Kanal für Abluft testen
+- [ ] NA-FC1 nach erfolgreichem Test ersetzen
+- [ ] manuelle Lüfterleistung im Dashboard ergänzen
+- [ ] Modi AUS / AUTO / MANUELL ergänzen
+- [ ] Mindestdrehzahl festlegen
+- [ ] Automatik auf Temperatur / RH / VPD abstimmen
+- [ ] Tag-/Nachtverhalten definieren
+- [ ] optionalen 230-V-Abluftlüfter separat bewerten
+- [ ] falls verwendet: 230-V-Abluft nur über geeignetes Relais / Schütz schalten
+
+---
+
 # Mögliche Erweiterungen
 
 Geplant bzw. sinnvoll:
