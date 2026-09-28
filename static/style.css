@@ -1384,3 +1384,18 @@ footer {
     object-fit: contain;
     background: #000;
 }
+
+
+/* MJPEG LIVESTREAM */
+
+.camera-image {
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+    object-fit: cover;
+}
+
+.camera-panel .badge::before {
+    content: "●";
+    margin-right: 6px;
+    font-size: 0.65em;
+}
