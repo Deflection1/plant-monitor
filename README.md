@@ -34,8 +34,9 @@ Stand: **29.09.2026**, Entwicklungsbranch **`test/overview-controls`**. Die folg
 - ✅ getrennt speicherbare Lampenprofile mit eigenen SVG-Symbolen
 - ✅ Bewässerungs-Konfiguration, Pumpenkalibrierungsberechnung und reine Entscheidungsvorschau
 - ✅ animierbare Pumpensymbole mit separatem Animationstest
+- ✅ vorbereitete Lüftersteuerung für Zu-/Abluft mit speicherbaren Sollwerten und Symbolvorschau
 
-**Hardwaregrenze:** Lampendimmung und Bewässerung geben weiterhin keine Steuersignale aus. Die Bodenfeuchtesensoren müssen noch angebunden werden. Gespeicherte Automatik-Einstellungen sind keine aktive Bewässerung.
+**Hardwaregrenze:** Lampendimmung, Bewässerung und Lüftersteuerung geben weiterhin keine Steuersignale aus. Die Bodenfeuchtesensoren müssen noch angebunden werden. Gespeicherte Automatik-Einstellungen sind keine aktive Bewässerung.
 
 ## In Arbeit / Hardware bestellt
 
@@ -193,6 +194,7 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 ├── configuration.py       # Validierung und atomare JSON-Speicherung
 ├── lamp_profiles.py       # getrennte Profileinstellungen
 ├── irrigation.py          # Konfiguration und reine Entscheidungsvorschau
+├── fan_control.py         # Lüftereinstellungen ohne PWM-Ausgabe
 ├── templates/
 │   └── index.html
 ├── static/
@@ -201,6 +203,7 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 │   ├── overview.js
 │   ├── liquid-glass.css
 │   ├── pump-icons.js
+│   ├── fans.js
 │   ├── profile-growth.svg
 │   ├── profile-flower.svg
 │   └── chart.umd.min.js
@@ -211,7 +214,8 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
     ├── soil_moisture.json
     ├── timelapse.json
     ├── lamp_control.json
-    └── irrigation.json
+    ├── irrigation.json
+    └── fan_control.json
 ```
 
 ---
@@ -520,6 +524,7 @@ History:
 - Lampenleistung 0–100 % und getrennte Lichtprofile als speicherbare Einstellungen
 - Tank- und Pumpenkarten; Tankstatus derzeit unbekannt, Pumpen nicht verbunden
 - Bewässerungsmenge, Feuchteschwelle und Pumpenkalibrierung je Topf
+- Lüfternamen, AUS/MANUELL-Modus, gewünschte Leistung und Mindestleistung je Zu-/Abluft
 
 ## Noch offen
 
@@ -527,7 +532,7 @@ History:
 - letzte Bewässerung und dauerhaftes Ereignisprotokoll
 - manueller Bewässerungsstart und aktive Automatik
 - tatsächliche Lampendimmung und Ausführung der Zeitpläne
-- Zuluft-/Abluftleistung und Lüftermodi
+- tatsächliche PWM-Ausgabe, Lüfterdrehzahl und automatische Lüfterregelung
 
 ---
 
@@ -763,6 +768,33 @@ Für die spätere Hardwareintegration vorgesehen:
 
 # Lüftersteuerung
 
+## Software-Vorbereitung
+
+Unter **Steuerung → Lüftersteuerung** gibt es zwei Karten für **Zuluft unten** und **Abluft oben**. Beide haben ein eigenes Liquid-Glass-Lüftersymbol. **Animation testen** dreht nur das jeweilige Symbol für drei Sekunden; dabei wird kein Steuerbefehl gesendet. Reduzierte Bewegung wird berücksichtigt.
+
+Unter **Lüfter einrichten** sind getrennt speicherbar:
+
+| Einstellung | Bedeutung |
+|---|---|
+| Name | Bezeichnung des jeweiligen Lüfters |
+| AUS / MANUELL | vorgemerkter Modus; standardmäßig AUS |
+| Gewünschte Leistung | ganzzahliger Sollwert von 0 bis 100 %, standardmäßig 0 % |
+| Mindestleistung bei Betrieb | untere Grenze für positive manuelle Sollwerte; standardmäßig 0 % und noch am Lüfter zu prüfen |
+
+AUS oder ein gewünschter Wert von 0 % ergibt einen Sollwert von 0 %. Bei einem positiven manuellen Wert gilt der größere Wert aus gewünschter Leistung und Mindestleistung. Die Oberfläche zeigt den Entwurf und den gespeicherten Sollwert getrennt. Diese Prozentangaben sind keine gemessene Drehzahl.
+
+- Persistente Einstellungen in `data/fan_control.json`
+- `GET /api/fans/config` und `POST /api/fans/config`
+- `GET /api/fans/status` mit berechnetem Sollwert, `hardware_connected: false` und `output_available: false`
+- Tatsächliche Leistung und Drehzahl bleiben unbekannt (`null` / „—“).
+- Keine GPIO-Zugriffe, PWM-Signale oder automatische Regelung
+- AUTO ist in der Oberfläche als spätere Funktion gekennzeichnet und nicht auswählbar.
+- Laden, Validierung und atomare Speicherung sind vorbereitet; ein Speicherfehler übernimmt keine neue aktive Konfiguration.
+
+**Kanalzuordnung noch offen:** Die zwei getrennten Softwareeinstellungen bedeuten nicht, dass der vorhandene NA-FC1 bereits zwei unabhängig steuerbare PWM-Kanäle bereitstellt. Die tatsächliche Anbindung und Zuordnung muss vor der Hardwareintegration geprüft werden.
+
+## Geplante Hardware-Anbindung
+
 Vorhanden:
 
 ```text
@@ -918,12 +950,19 @@ Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet wer
 
 ## Phase 5 – Lüfter
 
+- [x] Liquid-Glass-Karten für Zu- und Abluft
+- [x] getrennte Namen, AUS/MANUELL-Sollwerte und Mindestleistung speichern
+- [x] Konfigurations-/Status-API ohne Hardwareausgabe
+- [x] Lüftersymbole mit separatem Animationstest
+- [x] Validierung und Speicherung hardwareunabhängig testen
+- [ ] tatsächliche PWM-Kanalzuordnung am vorhandenen NA-FC1 klären
+
 - [ ] aktuelle Verkabelung dokumentieren
 - [ ] Zuluft / Abluft eindeutig kennzeichnen
 - [ ] NA-FC1-PWM-Eingang mit Pi-GPIO bei ca. 25 kHz testen
 - [ ] Verhalten des beschädigten Reglers prüfen
-- [ ] manuelle Lüftersteuerung ins Dashboard integrieren
-- [ ] AUS / AUTO / MANUELL ergänzen
+- [ ] gespeicherte manuelle Sollwerte an die reale PWM-Ausgabe anbinden
+- [ ] aktive AUS-/MANUELL-Ausgabe und AUTO-Regelung ergänzen
 - [ ] Mindestdrehzahl festlegen
 - [ ] Automatik auf Temperatur / RH / VPD abstimmen
 
@@ -981,7 +1020,7 @@ Nach Python-Änderungen den Dienst neu starten; anschließend die Website mit **
 
 ## Konfiguration speichern
 
-Bodenfeuchte-, Lampen-, Zeitraffer- und Bewässerungseinstellungen werden in JSON-Dateien unter `data/` gespeichert. Die Speicherung erfolgt über eine temporäre Datei und atomaren Austausch. Bei einem Speicherfehler meldet die API einen Fehler, statt die neue Konfiguration im Arbeitsspeicher als erfolgreich gespeichert zu übernehmen.
+Bodenfeuchte-, Lampen-, Zeitraffer-, Bewässerungs- und Lüftereinstellungen werden in JSON-Dateien unter `data/` gespeichert. Die Speicherung erfolgt über eine temporäre Datei und atomaren Austausch. Bei einem Speicherfehler meldet die API einen Fehler, statt die neue Konfiguration im Arbeitsspeicher als erfolgreich gespeichert zu übernehmen.
 
 ## Uvicorn manuell starten
 
@@ -1084,9 +1123,11 @@ curl http://127.0.0.1:8000/api/light/today
 curl http://raspberrypi.local/api/current
 curl http://127.0.0.1:8000/api/irrigation/config
 curl http://127.0.0.1:8000/api/irrigation/status
+curl http://127.0.0.1:8000/api/fans/config
+curl http://127.0.0.1:8000/api/fans/status
 ```
 
-Nach Änderungen an Python-Code (z. B. `app.py`, `sensor.py`, `database.py`, `configuration.py`, `lamp_profiles.py` oder `irrigation.py`):
+Nach Änderungen an Python-Code (z. B. `app.py`, `sensor.py`, `database.py`, `configuration.py`, `lamp_profiles.py`, `irrigation.py` oder `fan_control.py`):
 
 ```bash
 sudo systemctl restart plant-monitor

@@ -21,7 +21,7 @@
     >
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-pump-refined">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-fans">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -900,6 +900,73 @@
         </div>
     </section>
 
+<section class="panel fan-panel" aria-labelledby="fanHeading">
+<div class="panel-header"><div><p class="eyebrow">LUFT &amp; KLIMA</p><h2 id="fanHeading">Lüftersteuerung</h2></div><span class="camera-meta">Keine PWM-Ausgabe</span></div>
+<p class="camera-meta">Noctua · Zuluft unten und Abluft oben · Anbindung über NA-FC1 vorgesehen</p>
+<div class="fan-grid"><article class="lamp-control-card fan-card">
+<div class="fan-symbol" id="fanIcon-intake" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true">
+<defs>
+<linearGradient id="fanGlassintake" x1="15" y1="10" x2="81" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#ddf6ff" stop-opacity=".6"/><stop offset=".5" stop-color="#8094eb" stop-opacity=".2"/><stop offset="1" stop-color="#819eff" stop-opacity=".5"/></linearGradient>
+<linearGradient id="fanBladeintake" x1="24" y1="24" x2="72" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#e1f8ff"/><stop offset=".45" stop-color="#9bbaf4"/><stop offset="1" stop-color="#647fd8"/></linearGradient>
+</defs>
+<rect x="10" y="10" width="76" height="76" rx="22" fill="url(#fanGlassintake)" stroke="#d2eaff" stroke-opacity=".5"/>
+<circle cx="48" cy="48" r="30" fill="#263e6a" fill-opacity=".45" stroke="#bddbff" stroke-opacity=".5"/>
+<circle cx="48" cy="48" r="26" fill="none" stroke="#b4daff" stroke-opacity=".18"/>
+<g class="fan-rotor" fill="url(#fanBladeintake)" stroke="#ddf2ff" stroke-opacity=".5" stroke-width=".6"><path transform="rotate(0 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(90 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(180 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(270 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/></g>
+<circle cx="48" cy="48" r="8" fill="#d4eaff" stroke="#f0fcff"/><circle cx="48" cy="48" r="3" fill="#6e8ec0"/>
+<path d="M17 33V27a10 10 0 0 1 10-10h24" fill="none" stroke="white" stroke-opacity=".6" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M67 80q13-2 13-15" fill="none" stroke="#bed8ff" stroke-opacity=".55" stroke-linecap="round"/>
+</svg></div>
+<span class="lamp-control-label">Zuluft · unten</span>
+<h3 id="fanTitle-intake">Zuluft unten</h3>
+<strong>Hardware ausstehend</strong>
+<p id="fanSaved-intake" class="camera-meta">Gespeicherter Sollwert wird geladen …</p>
+<small>Ist-Leistung: — · Drehzahl: —</small>
+<button type="button" class="fan-preview" data-fan="intake">Animation testen</button>
+<small id="fanPreviewNote-intake" role="status">Symbolvorschau ohne Lüfteransteuerung</small>
+</article><article class="lamp-control-card fan-card">
+<div class="fan-symbol" id="fanIcon-exhaust" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true">
+<defs>
+<linearGradient id="fanGlassexhaust" x1="15" y1="10" x2="81" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#ddf6ff" stop-opacity=".6"/><stop offset=".5" stop-color="#8094eb" stop-opacity=".2"/><stop offset="1" stop-color="#819eff" stop-opacity=".5"/></linearGradient>
+<linearGradient id="fanBladeexhaust" x1="24" y1="24" x2="72" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#e1f8ff"/><stop offset=".45" stop-color="#9bbaf4"/><stop offset="1" stop-color="#647fd8"/></linearGradient>
+</defs>
+<rect x="10" y="10" width="76" height="76" rx="22" fill="url(#fanGlassexhaust)" stroke="#d2eaff" stroke-opacity=".5"/>
+<circle cx="48" cy="48" r="30" fill="#263e6a" fill-opacity=".45" stroke="#bddbff" stroke-opacity=".5"/>
+<circle cx="48" cy="48" r="26" fill="none" stroke="#b4daff" stroke-opacity=".18"/>
+<g class="fan-rotor" fill="url(#fanBladeexhaust)" stroke="#ddf2ff" stroke-opacity=".5" stroke-width=".6"><path transform="rotate(0 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(90 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(180 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(270 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/></g>
+<circle cx="48" cy="48" r="8" fill="#d4eaff" stroke="#f0fcff"/><circle cx="48" cy="48" r="3" fill="#6e8ec0"/>
+<path d="M17 33V27a10 10 0 0 1 10-10h24" fill="none" stroke="white" stroke-opacity=".6" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M67 80q13-2 13-15" fill="none" stroke="#bed8ff" stroke-opacity=".55" stroke-linecap="round"/>
+</svg></div>
+<span class="lamp-control-label">Abluft · oben</span>
+<h3 id="fanTitle-exhaust">Abluft oben</h3>
+<strong>Hardware ausstehend</strong>
+<p id="fanSaved-exhaust" class="camera-meta">Gespeicherter Sollwert wird geladen …</p>
+<small>Ist-Leistung: — · Drehzahl: —</small>
+<button type="button" class="fan-preview" data-fan="exhaust">Animation testen</button>
+<small id="fanPreviewNote-exhaust" role="status">Symbolvorschau ohne Lüfteransteuerung</small>
+</article></div>
+<details class="lamp-config"><summary>Lüfter einrichten</summary>
+<form id="fanForm"><fieldset id="fanFields" disabled><legend class="camera-meta">Einstellungen je Lüfter</legend>
+<div class="fan-grid"><section class="lamp-config-card"><h3>Zuluft unten</h3>
+<label>Name<input id="fanName-intake" value="Zuluft unten" maxlength="40" required></label>
+<label>Modus<select id="fanMode-intake"><option value="off">AUS</option><option value="manual">MANUELL (vorgemerkt)</option><option disabled>AUTO – später verfügbar</option></select></label>
+<label>Gewünschte Leistung (%)<input id="fanPower-intake" type="number" min="0" max="100" step="1" value="0" required></label>
+<label>Mindestleistung bei Betrieb (%)<input id="fanMinimum-intake" type="number" min="0" max="100" step="1" value="0" required></label>
+<p class="camera-meta" id="fanDraft-intake" aria-live="polite">Vorgemerkter Sollwert: 0 %</p>
+</section><section class="lamp-config-card"><h3>Abluft oben</h3>
+<label>Name<input id="fanName-exhaust" value="Abluft oben" maxlength="40" required></label>
+<label>Modus<select id="fanMode-exhaust"><option value="off">AUS</option><option value="manual">MANUELL (vorgemerkt)</option><option disabled>AUTO – später verfügbar</option></select></label>
+<label>Gewünschte Leistung (%)<input id="fanPower-exhaust" type="number" min="0" max="100" step="1" value="0" required></label>
+<label>Mindestleistung bei Betrieb (%)<input id="fanMinimum-exhaust" type="number" min="0" max="100" step="1" value="0" required></label>
+<p class="camera-meta" id="fanDraft-exhaust" aria-live="polite">Vorgemerkter Sollwert: 0 %</p>
+</section></div>
+<p class="camera-meta">AUS und 0 % ergeben einen Sollwert von 0 %. Bei positivem manuellem Wert gilt mindestens die eingestellte Mindestleistung. Diese Werte sind noch keine gemessene Drehzahl oder tatsächliche PWM-Ausgabe.</p>
+<p class="camera-meta">Die Mindestleistung muss später am Lüfter geprüft werden. Ob Zu- und Abluft unabhängig ansteuerbar sind, hängt von der noch offenen Kanalzuordnung am NA-FC1 ab.</p>
+<button type="submit" class="primary">Einstellungen speichern</button>
+</fieldset><p id="fanMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p><button type="button" id="fanRetry" hidden>Erneut laden</button></form>
+</details></section>
+
     <!-- SYSTEM -->
 
     <section class="main-grid system-only-grid">
@@ -1614,6 +1681,7 @@
 
 <script src="/static/overview.js?v=6"></script>
 <script src="/static/pump-icons.js?v=1"></script>
+<script src="/static/fans.js?v=1"></script>
 </body>
 
 </html>

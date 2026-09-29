@@ -6,6 +6,7 @@ from functools import wraps
 from configuration import atomic_write_json, next_capture_time, validate_soil_config
 from lamp_profiles import normalize_lamp_config, update_lamp_profile
 from irrigation import default_irrigation_config, validate_irrigation_config, irrigation_status, plan_watering
+from fan_control import default_fan_config, validate_fan_config, fan_status
 import shutil
 import threading
 
@@ -66,6 +67,7 @@ PHOTO_DIR = BASE_DIR / "photos"
 LATEST_PHOTO = PHOTO_DIR / "latest.jpg"
 TIMELAPSE_CONFIG_FILE = BASE_DIR / "data" / "timelapse.json"
 SOIL_CONFIG_FILE = BASE_DIR / "data" / "soil_moisture.json"
+FAN_CONFIG_FILE = BASE_DIR / "data" / "fan_control.json"
 IRRIGATION_CONFIG_FILE = BASE_DIR / "data" / "irrigation.json"
 LAMP_CONFIG_FILE = BASE_DIR / "data" / "lamp_control.json"
 TIMELAPSE_DEFAULT_INTERVAL_MINUTES = 720
@@ -104,6 +106,20 @@ def persist_config(path, config):
             detail="Speichern fehlgeschlagen. Bisherige Einstellungen bleiben aktiv."
         ) from error
 
+
+
+
+def load_fan_config():
+    try:
+        return validate_fan_config(json.loads(FAN_CONFIG_FILE.read_text()))
+    except FileNotFoundError:
+        return default_fan_config()
+    except (OSError, ValueError) as error:
+        print("Lüfterkonfiguration nicht lesbar:", error)
+        return default_fan_config()
+
+
+FAN_CONFIG = load_fan_config()
 
 
 def load_irrigation_config():
@@ -860,6 +876,31 @@ def light_today():
 
 
 # Display-only preparation. No GPIO, scheduler or watering execution endpoints.
+@app.get("/api/fans/config")
+@configuration_locked
+def fans_config():
+    return FAN_CONFIG
+
+
+@app.post("/api/fans/config")
+@configuration_locked
+def fans_config_update(payload: dict = Body(...)):
+    global FAN_CONFIG
+    try:
+        updated = validate_fan_config(payload)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    persist_config(FAN_CONFIG_FILE, updated)
+    FAN_CONFIG = updated
+    return {"status": "ok", **updated}
+
+
+@app.get("/api/fans/status")
+@configuration_locked
+def fans_status():
+    return fan_status(FAN_CONFIG)
+
+
 @app.get("/api/irrigation/config")
 @configuration_locked
 def irrigation_config():
