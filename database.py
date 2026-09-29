@@ -124,6 +124,17 @@ def init_db():
             ON measurements(timestamp)
         """)
 
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS watering_events (
+                event_id TEXT PRIMARY KEY,
+                timestamp REAL NOT NULL,
+                pot_id INTEGER NOT NULL CHECK (pot_id IN (1, 2)),
+                duration_seconds REAL NOT NULL CHECK (duration_seconds > 0),
+                flow_ml_s REAL NOT NULL CHECK (flow_ml_s > 0),
+                trigger TEXT NOT NULL
+            )
+        """)
+        db.execute("CREATE INDEX IF NOT EXISTS idx_watering_time ON watering_events(timestamp)")
         db.commit()
 
 
@@ -564,4 +575,69 @@ def get_light_today():
 
         "samples":
             len(rows)
+    }
+
+
+# Only a future hardware driver may call this after a real pump run has stopped.
+# Record actual elapsed time, including interrupted runs; never planned doses.
+def record_watering_event(event_id, pot_id, timestamp, duration_seconds, flow_ml_s, trigger):
+    import math
+    if not isinstance(event_id, str) or not event_id.strip() or len(event_id) > 128:
+        raise ValueError("Invalid event ID")
+    if type(pot_id) is not int or pot_id not in (1, 2):
+        raise ValueError("Invalid pot")
+    for value in (timestamp, duration_seconds, flow_ml_s):
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0:
+            raise ValueError("Invalid measurement")
+    if not math.isfinite(duration_seconds * flow_ml_s) or timestamp > time.time() + 5:
+        raise ValueError("Invalid event")
+    if trigger not in ("manual", "automatic", "calibration"):
+        raise ValueError("Invalid trigger")
+    with get_connection() as db:
+        # Retries must not double count; conflicting reuse is an error.
+        values = (event_id, timestamp, pot_id, duration_seconds, flow_ml_s, trigger)
+        old = db.execute("SELECT * FROM watering_events WHERE event_id = ?", (event_id,)).fetchone()
+        if old is not None:
+            if tuple(old) != values:
+                raise ValueError("Conflicting event ID")
+            return
+        db.execute("INSERT INTO watering_events VALUES (?, ?, ?, ?, ?, ?)", values)
+
+
+def get_watering_history(now=None):
+    from datetime import timedelta
+    from zoneinfo import ZoneInfo
+    zone = ZoneInfo("Europe/Zurich")
+    current = datetime.fromtimestamp(time.time() if now is None else now, zone)
+    today = current.date()
+    dates = [today - timedelta(days=n) for n in range(6, -1, -1)]
+    start = datetime.combine(dates[0], datetime.min.time(), tzinfo=zone).timestamp()
+    end = current.timestamp()
+    with get_connection() as db:
+        # Calibration water is collected separately, not delivered to a pot.
+        rows = db.execute(
+            "SELECT * FROM watering_events WHERE timestamp >= ? AND timestamp <= ? "
+            "AND trigger != 'calibration' ORDER BY timestamp",
+            (start, end)
+        ).fetchall()
+        last = db.execute(
+            "SELECT * FROM watering_events WHERE timestamp <= ? AND trigger != 'calibration' "
+            "ORDER BY timestamp DESC, event_id DESC LIMIT 1", (end,)
+        ).fetchone()
+    days = {d.isoformat(): {"date": d.isoformat(), "ml": [0.0, 0.0], "counts": [0, 0]} for d in dates}
+    for row in rows:
+        day = days[datetime.fromtimestamp(row["timestamp"], zone).date().isoformat()]
+        index = row["pot_id"] - 1
+        day["ml"][index] += row["duration_seconds"] * row["flow_ml_s"]
+        day["counts"][index] += 1
+    for day in days.values():
+        day["ml"] = [round(v, 1) for v in day["ml"]]
+    return {
+        "timezone": "Europe/Zurich", "estimated": True,
+        "days": list(days.values()), "today_ml": days[today.isoformat()]["ml"],
+        "last": None if last is None else {
+            "timestamp": last["timestamp"], "pot_id": last["pot_id"],
+            "ml": round(last["duration_seconds"] * last["flow_ml_s"], 1),
+            "trigger": last["trigger"]
+        }
     }
