@@ -45,7 +45,7 @@
         if (!Array.isArray(config?.pumps) || config.pumps.length !== 2 || !Array.isArray(status?.pumps)) throw new Error("Invalid water configuration");
         set("ovWaterStatus", hardware(status));
         // Only explicitly known tank values are represented as known.
-        const tank = {empty:"Leer",ok:"OK",unknown:"Unbekannt"}[status.tank_state] || "Unbekannt";
+        const tank = {empty:"Leer",ok:"Wasser vorhanden",full:"Wasser vorhanden",unknown:"Unbekannt"}[status.tank_state] || "Unbekannt";
         set("ovWaterTank", (config.tank_name || "Tank") + " · " + tank);
         for (const id of [1, 2]) {
             const p = config.pumps.find(p => p.id === id);

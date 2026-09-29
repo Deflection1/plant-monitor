@@ -205,6 +205,7 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 │   ├── layout.js
 │   ├── liquid-glass.css
 │   ├── pump-icons.js
+│   ├── tank-status.js
 │   ├── fans.js
 │   ├── profile-growth.svg
 │   ├── profile-flower.svg
@@ -659,6 +660,16 @@ Berechnete Pumpdauer (s) = gewünschte Wassermenge (ml) / Fördermenge (ml/s)
 ```
 
 Die Oberfläche zeigt Fördermenge und berechnete Laufzeit direkt an. Unvollständige Kalibrierpaare, ungültige Zahlen, eine Einzelmenge über dem Tageslimit oder eine berechnete Dauer über der Laufzeitgrenze werden beim Speichern abgelehnt.
+
+## Tanksymbol
+
+Übersicht und Steuerung zeigen ein Liquid-Glass-Tanksymbol mit Deckel und Wasserlinie. Die vorhandene Statusabfrage aktualisiert beide Symbole:
+
+- Rot mit Ausrufezeichen: Tank leer (`tank_state: "empty"`)
+- Blau: Wasser vorhanden (`"ok"` oder `"full"`)
+- Neutral mit Fragezeichen: Status unbekannt oder Statusabfrage fehlgeschlagen
+
+Der Schwimmerschalter liefert keine Füllmenge in Prozent. Blau bedeutet daher „Wasser vorhanden“, nicht einen messtechnisch bestätigten randvollen Tank. Aktuell meldet das Backend weiterhin `unknown`, bis der Schalter angebunden ist.
 
 ## Pumpensymbole und Animation
 

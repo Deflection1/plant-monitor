@@ -20,6 +20,7 @@
     });
 
     function render(status) {
+        if (window.renderTankStatus) window.renderTankStatus(status);
         const connected = status?.hardware_connected === true;
         const available = connected && status?.output_available === true;
         for (const id of [1, 2]) {

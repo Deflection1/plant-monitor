@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/static/style.css?v=12">
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-fixed-camera">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-tank">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -107,7 +107,24 @@
 <path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
 <path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
 </svg></div><div><h3>Bewässerung</h3><p id="ovWaterStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
-<dl><div><dt>Tank</dt><dd id="ovWaterTank">—</dd></div><div><dt>Letzte Bewässerung</dt><dd id="ovWaterLast">—</dd></div></dl><a href="#steuerung" data-control-target="irrigationControlSection">Zur Bewässerung →</a>
+<dl><div><dt>Tank</dt><dd class="overview-tank-value"><span class="tank-symbol" data-tank-state="unknown" role="img" aria-label="Tankstatus unbekannt">
+<svg viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="tank-overview-shell" x1="17" y1="24" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#e7ffff" stop-opacity=".52"/><stop offset=".5" stop-color="#9ccee0" stop-opacity=".13"/><stop offset="1" stop-color="#8acbde" stop-opacity=".38"/></linearGradient>
+<linearGradient id="tank-overview-water" x1="27" y1="40" x2="73" y2="82" gradientUnits="userSpaceOnUse"><stop class="tank-liquid-light" stop-color="var(--tank-light)"/><stop offset="1" class="tank-liquid-dark" stop-color="var(--tank-dark)"/></linearGradient>
+</defs>
+<path d="M25 27V18h17v9" fill="url(#tank-overview-shell)" stroke="#c5ecf1" stroke-opacity=".65" stroke-width="1.2"/>
+<rect x="20" y="9" width="28" height="12" rx="4" fill="url(#tank-overview-shell)" stroke="#d9faff" stroke-opacity=".75"/>
+<path d="M25 13h18" stroke="white" stroke-opacity=".65" stroke-linecap="round"/>
+<rect x="10" y="27" width="76" height="58" rx="15" fill="url(#tank-overview-shell)" stroke="#d7faff" stroke-opacity=".7" stroke-width="1.3"/>
+<path class="tank-fill-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46V70Q81 80 70 80H26Q15 80 15 70Z" fill="url(#tank-overview-water)" fill-opacity=".86"/>
+<path class="tank-fill-empty" d="M15 72Q23 69 31 72T47 72T63 72T81 72Q80 80 70 80H26Q16 80 15 72Z" fill="url(#tank-overview-water)" fill-opacity=".9"/>
+<path class="tank-wave-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46" fill="none" stroke="var(--tank-light)" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M16 50V42q0-9 10-9h30" fill="none" stroke="white" stroke-opacity=".62" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M78 57v12q0 9-9 9" fill="none" stroke="#dbffff" stroke-opacity=".42" stroke-width="1.2" stroke-linecap="round"/>
+<g class="tank-unknown-mark" fill="none" stroke="#d2e4ed" stroke-width="2.4" stroke-linecap="round"><path d="M43 51c0-7 12-7 12 0 0 4-6 4-6 9"/><path d="M49 66v.3"/></g>
+<g class="tank-empty-mark" stroke="#ffd8db" stroke-width="2.7" stroke-linecap="round"><path d="M49 46v12M49 64v.3"/></g>
+</svg></span><span id="ovWaterTank">—</span></dd></div><div><dt>Letzte Bewässerung</dt><dd id="ovWaterLast">—</dd></div></dl><a href="#steuerung" data-control-target="irrigationControlSection">Zur Bewässerung →</a>
 </article>
 <article class="panel overview-equipment-card">
 <header><div class="ov-equipment-icon"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
@@ -901,8 +918,26 @@
         <p class="camera-meta">Zwei getrennte Pumpen · gemeinsamer Tank · noch keine Pumpenansteuerung</p>
         <div class="lamp-control-grid water-top-grid">
             <article class="lamp-control-card">
-                <span class="lamp-control-label" id="irrigationTankName">Wassertank</span>
-                <strong>Tankstatus unbekannt</strong>
+                <span class="tank-symbol" data-tank-state="unknown" role="img" aria-label="Tankstatus unbekannt">
+<svg viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="tank-control-shell" x1="17" y1="24" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#e7ffff" stop-opacity=".52"/><stop offset=".5" stop-color="#9ccee0" stop-opacity=".13"/><stop offset="1" stop-color="#8acbde" stop-opacity=".38"/></linearGradient>
+<linearGradient id="tank-control-water" x1="27" y1="40" x2="73" y2="82" gradientUnits="userSpaceOnUse"><stop class="tank-liquid-light" stop-color="var(--tank-light)"/><stop offset="1" class="tank-liquid-dark" stop-color="var(--tank-dark)"/></linearGradient>
+</defs>
+<path d="M25 27V18h17v9" fill="url(#tank-control-shell)" stroke="#c5ecf1" stroke-opacity=".65" stroke-width="1.2"/>
+<rect x="20" y="9" width="28" height="12" rx="4" fill="url(#tank-control-shell)" stroke="#d9faff" stroke-opacity=".75"/>
+<path d="M25 13h18" stroke="white" stroke-opacity=".65" stroke-linecap="round"/>
+<rect x="10" y="27" width="76" height="58" rx="15" fill="url(#tank-control-shell)" stroke="#d7faff" stroke-opacity=".7" stroke-width="1.3"/>
+<path class="tank-fill-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46V70Q81 80 70 80H26Q15 80 15 70Z" fill="url(#tank-control-water)" fill-opacity=".86"/>
+<path class="tank-fill-empty" d="M15 72Q23 69 31 72T47 72T63 72T81 72Q80 80 70 80H26Q16 80 15 72Z" fill="url(#tank-control-water)" fill-opacity=".9"/>
+<path class="tank-wave-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46" fill="none" stroke="var(--tank-light)" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M16 50V42q0-9 10-9h30" fill="none" stroke="white" stroke-opacity=".62" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M78 57v12q0 9-9 9" fill="none" stroke="#dbffff" stroke-opacity=".42" stroke-width="1.2" stroke-linecap="round"/>
+<g class="tank-unknown-mark" fill="none" stroke="#d2e4ed" stroke-width="2.4" stroke-linecap="round"><path d="M43 51c0-7 12-7 12 0 0 4-6 4-6 9"/><path d="M49 66v.3"/></g>
+<g class="tank-empty-mark" stroke="#ffd8db" stroke-width="2.7" stroke-linecap="round"><path d="M49 46v12M49 64v.3"/></g>
+</svg></span>
+<span class="lamp-control-label" id="irrigationTankName">Wassertank</span>
+                <strong id="irrigationTankState">Tankstatus unbekannt</strong>
                 <small>WLSW1 noch nicht angebunden. Der Schalter erkennt den Tankzustand, keinen Füllstand in Prozent.</small>
             </article>
             <article class="lamp-control-card">
@@ -1523,9 +1558,10 @@
 <script src="/static/app.js?v=20260929-chart-lines"></script>
 
 <script src="/static/overview.js?v=8"></script>
-<script src="/static/pump-icons.js?v=1"></script>
+<script src="/static/tank-status.js?v=1"></script>
+<script src="/static/pump-icons.js?v=2"></script>
 <script src="/static/fans.js?v=1"></script>
-<script src="/static/overview-equipment.js?v=2"></script>
+<script src="/static/overview-equipment.js?v=3"></script>
 <script src="/static/layout.js?v=2"></script></body>
 
 </html>

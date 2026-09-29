@@ -870,3 +870,17 @@ footer { color: #a9c5b8; }
 @media(prefers-reduced-transparency:reduce) { .control-jump-nav { background:#183d34; } }
 
 .overview-analysis>h2 { margin:0 0 18px; font-size:1.3rem; color:#d8eee8; }
+
+/* Tank color represents the switch state, never a measured percentage. */
+.tank-symbol { --tank-light:#b9d2df; --tank-dark:#708c9e; display:inline-block; width:84px; height:84px; flex-shrink:0; }
+.tank-symbol svg { display:block; width:100%; height:100%; filter:drop-shadow(0 4px 7px rgba(5,25,35,.18)); }
+.tank-symbol[data-tank-state="ok"] { --tank-light:#a2edff; --tank-dark:#367cf1; }
+.tank-symbol[data-tank-state="empty"] { --tank-light:#ffabb5; --tank-dark:#e54960; }
+.tank-fill-full,.tank-wave-full,.tank-fill-empty,.tank-empty-mark { display:none; }
+.tank-symbol[data-tank-state="ok"] .tank-fill-full,.tank-symbol[data-tank-state="ok"] .tank-wave-full { display:block; }
+.tank-symbol[data-tank-state="empty"] .tank-fill-empty,.tank-symbol[data-tank-state="empty"] .tank-empty-mark { display:block; }
+.tank-symbol:not([data-tank-state="unknown"]) .tank-unknown-mark { display:none; }
+.overview-equipment-card dl .tank-symbol { width:42px; height:42px; }
+
+.overview-tank-value { display:flex; justify-content:flex-end; align-items:center; gap:8px; }
+@media(max-width:420px) { .overview-tank-value { justify-content:flex-start; } }
