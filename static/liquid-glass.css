@@ -955,3 +955,10 @@ footer { color: #a9c5b8; }
 .fan-percent-input input[type="number"] { box-sizing:border-box; width:74px; min-height:42px; border:1px solid rgba(203,243,231,.25); border-radius:10px; padding:8px; color:#edf9f3; background:rgba(5,29,27,.45); font:inherit; }
 .fan-range-row input:focus-visible { outline:2px solid #97f2db; outline-offset:3px; }
 @media(max-width:420px) { .fan-range-row { gap:10px; } .fan-percent-input input[type="number"] { width:64px; } }
+
+/* Keep the shared save action separate from technical notes. */
+#fanFields .fan-form-actions { display:flex; justify-content:flex-end; width:100%; clear:both; margin:18px 0 22px; }
+#fanFields > .camera-meta { display:block; }
+@media(max-width:600px) {
+    #fanFields .fan-form-actions .primary { width:100%; }
+}
