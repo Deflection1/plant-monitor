@@ -3,7 +3,7 @@
     const icons = document.querySelectorAll(".live-lamp-icon");
     const label = document.getElementById("ovLampLiveState");
     const note = document.getElementById("ovLampLiveNote");
-    if (!label || !note) return;
+    if (!note) return;
     let receivedAt = null;
     function render(state, lux) {
         const text = state === "on" ? "Licht erkannt" :
@@ -12,9 +12,9 @@
             icon.dataset.state = state;
             icon.setAttribute("aria-label", text);
         });
-        label.textContent = text;
-        note.textContent = state === "unknown" ? "Kein aktueller Sensorwert" :
-            lux.toLocaleString("de-CH", {maximumFractionDigits:1}) + " Lux · sensorbasiert";
+        if (label) label.textContent = text;
+        note.textContent = state === "unknown" ? "— Lux" :
+            lux.toLocaleString("de-CH", {maximumFractionDigits:1}) + " Lux";
     }
     window.addEventListener("plant:current", event => {
         const data = event.detail;
