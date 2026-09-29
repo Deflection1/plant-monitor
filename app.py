@@ -4,6 +4,7 @@ import math
 import time
 from functools import wraps
 from configuration import atomic_write_json, next_capture_time, validate_soil_config
+from lamp_profiles import normalize_lamp_config, update_lamp_profile
 import shutil
 import threading
 
@@ -277,28 +278,7 @@ def add_soil_values(
 # =====================================================
 
 def default_lamp_config():
-
-    return {
-        "name":
-            "Pflanzenlampe",
-
-        "profile":
-            "custom",
-
-        "schedule_enabled":
-            False,
-
-        "on_time":
-            "08:00",
-
-        "off_time":
-            "20:00",
-
-        # Sicherer Startwert: solange die Hardware noch nicht
-        # angebunden ist, wird nur die Vorgabe gespeichert.
-        "power_percent":
-            0
-    }
+    return normalize_lamp_config({})
 
 
 def valid_clock_time(
@@ -323,121 +303,13 @@ def valid_clock_time(
 
 
 def load_lamp_config():
-
-    default = default_lamp_config()
-
     if not LAMP_CONFIG_FILE.exists():
-        return default
-
+        return default_lamp_config()
     try:
-
-        data = json.loads(
-            LAMP_CONFIG_FILE.read_text()
-        )
-
-        profile = str(
-            data.get(
-                "profile",
-                default["profile"]
-            )
-        )
-
-        if profile not in (
-            "custom",
-            "growth",
-            "flower"
-        ):
-            profile = "custom"
-
-        on_time = str(
-            data.get(
-                "on_time",
-                default["on_time"]
-            )
-        )
-
-        off_time = str(
-            data.get(
-                "off_time",
-                default["off_time"]
-            )
-        )
-
-        if not valid_clock_time(
-            on_time
-        ):
-            on_time = default[
-                "on_time"
-            ]
-
-        if not valid_clock_time(
-            off_time
-        ):
-            off_time = default[
-                "off_time"
-            ]
-
-        try:
-
-            power_percent = int(
-                data.get(
-                    "power_percent",
-                    default[
-                        "power_percent"
-                    ]
-                )
-            )
-
-        except (
-            TypeError,
-            ValueError
-        ):
-
-            power_percent = default[
-                "power_percent"
-            ]
-
-        return {
-            "name":
-                str(
-                    data.get(
-                        "name",
-                        default["name"]
-                    )
-                )[:40],
-
-            "profile":
-                profile,
-
-            "schedule_enabled":
-                bool(
-                    data.get(
-                        "schedule_enabled",
-                        default[
-                            "schedule_enabled"
-                        ]
-                    )
-                ),
-
-            "on_time":
-                on_time,
-
-            "off_time":
-                off_time,
-
-            "power_percent":
-                max(
-                    0,
-                    min(
-                        100,
-                        power_percent
-                    )
-                )
-        }
-
-    except Exception:
-
-        return default
+        return normalize_lamp_config(json.loads(LAMP_CONFIG_FILE.read_text()))
+    except (OSError, ValueError, TypeError) as error:
+        print("Ungültige Lampenkonfiguration:", error)
+        return default_lamp_config()
 
 
 def save_lamp_config(config):
@@ -986,133 +858,15 @@ def lamp_config():
     "/api/light/config"
 )
 @configuration_locked
-def lamp_config_update(
-    payload: dict = Body(...)
-):
-
-    updated = default_lamp_config()
-
-    updated["name"] = str(
-        payload.get(
-            "name",
-            updated["name"]
-        )
-    )[:40]
-
-    profile = str(
-        payload.get(
-            "profile",
-            updated["profile"]
-        )
-    )
-
-    if profile not in (
-        "custom",
-        "growth",
-        "flower"
-    ):
-
-        return {
-            "status":
-                "error",
-
-            "message":
-                "Ungültiges Lichtprofil"
-        }
-
-    updated["profile"] = profile
-
-    updated["schedule_enabled"] = bool(
-        payload.get(
-            "schedule_enabled",
-            False
-        )
-    )
-
-    on_time = str(
-        payload.get(
-            "on_time",
-            updated["on_time"]
-        )
-    )
-
-    off_time = str(
-        payload.get(
-            "off_time",
-            updated["off_time"]
-        )
-    )
-
-    if (
-        not valid_clock_time(
-            on_time
-        )
-        or not valid_clock_time(
-            off_time
-        )
-    ):
-
-        return {
-            "status":
-                "error",
-
-            "message":
-                "Ungültige Schaltzeit"
-        }
-
-    updated["on_time"] = on_time
-    updated["off_time"] = off_time
-
-    try:
-
-        power_percent = int(
-            payload.get(
-                "power_percent",
-                0
-            )
-        )
-
-    except (
-        TypeError,
-        ValueError
-    ):
-
-        return {
-            "status":
-                "error",
-
-            "message":
-                "Ungültige Lampenleistung"
-        }
-
-    if not (
-        0
-        <= power_percent
-        <= 100
-    ):
-
-        return {
-            "status":
-                "error",
-
-            "message":
-                "Lampenleistung muss zwischen 0 und 100 % liegen"
-        }
-
-    updated[
-        "power_percent"
-    ] = power_percent
-
-    save_lamp_config(updated)
+def lamp_config_update(payload: dict = Body(...)):
     global LAMP_CONFIG
+    try:
+        updated = update_lamp_profile(LAMP_CONFIG, payload)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    save_lamp_config(updated)
     LAMP_CONFIG = updated
-
-    return {
-        "status":
-            "ok",
-
-        **LAMP_CONFIG
-    }
+    return {"status": "ok", **LAMP_CONFIG}
 
 
 @app.get(

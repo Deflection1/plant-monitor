@@ -1230,6 +1230,13 @@ function updateLampControlPreview() {
         + " – "
         + offTime;
 
+    const toMinutes = value => /^\d{2}:\d{2}$/.test(value) ? Number(value.slice(0, 2)) * 60 + Number(value.slice(3)) : null;
+    const start = toMinutes(onTime), end = toMinutes(offTime);
+    const duration = start === null || end === null ? null : (end - start + 1440) % 1440;
+    $("lampDurationPreview").textContent = duration === null ? "Dauer nicht verfügbar"
+        : duration === 0 ? "Gleiche Schaltzeiten · Dauer nicht eindeutig"
+        : Math.floor(duration / 60) + " h " + String(duration % 60).padStart(2, "0") + " min Einschaltzeit";
+
     $("lampProfilePreview").textContent =
         lampProfileLabel(
             profile
@@ -1268,78 +1275,51 @@ function updateLampControlPreview() {
 }
 
 
-async function loadLampConfig() {
+let lampProfiles = {};
+let lampDrafts = {};
+let currentLampProfile = "custom";
+const lampFieldIds = ["lampNameInput", "lampProfileInput", "lampPowerInput", "lampScheduleEnabled", "lampOnTime", "lampOffTime", "saveLampConfigButton"];
 
-    try {
-
-        const response = await fetch(
-            "/api/light/config",
-            {
-                cache: "no-store"
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                "HTTP "
-                + response.status
-            );
-        }
-
-        const data =
-            await response.json();
-
-
-        $("lampControlName").textContent =
-            data.name
-            || "Pflanzenlampe";
-
-        $("lampNameInput").value =
-            data.name
-            || "Pflanzenlampe";
-
-        $("lampProfileInput").value =
-            data.profile
-            || "custom";
-
-        $("lampScheduleEnabled").checked =
-            Boolean(
-                data.schedule_enabled
-            );
-
-        $("lampOnTime").value =
-            data.on_time
-            || "08:00";
-
-        $("lampOffTime").value =
-            data.off_time
-            || "20:00";
-
-        $("lampPowerInput").value =
-            String(
-                Number(
-                    data.power_percent
-                    || 0
-                )
-            );
-
-        updateLampControlPreview();
-
-        $("lampConfigMessage").textContent =
-            "Konfiguration geladen · Hardware noch nicht verbunden";
-
-    } catch (error) {
-
-        console.error(
-            "Lamp config error:",
-            error
-        );
-
-        $("lampConfigMessage").textContent =
-            "Konfiguration konnte nicht geladen werden.";
-    }
+function lockLampForm(locked) {
+    lampFieldIds.forEach(id => { $(id).disabled = locked; });
 }
 
+function readLampDraft() {
+    return {schedule_enabled: $("lampScheduleEnabled").checked,
+        on_time: $("lampOnTime").value, off_time: $("lampOffTime").value,
+        power_percent: Number($("lampPowerInput").value)};
+}
+
+function showLampProfile(profile) {
+    const config = lampDrafts[profile] || lampProfiles[profile];
+    if (!config) return;
+    currentLampProfile = profile;
+    $("lampProfileInput").value = profile;
+    $("lampScheduleEnabled").checked = config.schedule_enabled;
+    $("lampOnTime").value = config.on_time;
+    $("lampOffTime").value = config.off_time;
+    $("lampPowerInput").value = String(config.power_percent);
+    updateLampControlPreview();
+}
+
+async function loadLampConfig() {
+    lockLampForm(true);
+    try {
+        const response = await fetch("/api/light/config", {cache: "no-store"});
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        if (!data.profiles) throw new Error("Bitte den Dienst plant-monitor neu starten.");
+        lampProfiles = data.profiles;
+        lampDrafts = {};
+        $("lampNameInput").value = data.name;
+        $("lampControlName").textContent = data.name;
+        showLampProfile(data.profile);
+        $("lampConfigMessage").textContent = "Profil geladen · Änderungen mit Speichern übernehmen";
+        lockLampForm(false);
+    } catch (error) {
+        $("lampConfigMessage").textContent = "Konfiguration konnte nicht geladen werden: " + error.message;
+    }
+}
 
 async function loadLampStatus() {
 
@@ -1381,137 +1361,48 @@ async function loadLampStatus() {
 
 
 async function saveLampConfig() {
-
-    const button =
-        $("saveLampConfigButton");
-
-    button.disabled =
-        true;
-
-    $("lampConfigMessage").textContent =
-        "Speichere …";
-
+    lockLampForm(true);
+    const profile = currentLampProfile;
+    const draft = readLampDraft();
+    $("lampConfigMessage").textContent = "Speichere Profil …";
     try {
-
-        const payload = {
-            name:
-                $("lampNameInput").value.trim()
-                || "Pflanzenlampe",
-
-            profile:
-                $("lampProfileInput").value,
-
-            schedule_enabled:
-                $("lampScheduleEnabled").checked,
-
-            on_time:
-                $("lampOnTime").value,
-
-            off_time:
-                $("lampOffTime").value,
-
-            power_percent:
-                Number(
-                    $("lampPowerInput").value
-                    || 0
-                )
-        };
-
-
-        const response = await fetch(
-            "/api/light/config",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-                body:
-                    JSON.stringify(
-                        payload
-                    )
-            }
-        );
-
-        if (!response.ok) {
-            const failure = await response.json().catch(() => ({}));
-            throw new Error(typeof failure.detail === "string" ? failure.detail : "Speichern fehlgeschlagen (HTTP " + response.status + ")");
+        const response = await fetch("/api/light/config", {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({name: $("lampNameInput").value.trim() || "Pflanzenlampe", profile, ...draft})
+        });
+        const data = await response.json();
+        if (!response.ok || data.status === "error") {
+            throw new Error(typeof data.detail === "string" ? data.detail : data.message || "Speichern fehlgeschlagen");
         }
-
-        const data =
-            await response.json();
-
-        if (data.status === "error") {
-            throw new Error(
-                data.message
-                || "Konfigurationsfehler"
-            );
-        }
-
-        await loadLampConfig();
-        await loadLampStatus();
-
-        $("lampConfigMessage").textContent =
-            "Gespeichert · bleibt nach Neustart erhalten";
-
+        lampProfiles = data.profiles;
+        delete lampDrafts[profile];
+        showLampProfile(profile);
+        $("lampConfigMessage").textContent = lampProfileLabel(profile) + " gespeichert · bleibt nach Neustart erhalten";
     } catch (error) {
-
-        console.error(
-            "Lamp config save error:",
-            error
-        );
-
-        $("lampConfigMessage").textContent =
-            error.message || "Speichern fehlgeschlagen";
-
+        $("lampConfigMessage").textContent = error.message || "Speichern fehlgeschlagen";
     } finally {
-
-        button.disabled =
-            false;
+        lockLampForm(false);
     }
 }
 
-
 function setupLampControl() {
-
-    [
-        "lampPowerInput",
-        "lampScheduleEnabled",
-        "lampOnTime",
-        "lampOffTime",
-        "lampProfileInput"
-    ].forEach(
-        function(id) {
-
-            $(id).addEventListener(
-                "input",
-                updateLampControlPreview
-            );
-
-            $(id).addEventListener(
-                "change",
-                updateLampControlPreview
-            );
-        }
-    );
-
-    $("lampNameInput")
-        .addEventListener(
-            "input",
-            function() {
-
-                $("lampControlName").textContent =
-                    $("lampNameInput").value.trim()
-                    || "Pflanzenlampe";
-            }
-        );
-
-    $("saveLampConfigButton")
-        .addEventListener(
-            "click",
-            saveLampConfig
-        );
-
+    ["lampPowerInput", "lampScheduleEnabled", "lampOnTime", "lampOffTime"].forEach(id => {
+        $(id).addEventListener("input", () => {
+            updateLampControlPreview();
+            $("lampConfigMessage").textContent = "Ungespeicherte Änderungen · Profil speichern";
+        });
+    });
+    $("lampProfileInput").addEventListener("change", () => {
+        lampDrafts[currentLampProfile] = readLampDraft();
+        const selected = $("lampProfileInput").value;
+        showLampProfile(selected);
+        $("lampConfigMessage").textContent = "Profilvorschau · mit Speichern als aktives Profil übernehmen";
+    });
+    $("lampNameInput").addEventListener("input", () => {
+        $("lampControlName").textContent = $("lampNameInput").value.trim() || "Pflanzenlampe";
+        $("lampConfigMessage").textContent = "Ungespeicherte Änderungen · Profil speichern";
+    });
+    $("saveLampConfigButton").addEventListener("click", saveLampConfig);
     loadLampConfig();
     loadLampStatus();
 }

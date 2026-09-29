@@ -23,6 +23,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from configuration import atomic_write_json, next_capture_time, validate_soil_config
+from lamp_profiles import normalize_lamp_config, update_lamp_profile
 
 
 class HTTPException(Exception):
@@ -45,6 +46,7 @@ def load_functions(directory):
     ns = dict(json=json, math=math, time=time, datetime=datetime, wraps=wraps,
               atomic_write_json=atomic_write_json, next_capture_time=next_capture_time,
               validate_soil_config=validate_soil_config, HTTPException=HTTPException,
+              normalize_lamp_config=normalize_lamp_config, update_lamp_profile=update_lamp_profile,
               Body=lambda *a: None, CONFIG_LOCK=threading.RLock(),
               TIMELAPSE_DEFAULT_INTERVAL_MINUTES=720)
     for prefix in ('SOIL', 'LAMP', 'TIMELAPSE'):
