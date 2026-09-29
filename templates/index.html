@@ -21,7 +21,7 @@
     >
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-pump-icons">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-pump-refined">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -773,24 +773,36 @@
             <article class="lamp-control-card">
                 <div class="pump-symbol" id="pumpSymbol1" data-running="false" data-preview="false"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
 <defs>
-<linearGradient id="pumpCase1" x1="12" y1="6" x2="83" y2="91" gradientUnits="userSpaceOnUse"><stop stop-color="#dcffff" stop-opacity=".45"/><stop offset=".45" stop-color="#35cadf" stop-opacity=".18"/><stop offset="1" stop-color="#4270d9" stop-opacity=".35"/></linearGradient>
-<linearGradient id="pumpRotor1" x1="29" y1="26" x2="66" y2="69" gradientUnits="userSpaceOnUse"><stop stop-color="#d7fff5"/><stop offset=".45" stop-color="#69f2d8"/><stop offset="1" stop-color="#28aacb"/></linearGradient>
+ <linearGradient id="pumpShell1" x1="22" y1="12" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#daffff" stop-opacity=".65"/><stop offset=".28" stop-color="#7ddbea" stop-opacity=".22"/><stop offset=".7" stop-color="#498dbb" stop-opacity=".2"/><stop offset="1" stop-color="#83eddf" stop-opacity=".45"/></linearGradient>
+ <linearGradient id="pumpEdge1" x1="22" y1="15" x2="78" y2="83" gradientUnits="userSpaceOnUse"><stop stop-color="#f1ffff"/><stop offset=".38" stop-color="#87e3ec" stop-opacity=".6"/><stop offset=".7" stop-color="#508dba" stop-opacity=".3"/><stop offset="1" stop-color="#99f4e2"/></linearGradient>
+ <radialGradient id="pumpFace1" cx=".3" cy=".15" r=".95"><stop stop-color="#b0faff" stop-opacity=".32"/><stop offset=".55" stop-color="#277790" stop-opacity=".25"/><stop offset="1" stop-color="#123e56" stop-opacity=".55"/></radialGradient>
+ <linearGradient id="pumpMetal1" x1="31" y1="27" x2="62" y2="67" gradientUnits="userSpaceOnUse"><stop stop-color="#ecfffc"/><stop offset=".45" stop-color="#95eadd"/><stop offset="1" stop-color="#3ca4bd"/></linearGradient>
+ <radialGradient id="pumpRoller1" cx=".3" cy=".2" r=".85"><stop stop-color="#f0ffff"/><stop offset=".5" stop-color="#b4eff3"/><stop offset="1" stop-color="#5da9c9"/></radialGradient>
 </defs>
-<rect x="8" y="8" width="80" height="80" rx="24" fill="url(#pumpCase1)" stroke="#b3f8ff" stroke-opacity=".5"/>
-<path d="M13 32V22a9 9 0 0 1 9-9h23" stroke="white" stroke-opacity=".65" stroke-width="2" stroke-linecap="round"/>
-<path d="M17 84V65C2 26 28 17 48 17s46 9 31 48v19" stroke="#172e4a" stroke-width="9" stroke-linecap="round"/>
-<path d="M17 84V65C2 26 28 17 48 17s46 9 31 48v19" stroke="#78eaf4" stroke-opacity=".85" stroke-width="5" stroke-linecap="round"/>
-<circle cx="48" cy="48" r="27" fill="#123a54" fill-opacity=".72" stroke="#acfcff" stroke-opacity=".55"/>
-<circle cx="48" cy="48" r="23" fill="none" stroke="#67e8e1" stroke-opacity=".22" stroke-width="2"/>
+<!-- Short translucent hose ends sit behind the round pump head. -->
+<path d="M29 71v13q0 5-5 5M67 71v13q0 5 5 5" fill="none" stroke="#4fc6d6" stroke-opacity=".55" stroke-width="6" stroke-linecap="round"/>
+<path d="M28 73v11M66 73v11" fill="none" stroke="#c9ffff" stroke-opacity=".6" stroke-width="1.4" stroke-linecap="round"/>
+<!-- Cast glass housing and softly recessed circular face. -->
+<circle cx="48" cy="49" r="35" fill="url(#pumpShell1)" stroke="url(#pumpEdge1)" stroke-width="1.2"/>
+<circle cx="48" cy="48" r="29" fill="url(#pumpFace1)" stroke="#b9f6fb" stroke-opacity=".35" stroke-width=".8"/>
+<!-- The pump tube follows the inside of the casing, with no square backing. -->
+<path d="M31 70C8 49 23 22 48 22S88 49 65 70" fill="none" stroke="#163d57" stroke-opacity=".45" stroke-width="6"/>
+<path d="M31 70C8 49 23 22 48 22S88 49 65 70" fill="none" stroke="#7fede4" stroke-opacity=".8" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M27 39C30 27 43 23 53 26" fill="none" stroke="#efffff" stroke-opacity=".7" stroke-width="1.2" stroke-linecap="round"/>
 <g class="pump-rotor">
-<path d="M43 47 40 29Q48 22 56 30l-3 17 16 6q2 12-9 15L47 55 34 68Q22 65 26 54Z" fill="url(#pumpRotor1)" stroke="#d8fff7" stroke-opacity=".75"/>
-<circle cx="48" cy="32" r="5" fill="#244d70" stroke="#b9fff7" stroke-width="2"/>
-<circle cx="62" cy="59" r="5" fill="#244d70" stroke="#b9fff7" stroke-width="2"/>
-<circle cx="33" cy="59" r="5" fill="#244d70" stroke="#b9fff7" stroke-width="2"/>
-<circle cx="48" cy="48" r="7" fill="#d6fff7"/><circle cx="48" cy="48" r="3" fill="#3c93ae"/>
+ <path d="M44 48 43 32Q48 27 53 32L52 46 65 55Q68 62 60 64L48 55 36 64Q28 62 31 55Z" fill="url(#pumpMetal1)" stroke="#d4fff3" stroke-opacity=".65" stroke-width=".7"/>
+ <circle cx="48" cy="33" r="6.4" fill="url(#pumpRoller1)" stroke="#e5ffff" stroke-opacity=".8" stroke-width=".8"/>
+ <circle cx="61" cy="56" r="6.4" fill="url(#pumpRoller1)" stroke="#e5ffff" stroke-opacity=".8" stroke-width=".8"/>
+ <circle cx="35" cy="56" r="6.4" fill="url(#pumpRoller1)" stroke="#e5ffff" stroke-opacity=".8" stroke-width=".8"/>
+ <g fill="#4384a1" fill-opacity=".7"><circle cx="48" cy="33" r="2.2"/><circle cx="61" cy="56" r="2.2"/><circle cx="35" cy="56" r="2.2"/></g>
+ <circle cx="48" cy="48" r="7" fill="url(#pumpRoller1)" stroke="#e0fff7" stroke-width=".8"/>
+ <circle cx="48" cy="48" r="2.5" fill="#5599ad"/>
 </g>
-<path d="M26 77h44" stroke="#defaff" stroke-opacity=".35" stroke-linecap="round"/>
-<circle cx="73" cy="22" r="3" fill="#81ffdf"/>
+<!-- Stationary reflections over the rotating mechanism. -->
+<path d="M22 37C29 16 52 13 67 26" fill="none" stroke="white" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M22 32Q41 12 65 24Q54 29 36 37Q27 39 22 32Z" fill="white" fill-opacity=".1"/>
+<path d="M66 76Q76 69 80 57" fill="none" stroke="#bcffed" stroke-opacity=".65" stroke-width="1.5" stroke-linecap="round"/>
+<g fill="#b8e5ed" fill-opacity=".65"><circle cx="19" cy="49" r="1.5"/><circle cx="77" cy="49" r="1.5"/></g>
 </svg></div>
                 <span class="lamp-control-label" id="irrigationPumpName1">Pumpe Topf 1</span>
                 <strong id="pumpState1">Nicht verbunden</strong>
@@ -802,24 +814,36 @@
             <article class="lamp-control-card">
                 <div class="pump-symbol" id="pumpSymbol2" data-running="false" data-preview="false"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
 <defs>
-<linearGradient id="pumpCase2" x1="12" y1="6" x2="83" y2="91" gradientUnits="userSpaceOnUse"><stop stop-color="#dcffff" stop-opacity=".45"/><stop offset=".45" stop-color="#35cadf" stop-opacity=".18"/><stop offset="1" stop-color="#4270d9" stop-opacity=".35"/></linearGradient>
-<linearGradient id="pumpRotor2" x1="29" y1="26" x2="66" y2="69" gradientUnits="userSpaceOnUse"><stop stop-color="#d7fff5"/><stop offset=".45" stop-color="#69f2d8"/><stop offset="1" stop-color="#28aacb"/></linearGradient>
+ <linearGradient id="pumpShell2" x1="22" y1="12" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#daffff" stop-opacity=".65"/><stop offset=".28" stop-color="#7ddbea" stop-opacity=".22"/><stop offset=".7" stop-color="#498dbb" stop-opacity=".2"/><stop offset="1" stop-color="#83eddf" stop-opacity=".45"/></linearGradient>
+ <linearGradient id="pumpEdge2" x1="22" y1="15" x2="78" y2="83" gradientUnits="userSpaceOnUse"><stop stop-color="#f1ffff"/><stop offset=".38" stop-color="#87e3ec" stop-opacity=".6"/><stop offset=".7" stop-color="#508dba" stop-opacity=".3"/><stop offset="1" stop-color="#99f4e2"/></linearGradient>
+ <radialGradient id="pumpFace2" cx=".3" cy=".15" r=".95"><stop stop-color="#b0faff" stop-opacity=".32"/><stop offset=".55" stop-color="#277790" stop-opacity=".25"/><stop offset="1" stop-color="#123e56" stop-opacity=".55"/></radialGradient>
+ <linearGradient id="pumpMetal2" x1="31" y1="27" x2="62" y2="67" gradientUnits="userSpaceOnUse"><stop stop-color="#ecfffc"/><stop offset=".45" stop-color="#95eadd"/><stop offset="1" stop-color="#3ca4bd"/></linearGradient>
+ <radialGradient id="pumpRoller2" cx=".3" cy=".2" r=".85"><stop stop-color="#f0ffff"/><stop offset=".5" stop-color="#b4eff3"/><stop offset="1" stop-color="#5da9c9"/></radialGradient>
 </defs>
-<rect x="8" y="8" width="80" height="80" rx="24" fill="url(#pumpCase2)" stroke="#b3f8ff" stroke-opacity=".5"/>
-<path d="M13 32V22a9 9 0 0 1 9-9h23" stroke="white" stroke-opacity=".65" stroke-width="2" stroke-linecap="round"/>
-<path d="M17 84V65C2 26 28 17 48 17s46 9 31 48v19" stroke="#172e4a" stroke-width="9" stroke-linecap="round"/>
-<path d="M17 84V65C2 26 28 17 48 17s46 9 31 48v19" stroke="#78eaf4" stroke-opacity=".85" stroke-width="5" stroke-linecap="round"/>
-<circle cx="48" cy="48" r="27" fill="#123a54" fill-opacity=".72" stroke="#acfcff" stroke-opacity=".55"/>
-<circle cx="48" cy="48" r="23" fill="none" stroke="#67e8e1" stroke-opacity=".22" stroke-width="2"/>
+<!-- Short translucent hose ends sit behind the round pump head. -->
+<path d="M29 71v13q0 5-5 5M67 71v13q0 5 5 5" fill="none" stroke="#4fc6d6" stroke-opacity=".55" stroke-width="6" stroke-linecap="round"/>
+<path d="M28 73v11M66 73v11" fill="none" stroke="#c9ffff" stroke-opacity=".6" stroke-width="1.4" stroke-linecap="round"/>
+<!-- Cast glass housing and softly recessed circular face. -->
+<circle cx="48" cy="49" r="35" fill="url(#pumpShell2)" stroke="url(#pumpEdge2)" stroke-width="1.2"/>
+<circle cx="48" cy="48" r="29" fill="url(#pumpFace2)" stroke="#b9f6fb" stroke-opacity=".35" stroke-width=".8"/>
+<!-- The pump tube follows the inside of the casing, with no square backing. -->
+<path d="M31 70C8 49 23 22 48 22S88 49 65 70" fill="none" stroke="#163d57" stroke-opacity=".45" stroke-width="6"/>
+<path d="M31 70C8 49 23 22 48 22S88 49 65 70" fill="none" stroke="#7fede4" stroke-opacity=".8" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M27 39C30 27 43 23 53 26" fill="none" stroke="#efffff" stroke-opacity=".7" stroke-width="1.2" stroke-linecap="round"/>
 <g class="pump-rotor">
-<path d="M43 47 40 29Q48 22 56 30l-3 17 16 6q2 12-9 15L47 55 34 68Q22 65 26 54Z" fill="url(#pumpRotor2)" stroke="#d8fff7" stroke-opacity=".75"/>
-<circle cx="48" cy="32" r="5" fill="#244d70" stroke="#b9fff7" stroke-width="2"/>
-<circle cx="62" cy="59" r="5" fill="#244d70" stroke="#b9fff7" stroke-width="2"/>
-<circle cx="33" cy="59" r="5" fill="#244d70" stroke="#b9fff7" stroke-width="2"/>
-<circle cx="48" cy="48" r="7" fill="#d6fff7"/><circle cx="48" cy="48" r="3" fill="#3c93ae"/>
+ <path d="M44 48 43 32Q48 27 53 32L52 46 65 55Q68 62 60 64L48 55 36 64Q28 62 31 55Z" fill="url(#pumpMetal2)" stroke="#d4fff3" stroke-opacity=".65" stroke-width=".7"/>
+ <circle cx="48" cy="33" r="6.4" fill="url(#pumpRoller2)" stroke="#e5ffff" stroke-opacity=".8" stroke-width=".8"/>
+ <circle cx="61" cy="56" r="6.4" fill="url(#pumpRoller2)" stroke="#e5ffff" stroke-opacity=".8" stroke-width=".8"/>
+ <circle cx="35" cy="56" r="6.4" fill="url(#pumpRoller2)" stroke="#e5ffff" stroke-opacity=".8" stroke-width=".8"/>
+ <g fill="#4384a1" fill-opacity=".7"><circle cx="48" cy="33" r="2.2"/><circle cx="61" cy="56" r="2.2"/><circle cx="35" cy="56" r="2.2"/></g>
+ <circle cx="48" cy="48" r="7" fill="url(#pumpRoller2)" stroke="#e0fff7" stroke-width=".8"/>
+ <circle cx="48" cy="48" r="2.5" fill="#5599ad"/>
 </g>
-<path d="M26 77h44" stroke="#defaff" stroke-opacity=".35" stroke-linecap="round"/>
-<circle cx="73" cy="22" r="3" fill="#81ffdf"/>
+<!-- Stationary reflections over the rotating mechanism. -->
+<path d="M22 37C29 16 52 13 67 26" fill="none" stroke="white" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M22 32Q41 12 65 24Q54 29 36 37Q27 39 22 32Z" fill="white" fill-opacity=".1"/>
+<path d="M66 76Q76 69 80 57" fill="none" stroke="#bcffed" stroke-opacity=".65" stroke-width="1.5" stroke-linecap="round"/>
+<g fill="#b8e5ed" fill-opacity=".65"><circle cx="19" cy="49" r="1.5"/><circle cx="77" cy="49" r="1.5"/></g>
 </svg></div>
                 <span class="lamp-control-label" id="irrigationPumpName2">Pumpe Topf 2</span>
                 <strong id="pumpState2">Nicht verbunden</strong>
