@@ -904,18 +904,27 @@
 <div class="panel-header"><div><p class="eyebrow">LUFT &amp; KLIMA</p><h2 id="fanHeading">Lüftersteuerung</h2></div><span class="camera-meta">Keine PWM-Ausgabe</span></div>
 <p class="camera-meta">Noctua · Zuluft unten und Abluft oben · Anbindung über NA-FC1 vorgesehen</p>
 <div class="fan-grid"><article class="lamp-control-card fan-card">
-<div class="fan-symbol" id="fanIcon-intake" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true">
+<div class="fan-symbol" id="fanIcon-intake" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
 <defs>
-<linearGradient id="fanGlassintake" x1="15" y1="10" x2="81" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#ddf6ff" stop-opacity=".6"/><stop offset=".5" stop-color="#8094eb" stop-opacity=".2"/><stop offset="1" stop-color="#819eff" stop-opacity=".5"/></linearGradient>
-<linearGradient id="fanBladeintake" x1="24" y1="24" x2="72" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#e1f8ff"/><stop offset=".45" stop-color="#9bbaf4"/><stop offset="1" stop-color="#647fd8"/></linearGradient>
+<linearGradient id="fanGlassintake" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#e0ffff" stop-opacity=".58"/><stop offset=".32" stop-color="#91c9e9" stop-opacity=".24"/><stop offset=".68" stop-color="#528bb0" stop-opacity=".18"/><stop offset="1" stop-color="#a2e6f5" stop-opacity=".44"/></linearGradient>
+<linearGradient id="fanEdgeintake" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#e9ffff"/><stop offset=".5" stop-color="#9cbfe1" stop-opacity=".38"/><stop offset="1" stop-color="#d3fff4" stop-opacity=".85"/></linearGradient>
+<linearGradient id="fanBladeintake" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faff"/><stop offset=".42" stop-color="#9fd9ed" stop-opacity=".94"/><stop offset="1" stop-color="#689bcc" stop-opacity=".85"/></linearGradient>
+<radialGradient id="fanHubintake" cx=".32" cy=".22" r=".9"><stop stop-color="#edffff"/><stop offset=".4" stop-color="#a4dbe9"/><stop offset="1" stop-color="#527ea4"/></radialGradient>
 </defs>
-<rect x="10" y="10" width="76" height="76" rx="22" fill="url(#fanGlassintake)" stroke="#d2eaff" stroke-opacity=".5"/>
-<circle cx="48" cy="48" r="30" fill="#263e6a" fill-opacity=".45" stroke="#bddbff" stroke-opacity=".5"/>
-<circle cx="48" cy="48" r="26" fill="none" stroke="#b4daff" stroke-opacity=".18"/>
-<g class="fan-rotor" fill="url(#fanBladeintake)" stroke="#ddf2ff" stroke-opacity=".5" stroke-width=".6"><path transform="rotate(0 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(90 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(180 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(270 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/></g>
-<circle cx="48" cy="48" r="8" fill="#d4eaff" stroke="#f0fcff"/><circle cx="48" cy="48" r="3" fill="#6e8ec0"/>
-<path d="M17 33V27a10 10 0 0 1 10-10h24" fill="none" stroke="white" stroke-opacity=".6" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M67 80q13-2 13-15" fill="none" stroke="#bed8ff" stroke-opacity=".55" stroke-linecap="round"/>
+<!-- Square PC fan frame with four visible mounting holes. -->
+<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#fanGlassintake)" stroke="url(#fanEdgeintake)" stroke-width="1.1"/>
+<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
+<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#fanEdgeintake)" stroke-width="1.6"/>
+<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
+<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
+<!-- Seven swept blades; the existing animation rotates around 48,48. -->
+<g class="fan-rotor" fill="url(#fanBladeintake)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
+<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
+<circle cx="48" cy="48" r="8.7" fill="url(#fanHubintake)"/>
+<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
+<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
+<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
 </svg></div>
 <span class="lamp-control-label">Zuluft · unten</span>
 <h3 id="fanTitle-intake">Zuluft unten</h3>
@@ -925,18 +934,27 @@
 <button type="button" class="fan-preview" data-fan="intake">Animation testen</button>
 <small id="fanPreviewNote-intake" role="status">Symbolvorschau ohne Lüfteransteuerung</small>
 </article><article class="lamp-control-card fan-card">
-<div class="fan-symbol" id="fanIcon-exhaust" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true">
+<div class="fan-symbol" id="fanIcon-exhaust" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
 <defs>
-<linearGradient id="fanGlassexhaust" x1="15" y1="10" x2="81" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#ddf6ff" stop-opacity=".6"/><stop offset=".5" stop-color="#8094eb" stop-opacity=".2"/><stop offset="1" stop-color="#819eff" stop-opacity=".5"/></linearGradient>
-<linearGradient id="fanBladeexhaust" x1="24" y1="24" x2="72" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#e1f8ff"/><stop offset=".45" stop-color="#9bbaf4"/><stop offset="1" stop-color="#647fd8"/></linearGradient>
+<linearGradient id="fanGlassexhaust" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#e0ffff" stop-opacity=".58"/><stop offset=".32" stop-color="#91c9e9" stop-opacity=".24"/><stop offset=".68" stop-color="#528bb0" stop-opacity=".18"/><stop offset="1" stop-color="#a2e6f5" stop-opacity=".44"/></linearGradient>
+<linearGradient id="fanEdgeexhaust" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#e9ffff"/><stop offset=".5" stop-color="#9cbfe1" stop-opacity=".38"/><stop offset="1" stop-color="#d3fff4" stop-opacity=".85"/></linearGradient>
+<linearGradient id="fanBladeexhaust" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faff"/><stop offset=".42" stop-color="#9fd9ed" stop-opacity=".94"/><stop offset="1" stop-color="#689bcc" stop-opacity=".85"/></linearGradient>
+<radialGradient id="fanHubexhaust" cx=".32" cy=".22" r=".9"><stop stop-color="#edffff"/><stop offset=".4" stop-color="#a4dbe9"/><stop offset="1" stop-color="#527ea4"/></radialGradient>
 </defs>
-<rect x="10" y="10" width="76" height="76" rx="22" fill="url(#fanGlassexhaust)" stroke="#d2eaff" stroke-opacity=".5"/>
-<circle cx="48" cy="48" r="30" fill="#263e6a" fill-opacity=".45" stroke="#bddbff" stroke-opacity=".5"/>
-<circle cx="48" cy="48" r="26" fill="none" stroke="#b4daff" stroke-opacity=".18"/>
-<g class="fan-rotor" fill="url(#fanBladeexhaust)" stroke="#ddf2ff" stroke-opacity=".5" stroke-width=".6"><path transform="rotate(0 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(90 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(180 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/><path transform="rotate(270 48 48)" d="M48 43C34 43 25 37 29 28C33 19 51 24 54 35L52 44Z"/></g>
-<circle cx="48" cy="48" r="8" fill="#d4eaff" stroke="#f0fcff"/><circle cx="48" cy="48" r="3" fill="#6e8ec0"/>
-<path d="M17 33V27a10 10 0 0 1 10-10h24" fill="none" stroke="white" stroke-opacity=".6" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M67 80q13-2 13-15" fill="none" stroke="#bed8ff" stroke-opacity=".55" stroke-linecap="round"/>
+<!-- Square PC fan frame with four visible mounting holes. -->
+<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#fanGlassexhaust)" stroke="url(#fanEdgeexhaust)" stroke-width="1.1"/>
+<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
+<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#fanEdgeexhaust)" stroke-width="1.6"/>
+<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
+<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
+<!-- Seven swept blades; the existing animation rotates around 48,48. -->
+<g class="fan-rotor" fill="url(#fanBladeexhaust)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
+<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
+<circle cx="48" cy="48" r="8.7" fill="url(#fanHubexhaust)"/>
+<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
+<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
+<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
 </svg></div>
 <span class="lamp-control-label">Abluft · oben</span>
 <h3 id="fanTitle-exhaust">Abluft oben</h3>
