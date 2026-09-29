@@ -12,15 +12,8 @@
         if (status?.hardware_connected === false) return "Hardware nicht verbunden · vorbereitet";
         return "Ausgabe nicht verfügbar";
     }
-    function duration(on, off) {
-        const valid = v => typeof v === "string" && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(v);
-        if (!valid(on) || !valid(off)) return "—";
-        const minutes = v => Number(v.slice(0, 2)) * 60 + Number(v.slice(3));
-        const diff = (minutes(off) - minutes(on) + 1440) % 1440;
-        return Math.floor(diff / 60) + " h " + String(diff % 60).padStart(2, "0") + " min (geplant)";
-    }
     const fields = {
-        lamp: ["ovLampProfile", "ovLampPower", "ovLampSchedule", "ovLampDuration", "ovLampActual"],
+        lamp: ["ovLampProfile", "ovLampPower", "ovLampSchedule", "ovLampActual"],
         water: ["ovWaterTank", "ovWaterPot1", "ovWaterPot2", "ovWaterLast"],
         fan: ["ovFanIntake", "ovFanExhaust", "ovFanActual"]
     };
@@ -41,8 +34,7 @@
         set("ovLampProfile", {growth:"Wachstum",flower:"Blüte",custom:"Benutzerdefiniert"}[c.profile] || "—");
         set("ovLampPower", percent(c.power_percent) + " Sollwert");
         const scheduled = c.schedule_enabled === true;
-        set("ovLampSchedule", scheduled ? (c.on_time + "–" + c.off_time + " · vorgemerkt") : "Deaktiviert");
-        set("ovLampDuration", scheduled ? duration(c.on_time, c.off_time) : "—");
+        set("ovLampSchedule", scheduled ? "Vorgemerkt" : "Deaktiviert");
         set("ovLampActual", available(status) ? percent(status.output_percent) : "Nicht verfügbar");
         const path = {growth:"/static/profile-growth.svg?v=1",flower:"/static/profile-flower.svg?v=2"}[c.profile];
         $("ovLampProfileIcon").hidden = !path;
@@ -53,14 +45,13 @@
         if (!Array.isArray(config?.pumps) || config.pumps.length !== 2 || !Array.isArray(status?.pumps)) throw new Error("Invalid water configuration");
         set("ovWaterStatus", hardware(status));
         // Only explicitly known tank values are represented as known.
-        const tank = {empty:"Leer",ok:"OK",unknown:"Unbekannt"}[status.tank_state] || "Unbekannt";
+        const tank = {empty:"Leer",ok:"Wasser vorhanden",full:"Wasser vorhanden",unknown:"Unbekannt"}[status.tank_state] || "Unbekannt";
         set("ovWaterTank", (config.tank_name || "Tank") + " · " + tank);
         for (const id of [1, 2]) {
             const p = config.pumps.find(p => p.id === id);
             if (!p) throw new Error("Missing pump");
-            const threshold = number(p.threshold_percent) ? "unter " + percent(p.threshold_percent) : "Schwelle offen";
             const dose = number(p.dose_ml) ? fmt(p.dose_ml) + " ml je Gabe" : "Menge offen";
-            set("ovWaterPot" + id, (p.enabled === true ? "Automatik vorgemerkt" : "Automatik aus") + " · " + threshold + " · " + dose);
+            set("ovWaterPot" + id, (p.enabled === true ? "Automatik vorgemerkt" : "Automatik aus") + " · " + dose);
         }
         // Backend does not yet record events. Do not infer watering from settings.
         set("ovWaterLast", "Noch nicht protokolliert");

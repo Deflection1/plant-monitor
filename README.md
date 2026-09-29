@@ -202,8 +202,10 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 │   ├── app.js
 │   ├── overview.js
 │   ├── overview-equipment.js
+│   ├── layout.js
 │   ├── liquid-glass.css
 │   ├── pump-icons.js
+│   ├── tank-status.js
 │   ├── fans.js
 │   ├── profile-growth.svg
 │   ├── profile-flower.svg
@@ -481,17 +483,27 @@ GET /api/light/today
 
 ## Gestaltung und Ansichten
 
-- Liquid-Glass-Design mit farbigen Symbolen für Klima, Licht und Bodenfeuchte
-- **Übersicht:** kompakte Kennzahlen und Kameradarstellung
-- Zusätzliche kompakte Versorgungskarten: Lampenprofil, gespeicherte Leistung, Zeitplan und geplante Dauer; Tankstatus sowie Automatik-Vormerkung, Feuchteschwelle und Einzelmenge je Topf; Lüftermodi und gespeicherte Sollwerte
-- Direkte Links aus den Karten zum jeweiligen Steuerungsbereich
-- Gespeicherte Sollwerte und tatsächliche Ausgänge werden getrennt bezeichnet; nicht verbundene Hardware bleibt erkennbar.
-- Die Versorgungskarten werden bei sichtbarer Übersicht alle 15 Sekunden sowie bei Rückkehr zur Ansicht aktualisiert. Fehler werden pro Karte angezeigt; alte Werte werden dabei ausgeblendet.
+Die Seite trennt Beobachten und Einstellen; das Liquid-Glass-Design und die vorhandenen Symbole bleiben erhalten.
 
-- **Steuerung:** Konfiguration von Bodenfeuchte, Lampe, Bewässerung und Kamera
-- Bilder und Livestream bleiben bewusst kompakt
-- eigene SVG-Symbole für Wachstum und Blüte; beim Profilwechsel wird das passende Symbol angezeigt
-- rundes gläsernes Pumpensymbol je Topf mit unabhängig animierbarem Rotor
+**Übersicht**, von oben nach unten:
+
+1. Verbindungsstatus und letzte Messung
+2. Temperatur, Luftfeuchtigkeit, VPD und Licht
+3. Topf 1/2 mit Bodenfeuchte, vorgemerktem Bewässerungsmodus und Einzelmenge
+4. kompakte Versorgungskarten für Lampe, Tank/Bewässerung und Lüfter
+5. dauerhaft sichtbarer Klima- und Lichtverlauf einschließlich Beleuchtungsstatistik
+6. Kamera mit maximal 320 px breiter Vorschau; Archiv und Zeitraffer bei Bedarf
+
+Gespeicherte Sollwerte bleiben ausdrücklich von tatsächlichen Ausgängen getrennt. Die Versorgungskarten aktualisieren sich bei sichtbarer Übersicht alle 15 Sekunden und bei Rückkehr zur Ansicht. Abruffehler blenden alte Werte der betroffenen Karte aus. Direkte Links führen zur passenden Steuerung.
+
+**Steuerung**, mit Sprungnavigation:
+
+1. Licht: Profil, Leistung und Zeitplan
+2. Wasser & Töpfe: gemeinsame Tankanzeige; je Topf Bodenfeuchte und passende Pumpe zusammen; Bewässerungseinstellungen und separate Sensorkalibrierung
+3. Lüftung: Zu- und Abluft nebeneinander
+4. aufklappbare Systemdiagnose mit Rohwerten und CPU-Temperatur
+
+Technische Grenzen und Pumpenkalibrierung sind pro Topf aufklappbar, ebenso die Mindestleistung der Lüfter. Speichern erfolgt weiterhin über die bestehenden Formulare. Kamera, Archiv und Zeitraffer sind ausschließlich in der Übersicht verfügbar. Die Vorschau bleibt kompakt; Vollbild ist weiterhin verfügbar. Auf Tablets können zwei Versorgungskarten nebeneinander stehen, auf schmalen Bildschirmen eine.
 
 ## Aktuell
 
@@ -626,7 +638,7 @@ Die reine Entscheidungsfunktion prüft Automatik, Tankstatus, Sensoralter (max. 
 
 ## Einstellungen und Kalibrierung
 
-Unter **Steuerung → Bewässerung → Bewässerung einrichten** lassen sich beide Pumpen unabhängig konfigurieren.
+Unter **Steuerung → Wasser & Töpfe → Bewässerung einrichten** lassen sich beide Pumpen unabhängig konfigurieren.
 
 | Einstellung | Bedeutung |
 |---|---|
@@ -648,6 +660,16 @@ Berechnete Pumpdauer (s) = gewünschte Wassermenge (ml) / Fördermenge (ml/s)
 ```
 
 Die Oberfläche zeigt Fördermenge und berechnete Laufzeit direkt an. Unvollständige Kalibrierpaare, ungültige Zahlen, eine Einzelmenge über dem Tageslimit oder eine berechnete Dauer über der Laufzeitgrenze werden beim Speichern abgelehnt.
+
+## Tanksymbol
+
+Übersicht und Steuerung zeigen ein Liquid-Glass-Tanksymbol mit Deckel und Wasserlinie. Die vorhandene Statusabfrage aktualisiert beide Symbole:
+
+- Rot mit Ausrufezeichen: Tank leer (`tank_state: "empty"`)
+- Blau: Wasser vorhanden (`"ok"` oder `"full"`)
+- Neutral mit Fragezeichen: Status unbekannt oder Statusabfrage fehlgeschlagen
+
+Der Schwimmerschalter liefert keine Füllmenge in Prozent. Blau bedeutet daher „Wasser vorhanden“, nicht einen messtechnisch bestätigten randvollen Tank. Aktuell meldet das Backend weiterhin `unknown`, bis der Schalter angebunden ist.
 
 ## Pumpensymbole und Animation
 

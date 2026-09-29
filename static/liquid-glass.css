@@ -842,3 +842,94 @@ footer { color: #a9c5b8; }
 #lampControlSection,#irrigationControlSection,#fanControlSection { scroll-margin-top:20px; }
 @media(max-width:1100px) { .overview-equipment-grid { grid-template-columns:1fr; } }
 @media(max-width:420px) { .overview-equipment-card dl>div { grid-template-columns:1fr; gap:4px; } .overview-equipment-card dd { text-align:left; } }
+
+/* Layout: observe in overview, configure in controls. */
+.control-jump-nav { position:sticky; top:8px; z-index:10; display:flex; gap:8px; flex-wrap:wrap; padding:10px; margin:0 0 20px; border:1px solid rgba(215,255,245,.2); border-radius:18px; background:rgba(18,48,43,.96); box-shadow:0 6px 22px rgba(0,0,0,.15); }
+.control-jump-nav button { padding:9px 14px; font:inherit; font-size:.85rem; border-radius:12px; color:#daf2eb; background:rgba(220,255,245,.06); border:1px solid rgba(220,255,245,.12); cursor:pointer; }
+#lampControlSection,#irrigationControlSection,#fanControlSection,#cameraControlSection,#systemDiagnostics { scroll-margin-top:90px; }
+.overview-pot-water { grid-column:1/-1; margin:0; padding-top:6px; line-height:1.5; }
+.pot-control-link { grid-column:1/-1; color:#b8eee0; font-size:.8rem; }
+.overview-analysis { margin:24px 0; }
+.overview-analysis>summary,.system-diagnostics>summary,.advanced-settings>summary,.irrigation-history>summary { cursor:pointer; color:#d8eee8; font-weight:500; padding:10px 0; }
+.overview-analysis .history-panel { margin-top:18px; }
+.overview-analysis .bottom-grid { margin-bottom:0; }
+.system-diagnostics { margin:24px 0; }
+.system-diagnostics .sensor-grid { margin-bottom:0; }
+.advanced-settings { margin:14px 0; padding:0 12px; border:1px solid rgba(215,255,245,.12); border-radius:12px; }
+.water-top-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.water-top-grid>article:first-child { grid-column:1/-1; }
+.integrated-soil-reading { background:transparent; border:0; box-shadow:none; padding:0 0 16px; border-bottom:1px solid rgba(210,255,235,.12); margin-bottom:6px; }
+#irrigationControlSection>.badge { display:inline-block; margin-bottom:14px; }
+#irrigationControlSection .soil-config { margin-top:20px; }
+#irrigationControlSection .lamp-config-card { margin-bottom:16px; }
+#overviewCameraSlot #cameraArea,#controlsCameraSlot #cameraArea { width:100%; max-width:320px; }
+#overviewCameraSlot #cameraArea .camera-image,#controlsCameraSlot #cameraArea .camera-image { max-height:180px; object-fit:contain; }
+#overviewCameraSlot #cameraArea .camera-image:fullscreen,#controlsCameraSlot #cameraArea .camera-image:fullscreen { max-width:none; max-height:none; width:100vw; height:100vh; }
+@media(min-width:761px) and (max-width:1100px) { .overview-equipment-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:760px) { .water-top-grid { grid-template-columns:1fr; } .control-jump-nav { position:static; } }
+@media(prefers-reduced-transparency:reduce) { .control-jump-nav { background:#183d34; } }
+
+.overview-analysis>h2 { margin:0 0 18px; font-size:1.3rem; color:#d8eee8; }
+
+/* Tank color represents the switch state, never a measured percentage. */
+.tank-symbol { --tank-light:#b9d2df; --tank-dark:#708c9e; display:inline-block; width:84px; height:84px; flex-shrink:0; }
+.tank-symbol svg { display:block; width:100%; height:100%; filter:drop-shadow(0 4px 7px rgba(5,25,35,.18)); }
+.tank-symbol[data-tank-state="ok"] { --tank-light:#a2edff; --tank-dark:#367cf1; }
+.tank-symbol[data-tank-state="empty"] { --tank-light:#ffabb5; --tank-dark:#e54960; }
+.tank-fill-full,.tank-wave-full,.tank-fill-empty,.tank-empty-mark { display:none; }
+.tank-symbol[data-tank-state="ok"] .tank-fill-full,.tank-symbol[data-tank-state="ok"] .tank-wave-full { display:block; }
+.tank-symbol[data-tank-state="empty"] .tank-fill-empty,.tank-symbol[data-tank-state="empty"] .tank-empty-mark { display:block; }
+.tank-symbol:not([data-tank-state="unknown"]) .tank-unknown-mark { display:none; }
+.overview-equipment-card dl .tank-symbol { width:42px; height:42px; }
+
+.overview-tank-value { display:flex; justify-content:flex-end; align-items:center; gap:8px; }
+@media(max-width:420px) { .overview-tank-value { justify-content:flex-start; } }
+
+/* Profile identity and measured light state remain separate. */
+.overview-lamp-live { display:flex; align-items:center; gap:12px; margin:16px 0 0; padding:8px 12px; border:1px solid rgba(211,245,239,.12); border-radius:16px; background:rgba(4,25,27,.12); }
+.live-lamp-icon { display:block; width:84px; height:84px; flex:0 0 84px; }
+.live-lamp-icon svg { display:block; width:100%; height:100%; }
+.live-lamp-panel { fill:#55717c; }
+.live-lamp-leds { fill:#8cabb6; }
+.live-lamp-beam,.live-lamp-rays { opacity:0; }
+.live-lamp-icon[data-state="on"] .live-lamp-panel { fill:#ffe7a3; filter:drop-shadow(0 0 5px rgba(255,209,103,.8)); }
+.live-lamp-icon[data-state="on"] .live-lamp-leds { fill:#fffbea; }
+.live-lamp-icon[data-state="on"] .live-lamp-beam,.live-lamp-icon[data-state="on"] .live-lamp-rays { opacity:1; }
+.live-lamp-icon[data-state="off"] { opacity:.65; }
+.live-lamp-icon[data-state="unknown"] { opacity:.45; }
+.overview-lamp-live strong { display:block; font-size:.95rem; margin:5px 0; color:#dbeee8; }
+.overview-lamp-live small { display:block; font-size:.73rem; color:#b4cbc4; line-height:1.4; }
+#ovLampFallback { color:#b7cad0; text-shadow:none; }
+@media(max-width:420px) { .live-lamp-icon { width:64px; height:64px; flex-basis:64px; } }
+
+/* Main lamp identity on the left; selected profile beside its value. */
+.overview-equipment-card header > .glass-icon.live-lamp-icon {
+    display:grid; place-items:center; width:58px; height:64px; flex:0 0 58px;
+}
+.overview-equipment-card header > .live-lamp-icon .glass-glyph { width:44px; height:44px; }
+.overview-profile-value { display:flex; justify-content:flex-end; align-items:center; gap:8px; }
+.overview-profile-icon { display:grid; place-items:center; width:40px; height:40px; flex:0 0 40px; }
+.overview-profile-icon img { width:100%; height:100%; object-fit:contain; }
+.overview-profile-icon [hidden] { display:none; }
+.live-lamp-icon .lamp-main-rays { opacity:0; }
+.live-lamp-icon:not([data-state="on"]) {
+    --icon-color:145,175,186; box-shadow:none; filter:none;
+}
+.live-lamp-icon:not([data-state="on"]) .lamp-main-body,
+.live-lamp-icon:not([data-state="on"]) .lamp-main-knob { fill:#809ca6; stroke:#c1d4dc; }
+.live-lamp-icon:not([data-state="on"]) .lamp-main-wire { stroke:#a5bec8; }
+.live-lamp-icon[data-state="on"] .lamp-main-rays { opacity:1; }
+.live-lamp-icon[data-state="on"] .lamp-main-body { filter:drop-shadow(0 0 3px rgba(255,209,103,.6)); }
+@media(max-width:420px) { .overview-profile-value { justify-content:flex-start; } }
+
+/* Overview grow light: reference-inspired lamp and seedling, without controls. */
+.overview-equipment-card header > .overview-grow-lamp.live-lamp-icon {
+    display:grid; place-items:center; width:58px; height:58px; flex:0 0 58px;
+}
+.overview-equipment-card header > .overview-grow-lamp.live-lamp-icon .glass-glyph {
+    width:100%; height:100%;
+}
+.grow-lamp-rays,.grow-lamp-beam { opacity:0; }
+.live-lamp-icon[data-state="on"] .grow-lamp-rays,
+.live-lamp-icon[data-state="on"] .grow-lamp-beam { opacity:1; }
+.live-lamp-icon[data-state="on"] .grow-lamp-emitter { fill:url(#overviewGrowLight); filter:drop-shadow(0 0 3px rgba(255,210,135,.8)); }

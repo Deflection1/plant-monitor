@@ -417,6 +417,8 @@ function chartOptions(
 
         maintainAspectRatio: false,
 
+        interaction: { mode: "nearest", axis: "x", intersect: false },
+
 
         plugins: {
 
@@ -458,8 +460,10 @@ function chartOptions(
                     color:
                         "#89988e",
 
-                    maxTicksLimit:
-                        8
+                    maxTicksLimit: 6,
+                    autoSkip: true,
+                    maxRotation: 0,
+                    minRotation: 0
                 },
 
 
@@ -526,17 +530,15 @@ function makeChart(
                     backgroundColor:
                         color,
 
-                    borderWidth:
-                        2,
+                    borderWidth: 1.5,
 
-                    pointRadius:
-                        2,
+                    pointRadius: 0,
 
-                    pointHoverRadius:
-                        5,
+                    pointHitRadius: 10,
 
-                    tension:
-                        0.25,
+                    pointHoverRadius: 4,
+
+                    tension: 0,
 
                     fill:
                         false

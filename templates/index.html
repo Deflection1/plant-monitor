@@ -1,27 +1,20 @@
 <!DOCTYPE html>
-
 <html lang="de">
 
 <head>
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
         Pflanzenschrank
     </title>
 
-    <link
-        rel="stylesheet"
-        href="/static/style.css?v=12"
-    >
+    <link rel="stylesheet" href="/static/style.css?v=12">
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-overview-equipment">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-unified-equipment-icons">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -52,10 +45,7 @@
         </div>
 
 
-        <div
-            class="status"
-            id="systemStatus"
-        >
+        <div class="status" id="systemStatus">
 
             <span class="status-dot"></span>
 
@@ -74,19 +64,39 @@
 </nav>
 <div class="overview-freshness" id="overviewFreshness" role="status">Verbindung wird geprüft …</div>
 <main id="overviewView" aria-label="Pflanzenübersicht">
-<div class="overview-heading"><div><p class="eyebrow">PFLANZEN & UMGEBUNG</p><h2>Dein Wachstum im Blick.</h2></div><p>Pflanzen · Klima · Wachstum</p></div>
-<section class="overview-pots" aria-label="Deine Pflanzen"><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-plant-9" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffd0"/><stop offset=".48" stop-color="#86e4aa"/><stop offset="1" stop-color="#358b70"/></linearGradient></defs><path d="M24 35C7 36 5 25 6 17c11-1 19 5 18 18Z" fill="url(#glass-plant-9)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 27c-1-13 7-19 18-19 1 12-7 20-18 19Z" fill="url(#glass-plant-9)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 43V25M24 34 13 24m11 3 10-10" fill="none" stroke="#e7ffdb" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 01</p><h3 id="ovName1">Topf 1</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil1">—</strong><p id="ovSoilNote1">Messwert ausstehend</p><progress id="ovProgress1" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 1" hidden></progress></div></article><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-plant-10" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffd0"/><stop offset=".48" stop-color="#86e4aa"/><stop offset="1" stop-color="#358b70"/></linearGradient></defs><path d="M24 35C7 36 5 25 6 17c11-1 19 5 18 18Z" fill="url(#glass-plant-10)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 27c-1-13 7-19 18-19 1 12-7 20-18 19Z" fill="url(#glass-plant-10)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 43V25M24 34 13 24m11 3 10-10" fill="none" stroke="#e7ffdb" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 02</p><h3 id="ovName2">Topf 2</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil2">—</strong><p id="ovSoilNote2">Messwert ausstehend</p><progress id="ovProgress2" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 2" hidden></progress></div></article></section><section class="overview-climate" aria-label="Klima und Licht">
+<div class="overview-heading"><div><p class="eyebrow">PFLANZEN &amp; UMGEBUNG</p><h2>Dein Wachstum im Blick.</h2></div><p>Pflanzen · Klima · Wachstum</p></div>
+<section class="overview-climate" aria-label="Klima und Licht">
 <article class="overview-stat metric-temperature"><span class="glass-icon glass-icon--temperature" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-temperature-5" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdbc5"/><stop offset=".48" stop-color="#ff805e"/><stop offset="1" stop-color="#ce3450"/></linearGradient></defs><path d="M19 29V12a5 5 0 0 1 10 0v17a9 9 0 1 1-10 0Z" fill="url(#glass-temperature-5)" stroke="#ffdbc5" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 15v20" stroke="#fff7ed" stroke-opacity=".8" stroke-width="3.5" stroke-linecap="round"/><circle cx="24" cy="35" r="4" fill="#fff1df" fill-opacity=".9"/><path d="M32 15h5m-5 7h3" stroke="#ffc6b8" stroke-width="2" stroke-linecap="round"/></svg></span><div><span class="reading-label">Temperatur</span><strong><span id="ovTemperature">—</span><small> °C</small></strong><p>Korrigierter Wert</p></div></article>
 <article class="overview-stat metric-humidity"><span class="glass-icon glass-icon--humidity" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-humidity-6" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7ffff"/><stop offset=".48" stop-color="#54d5ff"/><stop offset="1" stop-color="#3176db"/></linearGradient></defs><path d="M28 6S15 21 15 30a13 13 0 0 0 26 0C41 21 28 6 28 6Z" fill="url(#glass-humidity-6)" stroke="#c7ffff" stroke-opacity=".65" stroke-width="1.2"/><path d="M11 10S4 19 4 24a7 7 0 0 0 11 5" fill="#89e9ff" fill-opacity=".45" stroke="#c6f7ff" stroke-opacity=".6" stroke-width="1.2"/><path d="M22 29c-1 5 2 8 5 8" fill="none" stroke="#e5ffff" stroke-opacity=".85" stroke-width="2.5" stroke-linecap="round"/></svg></span><div><span class="reading-label">Luftfeuchtigkeit</span><strong><span id="ovHumidity">—</span><small> %</small></strong><p>Relative Feuchte</p></div></article>
 <article class="overview-stat metric-vpd"><span class="glass-icon glass-icon--vpd" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-vpd-7" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffc0"/><stop offset=".48" stop-color="#6ee5a2"/><stop offset="1" stop-color="#21977a"/></linearGradient></defs><path d="M10 34C1 13 27 9 40 7c1 14-3 36-23 32" fill="url(#glass-vpd-7)" stroke="#e4ffc0" stroke-opacity=".65" stroke-width="1.2"/><path d="M8 42c5-13 12-21 23-27M19 27l-1-8m1 8 10 1" fill="none" stroke="#ebffdb" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/></svg></span><div><span class="reading-label">VPD</span><strong><span id="ovVpd">—</span><small> kPa</small></strong><p>Berechnet</p></div></article>
 <article class="overview-stat metric-light"><span class="glass-icon glass-icon--light js-light-state-icon" data-state="off" aria-hidden="true"><svg class="glass-glyph light-state-sun" viewBox="0 0 48 48" focusable="false"><defs><linearGradient id="glass-light-overview" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4bf"/><stop offset=".48" stop-color="#ffc64f"/><stop offset="1" stop-color="#f18134"/></linearGradient></defs><g stroke="#ffc64f" stroke-width="2.5" stroke-linecap="round"><path d="M24 3v5m0 32v5M3 24h5m32 0h5M9 9l4 4m22 22 4 4M9 39l4-4m22-22 4-4"/></g><circle cx="24" cy="24" r="11" fill="url(#glass-light-overview)" stroke="#fff4bf" stroke-opacity=".65" stroke-width="1.2"/><path d="M17 23a7 7 0 0 1 7-7" fill="none" stroke="#fff9df" stroke-width="2" stroke-linecap="round"/></svg><svg class="glass-glyph light-state-moon" viewBox="0 0 48 48" fill="none" focusable="false"><path d="M34 37c-13 2-22-7-20-20 1-6 5-10 10-13-2 12 7 21 19 18-1 7-4 12-9 15Z" fill="#d7ecff" fill-opacity=".8" stroke="#eff8ff" stroke-opacity=".75" stroke-width="1.3"/><path d="M31 12h1m7 5h1m-6 8h1" stroke="#fff7c7" stroke-width="2.5" stroke-linecap="round"/></svg></span><div><span class="reading-label">Licht</span><strong><span id="ovLux">—</span><small> Lux</small></strong><p><span id="ovLight">—</span> · am Sensor</p></div></article>
 </section>
-<section class="overview-equipment" aria-labelledby="ovEquipmentHeading">
-<div class="overview-equipment-heading"><div><p class="eyebrow">VERSORGUNG &amp; TECHNIK</p><h2 id="ovEquipmentHeading">Dein Schrank im Überblick</h2></div><p id="ovEquipmentUpdated" class="camera-meta">Status wird geladen …</p></div>
+<section class="overview-pots" aria-label="Deine Pflanzen"><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-plant-9" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffd0"/><stop offset=".48" stop-color="#86e4aa"/><stop offset="1" stop-color="#358b70"/></linearGradient></defs><path d="M24 35C7 36 5 25 6 17c11-1 19 5 18 18Z" fill="url(#glass-plant-9)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 27c-1-13 7-19 18-19 1 12-7 20-18 19Z" fill="url(#glass-plant-9)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 43V25M24 34 13 24m11 3 10-10" fill="none" stroke="#e7ffdb" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 01</p><h3 id="ovName1">Topf 1</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil1">—</strong><p id="ovSoilNote1">Messwert ausstehend</p><progress id="ovProgress1" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 1" hidden></progress></div><p id="ovWaterPot1" class="camera-meta overview-pot-water">—</p><a class="pot-control-link" href="#steuerung" data-control-target="irrigationControlSection">Topf &amp; Bewässerung einstellen →</a></article><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-plant-10" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffd0"/><stop offset=".48" stop-color="#86e4aa"/><stop offset="1" stop-color="#358b70"/></linearGradient></defs><path d="M24 35C7 36 5 25 6 17c11-1 19 5 18 18Z" fill="url(#glass-plant-10)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 27c-1-13 7-19 18-19 1 12-7 20-18 19Z" fill="url(#glass-plant-10)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 43V25M24 34 13 24m11 3 10-10" fill="none" stroke="#e7ffdb" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 02</p><h3 id="ovName2">Topf 2</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil2">—</strong><p id="ovSoilNote2">Messwert ausstehend</p><progress id="ovProgress2" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 2" hidden></progress></div><p id="ovWaterPot2" class="camera-meta overview-pot-water">—</p><a class="pot-control-link" href="#steuerung" data-control-target="irrigationControlSection">Topf &amp; Bewässerung einstellen →</a></article></section><section class="overview-equipment" aria-labelledby="ovEquipmentHeading">
+<div class="overview-equipment-heading"><div><p class="eyebrow">VERSORGUNG &amp; TECHNIK</p><h2 id="ovEquipmentHeading">Versorgung im Blick</h2></div><p id="ovEquipmentUpdated" class="camera-meta">Status wird geladen …</p></div>
 <div class="overview-equipment-grid">
 <article class="panel overview-equipment-card">
-<header><div class="ov-equipment-icon"><img id="ovLampProfileIcon" src="/static/profile-growth.svg?v=1" alt="" hidden><span id="ovLampFallback" aria-hidden="true">☀</span></div><div><h3 id="ovLampTitle">Pflanzenlampe</h3><p id="ovLampStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
-<dl><div><dt>Profil</dt><dd id="ovLampProfile">—</dd></div><div><dt>Gespeicherte Leistung</dt><dd id="ovLampPower">—</dd></div><div><dt>Zeitplan</dt><dd id="ovLampSchedule">—</dd></div><div><dt>Einschaltdauer</dt><dd id="ovLampDuration">—</dd></div><div><dt>Tatsächlicher Ausgang</dt><dd id="ovLampActual">—</dd></div></dl><a href="#steuerung" data-control-target="lampControlSection">Zur Lampensteuerung →</a>
+<header><span class="ov-equipment-icon overview-grow-lamp live-lamp-icon" data-state="unknown" role="img" aria-label="Lichtstatus unbekannt"><svg viewBox="0 0 96 96" class="glass-glyph" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="overviewGrowShell" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#f1fcff" stop-opacity=".9"/><stop offset=".45" stop-color="#afcbd3" stop-opacity=".4"/><stop offset="1" stop-color="#608693" stop-opacity=".65"/></linearGradient>
+<linearGradient id="overviewGrowLeaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c4ffdb" stop-opacity=".95"/><stop offset=".5" stop-color="#69dba6" stop-opacity=".8"/><stop offset="1" stop-color="#23846e" stop-opacity=".75"/></linearGradient>
+<linearGradient id="overviewGrowBeam" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffe4a2" stop-opacity=".35"/><stop offset="1" stop-color="#ffe4a2" stop-opacity="0"/></linearGradient>
+<linearGradient id="overviewGrowLight"><stop stop-color="#ffe0ab"/><stop offset=".5" stop-color="#fff5cf"/><stop offset="1" stop-color="#ffbf97"/></linearGradient>
+</defs>
+<path d="M20 7v14M25 7v14M71 7v14M76 7v14" fill="none" stroke="#c7e1e7" stroke-opacity=".75" stroke-width="1.8" stroke-linecap="round"/>
+<path class="grow-lamp-beam" d="M14 38 5 80h86L82 38Z" fill="url(#overviewGrowBeam)"/>
+<path d="M9 35V28a7 7 0 0 1 7-7h64a7 7 0 0 1 7 7v7Z" fill="url(#overviewGrowShell)" stroke="#daf4f7" stroke-opacity=".8" stroke-width="1.2"/>
+<path d="M15 25h62" fill="none" stroke="white" stroke-opacity=".7" stroke-linecap="round"/>
+<path d="M9 35h78v5H9Z" fill="#91b4bf" fill-opacity=".65" stroke="#d4edf0" stroke-opacity=".6"/>
+<path class="grow-lamp-emitter" d="M14 40h68l-3 5H17Z" fill="#6f8f9b" stroke="#c7e1e5" stroke-opacity=".6"/>
+<g class="grow-lamp-rays" fill="none" stroke="#ffe5b1" stroke-width="2" stroke-linecap="round">
+<path d="m20 50-3 6m17-6-2 6m16-6v6m14-6 2 6m12-6 3 6"/>
+</g>
+<path d="M48 78C37 60 18 57 15 67c-4 13 18 12 33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".7" stroke-width="1"/>
+<path d="M48 78c11-18 30-21 33-11 4 13-18 12-33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".7" stroke-width="1"/>
+<path d="M28 69q12 0 20 9m20-9q-12 0-20 9v10" fill="none" stroke="#d1ffe4" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M12 89q16-3 36-1t36-2" fill="none" stroke="#aacfc4" stroke-opacity=".6" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M19 66q9-4 19 4M59 70q10-8 17-5" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1" stroke-linecap="round"/>
+</svg></span><div><h3 id="ovLampTitle">Pflanzenlampe</h3><p id="ovLampStatus" class="ov-equipment-status">Wird geladen …</p></div></header><dl><div><dt>Profil</dt><dd class="overview-profile-value"><span class="overview-profile-icon"><img id="ovLampProfileIcon" src="/static/profile-growth.svg?v=1" alt="" hidden><span id="ovLampFallback" aria-hidden="true">◇</span></span><span id="ovLampProfile">—</span></dd></div><div><dt>Beleuchtungsstärke</dt><dd id="ovLampLiveNote" aria-live="polite">— Lux</dd></div><div><dt>Gespeicherte Leistung</dt><dd id="ovLampPower">—</dd></div><div><dt>Zeitplan</dt><dd id="ovLampSchedule">—</dd></div><div><dt>Tatsächlicher Ausgang</dt><dd id="ovLampActual">—</dd></div></dl><a href="#steuerung" data-control-target="lampControlSection">Zur Lampensteuerung →</a>
 </article>
 <article class="panel overview-equipment-card">
 <header><div class="ov-equipment-icon"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
@@ -117,7 +127,24 @@
 <path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
 <path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
 </svg></div><div><h3>Bewässerung</h3><p id="ovWaterStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
-<dl><div><dt>Tank</dt><dd id="ovWaterTank">—</dd></div><div><dt>Topf 1</dt><dd id="ovWaterPot1">—</dd></div><div><dt>Topf 2</dt><dd id="ovWaterPot2">—</dd></div><div><dt>Letzte Bewässerung</dt><dd id="ovWaterLast">—</dd></div></dl><p class="camera-meta">Je Topf: Automatik-Vormerkung, Schwelle und Einzelmenge.</p><a href="#steuerung" data-control-target="irrigationControlSection">Zur Bewässerung →</a>
+<dl><div><dt>Tank</dt><dd class="overview-tank-value"><span class="tank-symbol" data-tank-state="unknown" role="img" aria-label="Tankstatus unbekannt">
+<svg viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="tank-overview-shell" x1="17" y1="24" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#e7ffff" stop-opacity=".52"/><stop offset=".5" stop-color="#9ccee0" stop-opacity=".13"/><stop offset="1" stop-color="#8acbde" stop-opacity=".38"/></linearGradient>
+<linearGradient id="tank-overview-water" x1="27" y1="40" x2="73" y2="82" gradientUnits="userSpaceOnUse"><stop class="tank-liquid-light" stop-color="var(--tank-light)"/><stop offset="1" class="tank-liquid-dark" stop-color="var(--tank-dark)"/></linearGradient>
+</defs>
+<path d="M25 27V18h17v9" fill="url(#tank-overview-shell)" stroke="#c5ecf1" stroke-opacity=".65" stroke-width="1.2"/>
+<rect x="20" y="9" width="28" height="12" rx="4" fill="url(#tank-overview-shell)" stroke="#d9faff" stroke-opacity=".75"/>
+<path d="M25 13h18" stroke="white" stroke-opacity=".65" stroke-linecap="round"/>
+<rect x="10" y="27" width="76" height="58" rx="15" fill="url(#tank-overview-shell)" stroke="#d7faff" stroke-opacity=".7" stroke-width="1.3"/>
+<path class="tank-fill-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46V70Q81 80 70 80H26Q15 80 15 70Z" fill="url(#tank-overview-water)" fill-opacity=".86"/>
+<path class="tank-fill-empty" d="M15 72Q23 69 31 72T47 72T63 72T81 72Q80 80 70 80H26Q16 80 15 72Z" fill="url(#tank-overview-water)" fill-opacity=".9"/>
+<path class="tank-wave-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46" fill="none" stroke="var(--tank-light)" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M16 50V42q0-9 10-9h30" fill="none" stroke="white" stroke-opacity=".62" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M78 57v12q0 9-9 9" fill="none" stroke="#dbffff" stroke-opacity=".42" stroke-width="1.2" stroke-linecap="round"/>
+<g class="tank-unknown-mark" fill="none" stroke="#d2e4ed" stroke-width="2.4" stroke-linecap="round"><path d="M43 51c0-7 12-7 12 0 0 4-6 4-6 9"/><path d="M49 66v.3"/></g>
+<g class="tank-empty-mark" stroke="#ffd8db" stroke-width="2.7" stroke-linecap="round"><path d="M49 46v12M49 64v.3"/></g>
+</svg></span><span id="ovWaterTank">—</span></dd></div><div><dt>Letzte Bewässerung</dt><dd id="ovWaterLast">—</dd></div></dl><a href="#steuerung" data-control-target="irrigationControlSection">Zur Bewässerung →</a>
 </article>
 <article class="panel overview-equipment-card">
 <header><div class="ov-equipment-icon"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
@@ -145,1126 +172,7 @@
 <dl><div><dt>Zuluft · gespeichert</dt><dd id="ovFanIntake">—</dd></div><div><dt>Abluft · gespeichert</dt><dd id="ovFanExhaust">—</dd></div><div><dt>Tatsächliche Leistung</dt><dd id="ovFanActual">—</dd></div></dl><p class="camera-meta">Sollwerte sind Einstellungen, keine gemessenen Drehzahlen.</p><a href="#steuerung" data-control-target="fanControlSection">Zur Lüftersteuerung →</a>
 </article>
 </div></section>
-<div id="overviewCameraSlot"></div><div id="overviewHistorySlot"></div></main>
-<div id="controlsView" hidden>
-
-    <!-- SENSOR CARDS -->
-
-    <section class="sensor-grid">
-
-
-        <article class="sensor-card">
-
-            <div class="sensor-header">
-
-                <span class="glass-icon glass-icon--temperature" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-temperature-1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdbc5"/><stop offset=".48" stop-color="#ff805e"/><stop offset="1" stop-color="#ce3450"/></linearGradient></defs><path d="M19 29V12a5 5 0 0 1 10 0v17a9 9 0 1 1-10 0Z" fill="url(#glass-temperature-1)" stroke="#ffdbc5" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 15v20" stroke="#fff7ed" stroke-opacity=".8" stroke-width="3.5" stroke-linecap="round"/><circle cx="24" cy="35" r="4" fill="#fff1df" fill-opacity=".9"/><path d="M32 15h5m-5 7h3" stroke="#ffc6b8" stroke-width="2" stroke-linecap="round"/></svg></span>
-
-                <span>
-                    Temperatur
-                </span>
-
-            </div>
-
-
-            <div class="sensor-value">
-
-                <span id="temperature">
-                    --
-                </span>
-
-                <small>
-                    °C
-                </small>
-
-            </div>
-
-
-            <div class="sensor-note">
-                korrigierter Wert
-            </div>
-
-        </article>
-
-
-        <article class="sensor-card">
-
-            <div class="sensor-header">
-
-                <span class="glass-icon glass-icon--humidity" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-humidity-2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7ffff"/><stop offset=".48" stop-color="#54d5ff"/><stop offset="1" stop-color="#3176db"/></linearGradient></defs><path d="M28 6S15 21 15 30a13 13 0 0 0 26 0C41 21 28 6 28 6Z" fill="url(#glass-humidity-2)" stroke="#c7ffff" stroke-opacity=".65" stroke-width="1.2"/><path d="M11 10S4 19 4 24a7 7 0 0 0 11 5" fill="#89e9ff" fill-opacity=".45" stroke="#c6f7ff" stroke-opacity=".6" stroke-width="1.2"/><path d="M22 29c-1 5 2 8 5 8" fill="none" stroke="#e5ffff" stroke-opacity=".85" stroke-width="2.5" stroke-linecap="round"/></svg></span>
-
-                <span>
-                    Luftfeuchtigkeit
-                </span>
-
-            </div>
-
-
-            <div class="sensor-value">
-
-                <span id="humidity">
-                    --
-                </span>
-
-                <small>
-                    %
-                </small>
-
-            </div>
-
-
-            <div class="sensor-note">
-                relative Feuchte
-            </div>
-
-        </article>
-
-
-        <article class="sensor-card">
-
-            <div class="sensor-header">
-
-                <span class="glass-icon glass-icon--vpd" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-vpd-3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffc0"/><stop offset=".48" stop-color="#6ee5a2"/><stop offset="1" stop-color="#21977a"/></linearGradient></defs><path d="M10 34C1 13 27 9 40 7c1 14-3 36-23 32" fill="url(#glass-vpd-3)" stroke="#e4ffc0" stroke-opacity=".65" stroke-width="1.2"/><path d="M8 42c5-13 12-21 23-27M19 27l-1-8m1 8 10 1" fill="none" stroke="#ebffdb" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/></svg></span>
-
-                <span>
-                    VPD
-                </span>
-
-            </div>
-
-
-            <div class="sensor-value">
-
-                <span id="vpd">
-                    --
-                </span>
-
-                <small>
-                    kPa
-                </small>
-
-            </div>
-
-
-            <div class="sensor-note">
-                berechnet
-            </div>
-
-        </article>
-
-
-        <article class="sensor-card">
-
-            <div class="sensor-header">
-
-                <span class="glass-icon glass-icon--light js-light-state-icon" data-state="off" aria-hidden="true"><svg class="glass-glyph light-state-sun" viewBox="0 0 48 48" focusable="false"><defs><linearGradient id="glass-light-sensor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4bf"/><stop offset=".48" stop-color="#ffc64f"/><stop offset="1" stop-color="#f18134"/></linearGradient></defs><g stroke="#ffc64f" stroke-width="2.5" stroke-linecap="round"><path d="M24 3v5m0 32v5M3 24h5m32 0h5M9 9l4 4m22 22 4 4M9 39l4-4m22-22 4-4"/></g><circle cx="24" cy="24" r="11" fill="url(#glass-light-sensor)" stroke="#fff4bf" stroke-opacity=".65" stroke-width="1.2"/><path d="M17 23a7 7 0 0 1 7-7" fill="none" stroke="#fff9df" stroke-width="2" stroke-linecap="round"/></svg><svg class="glass-glyph light-state-moon" viewBox="0 0 48 48" fill="none" focusable="false"><path d="M34 37c-13 2-22-7-20-20 1-6 5-10 10-13-2 12 7 21 19 18-1 7-4 12-9 15Z" fill="#d7ecff" fill-opacity=".8" stroke="#eff8ff" stroke-opacity=".75" stroke-width="1.3"/><path d="M31 12h1m7 5h1m-6 8h1" stroke="#fff7c7" stroke-width="2.5" stroke-linecap="round"/></svg></span>
-
-                <span>
-                    Licht
-                </span>
-
-            </div>
-
-
-            <div class="sensor-value">
-
-                <span id="lux">
-                    --
-                </span>
-
-                <small>
-                    Lux
-                </small>
-
-            </div>
-
-
-            <div
-                class="sensor-note"
-                id="lightStatus"
-            >
-                Lichtstatus wird geladen
-            </div>
-
-        </article>
-
-    </section>
-
-
-    <!-- BODENFEUCHTE -->
-
-    <section class="panel soil-panel">
-
-        <div class="panel-header">
-
-            <div>
-
-                <p class="eyebrow">
-                    BODENFEUCHTE
-                </p>
-
-                <h2>
-                    Töpfe
-                </h2>
-
-            </div>
-
-            <span
-                class="badge"
-                id="soilStatus"
-            >
-                Hardware ausstehend
-            </span>
-
-        </div>
-
-
-        <div class="soil-grid">
-
-            <article class="soil-card">
-
-                <div class="sensor-header">
-                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-soil-1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9fff0"/><stop offset=".5" stop-color="#69ddb1"/><stop offset="1" stop-color="#2c8d72"/></linearGradient></defs><path d="M12 32h24l-3 10H15l-3-10Z" fill="url(#glass-soil-1)" stroke="#d9fff0" stroke-opacity=".62" stroke-width="1.2"/><path d="M24 33V18" fill="none" stroke="#efffe9" stroke-width="2" stroke-linecap="round"/><path d="M24 25c-8 0-11-5-11-10 7 0 11 3 11 10Zm0-4c0-7 4-11 11-11 0 7-4 11-11 11Z" fill="url(#glass-soil-1)" stroke="#e4ffd8" stroke-opacity=".7" stroke-width="1.2"/><path d="M10 36h28" stroke="#b8e7cf" stroke-opacity=".7" stroke-width="1.5" stroke-linecap="round"/></svg></span>
-
-                    <span id="soilName1">
-                        Topf 1
-                    </span>
-                </div>
-
-                <div class="sensor-value">
-
-                    <span id="soilMoisture1">
-                        --
-                    </span>
-
-                    <small>%</small>
-
-                </div>
-
-                <div class="soil-details">
-
-                    <span>
-                        ADS1115 A0
-                    </span>
-
-                    <span>
-                        Rohwert:
-                        <strong id="soilRaw1">--</strong>
-                    </span>
-
-                </div>
-
-            </article>
-
-
-            <article class="soil-card">
-
-                <div class="sensor-header">
-                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-soil-2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9fff0"/><stop offset=".5" stop-color="#69ddb1"/><stop offset="1" stop-color="#2c8d72"/></linearGradient></defs><path d="M12 32h24l-3 10H15l-3-10Z" fill="url(#glass-soil-2)" stroke="#d9fff0" stroke-opacity=".62" stroke-width="1.2"/><path d="M24 33V18" fill="none" stroke="#efffe9" stroke-width="2" stroke-linecap="round"/><path d="M24 25c-8 0-11-5-11-10 7 0 11 3 11 10Zm0-4c0-7 4-11 11-11 0 7-4 11-11 11Z" fill="url(#glass-soil-2)" stroke="#e4ffd8" stroke-opacity=".7" stroke-width="1.2"/><path d="M10 36h28" stroke="#b8e7cf" stroke-opacity=".7" stroke-width="1.5" stroke-linecap="round"/></svg></span>
-
-                    <span id="soilName2">
-                        Topf 2
-                    </span>
-                </div>
-
-                <div class="sensor-value">
-
-                    <span id="soilMoisture2">
-                        --
-                    </span>
-
-                    <small>%</small>
-
-                </div>
-
-                <div class="soil-details">
-
-                    <span>
-                        ADS1115 A1
-                    </span>
-
-                    <span>
-                        Rohwert:
-                        <strong id="soilRaw2">--</strong>
-                    </span>
-
-                </div>
-
-            </article>
-
-        </div>
-
-
-        <details class="soil-config">
-
-            <summary>
-                Kalibrierung & Namen
-            </summary>
-
-            <p class="estimate-note">
-                Die Werte werden persistent auf dem Raspberry Pi gespeichert.
-                Trocken- und Nass-Rohwert werden für jeden SEN0308 separat kalibriert.
-            </p>
-
-            <div class="soil-config-grid">
-
-                <div class="soil-config-card">
-
-                    <strong>
-                        Sensor 1 · A0
-                    </strong>
-
-                    <label>
-                        Name
-                        <input
-                            id="soilNameInput1"
-                            type="text"
-                            maxlength="40"
-                            value="Topf 1"
-                        >
-                    </label>
-
-                    <label>
-                        Rohwert trocken · 0 %
-                        <input
-                            id="soilDry1"
-                            type="number"
-                            step="any"
-                            placeholder="noch nicht kalibriert"
-                        >
-                    </label>
-
-                    <label>
-                        Rohwert nass · 100 %
-                        <input
-                            id="soilWet1"
-                            type="number"
-                            step="any"
-                            placeholder="noch nicht kalibriert"
-                        >
-                    </label>
-
-                </div>
-
-
-                <div class="soil-config-card">
-
-                    <strong>
-                        Sensor 2 · A1
-                    </strong>
-
-                    <label>
-                        Name
-                        <input
-                            id="soilNameInput2"
-                            type="text"
-                            maxlength="40"
-                            value="Topf 2"
-                        >
-                    </label>
-
-                    <label>
-                        Rohwert trocken · 0 %
-                        <input
-                            id="soilDry2"
-                            type="number"
-                            step="any"
-                            placeholder="noch nicht kalibriert"
-                        >
-                    </label>
-
-                    <label>
-                        Rohwert nass · 100 %
-                        <input
-                            id="soilWet2"
-                            type="number"
-                            step="any"
-                            placeholder="noch nicht kalibriert"
-                        >
-                    </label>
-
-                </div>
-
-            </div>
-
-
-            <div class="button-row">
-
-                <button
-                    class="primary"
-                    id="saveSoilConfigButton"
-                >
-                    Einstellungen speichern
-                </button>
-
-                <span
-                    class="camera-meta"
-                    id="soilConfigMessage"
-                >
-                    Noch nicht kalibriert
-                </span>
-
-            </div>
-
-        </details>
-
-    </section>
-
-
-
-    <!-- LAMPENSTEUERUNG -->
-
-    <section class="panel lamp-control-panel" id="lampControlSection">
-
-        <div class="panel-header">
-
-            <div class="lamp-control-heading">
-
-                <span class="glass-icon glass-icon--lamp-control" aria-hidden="true">
-                    <svg viewBox="0 0 48 48" class="glass-glyph" focusable="false">
-                        <defs>
-                            <linearGradient id="glass-lamp-control-body" x1="0" y1="0" x2="1" y2="1">
-                                <stop stop-color="#fff2b6"/>
-                                <stop offset=".5" stop-color="#ffc954"/>
-                                <stop offset="1" stop-color="#f08a35"/>
-                            </linearGradient>
-                            <linearGradient id="glass-lamp-control-slider" x1="0" y1="0" x2="1" y2="1">
-                                <stop stop-color="#ffe8a0"/>
-                                <stop offset=".55" stop-color="#ffbf47"/>
-                                <stop offset="1" stop-color="#f19d32"/>
-                            </linearGradient>
-                        </defs>
-
-                        <rect x="9" y="8" width="30" height="9" rx="4.5"
-                              fill="url(#glass-lamp-control-body)"
-                              stroke="#fff4c7" stroke-opacity=".7" stroke-width="1.2"/>
-
-                        <path d="M14 8V5M34 8V5"
-                              stroke="#ffd978" stroke-width="1.8" stroke-linecap="round"/>
-
-                        <path d="M16 21L13 29M24 21V31M32 21L35 29"
-                              stroke="#ffd46b" stroke-width="2.2" stroke-linecap="round"/>
-
-                        <rect x="11" y="35" width="26" height="4" rx="2"
-                              fill="rgba(255,255,255,.12)"
-                              stroke="rgba(255,241,195,.35)" stroke-width="1"/>
-
-                        <circle cx="29" cy="37" r="4"
-                                fill="url(#glass-lamp-control-slider)"
-                                stroke="#fff1c0" stroke-opacity=".75" stroke-width="1.2"/>
-                    </svg>
-                </span>
-
-                <div>
-                    <p class="eyebrow">
-                        LAMPENSTEUERUNG
-                    </p>
-
-                    <h2 id="lampControlName">
-                        Pflanzenlampe
-                    </h2>
-                </div>
-
-            </div>
-
-
-            <span
-                class="badge"
-                id="lampControlStatus"
-            >
-                Hardware ausstehend
-            </span>
-
-        </div>
-
-
-        <div class="lamp-control-grid">
-
-            <article class="lamp-control-card">
-
-                <span class="lamp-control-label">
-                    Leistung
-                </span>
-
-                <strong id="lampPowerPreview">
-                    0 %
-                </strong>
-
-                <small>
-                    Zielwert · noch nicht ausgegeben
-                </small>
-
-            </article>
-
-
-            <article class="lamp-control-card">
-
-                <span class="lamp-control-label">
-                    Zeitplan
-                </span>
-
-                <strong id="lampSchedulePreview">
-                    Aus
-                </strong>
-
-                <small id="lampScheduleTimes">
-                    08:00 – 20:00
-                </small>
-                <small id="lampDurationPreview">12 h 00 min Einschaltzeit</small>
-
-            </article>
-
-
-            <article
-                class="lamp-control-card lamp-profile-card"
-                id="lampProfileCard"
-                data-profile="custom"
-            >
-
-                <span class="lamp-control-label">
-                    Profil
-                </span>
-
-                <div class="lamp-profile-display">
-
-                    <img
-                        id="lampProfileImage"
-                        class="lamp-profile-image"
-                        src="/static/profile-flower.svg?v=2"
-                        alt=""
-                        hidden
-                    >
-
-                    <span
-                        id="lampProfilePlaceholder"
-                        class="lamp-profile-placeholder"
-                        aria-hidden="true"
-                    >
-                        <svg
-                            viewBox="0 0 48 48"
-                            focusable="false"
-                        >
-                            <path
-                                d="M11 35C4 17 25 11 39 8c0 15-5 29-22 31"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                            <path
-                                d="M10 41c6-13 14-21 25-27"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.2"
-                                stroke-linecap="round"
-                            />
-                        </svg>
-                    </span>
-
-                    <div class="lamp-profile-copy">
-
-                        <strong id="lampProfilePreview">
-                            Benutzerdefiniert
-                        </strong>
-
-                        <small>
-                            persistent gespeichert
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-        </div>
-
-
-        <details class="lamp-config">
-
-            <summary>
-                Konfiguration
-            </summary>
-
-            <p class="estimate-note">
-                Die Einstellungen werden bereits persistent auf dem Raspberry Pi gespeichert.
-                Solange der GP8600 noch nicht angebunden ist, wird kein 0–10-V-Ausgang angesteuert.
-            </p>
-
-
-            <div class="lamp-config-grid">
-
-                <div class="lamp-config-card">
-
-                    <strong>
-                        Lampe
-                    </strong>
-
-                    <label>
-                        Name
-                        <input
-                            id="lampNameInput"
-                            type="text"
-                            maxlength="40"
-                            value="Pflanzenlampe"
-                        >
-                    </label>
-
-                    <label>
-                        Profil
-                        <select id="lampProfileInput">
-                            <option value="custom">Benutzerdefiniert</option>
-                            <option value="growth">Wachstum</option>
-                            <option value="flower">Blüte</option>
-                        </select>
-                    </label>
-
-                    <label>
-                        Leistung
-                        <div class="lamp-range-row">
-                            <input
-                                id="lampPowerInput"
-                                type="range"
-                                min="0"
-                                max="100"
-                                step="1"
-                                value="0"
-                            >
-                            <output
-                                id="lampPowerOutput"
-                                for="lampPowerInput"
-                            >
-                                0 %
-                            </output>
-                        </div>
-                    </label>
-
-                </div>
-
-
-                <div class="lamp-config-card">
-
-                    <strong>
-                        Zeitplan
-                    </strong>
-
-                    <label class="lamp-toggle-row">
-                        <input
-                            id="lampScheduleEnabled"
-                            type="checkbox"
-                        >
-                        <span>
-                            Zeitplan aktivieren
-                        </span>
-                    </label>
-
-                    <div class="lamp-time-grid">
-
-                        <label>
-                            Einschalten
-                            <input
-                                id="lampOnTime"
-                                type="time"
-                                value="08:00"
-                            >
-                        </label>
-
-                        <label>
-                            Ausschalten
-                            <input
-                                id="lampOffTime"
-                                type="time"
-                                value="20:00"
-                            >
-                        </label>
-
-                    </div>
-
-                    <p class="lamp-safety-note">
-                        Sicher vorbereitet: Standardmässig 0 % und Zeitplan aus.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="button-row">
-
-                <button
-                    class="primary"
-                    id="saveLampConfigButton"
-                >
-                    Einstellungen speichern
-                </button>
-
-                <span
-                    class="camera-meta"
-                    id="lampConfigMessage"
-                >
-                    Hardware noch nicht verbunden
-                </span>
-
-            </div>
-
-        </details>
-
-    </section>
-
-
-
-    <section id="irrigationControlSection" class="panel irrigation-panel" aria-labelledby="irrigationHeading">
-        <div class="panel-header">
-            <div class="lamp-control-heading">
-                <span class="glass-icon irrigation-icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" fill="none">
-                        <defs><linearGradient id="waterGlass" x1="12" y1="6" x2="52" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#ddffff"/><stop offset=".45" stop-color="#50dce9"/><stop offset="1" stop-color="#347bf3"/></linearGradient></defs>
-                        <path d="M32 7C27 17 13 29 13 40a19 19 0 0 0 38 0C51 29 37 17 32 7Z" fill="url(#waterGlass)" stroke="#c8ffff" stroke-opacity=".65"/>
-                        <path d="M25 29c-5 6-7 10-6 15" stroke="white" stroke-opacity=".85" stroke-width="4" stroke-linecap="round"/>
-                        <path d="M30 53c9 1 15-5 16-12" stroke="#8bffff" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </span>
-                <div><p class="eyebrow">WASSER &amp; VERSORGUNG</p><h2 id="irrigationHeading">Bewässerung</h2></div>
-            </div>
-            <span class="camera-meta">Hardware ausstehend</span>
-        </div>
-        <p class="camera-meta">Zwei getrennte Pumpen · gemeinsamer Tank · noch keine Pumpenansteuerung</p>
-        <div class="lamp-control-grid">
-            <article class="lamp-control-card">
-                <span class="lamp-control-label" id="irrigationTankName">Wassertank</span>
-                <strong>Tankstatus unbekannt</strong>
-                <small>WLSW1 noch nicht angebunden. Der Schalter erkennt den Tankzustand, keinen Füllstand in Prozent.</small>
-            </article>
-            <article class="lamp-control-card">
-                <div class="pump-symbol" id="pumpSymbol1" data-running="false" data-preview="false"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="pumpShell1" x1="24" y1="17" x2="74" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#e1ffff" stop-opacity=".62"/><stop offset=".4" stop-color="#77d6e5" stop-opacity=".2"/><stop offset="1" stop-color="#528fc5" stop-opacity=".46"/></linearGradient>
-<linearGradient id="pumpPipe1" x1="9" y1="18" x2="88" y2="81" gradientUnits="userSpaceOnUse"><stop stop-color="#d3faff"/><stop offset=".45" stop-color="#79c6db"/><stop offset="1" stop-color="#57acba"/></linearGradient>
-<linearGradient id="pumpEdge1" x1="24" y1="20" x2="70" y2="77" gradientUnits="userSpaceOnUse"><stop stop-color="#edffff"/><stop offset=".5" stop-color="#9fe8ef" stop-opacity=".55"/><stop offset="1" stop-color="#72dcd3"/></linearGradient>
-<linearGradient id="pumpRotor1" x1="30" y1="25" x2="65" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#ddfff8"/><stop offset=".5" stop-color="#8ce4df"/><stop offset="1" stop-color="#59afce"/></linearGradient>
-<radialGradient id="pumpHub1" cx=".3" cy=".2" r=".9"><stop stop-color="#edffff"/><stop offset=".55" stop-color="#9fdde9"/><stop offset="1" stop-color="#4c90b4"/></radialGradient>
-</defs>
-<!-- Opposing tangential pipe ports, matching the supplied pump silhouette. -->
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="#1c4c61" stroke-opacity=".65" stroke-width="8" stroke-linecap="round"/>
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="url(#pumpPipe1)" stroke-width="5" stroke-linecap="round"/>
-<path d="M50 16.5H78Q88 16.5 89 27M46 76.5H18Q10 76.5 10 69" fill="none" stroke="#ebffff" stroke-opacity=".7" stroke-width="1" stroke-linecap="round"/>
-<rect x="91" y="15" width="4" height="25" rx="2" fill="url(#pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<rect x="1" y="56" width="4" height="25" rx="2" fill="url(#pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<!-- Glass casing remains stationary while the four-vane impeller turns. -->
-<circle cx="48" cy="48" r="31" fill="url(#pumpShell1)" stroke="url(#pumpEdge1)" stroke-width="1.8"/>
-<circle cx="48" cy="48" r="27.5" fill="#163e50" fill-opacity=".48" stroke="#c2fcff" stroke-opacity=".28" stroke-width=".7"/>
-<g class="pump-rotor">
-<g fill="url(#pumpRotor1)" stroke="#d4fff5" stroke-opacity=".65" stroke-width=".6"><path transform="rotate(0 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(90 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(180 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(270 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/></g>
-<g transform="rotate(0 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(90 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(180 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(270 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g>
-<circle cx="48" cy="48" r="9.5" fill="#244d62" stroke="#cdf9fb" stroke-width="1"/>
-<circle cx="48" cy="48" r="6.6" fill="url(#pumpHub1)"/>
-<circle cx="48" cy="48" r="2" fill="#e1ffff" fill-opacity=".8"/>
-</g>
-<path d="M23 38Q30 18 49 20" fill="none" stroke="white" stroke-opacity=".65" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
-<path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
-</svg></div>
-                <span class="lamp-control-label" id="irrigationPumpName1">Pumpe Topf 1</span>
-                <strong id="pumpState1">Nicht verbunden</strong>
-                <small>PPFL-1 · Topf 1 · letzte Bewässerung: —</small>
-                <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
-                <button type="button" class="pump-preview-button" data-pump-preview="1" aria-describedby="pumpPreviewNote1">Animation testen</button>
-                <small id="pumpPreviewNote1" role="status">Symbolvorschau ohne Pumpenansteuerung</small>
-            </article>
-            <article class="lamp-control-card">
-                <div class="pump-symbol" id="pumpSymbol2" data-running="false" data-preview="false"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="pumpShell2" x1="24" y1="17" x2="74" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#e1ffff" stop-opacity=".62"/><stop offset=".4" stop-color="#77d6e5" stop-opacity=".2"/><stop offset="1" stop-color="#528fc5" stop-opacity=".46"/></linearGradient>
-<linearGradient id="pumpPipe2" x1="9" y1="18" x2="88" y2="81" gradientUnits="userSpaceOnUse"><stop stop-color="#d3faff"/><stop offset=".45" stop-color="#79c6db"/><stop offset="1" stop-color="#57acba"/></linearGradient>
-<linearGradient id="pumpEdge2" x1="24" y1="20" x2="70" y2="77" gradientUnits="userSpaceOnUse"><stop stop-color="#edffff"/><stop offset=".5" stop-color="#9fe8ef" stop-opacity=".55"/><stop offset="1" stop-color="#72dcd3"/></linearGradient>
-<linearGradient id="pumpRotor2" x1="30" y1="25" x2="65" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#ddfff8"/><stop offset=".5" stop-color="#8ce4df"/><stop offset="1" stop-color="#59afce"/></linearGradient>
-<radialGradient id="pumpHub2" cx=".3" cy=".2" r=".9"><stop stop-color="#edffff"/><stop offset=".55" stop-color="#9fdde9"/><stop offset="1" stop-color="#4c90b4"/></radialGradient>
-</defs>
-<!-- Opposing tangential pipe ports, matching the supplied pump silhouette. -->
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="#1c4c61" stroke-opacity=".65" stroke-width="8" stroke-linecap="round"/>
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="url(#pumpPipe2)" stroke-width="5" stroke-linecap="round"/>
-<path d="M50 16.5H78Q88 16.5 89 27M46 76.5H18Q10 76.5 10 69" fill="none" stroke="#ebffff" stroke-opacity=".7" stroke-width="1" stroke-linecap="round"/>
-<rect x="91" y="15" width="4" height="25" rx="2" fill="url(#pumpPipe2)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<rect x="1" y="56" width="4" height="25" rx="2" fill="url(#pumpPipe2)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<!-- Glass casing remains stationary while the four-vane impeller turns. -->
-<circle cx="48" cy="48" r="31" fill="url(#pumpShell2)" stroke="url(#pumpEdge2)" stroke-width="1.8"/>
-<circle cx="48" cy="48" r="27.5" fill="#163e50" fill-opacity=".48" stroke="#c2fcff" stroke-opacity=".28" stroke-width=".7"/>
-<g class="pump-rotor">
-<g fill="url(#pumpRotor2)" stroke="#d4fff5" stroke-opacity=".65" stroke-width=".6"><path transform="rotate(0 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(90 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(180 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(270 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/></g>
-<g transform="rotate(0 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(90 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(180 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(270 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g>
-<circle cx="48" cy="48" r="9.5" fill="#244d62" stroke="#cdf9fb" stroke-width="1"/>
-<circle cx="48" cy="48" r="6.6" fill="url(#pumpHub2)"/>
-<circle cx="48" cy="48" r="2" fill="#e1ffff" fill-opacity=".8"/>
-</g>
-<path d="M23 38Q30 18 49 20" fill="none" stroke="white" stroke-opacity=".65" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
-<path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
-</svg></div>
-                <span class="lamp-control-label" id="irrigationPumpName2">Pumpe Topf 2</span>
-                <strong id="pumpState2">Nicht verbunden</strong>
-                <small>PPFL-1 · Topf 2 · letzte Bewässerung: —</small>
-                <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
-                <button type="button" class="pump-preview-button" data-pump-preview="2" aria-describedby="pumpPreviewNote2">Animation testen</button>
-                <small id="pumpPreviewNote2" role="status">Symbolvorschau ohne Pumpenansteuerung</small>
-            </article>
-        </div>
-        <p class="camera-meta" id="irrigationUnavailable">Ausgabe gesperrt: GPIO-Anbindung, Live-Tankstatus und Pumpentreiber fehlen. Gespeicherte Automatik-Einstellungen starten keine Bewässerung.</p>
-        <details class="lamp-config">
-            <summary>Bewässerung einrichten</summary>
-            <form id="irrigationForm">
-                <fieldset id="irrigationFields" disabled>
-                    <legend class="camera-meta">Bezeichnungen</legend>
-                    <div class="lamp-config-grid">
-                        <label>Tank<input id="irrigationTankInput" maxlength="40" required value="Wassertank"></label>
-                        <label>Pumpe für Topf 1<input id="irrigationPumpInput1" maxlength="40" required value="Pumpe Topf 1"></label>
-                        <label>Pumpe für Topf 2<input id="irrigationPumpInput2" maxlength="40" required value="Pumpe Topf 2"></label>
-                    </div>
-<section class="lamp-config-card"><h3>Topf 1 · Automatik &amp; Kalibrierung</h3>
-<label class="lamp-toggle-row"><input type="checkbox" id="waterEnabled1">Automatik vormerken (Hardware gesperrt)</label>
-<div class="lamp-config-grid">
-<label>Gießen unter Bodenfeuchte (%)<input type="number" id="water_threshold_percent_1" min="0" max="100" step="0.1" placeholder="Noch nicht festgelegt"></label>
-<label>Wassermenge pro Vorgang (ml)<input type="number" id="water_dose_ml_1" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
-<label>Einziehpause (Minuten)<input type="number" id="water_pause_minutes_1" min="1" max="10080" step="1" placeholder="Noch nicht festgelegt"></label>
-<label>Maximale Wassermenge pro Tag (ml)<input type="number" id="water_daily_limit_ml_1" min="0.1" max="100000" step="0.1" placeholder="Noch nicht festgelegt"></label>
-<label>Maximale Laufzeit pro Vorgang (Sekunden)<input type="number" id="water_max_run_seconds_1" min="1" max="600" step="1" placeholder="Noch nicht festgelegt"></label>
-<label>Bei Kalibrierung aufgefangene Menge (ml)<input type="number" id="water_calibration_ml_1" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
-<label>Zugehörige gemessene Laufzeit (Sekunden)<input type="number" id="water_calibration_seconds_1" min="1" max="600" step="0.1" placeholder="Noch nicht festgelegt"></label>
-</div><p class="camera-meta" id="waterSummary1" aria-live="polite">Kalibrierung ausstehend</p></section>
-<section class="lamp-config-card"><h3>Topf 2 · Automatik &amp; Kalibrierung</h3>
-<label class="lamp-toggle-row"><input type="checkbox" id="waterEnabled2">Automatik vormerken (Hardware gesperrt)</label>
-<div class="lamp-config-grid">
-<label>Gießen unter Bodenfeuchte (%)<input type="number" id="water_threshold_percent_2" min="0" max="100" step="0.1" placeholder="Noch nicht festgelegt"></label>
-<label>Wassermenge pro Vorgang (ml)<input type="number" id="water_dose_ml_2" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
-<label>Einziehpause (Minuten)<input type="number" id="water_pause_minutes_2" min="1" max="10080" step="1" placeholder="Noch nicht festgelegt"></label>
-<label>Maximale Wassermenge pro Tag (ml)<input type="number" id="water_daily_limit_ml_2" min="0.1" max="100000" step="0.1" placeholder="Noch nicht festgelegt"></label>
-<label>Maximale Laufzeit pro Vorgang (Sekunden)<input type="number" id="water_max_run_seconds_2" min="1" max="600" step="1" placeholder="Noch nicht festgelegt"></label>
-<label>Bei Kalibrierung aufgefangene Menge (ml)<input type="number" id="water_calibration_ml_2" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
-<label>Zugehörige gemessene Laufzeit (Sekunden)<input type="number" id="water_calibration_seconds_2" min="1" max="600" step="0.1" placeholder="Noch nicht festgelegt"></label>
-</div><p class="camera-meta" id="waterSummary2" aria-live="polite">Kalibrierung ausstehend</p></section>
-<p class="camera-meta">Die Bodenfeuchte wird separat im Bereich Bodenfeuchtigkeit mit Trocken- und Nassreferenz kalibriert. Die Prozentwerte sind relativ. Für die Pumpenkalibrierung werden eine tatsächlich gemessene Wassermenge und deren Laufzeit eingetragen; dieser Bildschirm startet keine Pumpe.</p>
-<p class="camera-meta">Geplante Regel: Unterhalb der Schwelle eine feste Wassermenge abgeben, Einziehpause abwarten und dann einen neuen Messwert prüfen. Schwelle und Wassermenge werden bewusst nicht vorbelegt.</p>
-                    <div class="button-row"><button class="primary" type="submit">Einstellungen speichern</button></div>
-                </fieldset>
-                <p id="irrigationMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p>
-                <button type="button" id="irrigationRetry" hidden>Erneut laden</button>
-            </form>
-        </details>
-        <div class="irrigation-history">
-            <h3>Bewässerungsverlauf</h3>
-            <p class="camera-meta">Noch nicht verfügbar. In dieser Vorbereitung werden keine Bewässerungen ausgeführt oder protokolliert.</p>
-        </div>
-    </section>
-
-<section id="fanControlSection" class="panel fan-panel" aria-labelledby="fanHeading">
-<div class="panel-header"><div><p class="eyebrow">LUFT &amp; KLIMA</p><h2 id="fanHeading">Lüftersteuerung</h2></div><span class="camera-meta">Keine PWM-Ausgabe</span></div>
-<p class="camera-meta">Noctua · Zuluft unten und Abluft oben · Anbindung über NA-FC1 vorgesehen</p>
-<div class="fan-grid"><article class="lamp-control-card fan-card">
-<div class="fan-symbol" id="fanIcon-intake" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="fanGlassintake" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#e0ffff" stop-opacity=".58"/><stop offset=".32" stop-color="#91c9e9" stop-opacity=".24"/><stop offset=".68" stop-color="#528bb0" stop-opacity=".18"/><stop offset="1" stop-color="#a2e6f5" stop-opacity=".44"/></linearGradient>
-<linearGradient id="fanEdgeintake" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#e9ffff"/><stop offset=".5" stop-color="#9cbfe1" stop-opacity=".38"/><stop offset="1" stop-color="#d3fff4" stop-opacity=".85"/></linearGradient>
-<linearGradient id="fanBladeintake" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faff"/><stop offset=".42" stop-color="#9fd9ed" stop-opacity=".94"/><stop offset="1" stop-color="#689bcc" stop-opacity=".85"/></linearGradient>
-<radialGradient id="fanHubintake" cx=".32" cy=".22" r=".9"><stop stop-color="#edffff"/><stop offset=".4" stop-color="#a4dbe9"/><stop offset="1" stop-color="#527ea4"/></radialGradient>
-</defs>
-<!-- Square PC fan frame with four visible mounting holes. -->
-<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#fanGlassintake)" stroke="url(#fanEdgeintake)" stroke-width="1.1"/>
-<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
-<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#fanEdgeintake)" stroke-width="1.6"/>
-<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
-<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
-<!-- Seven swept blades; the existing animation rotates around 48,48. -->
-<g class="fan-rotor" fill="url(#fanBladeintake)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
-<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
-<circle cx="48" cy="48" r="8.7" fill="url(#fanHubintake)"/>
-<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
-<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
-<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
-<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
-</svg></div>
-<span class="lamp-control-label">Zuluft · unten</span>
-<h3 id="fanTitle-intake">Zuluft unten</h3>
-<strong>Hardware ausstehend</strong>
-<p id="fanSaved-intake" class="camera-meta">Gespeicherter Sollwert wird geladen …</p>
-<small>Ist-Leistung: — · Drehzahl: —</small>
-<button type="button" class="fan-preview" data-fan="intake">Animation testen</button>
-<small id="fanPreviewNote-intake" role="status">Symbolvorschau ohne Lüfteransteuerung</small>
-</article><article class="lamp-control-card fan-card">
-<div class="fan-symbol" id="fanIcon-exhaust" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="fanGlassexhaust" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#e0ffff" stop-opacity=".58"/><stop offset=".32" stop-color="#91c9e9" stop-opacity=".24"/><stop offset=".68" stop-color="#528bb0" stop-opacity=".18"/><stop offset="1" stop-color="#a2e6f5" stop-opacity=".44"/></linearGradient>
-<linearGradient id="fanEdgeexhaust" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#e9ffff"/><stop offset=".5" stop-color="#9cbfe1" stop-opacity=".38"/><stop offset="1" stop-color="#d3fff4" stop-opacity=".85"/></linearGradient>
-<linearGradient id="fanBladeexhaust" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faff"/><stop offset=".42" stop-color="#9fd9ed" stop-opacity=".94"/><stop offset="1" stop-color="#689bcc" stop-opacity=".85"/></linearGradient>
-<radialGradient id="fanHubexhaust" cx=".32" cy=".22" r=".9"><stop stop-color="#edffff"/><stop offset=".4" stop-color="#a4dbe9"/><stop offset="1" stop-color="#527ea4"/></radialGradient>
-</defs>
-<!-- Square PC fan frame with four visible mounting holes. -->
-<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#fanGlassexhaust)" stroke="url(#fanEdgeexhaust)" stroke-width="1.1"/>
-<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
-<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#fanEdgeexhaust)" stroke-width="1.6"/>
-<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
-<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
-<!-- Seven swept blades; the existing animation rotates around 48,48. -->
-<g class="fan-rotor" fill="url(#fanBladeexhaust)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
-<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
-<circle cx="48" cy="48" r="8.7" fill="url(#fanHubexhaust)"/>
-<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
-<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
-<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
-<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
-</svg></div>
-<span class="lamp-control-label">Abluft · oben</span>
-<h3 id="fanTitle-exhaust">Abluft oben</h3>
-<strong>Hardware ausstehend</strong>
-<p id="fanSaved-exhaust" class="camera-meta">Gespeicherter Sollwert wird geladen …</p>
-<small>Ist-Leistung: — · Drehzahl: —</small>
-<button type="button" class="fan-preview" data-fan="exhaust">Animation testen</button>
-<small id="fanPreviewNote-exhaust" role="status">Symbolvorschau ohne Lüfteransteuerung</small>
-</article></div>
-<details class="lamp-config"><summary>Lüfter einrichten</summary>
-<form id="fanForm"><fieldset id="fanFields" disabled><legend class="camera-meta">Einstellungen je Lüfter</legend>
-<div class="fan-grid"><section class="lamp-config-card"><h3>Zuluft unten</h3>
-<label>Name<input id="fanName-intake" value="Zuluft unten" maxlength="40" required></label>
-<label>Modus<select id="fanMode-intake"><option value="off">AUS</option><option value="manual">MANUELL (vorgemerkt)</option><option disabled>AUTO – später verfügbar</option></select></label>
-<label>Gewünschte Leistung (%)<input id="fanPower-intake" type="number" min="0" max="100" step="1" value="0" required></label>
-<label>Mindestleistung bei Betrieb (%)<input id="fanMinimum-intake" type="number" min="0" max="100" step="1" value="0" required></label>
-<p class="camera-meta" id="fanDraft-intake" aria-live="polite">Vorgemerkter Sollwert: 0 %</p>
-</section><section class="lamp-config-card"><h3>Abluft oben</h3>
-<label>Name<input id="fanName-exhaust" value="Abluft oben" maxlength="40" required></label>
-<label>Modus<select id="fanMode-exhaust"><option value="off">AUS</option><option value="manual">MANUELL (vorgemerkt)</option><option disabled>AUTO – später verfügbar</option></select></label>
-<label>Gewünschte Leistung (%)<input id="fanPower-exhaust" type="number" min="0" max="100" step="1" value="0" required></label>
-<label>Mindestleistung bei Betrieb (%)<input id="fanMinimum-exhaust" type="number" min="0" max="100" step="1" value="0" required></label>
-<p class="camera-meta" id="fanDraft-exhaust" aria-live="polite">Vorgemerkter Sollwert: 0 %</p>
-</section></div>
-<p class="camera-meta">AUS und 0 % ergeben einen Sollwert von 0 %. Bei positivem manuellem Wert gilt mindestens die eingestellte Mindestleistung. Diese Werte sind noch keine gemessene Drehzahl oder tatsächliche PWM-Ausgabe.</p>
-<p class="camera-meta">Die Mindestleistung muss später am Lüfter geprüft werden. Ob Zu- und Abluft unabhängig ansteuerbar sind, hängt von der noch offenen Kanalzuordnung am NA-FC1 ab.</p>
-<button type="submit" class="primary">Einstellungen speichern</button>
-</fieldset><p id="fanMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p><button type="button" id="fanRetry" hidden>Erneut laden</button></form>
-</details></section>
-
-    <!-- SYSTEM -->
-
-    <section class="main-grid system-only-grid">
-
-
-        <!-- KAMERA -->
-
-        <!-- SYSTEM -->
-
-        <article class="panel">
-
-            <div class="panel-header">
-
-                <div>
-
-                    <p class="eyebrow">
-                        SYSTEM
-                    </p>
-
-                    <h2>
-                        Aktuelle Messung
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="info-row">
-
-                <span>
-                    Letzte Aktualisierung
-                </span>
-
-                <strong id="lastUpdate">
-                    --
-                </strong>
-
-            </div>
-
-
-            <div class="info-row">
-
-                <span>
-                    CPU Temperatur
-                </span>
-
-                <strong>
-
-                    <span id="cpuTemperature">
-                        --
-                    </span>
-
-                    °C
-
-                </strong>
-
-            </div>
-
-
-            <div class="info-row">
-
-                <span>
-                    Sensor Rohwert
-                </span>
-
-                <strong>
-
-                    <span id="rawTemperature">
-                        --
-                    </span>
-
-                    °C
-
-                </strong>
-
-            </div>
-
-
-            <div class="info-row">
-
-                <span>
-                    Roh-Feuchte
-                </span>
-
-                <strong>
-
-                    <span id="rawHumidity">
-                        --
-                    </span>
-
-                    %
-
-                </strong>
-
-            </div>
-
-
-            <div class="api-state">
-
-                <span class="status-dot"></span>
-
-                Enviro+ verbunden
-
-            </div>
-
-        </article>
-
-    </section>
-
-
-    <!-- FOTO-HISTORY / ZEITRAFFER -->
-
-    <section
-        class="panel photo-history-panel"
-        id="photoHistoryPanel"
-        hidden
-    >
-
-        <div class="panel-header history-header">
-
-            <div>
-
-                <p class="eyebrow">
-                    KAMERA-ARCHIV
-                </p>
-
-                <h2>
-                    Bilder & Zeitraffer
-                </h2>
-
-            </div>
-
-            <button
-                id="closePhotoHistoryButton"
-            >
-                Schließen
-            </button>
-
-        </div>
-
-
-        <div class="timelapse-controls">
-
-            <label>
-                Automatische Aufnahme
-
-                <select id="timelapseInterval">
-                    <option value="60">jede Stunde</option>
-                    <option value="180">alle 3 Stunden</option>
-                    <option value="360">alle 6 Stunden</option>
-                    <option value="720" selected>alle 12 Stunden · 2/Tag</option>
-                    <option value="1440">alle 24 Stunden · 1/Tag</option>
-                    <option value="2880">alle 48 Stunden</option>
-                </select>
-            </label>
-
-            <button
-                class="primary"
-                id="timelapseToggleButton"
-            >
-                Zeitraffer starten
-            </button>
-
-            <button
-                id="timelapsePlayButton"
-            >
-                ▶ Bilder abspielen
-            </button>
-
-            <span
-                class="camera-meta"
-                id="timelapseStatus"
-            >
-                Wird geladen …
-            </span>
-
-        </div>
-
-
-        <div
-            class="timelapse-player"
-            id="timelapsePlayer"
-            hidden
-        >
-
-            <img
-                id="timelapseImage"
-                alt="Zeitraffer"
-            >
-
-            <div class="timelapse-player-meta">
-
-                <span id="timelapsePlayerDate">
-                    --
-                </span>
-
-                <button id="timelapseStopButton">
-                    Stop
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div
-            class="photo-grid"
-            id="photoGrid"
-        ></div>
-
-        <p
-            class="estimate-note"
-            id="photoHistoryEmpty"
-            hidden
-        >
-            Noch keine gespeicherten Bilder vorhanden.
-        </p>
-
-    </section>
-
-
-    <!-- HISTORY -->
-
-    <section class="panel history-panel">
+<section class="panel overview-analysis" id="overviewAnalysis" aria-labelledby="overviewAnalysisHeading"><h2 id="overviewAnalysisHeading">Klima- &amp; Lichtverlauf</h2><section class="panel history-panel">
 
         <div class="panel-header history-header">
 
@@ -1316,9 +224,7 @@
 
                 <div class="chart-canvas">
 
-                    <canvas
-                        id="temperatureChart"
-                    ></canvas>
+                    <canvas id="temperatureChart"></canvas>
 
                 </div>
 
@@ -1334,9 +240,7 @@
 
                 <div class="chart-canvas">
 
-                    <canvas
-                        id="humidityChart"
-                    ></canvas>
+                    <canvas id="humidityChart"></canvas>
 
                 </div>
 
@@ -1352,9 +256,7 @@
 
                 <div class="chart-canvas">
 
-                    <canvas
-                        id="vpdChart"
-                    ></canvas>
+                    <canvas id="vpdChart"></canvas>
 
                 </div>
 
@@ -1370,9 +272,7 @@
 
                 <div class="chart-canvas">
 
-                    <canvas
-                        id="luxChart"
-                    ></canvas>
+                    <canvas id="luxChart"></canvas>
 
                 </div>
 
@@ -1387,9 +287,7 @@
 
                 <div class="chart-canvas">
 
-                    <canvas
-                        id="soilMoisture1Chart"
-                    ></canvas>
+                    <canvas id="soilMoisture1Chart"></canvas>
 
                 </div>
 
@@ -1405,9 +303,7 @@
 
                 <div class="chart-canvas">
 
-                    <canvas
-                        id="soilMoisture2Chart"
-                    ></canvas>
+                    <canvas id="soilMoisture2Chart"></canvas>
 
                 </div>
 
@@ -1418,8 +314,6 @@
     </section>
 
 
-    <!-- UNTEN -->
-
     <section class="bottom-grid">
 
 
@@ -1429,12 +323,7 @@
 
             <div class="bottom-panel-heading light-panel-heading">
 
-                <span
-                    id="lightIcon"
-                    class="glass-icon glass-icon--light light-state-icon light-heading-icon js-light-state-icon"
-                    data-state="off"
-                    aria-hidden="true"
-                >
+                <span id="lightIcon" class="glass-icon glass-icon--light light-state-icon light-heading-icon js-light-state-icon" data-state="off" aria-hidden="true">
                     <svg class="glass-glyph light-state-sun" viewBox="0 0 48 48" focusable="false"><defs><linearGradient id="glass-light-status" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4bf"/><stop offset=".48" stop-color="#ffc64f"/><stop offset="1" stop-color="#f18134"/></linearGradient></defs><g stroke="#ffc64f" stroke-width="2.5" stroke-linecap="round"><path d="M24 3v5m0 32v5M3 24h5m32 0h5M9 9l4 4m22 22 4 4M9 39l4-4m22-22 4-4"/></g><circle cx="24" cy="24" r="11" fill="url(#glass-light-status)" stroke="#fff4bf" stroke-opacity=".65" stroke-width="1.2"/><path d="M17 23a7 7 0 0 1 7-7" fill="none" stroke="#fff9df" stroke-width="2" stroke-linecap="round"/></svg>
                     <svg class="glass-glyph light-state-moon" viewBox="0 0 48 48" fill="none" focusable="false"><path d="M34 37c-13 2-22-7-20-20 1-6 5-10 10-13-2 12 7 21 19 18-1 7-4 12-9 15Z" fill="#d7ecff" fill-opacity=".8" stroke="#eff8ff" stroke-opacity=".75" stroke-width="1.3"/><path d="M31 12h1m7 5h1m-6 8h1" stroke="#fff7c7" stroke-width="2.5" stroke-linecap="round"/></svg>
                 </span>
@@ -1609,10 +498,7 @@
             </div>
 
 
-            <div
-                class="climate-state"
-                id="climateState"
-            >
+            <div class="climate-state" id="climateState">
                 Messwerte werden geladen …
             </div>
 
@@ -1621,10 +507,7 @@
     </section>
 
 
-    <!-- KAMERA GANZ UNTEN -->
-
-    <div class="controls-camera-bottom">
-        <div id="controlsCameraSlot" class="camera-panel-slot"><article class="panel camera-panel" id="sharedCameraPanel">
+    </section><div id="overviewCameraSlot"><article class="panel camera-panel" id="sharedCameraPanel">
 
             <div class="panel-header">
 
@@ -1648,15 +531,9 @@
             </div>
 
 
-            <div
-                class="camera-placeholder"
-                id="cameraArea"
-            >
+            <div class="camera-placeholder" id="cameraArea">
 
-                <div
-                    class="camera-empty"
-                    id="cameraEmpty"
-                >
+                <div class="camera-empty" id="cameraEmpty">
 
                     <span class="camera-icon">
                         📷
@@ -1672,48 +549,30 @@
 
                 </div>
 
-                <img
-                    id="cameraImage"
-                    class="camera-image"
-                    alt="Aktuelle Pflanzenansicht"
-                    hidden
-                >
+                <img id="cameraImage" class="camera-image" alt="Aktuelle Pflanzenansicht" hidden>
 
             </div>
 
 
             <div class="button-row">
 
-                <button
-                    class="primary"
-                    id="captureButton"
-                >
+                <button class="primary" id="captureButton">
                     📷 Foto aufnehmen
                 </button>
 
-                <button
-                    id="galleryButton"
-                >
+                <button id="galleryButton">
                     🖼️ Bilder
                 </button>
 
-                <button
-                    id="timelapseButton"
-                >
+                <button id="timelapseButton">
                     ⏱️ Zeitraffer
                 </button>
 
-                <button
-                    id="fullscreenButton"
-                    disabled
-                >
+                <button id="fullscreenButton" disabled>
                     Vollbild
                 </button>
 
-                <span
-                    class="camera-meta"
-                    id="cameraMeta"
-                >
+                <span class="camera-meta" id="cameraMeta">
                     Kamera wird geprüft …
                 </span>
 
@@ -1722,13 +581,983 @@
         </article>
 
 
+        </div><div id="overviewHistorySlot"><section class="panel photo-history-panel" id="photoHistoryPanel" hidden>
+
+        <div class="panel-header history-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    KAMERA-ARCHIV
+                </p>
+
+                <h2>
+                    Bilder &amp; Zeitraffer
+                </h2>
+
+            </div>
+
+            <button id="closePhotoHistoryButton">
+                Schließen
+            </button>
+
         </div>
-    </div>
-
-    <div id="controlsHistorySlot"></div>
 
 
-</div>
+        <div class="timelapse-controls">
+
+            <label>
+                Automatische Aufnahme
+
+                <select id="timelapseInterval">
+                    <option value="60">jede Stunde</option>
+                    <option value="180">alle 3 Stunden</option>
+                    <option value="360">alle 6 Stunden</option>
+                    <option value="720" selected>alle 12 Stunden · 2/Tag</option>
+                    <option value="1440">alle 24 Stunden · 1/Tag</option>
+                    <option value="2880">alle 48 Stunden</option>
+                </select>
+            </label>
+
+            <button class="primary" id="timelapseToggleButton">
+                Zeitraffer starten
+            </button>
+
+            <button id="timelapsePlayButton">
+                ▶ Bilder abspielen
+            </button>
+
+            <span class="camera-meta" id="timelapseStatus">
+                Wird geladen …
+            </span>
+
+        </div>
+
+
+        <div class="timelapse-player" id="timelapsePlayer" hidden>
+
+            <img id="timelapseImage" alt="Zeitraffer">
+
+            <div class="timelapse-player-meta">
+
+                <span id="timelapsePlayerDate">
+                    --
+                </span>
+
+                <button id="timelapseStopButton">
+                    Stop
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="photo-grid" id="photoGrid"></div>
+
+        <p class="estimate-note" id="photoHistoryEmpty" hidden>
+            Noch keine gespeicherten Bilder vorhanden.
+        </p>
+
+    </section>
+
+
+    </div></main>
+<div id="controlsView" hidden>
+
+    <nav class="control-jump-nav" aria-label="Steuerungsbereiche"><button type="button" data-jump="lampControlSection">Licht</button><button type="button" data-jump="irrigationControlSection">Wasser &amp; Töpfe</button><button type="button" data-jump="fanControlSection">Lüftung</button><button type="button" data-jump="systemDiagnostics">System</button></nav><section class="panel lamp-control-panel" id="lampControlSection">
+
+        <div class="panel-header">
+
+            <div class="lamp-control-heading">
+
+                <span class="glass-icon glass-icon--lamp-control" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" class="glass-glyph" focusable="false">
+                        <defs>
+                            <linearGradient id="glass-lamp-control-body" x1="0" y1="0" x2="1" y2="1">
+                                <stop stop-color="#fff2b6"/>
+                                <stop offset=".5" stop-color="#ffc954"/>
+                                <stop offset="1" stop-color="#f08a35"/>
+                            </linearGradient>
+                            <linearGradient id="glass-lamp-control-slider" x1="0" y1="0" x2="1" y2="1">
+                                <stop stop-color="#ffe8a0"/>
+                                <stop offset=".55" stop-color="#ffbf47"/>
+                                <stop offset="1" stop-color="#f19d32"/>
+                            </linearGradient>
+                        </defs>
+
+                        <rect x="9" y="8" width="30" height="9" rx="4.5"
+                              fill="url(#glass-lamp-control-body)"
+                              stroke="#fff4c7" stroke-opacity=".7" stroke-width="1.2"/>
+
+                        <path d="M14 8V5M34 8V5"
+                              stroke="#ffd978" stroke-width="1.8" stroke-linecap="round"/>
+
+                        <path d="M16 21L13 29M24 21V31M32 21L35 29"
+                              stroke="#ffd46b" stroke-width="2.2" stroke-linecap="round"/>
+
+                        <rect x="11" y="35" width="26" height="4" rx="2"
+                              fill="rgba(255,255,255,.12)"
+                              stroke="rgba(255,241,195,.35)" stroke-width="1"/>
+
+                        <circle cx="29" cy="37" r="4"
+                                fill="url(#glass-lamp-control-slider)"
+                                stroke="#fff1c0" stroke-opacity=".75" stroke-width="1.2"/>
+                    </svg>
+                </span>
+
+                <div>
+                    <p class="eyebrow">
+                        LAMPENSTEUERUNG
+                    </p>
+
+                    <h2 id="lampControlName">
+                        Pflanzenlampe
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <span class="badge" id="lampControlStatus">
+                Hardware ausstehend
+            </span>
+
+        </div>
+
+
+        <div class="lamp-control-grid">
+
+            <article class="lamp-control-card">
+
+                <span class="lamp-control-label">
+                    Leistung
+                </span>
+
+                <strong id="lampPowerPreview">
+                    0 %
+                </strong>
+
+                <small>
+                    Zielwert · noch nicht ausgegeben
+                </small>
+
+            </article>
+
+
+            <article class="lamp-control-card">
+
+                <span class="lamp-control-label">
+                    Zeitplan
+                </span>
+
+                <strong id="lampSchedulePreview">
+                    Aus
+                </strong>
+
+                <small id="lampScheduleTimes">
+                    08:00 – 20:00
+                </small>
+                <small id="lampDurationPreview">12 h 00 min Einschaltzeit</small>
+
+            </article>
+
+
+            <article class="lamp-control-card lamp-profile-card" id="lampProfileCard" data-profile="custom">
+
+                <span class="lamp-control-label">
+                    Profil
+                </span>
+
+                <div class="lamp-profile-display">
+
+                    <img id="lampProfileImage" class="lamp-profile-image" src="/static/profile-flower.svg?v=2" alt="" hidden>
+
+                    <span id="lampProfilePlaceholder" class="lamp-profile-placeholder" aria-hidden="true">
+                        <svg
+                            viewBox="0 0 48 48"
+                            focusable="false"
+                        >
+                            <path
+                                d="M11 35C4 17 25 11 39 8c0 15-5 29-22 31"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M10 41c6-13 14-21 25-27"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                    </span>
+
+                    <div class="lamp-profile-copy">
+
+                        <strong id="lampProfilePreview">
+                            Benutzerdefiniert
+                        </strong>
+
+                        <small>
+                            persistent gespeichert
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <details class="lamp-config">
+
+            <summary>
+                Konfiguration
+            </summary>
+
+            <p class="estimate-note">
+                Die Einstellungen werden bereits persistent auf dem Raspberry Pi gespeichert.
+                Solange der GP8600 noch nicht angebunden ist, wird kein 0–10-V-Ausgang angesteuert.
+            </p>
+
+
+            <div class="lamp-config-grid">
+
+                <div class="lamp-config-card">
+
+                    <strong>
+                        Lampe
+                    </strong>
+
+                    <label>
+                        Name
+                        <input id="lampNameInput" type="text" maxlength="40" value="Pflanzenlampe">
+                    </label>
+
+                    <label>
+                        Profil
+                        <select id="lampProfileInput">
+                            <option value="custom">Benutzerdefiniert</option>
+                            <option value="growth">Wachstum</option>
+                            <option value="flower">Blüte</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Leistung
+                        <div class="lamp-range-row">
+                            <input id="lampPowerInput" type="range" min="0" max="100" step="1" value="0">
+                            <output id="lampPowerOutput" for="lampPowerInput">
+                                0 %
+                            </output>
+                        </div>
+                    </label>
+
+                </div>
+
+
+                <div class="lamp-config-card">
+
+                    <strong>
+                        Zeitplan
+                    </strong>
+
+                    <label class="lamp-toggle-row">
+                        <input id="lampScheduleEnabled" type="checkbox">
+                        <span>
+                            Zeitplan aktivieren
+                        </span>
+                    </label>
+
+                    <div class="lamp-time-grid">
+
+                        <label>
+                            Einschalten
+                            <input id="lampOnTime" type="time" value="08:00">
+                        </label>
+
+                        <label>
+                            Ausschalten
+                            <input id="lampOffTime" type="time" value="20:00">
+                        </label>
+
+                    </div>
+
+                    <p class="lamp-safety-note">
+                        Sicher vorbereitet: Standardmässig 0 % und Zeitplan aus.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="button-row">
+
+                <button class="primary" id="saveLampConfigButton">
+                    Einstellungen speichern
+                </button>
+
+                <span class="camera-meta" id="lampConfigMessage">
+                    Hardware noch nicht verbunden
+                </span>
+
+            </div>
+
+        </details>
+
+    </section>
+
+
+
+    <section id="irrigationControlSection" class="panel irrigation-panel" aria-labelledby="irrigationHeading">
+        <div class="panel-header">
+            <div class="lamp-control-heading">
+                <span class="glass-icon irrigation-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" fill="none">
+                        <defs><linearGradient id="waterGlass" x1="12" y1="6" x2="52" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#ddffff"/><stop offset=".45" stop-color="#50dce9"/><stop offset="1" stop-color="#347bf3"/></linearGradient></defs>
+                        <path d="M32 7C27 17 13 29 13 40a19 19 0 0 0 38 0C51 29 37 17 32 7Z" fill="url(#waterGlass)" stroke="#c8ffff" stroke-opacity=".65"/>
+                        <path d="M25 29c-5 6-7 10-6 15" stroke="white" stroke-opacity=".85" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M30 53c9 1 15-5 16-12" stroke="#8bffff" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <div><p class="eyebrow">WASSER &amp; VERSORGUNG</p><h2 id="irrigationHeading">Wasser &amp; Töpfe</h2></div>
+            </div>
+            <span class="camera-meta">Hardware ausstehend</span>
+        </div>
+        <span class="badge" id="soilStatus">
+                Hardware ausstehend
+            </span>
+
+        <p class="camera-meta">Zwei getrennte Pumpen · gemeinsamer Tank · noch keine Pumpenansteuerung</p>
+        <div class="lamp-control-grid water-top-grid">
+            <article class="lamp-control-card">
+                <span class="tank-symbol" data-tank-state="unknown" role="img" aria-label="Tankstatus unbekannt">
+<svg viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="tank-control-shell" x1="17" y1="24" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#e7ffff" stop-opacity=".52"/><stop offset=".5" stop-color="#9ccee0" stop-opacity=".13"/><stop offset="1" stop-color="#8acbde" stop-opacity=".38"/></linearGradient>
+<linearGradient id="tank-control-water" x1="27" y1="40" x2="73" y2="82" gradientUnits="userSpaceOnUse"><stop class="tank-liquid-light" stop-color="var(--tank-light)"/><stop offset="1" class="tank-liquid-dark" stop-color="var(--tank-dark)"/></linearGradient>
+</defs>
+<path d="M25 27V18h17v9" fill="url(#tank-control-shell)" stroke="#c5ecf1" stroke-opacity=".65" stroke-width="1.2"/>
+<rect x="20" y="9" width="28" height="12" rx="4" fill="url(#tank-control-shell)" stroke="#d9faff" stroke-opacity=".75"/>
+<path d="M25 13h18" stroke="white" stroke-opacity=".65" stroke-linecap="round"/>
+<rect x="10" y="27" width="76" height="58" rx="15" fill="url(#tank-control-shell)" stroke="#d7faff" stroke-opacity=".7" stroke-width="1.3"/>
+<path class="tank-fill-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46V70Q81 80 70 80H26Q15 80 15 70Z" fill="url(#tank-control-water)" fill-opacity=".86"/>
+<path class="tank-fill-empty" d="M15 72Q23 69 31 72T47 72T63 72T81 72Q80 80 70 80H26Q16 80 15 72Z" fill="url(#tank-control-water)" fill-opacity=".9"/>
+<path class="tank-wave-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46" fill="none" stroke="var(--tank-light)" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M16 50V42q0-9 10-9h30" fill="none" stroke="white" stroke-opacity=".62" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M78 57v12q0 9-9 9" fill="none" stroke="#dbffff" stroke-opacity=".42" stroke-width="1.2" stroke-linecap="round"/>
+<g class="tank-unknown-mark" fill="none" stroke="#d2e4ed" stroke-width="2.4" stroke-linecap="round"><path d="M43 51c0-7 12-7 12 0 0 4-6 4-6 9"/><path d="M49 66v.3"/></g>
+<g class="tank-empty-mark" stroke="#ffd8db" stroke-width="2.7" stroke-linecap="round"><path d="M49 46v12M49 64v.3"/></g>
+</svg></span>
+<span class="lamp-control-label" id="irrigationTankName">Wassertank</span>
+                <strong id="irrigationTankState">Tankstatus unbekannt</strong>
+                <small>WLSW1 noch nicht angebunden. Der Schalter erkennt den Tankzustand, keinen Füllstand in Prozent.</small>
+            </article>
+            <article class="lamp-control-card">
+                <div class="soil-card integrated-soil-reading">
+
+                <div class="sensor-header">
+                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-soil-1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9fff0"/><stop offset=".5" stop-color="#69ddb1"/><stop offset="1" stop-color="#2c8d72"/></linearGradient></defs><path d="M12 32h24l-3 10H15l-3-10Z" fill="url(#glass-soil-1)" stroke="#d9fff0" stroke-opacity=".62" stroke-width="1.2"/><path d="M24 33V18" fill="none" stroke="#efffe9" stroke-width="2" stroke-linecap="round"/><path d="M24 25c-8 0-11-5-11-10 7 0 11 3 11 10Zm0-4c0-7 4-11 11-11 0 7-4 11-11 11Z" fill="url(#glass-soil-1)" stroke="#e4ffd8" stroke-opacity=".7" stroke-width="1.2"/><path d="M10 36h28" stroke="#b8e7cf" stroke-opacity=".7" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+
+                    <span id="soilName1">
+                        Topf 1
+                    </span>
+                </div>
+
+                <div class="sensor-value">
+
+                    <span id="soilMoisture1">
+                        --
+                    </span>
+
+                    <small>%</small>
+
+                </div>
+
+                <div class="soil-details">
+
+                    <span>
+                        ADS1115 A0
+                    </span>
+
+                    <span>
+                        Rohwert:
+                        <strong id="soilRaw1">--</strong>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="pump-symbol" id="pumpSymbol1" data-running="false" data-preview="false"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="pumpShell1" x1="24" y1="17" x2="74" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#e1ffff" stop-opacity=".62"/><stop offset=".4" stop-color="#77d6e5" stop-opacity=".2"/><stop offset="1" stop-color="#528fc5" stop-opacity=".46"/></linearGradient>
+<linearGradient id="pumpPipe1" x1="9" y1="18" x2="88" y2="81" gradientUnits="userSpaceOnUse"><stop stop-color="#d3faff"/><stop offset=".45" stop-color="#79c6db"/><stop offset="1" stop-color="#57acba"/></linearGradient>
+<linearGradient id="pumpEdge1" x1="24" y1="20" x2="70" y2="77" gradientUnits="userSpaceOnUse"><stop stop-color="#edffff"/><stop offset=".5" stop-color="#9fe8ef" stop-opacity=".55"/><stop offset="1" stop-color="#72dcd3"/></linearGradient>
+<linearGradient id="pumpRotor1" x1="30" y1="25" x2="65" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#ddfff8"/><stop offset=".5" stop-color="#8ce4df"/><stop offset="1" stop-color="#59afce"/></linearGradient>
+<radialGradient id="pumpHub1" cx=".3" cy=".2" r=".9"><stop stop-color="#edffff"/><stop offset=".55" stop-color="#9fdde9"/><stop offset="1" stop-color="#4c90b4"/></radialGradient>
+</defs>
+<!-- Opposing tangential pipe ports, matching the supplied pump silhouette. -->
+<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="#1c4c61" stroke-opacity=".65" stroke-width="8" stroke-linecap="round"/>
+<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="url(#pumpPipe1)" stroke-width="5" stroke-linecap="round"/>
+<path d="M50 16.5H78Q88 16.5 89 27M46 76.5H18Q10 76.5 10 69" fill="none" stroke="#ebffff" stroke-opacity=".7" stroke-width="1" stroke-linecap="round"/>
+<rect x="91" y="15" width="4" height="25" rx="2" fill="url(#pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
+<rect x="1" y="56" width="4" height="25" rx="2" fill="url(#pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
+<!-- Glass casing remains stationary while the four-vane impeller turns. -->
+<circle cx="48" cy="48" r="31" fill="url(#pumpShell1)" stroke="url(#pumpEdge1)" stroke-width="1.8"/>
+<circle cx="48" cy="48" r="27.5" fill="#163e50" fill-opacity=".48" stroke="#c2fcff" stroke-opacity=".28" stroke-width=".7"/>
+<g class="pump-rotor">
+<g fill="url(#pumpRotor1)" stroke="#d4fff5" stroke-opacity=".65" stroke-width=".6"><path transform="rotate(0 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(90 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(180 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(270 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/></g>
+<g transform="rotate(0 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(90 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(180 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(270 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g>
+<circle cx="48" cy="48" r="9.5" fill="#244d62" stroke="#cdf9fb" stroke-width="1"/>
+<circle cx="48" cy="48" r="6.6" fill="url(#pumpHub1)"/>
+<circle cx="48" cy="48" r="2" fill="#e1ffff" fill-opacity=".8"/>
+</g>
+<path d="M23 38Q30 18 49 20" fill="none" stroke="white" stroke-opacity=".65" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
+<path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
+</svg></div>
+                <span class="lamp-control-label" id="irrigationPumpName1">Pumpe Topf 1</span>
+                <strong id="pumpState1">Nicht verbunden</strong>
+                <small>PPFL-1 · Topf 1 · letzte Bewässerung: —</small>
+                <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
+                <button type="button" class="pump-preview-button" data-pump-preview="1" aria-describedby="pumpPreviewNote1">Animation testen</button>
+                <small id="pumpPreviewNote1" role="status">Symbolvorschau ohne Pumpenansteuerung</small>
+            </article>
+            <article class="lamp-control-card">
+                <div class="soil-card integrated-soil-reading">
+
+                <div class="sensor-header">
+                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-soil-2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9fff0"/><stop offset=".5" stop-color="#69ddb1"/><stop offset="1" stop-color="#2c8d72"/></linearGradient></defs><path d="M12 32h24l-3 10H15l-3-10Z" fill="url(#glass-soil-2)" stroke="#d9fff0" stroke-opacity=".62" stroke-width="1.2"/><path d="M24 33V18" fill="none" stroke="#efffe9" stroke-width="2" stroke-linecap="round"/><path d="M24 25c-8 0-11-5-11-10 7 0 11 3 11 10Zm0-4c0-7 4-11 11-11 0 7-4 11-11 11Z" fill="url(#glass-soil-2)" stroke="#e4ffd8" stroke-opacity=".7" stroke-width="1.2"/><path d="M10 36h28" stroke="#b8e7cf" stroke-opacity=".7" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+
+                    <span id="soilName2">
+                        Topf 2
+                    </span>
+                </div>
+
+                <div class="sensor-value">
+
+                    <span id="soilMoisture2">
+                        --
+                    </span>
+
+                    <small>%</small>
+
+                </div>
+
+                <div class="soil-details">
+
+                    <span>
+                        ADS1115 A1
+                    </span>
+
+                    <span>
+                        Rohwert:
+                        <strong id="soilRaw2">--</strong>
+                    </span>
+
+                </div>
+
+            </div>
+
+        <div class="pump-symbol" id="pumpSymbol2" data-running="false" data-preview="false"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="pumpShell2" x1="24" y1="17" x2="74" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#e1ffff" stop-opacity=".62"/><stop offset=".4" stop-color="#77d6e5" stop-opacity=".2"/><stop offset="1" stop-color="#528fc5" stop-opacity=".46"/></linearGradient>
+<linearGradient id="pumpPipe2" x1="9" y1="18" x2="88" y2="81" gradientUnits="userSpaceOnUse"><stop stop-color="#d3faff"/><stop offset=".45" stop-color="#79c6db"/><stop offset="1" stop-color="#57acba"/></linearGradient>
+<linearGradient id="pumpEdge2" x1="24" y1="20" x2="70" y2="77" gradientUnits="userSpaceOnUse"><stop stop-color="#edffff"/><stop offset=".5" stop-color="#9fe8ef" stop-opacity=".55"/><stop offset="1" stop-color="#72dcd3"/></linearGradient>
+<linearGradient id="pumpRotor2" x1="30" y1="25" x2="65" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#ddfff8"/><stop offset=".5" stop-color="#8ce4df"/><stop offset="1" stop-color="#59afce"/></linearGradient>
+<radialGradient id="pumpHub2" cx=".3" cy=".2" r=".9"><stop stop-color="#edffff"/><stop offset=".55" stop-color="#9fdde9"/><stop offset="1" stop-color="#4c90b4"/></radialGradient>
+</defs>
+<!-- Opposing tangential pipe ports, matching the supplied pump silhouette. -->
+<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="#1c4c61" stroke-opacity=".65" stroke-width="8" stroke-linecap="round"/>
+<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="url(#pumpPipe2)" stroke-width="5" stroke-linecap="round"/>
+<path d="M50 16.5H78Q88 16.5 89 27M46 76.5H18Q10 76.5 10 69" fill="none" stroke="#ebffff" stroke-opacity=".7" stroke-width="1" stroke-linecap="round"/>
+<rect x="91" y="15" width="4" height="25" rx="2" fill="url(#pumpPipe2)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
+<rect x="1" y="56" width="4" height="25" rx="2" fill="url(#pumpPipe2)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
+<!-- Glass casing remains stationary while the four-vane impeller turns. -->
+<circle cx="48" cy="48" r="31" fill="url(#pumpShell2)" stroke="url(#pumpEdge2)" stroke-width="1.8"/>
+<circle cx="48" cy="48" r="27.5" fill="#163e50" fill-opacity=".48" stroke="#c2fcff" stroke-opacity=".28" stroke-width=".7"/>
+<g class="pump-rotor">
+<g fill="url(#pumpRotor2)" stroke="#d4fff5" stroke-opacity=".65" stroke-width=".6"><path transform="rotate(0 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(90 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(180 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(270 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/></g>
+<g transform="rotate(0 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(90 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(180 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(270 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g>
+<circle cx="48" cy="48" r="9.5" fill="#244d62" stroke="#cdf9fb" stroke-width="1"/>
+<circle cx="48" cy="48" r="6.6" fill="url(#pumpHub2)"/>
+<circle cx="48" cy="48" r="2" fill="#e1ffff" fill-opacity=".8"/>
+</g>
+<path d="M23 38Q30 18 49 20" fill="none" stroke="white" stroke-opacity=".65" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
+<path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
+</svg></div>
+                <span class="lamp-control-label" id="irrigationPumpName2">Pumpe Topf 2</span>
+                <strong id="pumpState2">Nicht verbunden</strong>
+                <small>PPFL-1 · Topf 2 · letzte Bewässerung: —</small>
+                <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
+                <button type="button" class="pump-preview-button" data-pump-preview="2" aria-describedby="pumpPreviewNote2">Animation testen</button>
+                <small id="pumpPreviewNote2" role="status">Symbolvorschau ohne Pumpenansteuerung</small>
+            </article>
+        </div>
+        <p class="camera-meta" id="irrigationUnavailable">Ausgabe gesperrt: GPIO-Anbindung, Live-Tankstatus und Pumpentreiber fehlen. Gespeicherte Automatik-Einstellungen starten keine Bewässerung.</p>
+        <details class="lamp-config">
+            <summary>Bewässerung einrichten</summary>
+            <form id="irrigationForm">
+                <fieldset id="irrigationFields" disabled>
+                    <legend class="camera-meta">Bezeichnungen</legend>
+                    <div class="lamp-config-grid">
+                        <label>Tank<input id="irrigationTankInput" maxlength="40" required value="Wassertank"></label>
+                        <label>Pumpe für Topf 1<input id="irrigationPumpInput1" maxlength="40" required value="Pumpe Topf 1"></label>
+                        <label>Pumpe für Topf 2<input id="irrigationPumpInput2" maxlength="40" required value="Pumpe Topf 2"></label>
+                    </div>
+<section class="lamp-config-card"><h3>Topf 1 · Bewässerung</h3>
+<label class="lamp-toggle-row"><input type="checkbox" id="waterEnabled1">Automatik vormerken (Hardware gesperrt)</label>
+<div class="lamp-config-grid">
+<label>Gießen unter Bodenfeuchte (%)<input type="number" id="water_threshold_percent_1" min="0" max="100" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Wassermenge pro Vorgang (ml)<input type="number" id="water_dose_ml_1" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Einziehpause (Minuten)<input type="number" id="water_pause_minutes_1" min="1" max="10080" step="1" placeholder="Noch nicht festgelegt"></label>
+</div><details class="advanced-settings"><summary>Grenzen &amp; Pumpenkalibrierung</summary><div class="lamp-config-grid"><label>Maximale Wassermenge pro Tag (ml)<input type="number" id="water_daily_limit_ml_1" min="0.1" max="100000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Maximale Laufzeit pro Vorgang (Sekunden)<input type="number" id="water_max_run_seconds_1" min="1" max="600" step="1" placeholder="Noch nicht festgelegt"></label>
+<label>Bei Kalibrierung aufgefangene Menge (ml)<input type="number" id="water_calibration_ml_1" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Zugehörige gemessene Laufzeit (Sekunden)<input type="number" id="water_calibration_seconds_1" min="1" max="600" step="0.1" placeholder="Noch nicht festgelegt"></label>
+</div></details><p class="camera-meta" id="waterSummary1" aria-live="polite">Kalibrierung ausstehend</p></section>
+<section class="lamp-config-card"><h3>Topf 2 · Bewässerung</h3>
+<label class="lamp-toggle-row"><input type="checkbox" id="waterEnabled2">Automatik vormerken (Hardware gesperrt)</label>
+<div class="lamp-config-grid">
+<label>Gießen unter Bodenfeuchte (%)<input type="number" id="water_threshold_percent_2" min="0" max="100" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Wassermenge pro Vorgang (ml)<input type="number" id="water_dose_ml_2" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Einziehpause (Minuten)<input type="number" id="water_pause_minutes_2" min="1" max="10080" step="1" placeholder="Noch nicht festgelegt"></label>
+</div><details class="advanced-settings"><summary>Grenzen &amp; Pumpenkalibrierung</summary><div class="lamp-config-grid"><label>Maximale Wassermenge pro Tag (ml)<input type="number" id="water_daily_limit_ml_2" min="0.1" max="100000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Maximale Laufzeit pro Vorgang (Sekunden)<input type="number" id="water_max_run_seconds_2" min="1" max="600" step="1" placeholder="Noch nicht festgelegt"></label>
+<label>Bei Kalibrierung aufgefangene Menge (ml)<input type="number" id="water_calibration_ml_2" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Zugehörige gemessene Laufzeit (Sekunden)<input type="number" id="water_calibration_seconds_2" min="1" max="600" step="0.1" placeholder="Noch nicht festgelegt"></label>
+</div></details><p class="camera-meta" id="waterSummary2" aria-live="polite">Kalibrierung ausstehend</p></section>
+<p class="camera-meta">Die Bodenfeuchte wird weiter unten unter „Bodenfeuchte kalibrieren &amp; Topfnamen“ mit Trocken- und Nassreferenz kalibriert. Die Prozentwerte sind relativ. Für die Pumpenkalibrierung werden eine tatsächlich gemessene Wassermenge und deren Laufzeit eingetragen; dieser Bildschirm startet keine Pumpe.</p>
+<p class="camera-meta">Geplante Regel: Unterhalb der Schwelle eine feste Wassermenge abgeben, Einziehpause abwarten und dann einen neuen Messwert prüfen. Schwelle und Wassermenge werden bewusst nicht vorbelegt.</p>
+                    <div class="button-row"><button class="primary" type="submit">Einstellungen speichern</button></div>
+                </fieldset>
+                <p id="irrigationMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p>
+                <button type="button" id="irrigationRetry" hidden>Erneut laden</button>
+            </form>
+        </details>
+        <details class="irrigation-history">
+            <summary>Bewässerungsverlauf</summary>
+            <p class="camera-meta">Noch nicht verfügbar. In dieser Vorbereitung werden keine Bewässerungen ausgeführt oder protokolliert.</p>
+        </details>
+    <details class="soil-config">
+
+            <summary>Bodenfeuchte kalibrieren &amp; Topfnamen</summary>
+
+            <p class="estimate-note">
+                Die Werte werden persistent auf dem Raspberry Pi gespeichert.
+                Trocken- und Nass-Rohwert werden für jeden SEN0308 separat kalibriert.
+            </p>
+
+            <div class="soil-config-grid">
+
+                <div class="soil-config-card">
+
+                    <strong>
+                        Sensor 1 · A0
+                    </strong>
+
+                    <label>
+                        Name
+                        <input id="soilNameInput1" type="text" maxlength="40" value="Topf 1">
+                    </label>
+
+                    <label>
+                        Rohwert trocken · 0 %
+                        <input id="soilDry1" type="number" step="any" placeholder="noch nicht kalibriert">
+                    </label>
+
+                    <label>
+                        Rohwert nass · 100 %
+                        <input id="soilWet1" type="number" step="any" placeholder="noch nicht kalibriert">
+                    </label>
+
+                </div>
+
+
+                <div class="soil-config-card">
+
+                    <strong>
+                        Sensor 2 · A1
+                    </strong>
+
+                    <label>
+                        Name
+                        <input id="soilNameInput2" type="text" maxlength="40" value="Topf 2">
+                    </label>
+
+                    <label>
+                        Rohwert trocken · 0 %
+                        <input id="soilDry2" type="number" step="any" placeholder="noch nicht kalibriert">
+                    </label>
+
+                    <label>
+                        Rohwert nass · 100 %
+                        <input id="soilWet2" type="number" step="any" placeholder="noch nicht kalibriert">
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="button-row">
+
+                <button class="primary" id="saveSoilConfigButton">
+                    Einstellungen speichern
+                </button>
+
+                <span class="camera-meta" id="soilConfigMessage">
+                    Noch nicht kalibriert
+                </span>
+
+            </div>
+
+        </details>
+
+    </section>
+
+<section id="fanControlSection" class="panel fan-panel" aria-labelledby="fanHeading">
+<div class="panel-header"><div><p class="eyebrow">LUFT &amp; KLIMA</p><h2 id="fanHeading">Lüftersteuerung</h2></div><span class="camera-meta">Keine PWM-Ausgabe</span></div>
+<p class="camera-meta">Noctua · Zuluft unten und Abluft oben · Anbindung über NA-FC1 vorgesehen</p>
+<div class="fan-grid"><article class="lamp-control-card fan-card">
+<div class="fan-symbol" id="fanIcon-intake" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="fanGlassintake" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#e0ffff" stop-opacity=".58"/><stop offset=".32" stop-color="#91c9e9" stop-opacity=".24"/><stop offset=".68" stop-color="#528bb0" stop-opacity=".18"/><stop offset="1" stop-color="#a2e6f5" stop-opacity=".44"/></linearGradient>
+<linearGradient id="fanEdgeintake" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#e9ffff"/><stop offset=".5" stop-color="#9cbfe1" stop-opacity=".38"/><stop offset="1" stop-color="#d3fff4" stop-opacity=".85"/></linearGradient>
+<linearGradient id="fanBladeintake" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faff"/><stop offset=".42" stop-color="#9fd9ed" stop-opacity=".94"/><stop offset="1" stop-color="#689bcc" stop-opacity=".85"/></linearGradient>
+<radialGradient id="fanHubintake" cx=".32" cy=".22" r=".9"><stop stop-color="#edffff"/><stop offset=".4" stop-color="#a4dbe9"/><stop offset="1" stop-color="#527ea4"/></radialGradient>
+</defs>
+<!-- Square PC fan frame with four visible mounting holes. -->
+<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#fanGlassintake)" stroke="url(#fanEdgeintake)" stroke-width="1.1"/>
+<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
+<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#fanEdgeintake)" stroke-width="1.6"/>
+<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
+<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
+<!-- Seven swept blades; the existing animation rotates around 48,48. -->
+<g class="fan-rotor" fill="url(#fanBladeintake)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
+<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
+<circle cx="48" cy="48" r="8.7" fill="url(#fanHubintake)"/>
+<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
+<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
+<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
+</svg></div>
+<span class="lamp-control-label">Zuluft · unten</span>
+<h3 id="fanTitle-intake">Zuluft unten</h3>
+<strong>Hardware ausstehend</strong>
+<p id="fanSaved-intake" class="camera-meta">Gespeicherter Sollwert wird geladen …</p>
+<small>Ist-Leistung: — · Drehzahl: —</small>
+<button type="button" class="fan-preview" data-fan="intake">Animation testen</button>
+<small id="fanPreviewNote-intake" role="status">Symbolvorschau ohne Lüfteransteuerung</small>
+</article><article class="lamp-control-card fan-card">
+<div class="fan-symbol" id="fanIcon-exhaust" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="fanGlassexhaust" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#e0ffff" stop-opacity=".58"/><stop offset=".32" stop-color="#91c9e9" stop-opacity=".24"/><stop offset=".68" stop-color="#528bb0" stop-opacity=".18"/><stop offset="1" stop-color="#a2e6f5" stop-opacity=".44"/></linearGradient>
+<linearGradient id="fanEdgeexhaust" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#e9ffff"/><stop offset=".5" stop-color="#9cbfe1" stop-opacity=".38"/><stop offset="1" stop-color="#d3fff4" stop-opacity=".85"/></linearGradient>
+<linearGradient id="fanBladeexhaust" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faff"/><stop offset=".42" stop-color="#9fd9ed" stop-opacity=".94"/><stop offset="1" stop-color="#689bcc" stop-opacity=".85"/></linearGradient>
+<radialGradient id="fanHubexhaust" cx=".32" cy=".22" r=".9"><stop stop-color="#edffff"/><stop offset=".4" stop-color="#a4dbe9"/><stop offset="1" stop-color="#527ea4"/></radialGradient>
+</defs>
+<!-- Square PC fan frame with four visible mounting holes. -->
+<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#fanGlassexhaust)" stroke="url(#fanEdgeexhaust)" stroke-width="1.1"/>
+<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
+<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#fanEdgeexhaust)" stroke-width="1.6"/>
+<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
+<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
+<!-- Seven swept blades; the existing animation rotates around 48,48. -->
+<g class="fan-rotor" fill="url(#fanBladeexhaust)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
+<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
+<circle cx="48" cy="48" r="8.7" fill="url(#fanHubexhaust)"/>
+<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
+<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
+<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
+</svg></div>
+<span class="lamp-control-label">Abluft · oben</span>
+<h3 id="fanTitle-exhaust">Abluft oben</h3>
+<strong>Hardware ausstehend</strong>
+<p id="fanSaved-exhaust" class="camera-meta">Gespeicherter Sollwert wird geladen …</p>
+<small>Ist-Leistung: — · Drehzahl: —</small>
+<button type="button" class="fan-preview" data-fan="exhaust">Animation testen</button>
+<small id="fanPreviewNote-exhaust" role="status">Symbolvorschau ohne Lüfteransteuerung</small>
+</article></div>
+<details class="lamp-config"><summary>Lüfter einrichten</summary>
+<form id="fanForm"><fieldset id="fanFields" disabled><legend class="camera-meta">Einstellungen je Lüfter</legend>
+<div class="fan-grid"><section class="lamp-config-card"><h3>Zuluft unten</h3>
+<label>Name<input id="fanName-intake" value="Zuluft unten" maxlength="40" required></label>
+<label>Modus<select id="fanMode-intake"><option value="off">AUS</option><option value="manual">MANUELL (vorgemerkt)</option><option disabled>AUTO – später verfügbar</option></select></label>
+<label>Gewünschte Leistung (%)<input id="fanPower-intake" type="number" min="0" max="100" step="1" value="0" required></label>
+<p class="camera-meta" id="fanDraft-intake" aria-live="polite">Vorgemerkter Sollwert: 0 %</p>
+<details class="advanced-settings"><summary>Technische Einstellung</summary><label>Mindestleistung bei Betrieb (%)<input id="fanMinimum-intake" type="number" min="0" max="100" step="1" value="0" required></label>
+</details></section><section class="lamp-config-card"><h3>Abluft oben</h3>
+<label>Name<input id="fanName-exhaust" value="Abluft oben" maxlength="40" required></label>
+<label>Modus<select id="fanMode-exhaust"><option value="off">AUS</option><option value="manual">MANUELL (vorgemerkt)</option><option disabled>AUTO – später verfügbar</option></select></label>
+<label>Gewünschte Leistung (%)<input id="fanPower-exhaust" type="number" min="0" max="100" step="1" value="0" required></label>
+<p class="camera-meta" id="fanDraft-exhaust" aria-live="polite">Vorgemerkter Sollwert: 0 %</p>
+<details class="advanced-settings"><summary>Technische Einstellung</summary><label>Mindestleistung bei Betrieb (%)<input id="fanMinimum-exhaust" type="number" min="0" max="100" step="1" value="0" required></label>
+</details></section></div>
+<p class="camera-meta">AUS und 0 % ergeben einen Sollwert von 0 %. Bei positivem manuellem Wert gilt mindestens die eingestellte Mindestleistung. Diese Werte sind noch keine gemessene Drehzahl oder tatsächliche PWM-Ausgabe.</p>
+<p class="camera-meta">Die Mindestleistung muss später am Lüfter geprüft werden. Ob Zu- und Abluft unabhängig ansteuerbar sind, hängt von der noch offenen Kanalzuordnung am NA-FC1 ab.</p>
+<button type="submit" class="primary">Einstellungen speichern</button>
+</fieldset><p id="fanMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p><button type="button" id="fanRetry" hidden>Erneut laden</button></form>
+</details></section>
+
+    <details class="panel system-diagnostics" id="systemDiagnostics"><summary>System &amp; Diagnose</summary><section class="main-grid system-only-grid">
+
+
+        <!-- KAMERA -->
+
+        <!-- SYSTEM -->
+
+        <article class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        SYSTEM
+                    </p>
+
+                    <h2>
+                        Aktuelle Messung
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Letzte Aktualisierung
+                </span>
+
+                <strong id="lastUpdate">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    CPU Temperatur
+                </span>
+
+                <strong>
+
+                    <span id="cpuTemperature">
+                        --
+                    </span>
+
+                    °C
+
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Sensor Rohwert
+                </span>
+
+                <strong>
+
+                    <span id="rawTemperature">
+                        --
+                    </span>
+
+                    °C
+
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>
+                    Roh-Feuchte
+                </span>
+
+                <strong>
+
+                    <span id="rawHumidity">
+                        --
+                    </span>
+
+                    %
+
+                </strong>
+
+            </div>
+
+
+            <div class="api-state">
+
+                <span class="status-dot"></span>
+
+                Enviro+ verbunden
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <section class="sensor-grid">
+
+
+        <article class="sensor-card">
+
+            <div class="sensor-header">
+
+                <span class="glass-icon glass-icon--temperature" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-temperature-1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdbc5"/><stop offset=".48" stop-color="#ff805e"/><stop offset="1" stop-color="#ce3450"/></linearGradient></defs><path d="M19 29V12a5 5 0 0 1 10 0v17a9 9 0 1 1-10 0Z" fill="url(#glass-temperature-1)" stroke="#ffdbc5" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 15v20" stroke="#fff7ed" stroke-opacity=".8" stroke-width="3.5" stroke-linecap="round"/><circle cx="24" cy="35" r="4" fill="#fff1df" fill-opacity=".9"/><path d="M32 15h5m-5 7h3" stroke="#ffc6b8" stroke-width="2" stroke-linecap="round"/></svg></span>
+
+                <span>
+                    Temperatur
+                </span>
+
+            </div>
+
+
+            <div class="sensor-value">
+
+                <span id="temperature">
+                    --
+                </span>
+
+                <small>
+                    °C
+                </small>
+
+            </div>
+
+
+            <div class="sensor-note">
+                korrigierter Wert
+            </div>
+
+        </article>
+
+
+        <article class="sensor-card">
+
+            <div class="sensor-header">
+
+                <span class="glass-icon glass-icon--humidity" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-humidity-2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7ffff"/><stop offset=".48" stop-color="#54d5ff"/><stop offset="1" stop-color="#3176db"/></linearGradient></defs><path d="M28 6S15 21 15 30a13 13 0 0 0 26 0C41 21 28 6 28 6Z" fill="url(#glass-humidity-2)" stroke="#c7ffff" stroke-opacity=".65" stroke-width="1.2"/><path d="M11 10S4 19 4 24a7 7 0 0 0 11 5" fill="#89e9ff" fill-opacity=".45" stroke="#c6f7ff" stroke-opacity=".6" stroke-width="1.2"/><path d="M22 29c-1 5 2 8 5 8" fill="none" stroke="#e5ffff" stroke-opacity=".85" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+
+                <span>
+                    Luftfeuchtigkeit
+                </span>
+
+            </div>
+
+
+            <div class="sensor-value">
+
+                <span id="humidity">
+                    --
+                </span>
+
+                <small>
+                    %
+                </small>
+
+            </div>
+
+
+            <div class="sensor-note">
+                relative Feuchte
+            </div>
+
+        </article>
+
+
+        <article class="sensor-card">
+
+            <div class="sensor-header">
+
+                <span class="glass-icon glass-icon--vpd" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-vpd-3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffc0"/><stop offset=".48" stop-color="#6ee5a2"/><stop offset="1" stop-color="#21977a"/></linearGradient></defs><path d="M10 34C1 13 27 9 40 7c1 14-3 36-23 32" fill="url(#glass-vpd-3)" stroke="#e4ffc0" stroke-opacity=".65" stroke-width="1.2"/><path d="M8 42c5-13 12-21 23-27M19 27l-1-8m1 8 10 1" fill="none" stroke="#ebffdb" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/></svg></span>
+
+                <span>
+                    VPD
+                </span>
+
+            </div>
+
+
+            <div class="sensor-value">
+
+                <span id="vpd">
+                    --
+                </span>
+
+                <small>
+                    kPa
+                </small>
+
+            </div>
+
+
+            <div class="sensor-note">
+                berechnet
+            </div>
+
+        </article>
+
+
+        <article class="sensor-card">
+
+            <div class="sensor-header">
+
+                <span class="glass-icon glass-icon--light js-light-state-icon" data-state="off" aria-hidden="true"><svg class="glass-glyph light-state-sun" viewBox="0 0 48 48" focusable="false"><defs><linearGradient id="glass-light-sensor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4bf"/><stop offset=".48" stop-color="#ffc64f"/><stop offset="1" stop-color="#f18134"/></linearGradient></defs><g stroke="#ffc64f" stroke-width="2.5" stroke-linecap="round"><path d="M24 3v5m0 32v5M3 24h5m32 0h5M9 9l4 4m22 22 4 4M9 39l4-4m22-22 4-4"/></g><circle cx="24" cy="24" r="11" fill="url(#glass-light-sensor)" stroke="#fff4bf" stroke-opacity=".65" stroke-width="1.2"/><path d="M17 23a7 7 0 0 1 7-7" fill="none" stroke="#fff9df" stroke-width="2" stroke-linecap="round"/></svg><svg class="glass-glyph light-state-moon" viewBox="0 0 48 48" fill="none" focusable="false"><path d="M34 37c-13 2-22-7-20-20 1-6 5-10 10-13-2 12 7 21 19 18-1 7-4 12-9 15Z" fill="#d7ecff" fill-opacity=".8" stroke="#eff8ff" stroke-opacity=".75" stroke-width="1.3"/><path d="M31 12h1m7 5h1m-6 8h1" stroke="#fff7c7" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+
+                <span>
+                    Licht
+                </span>
+
+            </div>
+
+
+            <div class="sensor-value">
+
+                <span id="lux">
+                    --
+                </span>
+
+                <small>
+                    Lux
+                </small>
+
+            </div>
+
+
+            <div class="sensor-note" id="lightStatus">
+                Lichtstatus wird geladen
+            </div>
+
+        </article>
+
+    </section>
+
+
+    </details></div>
     <!-- FOOTER -->
 
     <footer>
@@ -1744,19 +1573,16 @@
 </div>
 
 
-<script
-    src="/static/chart.umd.min.js?v=1"
-></script>
+<script src="/static/chart.umd.min.js?v=1"></script>
 
-<script
-    src="/static/app.js?v=20260929-water-auto"
-></script>
+<script src="/static/app.js?v=20260929-chart-lines"></script>
 
-<script src="/static/overview.js?v=6"></script>
-<script src="/static/pump-icons.js?v=1"></script>
+<script src="/static/overview.js?v=8"></script>
+<script src="/static/tank-status.js?v=1"></script>
+<script src="/static/pump-icons.js?v=2"></script>
 <script src="/static/fans.js?v=1"></script>
-<script src="/static/overview-equipment.js?v=1"></script>
+<script src="/static/overview-equipment.js?v=3"></script>
+<script src="/static/layout.js?v=2"></script><script src="/static/lamp-visual.js?v=2"></script>
 </body>
 
 </html>
-
