@@ -201,6 +201,7 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 │   ├── style.css
 │   ├── app.js
 │   ├── overview.js
+│   ├── overview-equipment.js
 │   ├── liquid-glass.css
 │   ├── pump-icons.js
 │   ├── fans.js
@@ -482,6 +483,11 @@ GET /api/light/today
 
 - Liquid-Glass-Design mit farbigen Symbolen für Klima, Licht und Bodenfeuchte
 - **Übersicht:** kompakte Kennzahlen und Kameradarstellung
+- Zusätzliche kompakte Versorgungskarten: Lampenprofil, gespeicherte Leistung, Zeitplan und geplante Dauer; Tankstatus sowie Automatik-Vormerkung, Feuchteschwelle und Einzelmenge je Topf; Lüftermodi und gespeicherte Sollwerte
+- Direkte Links aus den Karten zum jeweiligen Steuerungsbereich
+- Gespeicherte Sollwerte und tatsächliche Ausgänge werden getrennt bezeichnet; nicht verbundene Hardware bleibt erkennbar.
+- Die Versorgungskarten werden bei sichtbarer Übersicht alle 15 Sekunden sowie bei Rückkehr zur Ansicht aktualisiert. Fehler werden pro Karte angezeigt; alte Werte werden dabei ausgeblendet.
+
 - **Steuerung:** Konfiguration von Bodenfeuchte, Lampe, Bewässerung und Kamera
 - Bilder und Livestream bleiben bewusst kompakt
 - eigene SVG-Symbole für Wachstum und Blüte; beim Profilwechsel wird das passende Symbol angezeigt

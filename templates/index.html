@@ -21,7 +21,7 @@
     >
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-fans">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-overview-equipment">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -80,7 +80,72 @@
 <article class="overview-stat metric-humidity"><span class="glass-icon glass-icon--humidity" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-humidity-6" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7ffff"/><stop offset=".48" stop-color="#54d5ff"/><stop offset="1" stop-color="#3176db"/></linearGradient></defs><path d="M28 6S15 21 15 30a13 13 0 0 0 26 0C41 21 28 6 28 6Z" fill="url(#glass-humidity-6)" stroke="#c7ffff" stroke-opacity=".65" stroke-width="1.2"/><path d="M11 10S4 19 4 24a7 7 0 0 0 11 5" fill="#89e9ff" fill-opacity=".45" stroke="#c6f7ff" stroke-opacity=".6" stroke-width="1.2"/><path d="M22 29c-1 5 2 8 5 8" fill="none" stroke="#e5ffff" stroke-opacity=".85" stroke-width="2.5" stroke-linecap="round"/></svg></span><div><span class="reading-label">Luftfeuchtigkeit</span><strong><span id="ovHumidity">—</span><small> %</small></strong><p>Relative Feuchte</p></div></article>
 <article class="overview-stat metric-vpd"><span class="glass-icon glass-icon--vpd" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-vpd-7" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffc0"/><stop offset=".48" stop-color="#6ee5a2"/><stop offset="1" stop-color="#21977a"/></linearGradient></defs><path d="M10 34C1 13 27 9 40 7c1 14-3 36-23 32" fill="url(#glass-vpd-7)" stroke="#e4ffc0" stroke-opacity=".65" stroke-width="1.2"/><path d="M8 42c5-13 12-21 23-27M19 27l-1-8m1 8 10 1" fill="none" stroke="#ebffdb" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/></svg></span><div><span class="reading-label">VPD</span><strong><span id="ovVpd">—</span><small> kPa</small></strong><p>Berechnet</p></div></article>
 <article class="overview-stat metric-light"><span class="glass-icon glass-icon--light js-light-state-icon" data-state="off" aria-hidden="true"><svg class="glass-glyph light-state-sun" viewBox="0 0 48 48" focusable="false"><defs><linearGradient id="glass-light-overview" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4bf"/><stop offset=".48" stop-color="#ffc64f"/><stop offset="1" stop-color="#f18134"/></linearGradient></defs><g stroke="#ffc64f" stroke-width="2.5" stroke-linecap="round"><path d="M24 3v5m0 32v5M3 24h5m32 0h5M9 9l4 4m22 22 4 4M9 39l4-4m22-22 4-4"/></g><circle cx="24" cy="24" r="11" fill="url(#glass-light-overview)" stroke="#fff4bf" stroke-opacity=".65" stroke-width="1.2"/><path d="M17 23a7 7 0 0 1 7-7" fill="none" stroke="#fff9df" stroke-width="2" stroke-linecap="round"/></svg><svg class="glass-glyph light-state-moon" viewBox="0 0 48 48" fill="none" focusable="false"><path d="M34 37c-13 2-22-7-20-20 1-6 5-10 10-13-2 12 7 21 19 18-1 7-4 12-9 15Z" fill="#d7ecff" fill-opacity=".8" stroke="#eff8ff" stroke-opacity=".75" stroke-width="1.3"/><path d="M31 12h1m7 5h1m-6 8h1" stroke="#fff7c7" stroke-width="2.5" stroke-linecap="round"/></svg></span><div><span class="reading-label">Licht</span><strong><span id="ovLux">—</span><small> Lux</small></strong><p><span id="ovLight">—</span> · am Sensor</p></div></article>
-</section><div id="overviewCameraSlot"></div><div id="overviewHistorySlot"></div></main>
+</section>
+<section class="overview-equipment" aria-labelledby="ovEquipmentHeading">
+<div class="overview-equipment-heading"><div><p class="eyebrow">VERSORGUNG &amp; TECHNIK</p><h2 id="ovEquipmentHeading">Dein Schrank im Überblick</h2></div><p id="ovEquipmentUpdated" class="camera-meta">Status wird geladen …</p></div>
+<div class="overview-equipment-grid">
+<article class="panel overview-equipment-card">
+<header><div class="ov-equipment-icon"><img id="ovLampProfileIcon" src="/static/profile-growth.svg?v=1" alt="" hidden><span id="ovLampFallback" aria-hidden="true">☀</span></div><div><h3 id="ovLampTitle">Pflanzenlampe</h3><p id="ovLampStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
+<dl><div><dt>Profil</dt><dd id="ovLampProfile">—</dd></div><div><dt>Gespeicherte Leistung</dt><dd id="ovLampPower">—</dd></div><div><dt>Zeitplan</dt><dd id="ovLampSchedule">—</dd></div><div><dt>Einschaltdauer</dt><dd id="ovLampDuration">—</dd></div><div><dt>Tatsächlicher Ausgang</dt><dd id="ovLampActual">—</dd></div></dl><a href="#steuerung" data-control-target="lampControlSection">Zur Lampensteuerung →</a>
+</article>
+<article class="panel overview-equipment-card">
+<header><div class="ov-equipment-icon"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="overview-pumpShell1" x1="24" y1="17" x2="74" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#e1ffff" stop-opacity=".62"/><stop offset=".4" stop-color="#77d6e5" stop-opacity=".2"/><stop offset="1" stop-color="#528fc5" stop-opacity=".46"/></linearGradient>
+<linearGradient id="overview-pumpPipe1" x1="9" y1="18" x2="88" y2="81" gradientUnits="userSpaceOnUse"><stop stop-color="#d3faff"/><stop offset=".45" stop-color="#79c6db"/><stop offset="1" stop-color="#57acba"/></linearGradient>
+<linearGradient id="overview-pumpEdge1" x1="24" y1="20" x2="70" y2="77" gradientUnits="userSpaceOnUse"><stop stop-color="#edffff"/><stop offset=".5" stop-color="#9fe8ef" stop-opacity=".55"/><stop offset="1" stop-color="#72dcd3"/></linearGradient>
+<linearGradient id="overview-pumpRotor1" x1="30" y1="25" x2="65" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#ddfff8"/><stop offset=".5" stop-color="#8ce4df"/><stop offset="1" stop-color="#59afce"/></linearGradient>
+<radialGradient id="overview-pumpHub1" cx=".3" cy=".2" r=".9"><stop stop-color="#edffff"/><stop offset=".55" stop-color="#9fdde9"/><stop offset="1" stop-color="#4c90b4"/></radialGradient>
+</defs>
+<!-- Opposing tangential pipe ports, matching the supplied pump silhouette. -->
+<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="#1c4c61" stroke-opacity=".65" stroke-width="8" stroke-linecap="round"/>
+<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="url(#overview-pumpPipe1)" stroke-width="5" stroke-linecap="round"/>
+<path d="M50 16.5H78Q88 16.5 89 27M46 76.5H18Q10 76.5 10 69" fill="none" stroke="#ebffff" stroke-opacity=".7" stroke-width="1" stroke-linecap="round"/>
+<rect x="91" y="15" width="4" height="25" rx="2" fill="url(#overview-pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
+<rect x="1" y="56" width="4" height="25" rx="2" fill="url(#overview-pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
+<!-- Glass casing remains stationary while the four-vane impeller turns. -->
+<circle cx="48" cy="48" r="31" fill="url(#overview-pumpShell1)" stroke="url(#overview-pumpEdge1)" stroke-width="1.8"/>
+<circle cx="48" cy="48" r="27.5" fill="#163e50" fill-opacity=".48" stroke="#c2fcff" stroke-opacity=".28" stroke-width=".7"/>
+<g class="pump-rotor">
+<g fill="url(#overview-pumpRotor1)" stroke="#d4fff5" stroke-opacity=".65" stroke-width=".6"><path transform="rotate(0 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(90 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(180 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(270 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/></g>
+<g transform="rotate(0 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(90 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(180 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(270 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g>
+<circle cx="48" cy="48" r="9.5" fill="#244d62" stroke="#cdf9fb" stroke-width="1"/>
+<circle cx="48" cy="48" r="6.6" fill="url(#overview-pumpHub1)"/>
+<circle cx="48" cy="48" r="2" fill="#e1ffff" fill-opacity=".8"/>
+</g>
+<path d="M23 38Q30 18 49 20" fill="none" stroke="white" stroke-opacity=".65" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
+<path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
+</svg></div><div><h3>Bewässerung</h3><p id="ovWaterStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
+<dl><div><dt>Tank</dt><dd id="ovWaterTank">—</dd></div><div><dt>Topf 1</dt><dd id="ovWaterPot1">—</dd></div><div><dt>Topf 2</dt><dd id="ovWaterPot2">—</dd></div><div><dt>Letzte Bewässerung</dt><dd id="ovWaterLast">—</dd></div></dl><p class="camera-meta">Je Topf: Automatik-Vormerkung, Schwelle und Einzelmenge.</p><a href="#steuerung" data-control-target="irrigationControlSection">Zur Bewässerung →</a>
+</article>
+<article class="panel overview-equipment-card">
+<header><div class="ov-equipment-icon"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="overview-fanGlassintake" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#e0ffff" stop-opacity=".58"/><stop offset=".32" stop-color="#91c9e9" stop-opacity=".24"/><stop offset=".68" stop-color="#528bb0" stop-opacity=".18"/><stop offset="1" stop-color="#a2e6f5" stop-opacity=".44"/></linearGradient>
+<linearGradient id="overview-fanEdgeintake" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#e9ffff"/><stop offset=".5" stop-color="#9cbfe1" stop-opacity=".38"/><stop offset="1" stop-color="#d3fff4" stop-opacity=".85"/></linearGradient>
+<linearGradient id="overview-fanBladeintake" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faff"/><stop offset=".42" stop-color="#9fd9ed" stop-opacity=".94"/><stop offset="1" stop-color="#689bcc" stop-opacity=".85"/></linearGradient>
+<radialGradient id="overview-fanHubintake" cx=".32" cy=".22" r=".9"><stop stop-color="#edffff"/><stop offset=".4" stop-color="#a4dbe9"/><stop offset="1" stop-color="#527ea4"/></radialGradient>
+</defs>
+<!-- Square PC fan frame with four visible mounting holes. -->
+<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#overview-fanGlassintake)" stroke="url(#overview-fanEdgeintake)" stroke-width="1.1"/>
+<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
+<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#overview-fanEdgeintake)" stroke-width="1.6"/>
+<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
+<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
+<!-- Seven swept blades; the existing animation rotates around 48,48. -->
+<g class="fan-rotor" fill="url(#overview-fanBladeintake)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
+<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
+<circle cx="48" cy="48" r="8.7" fill="url(#overview-fanHubintake)"/>
+<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
+<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
+<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
+</svg></div><div><h3>Lüfter</h3><p id="ovFanStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
+<dl><div><dt>Zuluft · gespeichert</dt><dd id="ovFanIntake">—</dd></div><div><dt>Abluft · gespeichert</dt><dd id="ovFanExhaust">—</dd></div><div><dt>Tatsächliche Leistung</dt><dd id="ovFanActual">—</dd></div></dl><p class="camera-meta">Sollwerte sind Einstellungen, keine gemessenen Drehzahlen.</p><a href="#steuerung" data-control-target="fanControlSection">Zur Lüftersteuerung →</a>
+</article>
+</div></section>
+<div id="overviewCameraSlot"></div><div id="overviewHistorySlot"></div></main>
 <div id="controlsView" hidden>
 
     <!-- SENSOR CARDS -->
@@ -448,7 +513,7 @@
 
     <!-- LAMPENSTEUERUNG -->
 
-    <section class="panel lamp-control-panel">
+    <section class="panel lamp-control-panel" id="lampControlSection">
 
         <div class="panel-header">
 
@@ -748,7 +813,7 @@
 
 
 
-    <section class="panel irrigation-panel" aria-labelledby="irrigationHeading">
+    <section id="irrigationControlSection" class="panel irrigation-panel" aria-labelledby="irrigationHeading">
         <div class="panel-header">
             <div class="lamp-control-heading">
                 <span class="glass-icon irrigation-icon" aria-hidden="true">
@@ -890,7 +955,7 @@
         </div>
     </section>
 
-<section class="panel fan-panel" aria-labelledby="fanHeading">
+<section id="fanControlSection" class="panel fan-panel" aria-labelledby="fanHeading">
 <div class="panel-header"><div><p class="eyebrow">LUFT &amp; KLIMA</p><h2 id="fanHeading">Lüftersteuerung</h2></div><span class="camera-meta">Keine PWM-Ausgabe</span></div>
 <p class="camera-meta">Noctua · Zuluft unten und Abluft oben · Anbindung über NA-FC1 vorgesehen</p>
 <div class="fan-grid"><article class="lamp-control-card fan-card">
@@ -1690,6 +1755,7 @@
 <script src="/static/overview.js?v=6"></script>
 <script src="/static/pump-icons.js?v=1"></script>
 <script src="/static/fans.js?v=1"></script>
+<script src="/static/overview-equipment.js?v=1"></script>
 </body>
 
 </html>
