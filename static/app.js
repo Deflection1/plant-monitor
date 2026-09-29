@@ -1256,21 +1256,18 @@ function updateLampControlPreview() {
     profileCard.dataset.profile =
         profile;
 
-    if (profile === "flower") {
-
-        profileImage.hidden =
-            false;
-
-        profilePlaceholder.hidden =
-            true;
-
+    if (profile === "flower" || profile === "growth") {
+        const iconPath = profile === "growth"
+            ? "/static/profile-growth.svg?v=1"
+            : "/static/profile-flower.svg?v=2";
+        if (profileImage.getAttribute("src") !== iconPath) {
+            profileImage.setAttribute("src", iconPath);
+        }
+        profileImage.hidden = false;
+        profilePlaceholder.hidden = true;
     } else {
-
-        profileImage.hidden =
-            true;
-
-        profilePlaceholder.hidden =
-            false;
+        profileImage.hidden = true;
+        profilePlaceholder.hidden = false;
     }
 }
 
