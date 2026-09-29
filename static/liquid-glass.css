@@ -933,3 +933,17 @@ footer { color: #a9c5b8; }
 .live-lamp-icon[data-state="on"] .grow-lamp-rays,
 .live-lamp-icon[data-state="on"] .grow-lamp-beam { opacity:1; }
 .live-lamp-icon[data-state="on"] .grow-lamp-emitter { fill:url(#overviewGrowLight); filter:drop-shadow(0 0 3px rgba(255,210,135,.8)); }
+
+/* Compact watering journal within the overview equipment card. */
+.watering-history { margin:12px 0 16px; min-width:0; }
+.watering-today,.watering-history-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; font-size:.78rem; color:#b9d1cb; }
+.watering-today strong { color:#e1f6ef; font-weight:500; }
+.watering-history-heading { margin-top:16px; font-size:.7rem; }
+.water-key { display:inline-block; width:7px; height:7px; border-radius:2px; margin:0 4px 0 8px; }
+.pot-one { background:#68d7ba; }.pot-two { background:#71b9ee; }
+.watering-chart-wrap { height:112px; position:relative; margin-top:6px; }
+.watering-chart-wrap canvas { width:100%; height:100%; }
+.watering-chart-wrap canvas[hidden] { display:none; }
+#ovWaterEmpty { margin:0; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; font-size:.8rem; color:#b9d1cb; padding:12px; box-sizing:border-box; }
+#ovWaterEmpty[hidden] { display:none; }
+.watering-estimate { margin:6px 0 0; color:#a9c4bc; font-size:.65rem; line-height:1.4; }
