@@ -21,7 +21,7 @@
     >
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-irrigation">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-water-auto">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -783,7 +783,7 @@
                 <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
             </article>
         </div>
-        <p class="camera-meta" id="irrigationUnavailable">Start nicht verfügbar. GPIO-Zuordnung, Tankerkennung und Pumpenkalibrierung stehen noch aus.</p>
+        <p class="camera-meta" id="irrigationUnavailable">Ausgabe gesperrt: GPIO-Anbindung, Live-Tankstatus und Pumpentreiber fehlen. Gespeicherte Automatik-Einstellungen starten keine Bewässerung.</p>
         <details class="lamp-config">
             <summary>Bewässerung einrichten</summary>
             <form id="irrigationForm">
@@ -794,6 +794,30 @@
                         <label>Pumpe für Topf 1<input id="irrigationPumpInput1" maxlength="40" required value="Pumpe Topf 1"></label>
                         <label>Pumpe für Topf 2<input id="irrigationPumpInput2" maxlength="40" required value="Pumpe Topf 2"></label>
                     </div>
+<section class="lamp-config-card"><h3>Topf 1 · Automatik &amp; Kalibrierung</h3>
+<label class="lamp-toggle-row"><input type="checkbox" id="waterEnabled1">Automatik vormerken (Hardware gesperrt)</label>
+<div class="lamp-config-grid">
+<label>Gießen unter Bodenfeuchte (%)<input type="number" id="water_threshold_percent_1" min="0" max="100" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Wassermenge pro Vorgang (ml)<input type="number" id="water_dose_ml_1" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Einziehpause (Minuten)<input type="number" id="water_pause_minutes_1" min="1" max="10080" step="1" placeholder="Noch nicht festgelegt"></label>
+<label>Maximale Wassermenge pro Tag (ml)<input type="number" id="water_daily_limit_ml_1" min="0.1" max="100000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Maximale Laufzeit pro Vorgang (Sekunden)<input type="number" id="water_max_run_seconds_1" min="1" max="600" step="1" placeholder="Noch nicht festgelegt"></label>
+<label>Bei Kalibrierung aufgefangene Menge (ml)<input type="number" id="water_calibration_ml_1" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Zugehörige gemessene Laufzeit (Sekunden)<input type="number" id="water_calibration_seconds_1" min="1" max="600" step="0.1" placeholder="Noch nicht festgelegt"></label>
+</div><p class="camera-meta" id="waterSummary1" aria-live="polite">Kalibrierung ausstehend</p></section>
+<section class="lamp-config-card"><h3>Topf 2 · Automatik &amp; Kalibrierung</h3>
+<label class="lamp-toggle-row"><input type="checkbox" id="waterEnabled2">Automatik vormerken (Hardware gesperrt)</label>
+<div class="lamp-config-grid">
+<label>Gießen unter Bodenfeuchte (%)<input type="number" id="water_threshold_percent_2" min="0" max="100" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Wassermenge pro Vorgang (ml)<input type="number" id="water_dose_ml_2" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Einziehpause (Minuten)<input type="number" id="water_pause_minutes_2" min="1" max="10080" step="1" placeholder="Noch nicht festgelegt"></label>
+<label>Maximale Wassermenge pro Tag (ml)<input type="number" id="water_daily_limit_ml_2" min="0.1" max="100000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Maximale Laufzeit pro Vorgang (Sekunden)<input type="number" id="water_max_run_seconds_2" min="1" max="600" step="1" placeholder="Noch nicht festgelegt"></label>
+<label>Bei Kalibrierung aufgefangene Menge (ml)<input type="number" id="water_calibration_ml_2" min="0.1" max="10000" step="0.1" placeholder="Noch nicht festgelegt"></label>
+<label>Zugehörige gemessene Laufzeit (Sekunden)<input type="number" id="water_calibration_seconds_2" min="1" max="600" step="0.1" placeholder="Noch nicht festgelegt"></label>
+</div><p class="camera-meta" id="waterSummary2" aria-live="polite">Kalibrierung ausstehend</p></section>
+<p class="camera-meta">Die Bodenfeuchte wird separat im Bereich Bodenfeuchtigkeit mit Trocken- und Nassreferenz kalibriert. Die Prozentwerte sind relativ. Für die Pumpenkalibrierung werden eine tatsächlich gemessene Wassermenge und deren Laufzeit eingetragen; dieser Bildschirm startet keine Pumpe.</p>
+<p class="camera-meta">Geplante Regel: Unterhalb der Schwelle eine feste Wassermenge abgeben, Einziehpause abwarten und dann einen neuen Messwert prüfen. Schwelle und Wassermenge werden bewusst nicht vorbelegt.</p>
                     <div class="button-row"><button class="primary" type="submit">Einstellungen speichern</button></div>
                 </fieldset>
                 <p id="irrigationMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p>
@@ -1515,7 +1539,7 @@
 ></script>
 
 <script
-    src="/static/app.js?v=20260929-irrigation"
+    src="/static/app.js?v=20260929-water-auto"
 ></script>
 
 <script src="/static/overview.js?v=6"></script>

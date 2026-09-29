@@ -5,7 +5,7 @@ import time
 from functools import wraps
 from configuration import atomic_write_json, next_capture_time, validate_soil_config
 from lamp_profiles import normalize_lamp_config, update_lamp_profile
-from irrigation import default_irrigation_config, validate_irrigation_config, irrigation_status
+from irrigation import default_irrigation_config, validate_irrigation_config, irrigation_status, plan_watering
 import shutil
 import threading
 
@@ -877,6 +877,24 @@ def irrigation_config_update(payload: dict = Body(...)):
     persist_config(IRRIGATION_CONFIG_FILE, updated)
     IRRIGATION_CONFIG = updated
     return {"status": "ok", **updated}
+
+
+@app.post("/api/irrigation/preview")
+@configuration_locked
+def irrigation_preview(payload: dict = Body(...)):
+    """Explicit dry-run only. Never sends commands to pump hardware."""
+    pot_id = payload.get("pot_id")
+    if type(pot_id) is not int or pot_id not in (1, 2):
+        raise HTTPException(status_code=422, detail="Topf 1 oder 2 erwartet.")
+    decision = plan_watering(
+        IRRIGATION_CONFIG["pumps"][pot_id - 1],
+        moisture=payload.get("moisture"),
+        sensor_age_seconds=payload.get("sensor_age_seconds"),
+        tank_ok=payload.get("tank_ok"),
+        seconds_since_last=payload.get("seconds_since_last"),
+        used_today_ml=payload.get("used_today_ml"),
+    )
+    return {"simulation": True, "output_available": False, **decision}
 
 
 @app.get("/api/irrigation/status")

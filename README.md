@@ -567,7 +567,19 @@ Auf dem Test-Branch ist eine reine Anzeige- und Konfigurationsvorbereitung vorha
 - deaktivierte Start-Schaltflächen; keine GPIO-Ausgabe, Timer oder Automatik
 - GPIO-Zuordnung, Fördermengen-Kalibrierung, aktive Sicherheitslogik und Ereignisprotokollierung bleiben ausstehend
 
-Gespeichert werden ausschließlich Bezeichnungen. Die unten beschriebene Sicherheitslogik ist weiterhin geplant und noch nicht implementiert.
+Zusätzlich werden pro Topf gespeichert:
+- Automatik vorgemerkt (standardmäßig AUS; Hardwareausgabe bleibt gesperrt)
+- Feuchteschwelle, feste Wassermenge pro Vorgang in ml und Tageslimit (bewusst ohne Pflanzenvorgaben)
+- Einziehpause und maximale Laufzeit
+- Kalibrierung: aufgefangene ml / gemessene Sekunden; daraus berechnete ml/s und Dosierdauer
+
+Bestehende reine Namenskonfigurationen werden beim Laden ergänzt. Die Bodenfeuchtekalibrierung bleibt im vorhandenen Bodenfeuchtebereich.
+
+Die reine Entscheidungsfunktion prüft Automatik, Tankstatus, Sensoralter (max. 120 s), Einziehpause, Tagesverbrauch, Feuchteschwelle und maximale Laufzeit. Unterhalb der Schwelle ist eine feste Einzelgabe vorgesehen; weitere Gaben brauchen eine neue Prüfung nach der Pause. Ungültige oder fehlende Statusdaten sperren die Entscheidung.
+
+`POST /api/irrigation/preview` erlaubt ausschließlich eine Simulation mit `pot_id`, `moisture`, `sensor_age_seconds`, `tank_ok`, `seconds_since_last` und `used_today_ml`. Die Antwort enthält immer `simulation: true` und `output_available: false`.
+
+**Noch nicht aktiv:** GPIO-Pumpentreiber, Regelungs-Worker, dauerhafte Verbrauchs-/Ereignisspeicherung und Live-Tanküberwachung. Es werden keine Pumpen gestartet. Vor realem Betrieb muss die Steuerung kalibrierte Sensorwerte verwenden, Verbrauch und Pause über Neustarts erhalten, Pumpenzugriff serialisieren und Tank-/Laufzeitabschaltung während des Pumpens überwachen. Die reine Vorschau ersetzt diese Hardwareintegration nicht.
 
 ## Wasserkreis
 

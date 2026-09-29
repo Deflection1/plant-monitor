@@ -2083,6 +2083,20 @@ function setupIrrigation() {
     const message = $("irrigationMessage");
     const retry = $("irrigationRetry");
 
+    const waterFields = ["threshold_percent", "dose_ml", "pause_minutes",
+        "daily_limit_ml", "max_run_seconds", "calibration_ml", "calibration_seconds"];
+    function updateWaterSummary(id) {
+        const value = key => Number($("water_" + key + "_" + id).value);
+        const ml = value("calibration_ml"), seconds = value("calibration_seconds");
+        const dose = value("dose_ml");
+        const valid = ml > 0 && seconds > 0;
+        $("waterSummary" + id).textContent = valid
+            ? "Fördermenge: " + (ml / seconds).toFixed(2) + " ml/s"
+              + (dose > 0 ? " · berechnete Laufzeit: " + (dose * seconds / ml).toFixed(1) + " s" : "")
+              + " · Hardwareausgabe gesperrt"
+            : "Pumpenkalibrierung ausstehend · Hardwareausgabe gesperrt";
+    }
+
     function showConfig(config) {
         if (typeof config.tank_name !== "string" || !Array.isArray(config.pumps)
                 || config.pumps.length !== 2 || config.pumps.some((p, i) =>
@@ -2094,6 +2108,11 @@ function setupIrrigation() {
         config.pumps.forEach((pump) => {
             $("irrigationPumpInput" + pump.id).value = pump.name;
             $("irrigationPumpName" + pump.id).textContent = pump.name;
+            $("waterEnabled" + pump.id).checked = pump.enabled === true;
+            waterFields.forEach(key => {
+                $("water_" + key + "_" + pump.id).value = pump[key] ?? "";
+            });
+            updateWaterSummary(pump.id);
         });
     }
 
@@ -2106,7 +2125,7 @@ function setupIrrigation() {
             if (!response.ok) throw new Error("Laden fehlgeschlagen");
             showConfig(await response.json());
             fields.disabled = false;
-            message.textContent = "Namen können gespeichert werden. Hardware ausstehend.";
+            message.textContent = "Einstellungen können gespeichert werden. Hardwareausgabe bleibt gesperrt.";
         } catch (error) {
             message.textContent = "Einstellungen konnten nicht geladen werden.";
             retry.hidden = false;
@@ -2118,7 +2137,14 @@ function setupIrrigation() {
         if (fields.disabled) return;
         const payload = {
             tank_name: $("irrigationTankInput").value.trim(),
-            pumps: [1, 2].map(id => ({id, name: $("irrigationPumpInput" + id).value.trim()}))
+            pumps: [1, 2].map(id => ({
+                id, name: $("irrigationPumpInput" + id).value.trim(),
+                enabled: $("waterEnabled" + id).checked,
+                ...Object.fromEntries(waterFields.map(key => {
+                    const raw = $("water_" + key + "_" + id).value;
+                    return [key, raw === "" ? null : Number(raw)];
+                }))
+            }))
         };
         if (!payload.tank_name || payload.pumps.some(p => !p.name)) {
             message.textContent = "Bitte alle Namen ausfüllen.";
@@ -2131,15 +2157,20 @@ function setupIrrigation() {
                 method: "POST", headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(payload)
             });
-            if (!response.ok) throw new Error("Speichern fehlgeschlagen");
+            if (!response.ok) {
+                const body = await response.json().catch(() => ({}));
+                throw new Error(typeof body.detail === "string" ? body.detail : "Speichern fehlgeschlagen.");
+            }
             showConfig(await response.json());
             message.textContent = "Gespeichert. Hardware bleibt deaktiviert.";
         } catch (error) {
-            message.textContent = "Speichern fehlgeschlagen. Bitte erneut versuchen.";
+            message.textContent = error.message || "Speichern fehlgeschlagen. Bitte erneut versuchen.";
         } finally {
             fields.disabled = false;
         }
     });
+    [1, 2].forEach(id => waterFields.forEach(key =>
+        $("water_" + key + "_" + id).addEventListener("input", () => updateWaterSummary(id))));
     retry.addEventListener("click", load);
     load();
 }
