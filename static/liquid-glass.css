@@ -884,3 +884,20 @@ footer { color: #a9c5b8; }
 
 .overview-tank-value { display:flex; justify-content:flex-end; align-items:center; gap:8px; }
 @media(max-width:420px) { .overview-tank-value { justify-content:flex-start; } }
+
+/* Profile identity and measured light state remain separate. */
+.overview-lamp-live { display:flex; align-items:center; gap:12px; margin:16px 0 0; padding:8px 12px; border:1px solid rgba(211,245,239,.12); border-radius:16px; background:rgba(4,25,27,.12); }
+.live-lamp-icon { display:block; width:84px; height:84px; flex:0 0 84px; }
+.live-lamp-icon svg { display:block; width:100%; height:100%; }
+.live-lamp-panel { fill:#55717c; }
+.live-lamp-leds { fill:#8cabb6; }
+.live-lamp-beam,.live-lamp-rays { opacity:0; }
+.live-lamp-icon[data-state="on"] .live-lamp-panel { fill:#ffe7a3; filter:drop-shadow(0 0 5px rgba(255,209,103,.8)); }
+.live-lamp-icon[data-state="on"] .live-lamp-leds { fill:#fffbea; }
+.live-lamp-icon[data-state="on"] .live-lamp-beam,.live-lamp-icon[data-state="on"] .live-lamp-rays { opacity:1; }
+.live-lamp-icon[data-state="off"] { opacity:.65; }
+.live-lamp-icon[data-state="unknown"] { opacity:.45; }
+.overview-lamp-live strong { display:block; font-size:.95rem; margin:5px 0; color:#dbeee8; }
+.overview-lamp-live small { display:block; font-size:.73rem; color:#b4cbc4; line-height:1.4; }
+#ovLampFallback { color:#b7cad0; text-shadow:none; }
+@media(max-width:420px) { .live-lamp-icon { width:64px; height:64px; flex-basis:64px; } }
