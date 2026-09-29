@@ -1010,8 +1010,9 @@ async function loadSoilConfig() {
                 function(pot) {
 
                     return (
-                        pot.dry_raw !== null
-                        && pot.wet_raw !== null
+                        Number.isFinite(pot.dry_raw)
+                        && Number.isFinite(pot.wet_raw)
+                        && pot.dry_raw !== pot.wet_raw
                     );
                 }
             );
@@ -1045,7 +1046,11 @@ function nullableNumberFromInput(
         return null;
     }
 
-    return Number(value);
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) {
+        throw new Error("Bitte einen gültigen Kalibrierwert eingeben.");
+    }
+    return parsed;
 }
 
 
@@ -1114,10 +1119,8 @@ async function saveSoilConfig() {
         );
 
         if (!response.ok) {
-            throw new Error(
-                "HTTP "
-                + response.status
-            );
+            const failure = await response.json().catch(() => ({}));
+            throw new Error(typeof failure.detail === "string" ? failure.detail : "Speichern fehlgeschlagen (HTTP " + response.status + ")");
         }
 
         const data =
@@ -1145,7 +1148,7 @@ async function saveSoilConfig() {
         );
 
         $("soilConfigMessage").textContent =
-            "Speichern fehlgeschlagen";
+            error.message || "Speichern fehlgeschlagen";
 
     } finally {
 
@@ -1431,10 +1434,8 @@ async function saveLampConfig() {
         );
 
         if (!response.ok) {
-            throw new Error(
-                "HTTP "
-                + response.status
-            );
+            const failure = await response.json().catch(() => ({}));
+            throw new Error(typeof failure.detail === "string" ? failure.detail : "Speichern fehlgeschlagen (HTTP " + response.status + ")");
         }
 
         const data =
@@ -1461,7 +1462,7 @@ async function saveLampConfig() {
         );
 
         $("lampConfigMessage").textContent =
-            "Speichern fehlgeschlagen";
+            error.message || "Speichern fehlgeschlagen";
 
     } finally {
 
@@ -2084,75 +2085,28 @@ function setupPhotoHistory() {
             }
         );
 
-    $("timelapseInterval")
-        .addEventListener(
-            "change",
-            async function() {
-
-                try {
-
-                    const statusResponse =
-                        await fetch(
-                            "/api/camera/timelapse",
-                            {
-                                cache: "no-store"
-                            }
-                        );
-
-                    if (!statusResponse.ok) {
-                        throw new Error(
-                            "HTTP "
-                            + statusResponse.status
-                        );
-                    }
-
-                    const status =
-                        await statusResponse.json();
-
-
-                    const response = await fetch(
-                        "/api/camera/timelapse",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-                            body: JSON.stringify({
-                                enabled:
-                                    Boolean(
-                                        status.enabled
-                                    ),
-
-                                interval_minutes:
-                                    Number(
-                                        $("timelapseInterval").value
-                                    )
-                            })
-                        }
-                    );
-
-                    if (!response.ok) {
-                        throw new Error(
-                            "HTTP "
-                            + response.status
-                        );
-                    }
-
-                    await loadTimelapseStatus();
-
-                } catch (error) {
-
-                    console.error(
-                        "Timelapse interval save error:",
-                        error
-                    );
-
-                    $("timelapseStatus").textContent =
-                        "Intervall konnte nicht gespeichert werden.";
-                }
+    $("timelapseInterval").addEventListener("change", async function() {
+        const input = $("timelapseInterval");
+        const interval = Number(input.value);
+        input.disabled = true;
+        try {
+            const response = await fetch("/api/camera/timelapse", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({interval_minutes: interval})
+            });
+            if (!response.ok) {
+                const failure = await response.json().catch(() => ({}));
+                throw new Error(typeof failure.detail === "string" ? failure.detail : "Intervall konnte nicht gespeichert werden.");
             }
-        );
+            await loadTimelapseStatus();
+        } catch (error) {
+            await loadTimelapseStatus();
+            $("timelapseStatus").textContent = error.message;
+        } finally {
+            input.disabled = false;
+        }
+    });
 
     $("timelapsePlayButton")
         .addEventListener(

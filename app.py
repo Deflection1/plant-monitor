@@ -1,5 +1,9 @@
 import asyncio
 import json
+import math
+import time
+from functools import wraps
+from configuration import atomic_write_json, next_capture_time, validate_soil_config
 import shutil
 import threading
 
@@ -18,6 +22,7 @@ from pathlib import Path
 from fastapi import (
     Body,
     FastAPI,
+    HTTPException,
     Query
 )
 
@@ -61,6 +66,7 @@ TIMELAPSE_CONFIG_FILE = BASE_DIR / "data" / "timelapse.json"
 SOIL_CONFIG_FILE = BASE_DIR / "data" / "soil_moisture.json"
 LAMP_CONFIG_FILE = BASE_DIR / "data" / "lamp_control.json"
 TIMELAPSE_DEFAULT_INTERVAL_MINUTES = 720
+CONFIG_LOCK = threading.RLock()
 
 CAMERA_STREAM_SIZE = (1280, 720)
 CAMERA_PHOTO_SIZE = (3280, 2464)
@@ -77,68 +83,49 @@ PHOTO_DIR.mkdir(
 # FOTO-HISTORY / ZEITRAFFER KONFIGURATION
 # =====================================================
 
+def configuration_locked(function):
+    @wraps(function)
+    def locked(*args, **kwargs):
+        with CONFIG_LOCK:
+            return function(*args, **kwargs)
+    return locked
+
+
+def persist_config(path, config):
+    try:
+        atomic_write_json(path, config)
+    except (OSError, ValueError) as error:
+        print("Konfiguration konnte nicht gespeichert werden:", error)
+        raise HTTPException(
+            status_code=503,
+            detail="Speichern fehlgeschlagen. Bisherige Einstellungen bleiben aktiv."
+        ) from error
+
+
 def load_timelapse_config():
-
-    default = {
-        "enabled":
-            False,
-
-        "interval_minutes":
-            TIMELAPSE_DEFAULT_INTERVAL_MINUTES
-    }
-
+    default = {"enabled": False, "interval_minutes": TIMELAPSE_DEFAULT_INTERVAL_MINUTES,
+               "next_capture_at": None}
     if not TIMELAPSE_CONFIG_FILE.exists():
         return default
-
     try:
-
-        data = json.loads(
-            TIMELAPSE_CONFIG_FILE.read_text()
-        )
-
-        interval = int(
-            data.get(
-                "interval_minutes",
-                TIMELAPSE_DEFAULT_INTERVAL_MINUTES
-            )
-        )
-
-        return {
-            "enabled":
-                bool(
-                    data.get(
-                        "enabled",
-                        False
-                    )
-                ),
-
-            "interval_minutes":
-                max(
-                    1,
-                    interval
-                )
-        }
-
-    except Exception:
-
+        data = json.loads(TIMELAPSE_CONFIG_FILE.read_text())
+        if not isinstance(data, dict) or not isinstance(data.get("enabled", False), bool):
+            return default
+        interval = int(data.get("interval_minutes", TIMELAPSE_DEFAULT_INTERVAL_MINUTES))
+        if not 1 <= interval <= 10080:
+            return default
+        enabled = data.get("enabled", False)
+        due = data.get("next_capture_at")
+        if not isinstance(due, (int, float)) or isinstance(due, bool) or not math.isfinite(due) or due <= 0:
+            due = None
+        return {"enabled": enabled, "interval_minutes": interval,
+                "next_capture_at": due if enabled else None}
+    except (OSError, ValueError, TypeError, OverflowError):
         return default
 
 
-def save_timelapse_config(
-    config
-):
-
-    TIMELAPSE_CONFIG_FILE.parent.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    TIMELAPSE_CONFIG_FILE.write_text(
-        json.dumps(
-            config,
-            indent=2
-        )
-    )
+def save_timelapse_config(config):
+    persist_config(TIMELAPSE_CONFIG_FILE, config)
 
 
 TIMELAPSE_CONFIG = load_timelapse_config()
@@ -215,117 +202,33 @@ def default_soil_config():
 
 
 def load_soil_config():
-
-    default = default_soil_config()
-
     if not SOIL_CONFIG_FILE.exists():
-        return default
-
+        return default_soil_config()
     try:
-
-        data = json.loads(
-            SOIL_CONFIG_FILE.read_text()
-        )
-
-        pots = data.get(
-            "pots",
-            []
-        )
-
-        if len(pots) != 2:
-            return default
-
-        result = default_soil_config()
-
-        for index in range(2):
-
-            source = pots[index]
-            target = result["pots"][index]
-
-            target["name"] = str(
-                source.get(
-                    "name",
-                    target["name"]
-                )
-            )[:40]
-
-            for key in (
-                "dry_raw",
-                "wet_raw"
-            ):
-
-                value = source.get(key)
-
-                if value is None:
-                    target[key] = None
-
-                else:
-                    target[key] = float(value)
-
-        return result
-
-    except Exception:
-
-        return default
+        return validate_soil_config(json.loads(SOIL_CONFIG_FILE.read_text()))
+    except (OSError, ValueError, TypeError) as error:
+        print("Ungültige Bodenfeuchte-Konfiguration:", error)
+        return default_soil_config()
 
 
-def save_soil_config(
-    config
-):
-
-    SOIL_CONFIG_FILE.parent.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    SOIL_CONFIG_FILE.write_text(
-        json.dumps(
-            config,
-            indent=2
-        )
-    )
+def save_soil_config(config):
+    persist_config(SOIL_CONFIG_FILE, config)
 
 
 SOIL_CONFIG = load_soil_config()
 
 
-def raw_to_soil_percent(
-    raw_value,
-    dry_raw,
-    wet_raw
-):
-
-    if (
-        raw_value is None
-        or dry_raw is None
-        or wet_raw is None
-        or dry_raw == wet_raw
-    ):
+def raw_to_soil_percent(raw_value, dry_raw, wet_raw):
+    try:
+        raw, dry, wet = float(raw_value), float(dry_raw), float(wet_raw)
+    except (TypeError, ValueError, OverflowError):
         return None
-
-    value = (
-        (
-            float(raw_value)
-            - float(dry_raw)
-        )
-        /
-        (
-            float(wet_raw)
-            - float(dry_raw)
-        )
-        * 100.0
-    )
-
-    return round(
-        max(
-            0.0,
-            min(
-                100.0,
-                value
-            )
-        ),
-        1
-    )
+    if not all(math.isfinite(value) for value in (raw, dry, wet)) or dry == wet:
+        return None
+    value = (raw - dry) / (wet - dry) * 100.0
+    if not math.isfinite(value):
+        return None
+    return round(max(0.0, min(100.0, value)), 1)
 
 
 def add_soil_values(
@@ -537,21 +440,8 @@ def load_lamp_config():
         return default
 
 
-def save_lamp_config(
-    config
-):
-
-    LAMP_CONFIG_FILE.parent.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    LAMP_CONFIG_FILE.write_text(
-        json.dumps(
-            config,
-            indent=2
-        )
-    )
+def save_lamp_config(config):
+    persist_config(LAMP_CONFIG_FILE, config)
 
 
 LAMP_CONFIG = load_lamp_config()
@@ -748,64 +638,43 @@ def capture_photo():
 
 
 async def timelapse_worker():
-
+    global TIMELAPSE_CONFIG
+    retry_after = 0.0
+    retry_schedule = None
     while True:
-
-        config = TIMELAPSE_CONFIG.copy()
-
-        if not config.get(
-            "enabled",
-            False
-        ):
-
-            await asyncio.sleep(
-                5
-            )
-
-            continue
-
-
-        interval_seconds = max(
-            60,
-            int(
-                config.get(
-                    "interval_minutes",
-                    TIMELAPSE_DEFAULT_INTERVAL_MINUTES
-                )
-            )
-            * 60
-        )
-
-
-        await asyncio.sleep(
-            interval_seconds
-        )
-
-
-        if not TIMELAPSE_CONFIG.get(
-            "enabled",
-            False
-        ):
-            continue
-
-
         try:
-
-            result = await asyncio.to_thread(
-                capture_photo
-            )
-
-            print(
-                "Zeitraffer-Foto gespeichert:",
-                result["filename"]
-            )
-
+            with CONFIG_LOCK:
+                config = TIMELAPSE_CONFIG.copy()
+                if config["enabled"] and config.get("next_capture_at") is None:
+                    # Migrate older configurations once, then keep the deadline across restarts.
+                    config["next_capture_at"] = time.time() + config["interval_minutes"] * 60
+                    save_timelapse_config(config)
+                    TIMELAPSE_CONFIG = config
+            due = config.get("next_capture_at")
+            schedule = (config["enabled"], config["interval_minutes"], due)
+            if schedule != retry_schedule:
+                retry_after = 0.0
+            if config["enabled"] and due is not None and time.time() >= max(due, retry_after):
+                # Recheck immediately before starting. An exposure already in progress can finish.
+                with CONFIG_LOCK:
+                    unchanged = TIMELAPSE_CONFIG == config
+                if unchanged:
+                    try:
+                        result = await asyncio.to_thread(capture_photo)
+                        print("Zeitraffer-Foto gespeichert:", result["filename"])
+                    finally:
+                        # On camera or disk errors, avoid a rapid retry loop.
+                        retry_schedule = schedule
+                        retry_after = time.time() + 60
+                    with CONFIG_LOCK:
+                        if TIMELAPSE_CONFIG == config:
+                            updated = {**config, "next_capture_at": time.time() + config["interval_minutes"] * 60}
+                            save_timelapse_config(updated)
+                            TIMELAPSE_CONFIG = updated
         except Exception as error:
-
-            print(
-                "Zeitraffer-Fehler:",
-                error
-            )
+            print("Zeitraffer-Fehler:", error)
+        # Re-read settings at least once per second instead of sleeping for hours.
+        await asyncio.sleep(1)
 
 
 # =====================================================
@@ -1116,6 +985,7 @@ def lamp_config():
 @app.post(
     "/api/light/config"
 )
+@configuration_locked
 def lamp_config_update(
     payload: dict = Body(...)
 ):
@@ -1233,15 +1103,9 @@ def lamp_config_update(
         "power_percent"
     ] = power_percent
 
-    LAMP_CONFIG.clear()
-
-    LAMP_CONFIG.update(
-        updated
-    )
-
-    save_lamp_config(
-        LAMP_CONFIG
-    )
+    save_lamp_config(updated)
+    global LAMP_CONFIG
+    LAMP_CONFIG = updated
 
     return {
         "status":
@@ -1480,71 +1344,24 @@ def camera_timelapse_status():
 @app.post(
     "/api/camera/timelapse"
 )
-def camera_timelapse_update(
-    payload: dict = Body(...)
-):
-
-    enabled = bool(
-        payload.get(
-            "enabled",
-            TIMELAPSE_CONFIG.get(
-                "enabled",
-                False
-            )
-        )
-    )
-
+@configuration_locked
+def camera_timelapse_update(payload: dict = Body(...)):
+    global TIMELAPSE_CONFIG
+    enabled = payload.get("enabled", TIMELAPSE_CONFIG["enabled"])
+    value = payload.get("interval_minutes", TIMELAPSE_CONFIG["interval_minutes"])
+    if not isinstance(enabled, bool) or isinstance(value, bool):
+        raise HTTPException(status_code=422, detail="Ungültige Zeitraffer-Einstellung")
     try:
-
-        interval = int(
-            payload.get(
-                "interval_minutes",
-                TIMELAPSE_CONFIG.get(
-                    "interval_minutes",
-                    TIMELAPSE_DEFAULT_INTERVAL_MINUTES
-                )
-            )
-        )
-
-    except (
-        TypeError,
-        ValueError
-    ):
-
-        interval = (
-            TIMELAPSE_DEFAULT_INTERVAL_MINUTES
-        )
-
-
-    interval = max(
-        1,
-        min(
-            interval,
-            10080
-        )
-    )
-
-
-    TIMELAPSE_CONFIG.update({
-        "enabled":
-            enabled,
-
-        "interval_minutes":
-            interval
-    })
-
-
-    save_timelapse_config(
-        TIMELAPSE_CONFIG
-    )
-
-
-    return {
-        "status":
-            "ok",
-
-        **TIMELAPSE_CONFIG
-    }
+        interval = int(value)
+        if float(value) != interval or not 1 <= interval <= 10080:
+            raise ValueError()
+    except (ValueError, TypeError, OverflowError) as error:
+        raise HTTPException(status_code=422, detail="Intervall muss 1 bis 10080 ganze Minuten betragen") from error
+    updated = {"enabled": enabled, "interval_minutes": interval,
+               "next_capture_at": next_capture_time(TIMELAPSE_CONFIG, enabled, interval, time.time())}
+    save_timelapse_config(updated)
+    TIMELAPSE_CONFIG = updated
+    return {"status": "ok", **TIMELAPSE_CONFIG}
 
 
 
@@ -1563,107 +1380,16 @@ def soil_config():
 @app.post(
     "/api/soil/config"
 )
-def soil_config_update(
-    payload: dict = Body(...)
-):
-
-    pots = payload.get(
-        "pots"
-    )
-
-    if (
-        not isinstance(
-            pots,
-            list
-        )
-        or len(pots) != 2
-    ):
-
-        return {
-            "status":
-                "error",
-
-            "message":
-                "Genau zwei Topf-Konfigurationen erwartet"
-        }
-
-
-    updated = default_soil_config()
-
-
-    for index in range(2):
-
-        source = pots[index]
-        target = updated[
-            "pots"
-        ][index]
-
-        target["name"] = str(
-            source.get(
-                "name",
-                target["name"]
-            )
-        )[:40]
-
-
-        for key in (
-            "dry_raw",
-            "wet_raw"
-        ):
-
-            value = source.get(
-                key
-            )
-
-            if (
-                value is None
-                or value == ""
-            ):
-
-                target[key] = None
-
-            else:
-
-                try:
-
-                    target[key] = float(
-                        value
-                    )
-
-                except (
-                    TypeError,
-                    ValueError
-                ):
-
-                    return {
-                        "status":
-                            "error",
-
-                        "message":
-                            (
-                                "Ungültiger Kalibrierwert "
-                                + key
-                            )
-                    }
-
-
-    SOIL_CONFIG.clear()
-
-    SOIL_CONFIG.update(
-        updated
-    )
-
-    save_soil_config(
-        SOIL_CONFIG
-    )
-
-
-    return {
-        "status":
-            "ok",
-
-        **SOIL_CONFIG
-    }
+@configuration_locked
+def soil_config_update(payload: dict = Body(...)):
+    global SOIL_CONFIG
+    try:
+        updated = validate_soil_config(payload)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    save_soil_config(updated)
+    SOIL_CONFIG = updated
+    return {"status": "ok", **SOIL_CONFIG}
 
 
 @app.get(
