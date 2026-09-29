@@ -2042,6 +2042,8 @@ document.addEventListener(
 
         setupLampControl();
 
+        setupIrrigation();
+
 
         createCharts();
 
@@ -2072,3 +2074,72 @@ document.addEventListener(
     }
 );
 
+
+
+// Display-only irrigation setup: no start/stop requests or hardware commands.
+function setupIrrigation() {
+    const form = $("irrigationForm");
+    const fields = $("irrigationFields");
+    const message = $("irrigationMessage");
+    const retry = $("irrigationRetry");
+
+    function showConfig(config) {
+        if (typeof config.tank_name !== "string" || !Array.isArray(config.pumps)
+                || config.pumps.length !== 2 || config.pumps.some((p, i) =>
+                    p.id !== i + 1 || typeof p.name !== "string")) {
+            throw new Error("Ungültige Antwort");
+        }
+        $("irrigationTankInput").value = config.tank_name;
+        $("irrigationTankName").textContent = config.tank_name;
+        config.pumps.forEach((pump) => {
+            $("irrigationPumpInput" + pump.id).value = pump.name;
+            $("irrigationPumpName" + pump.id).textContent = pump.name;
+        });
+    }
+
+    async function load() {
+        fields.disabled = true;
+        retry.hidden = true;
+        message.textContent = "Einstellungen werden geladen …";
+        try {
+            const response = await fetch("/api/irrigation/config", {cache: "no-store"});
+            if (!response.ok) throw new Error("Laden fehlgeschlagen");
+            showConfig(await response.json());
+            fields.disabled = false;
+            message.textContent = "Namen können gespeichert werden. Hardware ausstehend.";
+        } catch (error) {
+            message.textContent = "Einstellungen konnten nicht geladen werden.";
+            retry.hidden = false;
+        }
+    }
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (fields.disabled) return;
+        const payload = {
+            tank_name: $("irrigationTankInput").value.trim(),
+            pumps: [1, 2].map(id => ({id, name: $("irrigationPumpInput" + id).value.trim()}))
+        };
+        if (!payload.tank_name || payload.pumps.some(p => !p.name)) {
+            message.textContent = "Bitte alle Namen ausfüllen.";
+            return;
+        }
+        fields.disabled = true;
+        message.textContent = "Wird gespeichert …";
+        try {
+            const response = await fetch("/api/irrigation/config", {
+                method: "POST", headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) throw new Error("Speichern fehlgeschlagen");
+            showConfig(await response.json());
+            message.textContent = "Gespeichert. Hardware bleibt deaktiviert.";
+        } catch (error) {
+            message.textContent = "Speichern fehlgeschlagen. Bitte erneut versuchen.";
+        } finally {
+            fields.disabled = false;
+        }
+    });
+    retry.addEventListener("click", load);
+    load();
+}

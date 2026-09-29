@@ -781,3 +781,13 @@ footer { color: #a9c5b8; }
 @media (forced-colors: active) {
     .lamp-profile-image { filter: none; }
 }
+
+/* Irrigation preparation */
+.irrigation-panel { margin-top: 24px; }
+.irrigation-icon { color: #76edff; background: linear-gradient(145deg, rgba(70,224,230,.2), rgba(57,108,228,.14)); }
+.irrigation-panel .lamp-control-card { display: flex; flex-direction: column; gap: 12px; }
+.irrigation-panel button:disabled { opacity: .5; cursor: not-allowed; }
+.irrigation-panel fieldset { min-width: 0; border: 0; padding: 16px 0 0; margin: 0; }
+.irrigation-panel label { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.irrigation-panel input { width: 100%; box-sizing: border-box; }
+.irrigation-history { margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(200,255,244,.12); }

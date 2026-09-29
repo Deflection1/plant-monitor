@@ -5,6 +5,7 @@ import time
 from functools import wraps
 from configuration import atomic_write_json, next_capture_time, validate_soil_config
 from lamp_profiles import normalize_lamp_config, update_lamp_profile
+from irrigation import default_irrigation_config, validate_irrigation_config, irrigation_status
 import shutil
 import threading
 
@@ -65,6 +66,7 @@ PHOTO_DIR = BASE_DIR / "photos"
 LATEST_PHOTO = PHOTO_DIR / "latest.jpg"
 TIMELAPSE_CONFIG_FILE = BASE_DIR / "data" / "timelapse.json"
 SOIL_CONFIG_FILE = BASE_DIR / "data" / "soil_moisture.json"
+IRRIGATION_CONFIG_FILE = BASE_DIR / "data" / "irrigation.json"
 LAMP_CONFIG_FILE = BASE_DIR / "data" / "lamp_control.json"
 TIMELAPSE_DEFAULT_INTERVAL_MINUTES = 720
 CONFIG_LOCK = threading.RLock()
@@ -101,6 +103,20 @@ def persist_config(path, config):
             status_code=503,
             detail="Speichern fehlgeschlagen. Bisherige Einstellungen bleiben aktiv."
         ) from error
+
+
+
+def load_irrigation_config():
+    try:
+        return validate_irrigation_config(json.loads(IRRIGATION_CONFIG_FILE.read_text()))
+    except FileNotFoundError:
+        return default_irrigation_config()
+    except (OSError, ValueError) as error:
+        print("Bewässerungskonfiguration nicht lesbar:", error)
+        return default_irrigation_config()
+
+
+IRRIGATION_CONFIG = load_irrigation_config()
 
 
 def load_timelapse_config():
@@ -840,6 +856,32 @@ def light_today():
 
     return stats
 
+
+
+
+# Display-only preparation. No GPIO, scheduler or watering execution endpoints.
+@app.get("/api/irrigation/config")
+@configuration_locked
+def irrigation_config():
+    return IRRIGATION_CONFIG
+
+
+@app.post("/api/irrigation/config")
+@configuration_locked
+def irrigation_config_update(payload: dict = Body(...)):
+    global IRRIGATION_CONFIG
+    try:
+        updated = validate_irrigation_config(payload)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    persist_config(IRRIGATION_CONFIG_FILE, updated)
+    IRRIGATION_CONFIG = updated
+    return {"status": "ok", **updated}
+
+
+@app.get("/api/irrigation/status")
+def irrigation_status_read():
+    return irrigation_status()
 
 
 # =====================================================

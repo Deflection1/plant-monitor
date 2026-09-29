@@ -555,6 +555,20 @@ Die Konfiguration bleibt nach Browser-Neuladen und Raspberry-Pi-Neustart erhalte
 
 Die komplette Pumpen- und Tanktechnik befindet sich **außerhalb des Pflanzenschranks**.
 
+## Software-Vorbereitung
+
+Auf dem Test-Branch ist eine reine Anzeige- und Konfigurationsvorbereitung vorhanden:
+
+- Liquid-Glass-Bereich unter Steuerung für Tank und beide Pumpen
+- persistent speicherbare Namen in `data/irrigation.json`
+- `GET /api/irrigation/config`, `POST /api/irrigation/config`
+- `GET /api/irrigation/status` meldet ausdrücklich nicht verfügbare Hardware
+- Tankstatus unbekannt; keine erfundenen Füllstände oder Bewässerungsereignisse
+- deaktivierte Start-Schaltflächen; keine GPIO-Ausgabe, Timer oder Automatik
+- GPIO-Zuordnung, Fördermengen-Kalibrierung, aktive Sicherheitslogik und Ereignisprotokollierung bleiben ausstehend
+
+Gespeichert werden ausschließlich Bezeichnungen. Die unten beschriebene Sicherheitslogik ist weiterhin geplant und noch nicht implementiert.
+
 ## Wasserkreis
 
 ```text

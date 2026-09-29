@@ -21,7 +21,7 @@
     >
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-flower">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-irrigation">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -747,6 +747,65 @@
     </section>
 
 
+
+    <section class="panel irrigation-panel" aria-labelledby="irrigationHeading">
+        <div class="panel-header">
+            <div class="lamp-control-heading">
+                <span class="glass-icon irrigation-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" fill="none">
+                        <defs><linearGradient id="waterGlass" x1="12" y1="6" x2="52" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#ddffff"/><stop offset=".45" stop-color="#50dce9"/><stop offset="1" stop-color="#347bf3"/></linearGradient></defs>
+                        <path d="M32 7C27 17 13 29 13 40a19 19 0 0 0 38 0C51 29 37 17 32 7Z" fill="url(#waterGlass)" stroke="#c8ffff" stroke-opacity=".65"/>
+                        <path d="M25 29c-5 6-7 10-6 15" stroke="white" stroke-opacity=".85" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M30 53c9 1 15-5 16-12" stroke="#8bffff" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <div><p class="eyebrow">WASSER &amp; VERSORGUNG</p><h2 id="irrigationHeading">Bewässerung</h2></div>
+            </div>
+            <span class="camera-meta">Hardware ausstehend</span>
+        </div>
+        <p class="camera-meta">Zwei getrennte Pumpen · gemeinsamer Tank · noch keine Pumpenansteuerung</p>
+        <div class="lamp-control-grid">
+            <article class="lamp-control-card">
+                <span class="lamp-control-label" id="irrigationTankName">Wassertank</span>
+                <strong>Tankstatus unbekannt</strong>
+                <small>WLSW1 noch nicht angebunden. Der Schalter erkennt den Tankzustand, keinen Füllstand in Prozent.</small>
+            </article>
+            <article class="lamp-control-card">
+                <span class="lamp-control-label" id="irrigationPumpName1">Pumpe Topf 1</span>
+                <strong>Nicht verbunden</strong>
+                <small>PPFL-1 · Topf 1 · letzte Bewässerung: —</small>
+                <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
+            </article>
+            <article class="lamp-control-card">
+                <span class="lamp-control-label" id="irrigationPumpName2">Pumpe Topf 2</span>
+                <strong>Nicht verbunden</strong>
+                <small>PPFL-1 · Topf 2 · letzte Bewässerung: —</small>
+                <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
+            </article>
+        </div>
+        <p class="camera-meta" id="irrigationUnavailable">Start nicht verfügbar. GPIO-Zuordnung, Tankerkennung und Pumpenkalibrierung stehen noch aus.</p>
+        <details class="lamp-config">
+            <summary>Bewässerung einrichten</summary>
+            <form id="irrigationForm">
+                <fieldset id="irrigationFields" disabled>
+                    <legend class="camera-meta">Bezeichnungen</legend>
+                    <div class="lamp-config-grid">
+                        <label>Tank<input id="irrigationTankInput" maxlength="40" required value="Wassertank"></label>
+                        <label>Pumpe für Topf 1<input id="irrigationPumpInput1" maxlength="40" required value="Pumpe Topf 1"></label>
+                        <label>Pumpe für Topf 2<input id="irrigationPumpInput2" maxlength="40" required value="Pumpe Topf 2"></label>
+                    </div>
+                    <div class="button-row"><button class="primary" type="submit">Einstellungen speichern</button></div>
+                </fieldset>
+                <p id="irrigationMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p>
+                <button type="button" id="irrigationRetry" hidden>Erneut laden</button>
+            </form>
+        </details>
+        <div class="irrigation-history">
+            <h3>Bewässerungsverlauf</h3>
+            <p class="camera-meta">Noch nicht verfügbar. In dieser Vorbereitung werden keine Bewässerungen ausgeführt oder protokolliert.</p>
+        </div>
+    </section>
+
     <!-- SYSTEM -->
 
     <section class="main-grid system-only-grid">
@@ -1456,7 +1515,7 @@
 ></script>
 
 <script
-    src="/static/app.js?v=20260929-growth-icon"
+    src="/static/app.js?v=20260929-irrigation"
 ></script>
 
 <script src="/static/overview.js?v=6"></script>
