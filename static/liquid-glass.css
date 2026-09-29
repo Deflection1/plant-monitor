@@ -947,3 +947,11 @@ footer { color: #a9c5b8; }
 #ovWaterEmpty { margin:0; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; font-size:.8rem; color:#b9d1cb; padding:12px; box-sizing:border-box; }
 #ovWaterEmpty[hidden] { display:none; }
 .watering-estimate { margin:6px 0 0; color:#a9c4bc; font-size:.65rem; line-height:1.4; }
+
+/* Fan sliders and exact percentage inputs share the existing saved values. */
+.fan-range-row { display:flex; align-items:center; gap:16px; margin:8px 0 16px; }
+.fan-range-row input[type="range"] { flex:1; min-width:0; width:100%; min-height:36px; accent-color:#75ddc2; cursor:pointer; }
+.fan-percent-input { display:flex; align-items:center; gap:6px; flex:0 0 auto; color:#cce8df; }
+.fan-percent-input input[type="number"] { box-sizing:border-box; width:74px; min-height:42px; border:1px solid rgba(203,243,231,.25); border-radius:10px; padding:8px; color:#edf9f3; background:rgba(5,29,27,.45); font:inherit; }
+.fan-range-row input:focus-visible { outline:2px solid #97f2db; outline-offset:3px; }
+@media(max-width:420px) { .fan-range-row { gap:10px; } .fan-percent-input input[type="number"] { width:64px; } }
