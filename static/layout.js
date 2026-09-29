@@ -1,6 +1,5 @@
 // Navigation and disclosure behavior only; no device or configuration changes.
 (() => {
-    const resize = () => requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
     document.querySelectorAll("[data-jump]").forEach(button => {
         button.addEventListener("click", () => {
             const target = document.getElementById(button.dataset.jump);
@@ -11,7 +10,6 @@
             if (heading) { heading.setAttribute("tabindex", "-1"); heading.focus({preventScroll:true}); }
         });
     });
-    document.getElementById("overviewAnalysis").addEventListener("toggle", resize);
     // Reveal a collapsed technical field before native form validation focuses it.
     document.addEventListener("invalid", event => {
         let parent = event.target.parentElement;

@@ -6,8 +6,6 @@
         const controls = view === 'controls';
         el('overviewView').hidden = controls;
         el('controlsView').hidden = !controls;
-        el(controls ? 'controlsCameraSlot' : 'overviewCameraSlot').append(el('sharedCameraPanel'));
-        el(controls ? 'controlsHistorySlot' : 'overviewHistorySlot').append(el('photoHistoryPanel'));
         document.querySelectorAll('[data-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
         requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
     }

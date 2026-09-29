@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/static/style.css?v=12">
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-layout">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-fixed-camera">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -135,7 +135,7 @@
 <dl><div><dt>Zuluft · gespeichert</dt><dd id="ovFanIntake">—</dd></div><div><dt>Abluft · gespeichert</dt><dd id="ovFanExhaust">—</dd></div><div><dt>Tatsächliche Leistung</dt><dd id="ovFanActual">—</dd></div></dl><p class="camera-meta">Sollwerte sind Einstellungen, keine gemessenen Drehzahlen.</p><a href="#steuerung" data-control-target="fanControlSection">Zur Lüftersteuerung →</a>
 </article>
 </div></section>
-<div id="overviewCameraSlot"></div><div id="overviewHistorySlot"></div><details class="panel overview-analysis" id="overviewAnalysis"><summary>Klima- &amp; Lichtverlauf ansehen</summary><section class="panel history-panel">
+<section class="panel overview-analysis" id="overviewAnalysis" aria-labelledby="overviewAnalysisHeading"><h2 id="overviewAnalysisHeading">Klima- &amp; Lichtverlauf</h2><section class="panel history-panel">
 
         <div class="panel-header history-header">
 
@@ -470,10 +470,165 @@
     </section>
 
 
-    </details></main>
+    </section><div id="overviewCameraSlot"><article class="panel camera-panel" id="sharedCameraPanel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        KAMERA
+                    </p>
+
+                    <h2>
+                        Pflanzenansicht
+                    </h2>
+
+                </div>
+
+
+                <span class="badge">
+                    Kamera
+                </span>
+
+            </div>
+
+
+            <div class="camera-placeholder" id="cameraArea">
+
+                <div class="camera-empty" id="cameraEmpty">
+
+                    <span class="camera-icon">
+                        📷
+                    </span>
+
+                    <h3>
+                        Kamera bereit
+                    </h3>
+
+                    <p id="cameraMessage">
+                        Livestream wird gestartet …
+                    </p>
+
+                </div>
+
+                <img id="cameraImage" class="camera-image" alt="Aktuelle Pflanzenansicht" hidden>
+
+            </div>
+
+
+            <div class="button-row">
+
+                <button class="primary" id="captureButton">
+                    📷 Foto aufnehmen
+                </button>
+
+                <button id="galleryButton">
+                    🖼️ Bilder
+                </button>
+
+                <button id="timelapseButton">
+                    ⏱️ Zeitraffer
+                </button>
+
+                <button id="fullscreenButton" disabled>
+                    Vollbild
+                </button>
+
+                <span class="camera-meta" id="cameraMeta">
+                    Kamera wird geprüft …
+                </span>
+
+            </div>
+
+        </article>
+
+
+        </div><div id="overviewHistorySlot"><section class="panel photo-history-panel" id="photoHistoryPanel" hidden>
+
+        <div class="panel-header history-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    KAMERA-ARCHIV
+                </p>
+
+                <h2>
+                    Bilder &amp; Zeitraffer
+                </h2>
+
+            </div>
+
+            <button id="closePhotoHistoryButton">
+                Schließen
+            </button>
+
+        </div>
+
+
+        <div class="timelapse-controls">
+
+            <label>
+                Automatische Aufnahme
+
+                <select id="timelapseInterval">
+                    <option value="60">jede Stunde</option>
+                    <option value="180">alle 3 Stunden</option>
+                    <option value="360">alle 6 Stunden</option>
+                    <option value="720" selected>alle 12 Stunden · 2/Tag</option>
+                    <option value="1440">alle 24 Stunden · 1/Tag</option>
+                    <option value="2880">alle 48 Stunden</option>
+                </select>
+            </label>
+
+            <button class="primary" id="timelapseToggleButton">
+                Zeitraffer starten
+            </button>
+
+            <button id="timelapsePlayButton">
+                ▶ Bilder abspielen
+            </button>
+
+            <span class="camera-meta" id="timelapseStatus">
+                Wird geladen …
+            </span>
+
+        </div>
+
+
+        <div class="timelapse-player" id="timelapsePlayer" hidden>
+
+            <img id="timelapseImage" alt="Zeitraffer">
+
+            <div class="timelapse-player-meta">
+
+                <span id="timelapsePlayerDate">
+                    --
+                </span>
+
+                <button id="timelapseStopButton">
+                    Stop
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="photo-grid" id="photoGrid"></div>
+
+        <p class="estimate-note" id="photoHistoryEmpty" hidden>
+            Noch keine gespeicherten Bilder vorhanden.
+        </p>
+
+    </section>
+
+
+    </div></main>
 <div id="controlsView" hidden>
 
-    <nav class="control-jump-nav" aria-label="Steuerungsbereiche"><button type="button" data-jump="lampControlSection">Licht</button><button type="button" data-jump="irrigationControlSection">Wasser &amp; Töpfe</button><button type="button" data-jump="fanControlSection">Lüftung</button><button type="button" data-jump="cameraControlSection">Kamera</button><button type="button" data-jump="systemDiagnostics">System</button></nav><section class="panel lamp-control-panel" id="lampControlSection">
+    <nav class="control-jump-nav" aria-label="Steuerungsbereiche"><button type="button" data-jump="lampControlSection">Licht</button><button type="button" data-jump="irrigationControlSection">Wasser &amp; Töpfe</button><button type="button" data-jump="fanControlSection">Lüftung</button><button type="button" data-jump="systemDiagnostics">System</button></nav><section class="panel lamp-control-panel" id="lampControlSection">
 
         <div class="panel-header">
 
@@ -1101,169 +1256,7 @@
 </fieldset><p id="fanMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p><button type="button" id="fanRetry" hidden>Erneut laden</button></form>
 </details></section>
 
-    <div class="controls-camera-bottom" id="cameraControlSection">
-        <div id="controlsCameraSlot" class="camera-panel-slot"><article class="panel camera-panel" id="sharedCameraPanel">
-
-            <div class="panel-header">
-
-                <div>
-
-                    <p class="eyebrow">
-                        KAMERA
-                    </p>
-
-                    <h2>
-                        Pflanzenansicht
-                    </h2>
-
-                </div>
-
-
-                <span class="badge">
-                    Kamera
-                </span>
-
-            </div>
-
-
-            <div class="camera-placeholder" id="cameraArea">
-
-                <div class="camera-empty" id="cameraEmpty">
-
-                    <span class="camera-icon">
-                        📷
-                    </span>
-
-                    <h3>
-                        Kamera bereit
-                    </h3>
-
-                    <p id="cameraMessage">
-                        Livestream wird gestartet …
-                    </p>
-
-                </div>
-
-                <img id="cameraImage" class="camera-image" alt="Aktuelle Pflanzenansicht" hidden>
-
-            </div>
-
-
-            <div class="button-row">
-
-                <button class="primary" id="captureButton">
-                    📷 Foto aufnehmen
-                </button>
-
-                <button id="galleryButton">
-                    🖼️ Bilder
-                </button>
-
-                <button id="timelapseButton">
-                    ⏱️ Zeitraffer
-                </button>
-
-                <button id="fullscreenButton" disabled>
-                    Vollbild
-                </button>
-
-                <span class="camera-meta" id="cameraMeta">
-                    Kamera wird geprüft …
-                </span>
-
-            </div>
-
-        </article>
-
-
-        </div>
-    </div>
-
-    <div id="controlsHistorySlot"><section class="panel photo-history-panel" id="photoHistoryPanel" hidden>
-
-        <div class="panel-header history-header">
-
-            <div>
-
-                <p class="eyebrow">
-                    KAMERA-ARCHIV
-                </p>
-
-                <h2>
-                    Bilder &amp; Zeitraffer
-                </h2>
-
-            </div>
-
-            <button id="closePhotoHistoryButton">
-                Schließen
-            </button>
-
-        </div>
-
-
-        <div class="timelapse-controls">
-
-            <label>
-                Automatische Aufnahme
-
-                <select id="timelapseInterval">
-                    <option value="60">jede Stunde</option>
-                    <option value="180">alle 3 Stunden</option>
-                    <option value="360">alle 6 Stunden</option>
-                    <option value="720" selected>alle 12 Stunden · 2/Tag</option>
-                    <option value="1440">alle 24 Stunden · 1/Tag</option>
-                    <option value="2880">alle 48 Stunden</option>
-                </select>
-            </label>
-
-            <button class="primary" id="timelapseToggleButton">
-                Zeitraffer starten
-            </button>
-
-            <button id="timelapsePlayButton">
-                ▶ Bilder abspielen
-            </button>
-
-            <span class="camera-meta" id="timelapseStatus">
-                Wird geladen …
-            </span>
-
-        </div>
-
-
-        <div class="timelapse-player" id="timelapsePlayer" hidden>
-
-            <img id="timelapseImage" alt="Zeitraffer">
-
-            <div class="timelapse-player-meta">
-
-                <span id="timelapsePlayerDate">
-                    --
-                </span>
-
-                <button id="timelapseStopButton">
-                    Stop
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="photo-grid" id="photoGrid"></div>
-
-        <p class="estimate-note" id="photoHistoryEmpty" hidden>
-            Noch keine gespeicherten Bilder vorhanden.
-        </p>
-
-    </section>
-
-
-    </div>
-
-
-<details class="panel system-diagnostics" id="systemDiagnostics"><summary>System &amp; Diagnose</summary><section class="main-grid system-only-grid">
+    <details class="panel system-diagnostics" id="systemDiagnostics"><summary>System &amp; Diagnose</summary><section class="main-grid system-only-grid">
 
 
         <!-- KAMERA -->
@@ -1529,10 +1522,10 @@
 
 <script src="/static/app.js?v=20260929-water-auto"></script>
 
-<script src="/static/overview.js?v=7"></script>
+<script src="/static/overview.js?v=8"></script>
 <script src="/static/pump-icons.js?v=1"></script>
 <script src="/static/fans.js?v=1"></script>
 <script src="/static/overview-equipment.js?v=2"></script>
-<script src="/static/layout.js?v=1"></script></body>
+<script src="/static/layout.js?v=2"></script></body>
 
 </html>

@@ -490,8 +490,8 @@ Die Seite trennt Beobachten und Einstellen; das Liquid-Glass-Design und die vorh
 2. Temperatur, Luftfeuchtigkeit, VPD und Licht
 3. Topf 1/2 mit Bodenfeuchte, vorgemerktem Bewässerungsmodus und Einzelmenge
 4. kompakte Versorgungskarten für Lampe, Tank/Bewässerung und Lüfter
-5. Kamera mit maximal 320 px breiter Vorschau; Archiv bei Bedarf
-6. aufklappbarer Klima- und Lichtverlauf einschließlich Beleuchtungsstatistik
+5. dauerhaft sichtbarer Klima- und Lichtverlauf einschließlich Beleuchtungsstatistik
+6. Kamera mit maximal 320 px breiter Vorschau; Archiv und Zeitraffer bei Bedarf
 
 Gespeicherte Sollwerte bleiben ausdrücklich von tatsächlichen Ausgängen getrennt. Die Versorgungskarten aktualisieren sich bei sichtbarer Übersicht alle 15 Sekunden und bei Rückkehr zur Ansicht. Abruffehler blenden alte Werte der betroffenen Karte aus. Direkte Links führen zur passenden Steuerung.
 
@@ -500,10 +500,9 @@ Gespeicherte Sollwerte bleiben ausdrücklich von tatsächlichen Ausgängen getre
 1. Licht: Profil, Leistung und Zeitplan
 2. Wasser & Töpfe: gemeinsame Tankanzeige; je Topf Bodenfeuchte und passende Pumpe zusammen; Bewässerungseinstellungen und separate Sensorkalibrierung
 3. Lüftung: Zu- und Abluft nebeneinander
-4. Kamera und Zeitraffer
-5. aufklappbare Systemdiagnose mit Rohwerten und CPU-Temperatur
+4. aufklappbare Systemdiagnose mit Rohwerten und CPU-Temperatur
 
-Technische Grenzen und Pumpenkalibrierung sind pro Topf aufklappbar, ebenso die Mindestleistung der Lüfter. Speichern erfolgt weiterhin über die bestehenden Formulare. Die Kamera bleibt in beiden Ansichten kompakt; Vollbild ist weiterhin verfügbar. Auf Tablets können zwei Versorgungskarten nebeneinander stehen, auf schmalen Bildschirmen eine.
+Technische Grenzen und Pumpenkalibrierung sind pro Topf aufklappbar, ebenso die Mindestleistung der Lüfter. Speichern erfolgt weiterhin über die bestehenden Formulare. Kamera, Archiv und Zeitraffer sind ausschließlich in der Übersicht verfügbar. Die Vorschau bleibt kompakt; Vollbild ist weiterhin verfügbar. Auf Tablets können zwei Versorgungskarten nebeneinander stehen, auf schmalen Bildschirmen eine.
 
 ## Aktuell
 
