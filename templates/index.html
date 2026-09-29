@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/static/style.css?v=12">
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-lamp-profile-layout">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-grow-lamp">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -75,40 +75,28 @@
 <div class="overview-equipment-heading"><div><p class="eyebrow">VERSORGUNG &amp; TECHNIK</p><h2 id="ovEquipmentHeading">Versorgung im Blick</h2></div><p id="ovEquipmentUpdated" class="camera-meta">Status wird geladen …</p></div>
 <div class="overview-equipment-grid">
 <article class="panel overview-equipment-card">
-<header><span class="glass-icon glass-icon--lamp-control live-lamp-icon" data-state="unknown" role="img" aria-label="Lichtstatus unbekannt">
-                    <svg viewBox="0 0 48 48" class="glass-glyph" focusable="false">
-                        <defs>
-                            <linearGradient id="glass-lamp-overview-body" x1="0" y1="0" x2="1" y2="1">
-                                <stop stop-color="#fff2b6"/>
-                                <stop offset=".5" stop-color="#ffc954"/>
-                                <stop offset="1" stop-color="#f08a35"/>
-                            </linearGradient>
-                            <linearGradient id="glass-lamp-overview-slider" x1="0" y1="0" x2="1" y2="1">
-                                <stop stop-color="#ffe8a0"/>
-                                <stop offset=".55" stop-color="#ffbf47"/>
-                                <stop offset="1" stop-color="#f19d32"/>
-                            </linearGradient>
-                        </defs>
-
-                        <rect class="lamp-main-body" x="9" y="8" width="30" height="9" rx="4.5"
-                              fill="url(#glass-lamp-overview-body)"
-                              stroke="#fff4c7" stroke-opacity=".7" stroke-width="1.2"/>
-
-                        <path class="lamp-main-wire" d="M14 8V5M34 8V5"
-                              stroke="#ffd978" stroke-width="1.8" stroke-linecap="round"/>
-
-                        <path class="lamp-main-rays" d="M16 21L13 29M24 21V31M32 21L35 29"
-                              stroke="#ffd46b" stroke-width="2.2" stroke-linecap="round"/>
-
-                        <rect x="11" y="35" width="26" height="4" rx="2"
-                              fill="rgba(255,255,255,.12)"
-                              stroke="rgba(255,241,195,.35)" stroke-width="1"/>
-
-                        <circle class="lamp-main-knob" cx="29" cy="37" r="4"
-                                fill="url(#glass-lamp-overview-slider)"
-                                stroke="#fff1c0" stroke-opacity=".75" stroke-width="1.2"/>
-                    </svg>
-                </span><div><h3 id="ovLampTitle">Pflanzenlampe</h3><p id="ovLampStatus" class="ov-equipment-status">Wird geladen …</p></div></header><div class="overview-lamp-live"><div><span class="camera-meta">Licht am Sensor</span><strong id="ovLampLiveState" role="status" aria-live="polite">Status unbekannt</strong><small id="ovLampLiveNote">Warte auf aktuellen Messwert</small></div></div>
+<header><span class="glass-icon glass-icon--grow-lamp live-lamp-icon" data-state="unknown" role="img" aria-label="Lichtstatus unbekannt"><svg viewBox="0 0 96 96" class="glass-glyph" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="overviewGrowShell" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#f1fcff" stop-opacity=".9"/><stop offset=".45" stop-color="#afcbd3" stop-opacity=".4"/><stop offset="1" stop-color="#608693" stop-opacity=".65"/></linearGradient>
+<linearGradient id="overviewGrowLeaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c4ffdb" stop-opacity=".95"/><stop offset=".5" stop-color="#69dba6" stop-opacity=".8"/><stop offset="1" stop-color="#23846e" stop-opacity=".75"/></linearGradient>
+<linearGradient id="overviewGrowBeam" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffe4a2" stop-opacity=".35"/><stop offset="1" stop-color="#ffe4a2" stop-opacity="0"/></linearGradient>
+<linearGradient id="overviewGrowLight"><stop stop-color="#ffe0ab"/><stop offset=".5" stop-color="#fff5cf"/><stop offset="1" stop-color="#ffbf97"/></linearGradient>
+</defs>
+<path d="M20 7v14M25 7v14M71 7v14M76 7v14" fill="none" stroke="#c7e1e7" stroke-opacity=".75" stroke-width="1.8" stroke-linecap="round"/>
+<path class="grow-lamp-beam" d="M14 38 5 80h86L82 38Z" fill="url(#overviewGrowBeam)"/>
+<path d="M9 35V28a7 7 0 0 1 7-7h64a7 7 0 0 1 7 7v7Z" fill="url(#overviewGrowShell)" stroke="#daf4f7" stroke-opacity=".8" stroke-width="1.2"/>
+<path d="M15 25h62" fill="none" stroke="white" stroke-opacity=".7" stroke-linecap="round"/>
+<path d="M9 35h78v5H9Z" fill="#91b4bf" fill-opacity=".65" stroke="#d4edf0" stroke-opacity=".6"/>
+<path class="grow-lamp-emitter" d="M14 40h68l-3 5H17Z" fill="#6f8f9b" stroke="#c7e1e5" stroke-opacity=".6"/>
+<g class="grow-lamp-rays" fill="none" stroke="#ffe5b1" stroke-width="2" stroke-linecap="round">
+<path d="m20 50-3 6m17-6-2 6m16-6v6m14-6 2 6m12-6 3 6"/>
+</g>
+<path d="M48 78C37 60 18 57 15 67c-4 13 18 12 33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".7" stroke-width="1"/>
+<path d="M48 78c11-18 30-21 33-11 4 13-18 12-33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".7" stroke-width="1"/>
+<path d="M28 69q12 0 20 9m20-9q-12 0-20 9v10" fill="none" stroke="#d1ffe4" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M12 89q16-3 36-1t36-2" fill="none" stroke="#aacfc4" stroke-opacity=".6" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M19 66q9-4 19 4M59 70q10-8 17-5" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1" stroke-linecap="round"/>
+</svg></span><div><h3 id="ovLampTitle">Pflanzenlampe</h3><p id="ovLampStatus" class="ov-equipment-status">Wird geladen …</p></div></header><div class="overview-lamp-live"><div><span class="camera-meta">Licht am Sensor</span><strong id="ovLampLiveState" role="status" aria-live="polite">Status unbekannt</strong><small id="ovLampLiveNote">Warte auf aktuellen Messwert</small></div></div>
 <dl><div><dt>Profil</dt><dd class="overview-profile-value"><span class="overview-profile-icon"><img id="ovLampProfileIcon" src="/static/profile-growth.svg?v=1" alt="" hidden><span id="ovLampFallback" aria-hidden="true">◇</span></span><span id="ovLampProfile">—</span></dd></div><div><dt>Gespeicherte Leistung</dt><dd id="ovLampPower">—</dd></div><div><dt>Zeitplan</dt><dd id="ovLampSchedule">—</dd></div><div><dt>Tatsächlicher Ausgang</dt><dd id="ovLampActual">—</dd></div></dl><a href="#steuerung" data-control-target="lampControlSection">Zur Lampensteuerung →</a>
 </article>
 <article class="panel overview-equipment-card">
