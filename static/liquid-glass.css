@@ -791,3 +791,16 @@ footer { color: #a9c5b8; }
 .irrigation-panel label { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .irrigation-panel input:not([type="checkbox"]) { width: 100%; box-sizing: border-box; }
 .irrigation-history { margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(200,255,244,.12); }
+
+/* Peristaltic pump icon: rotor moves only for reported running state or preview. */
+.pump-symbol { width: 84px; height: 84px; flex-shrink: 0; }
+.pump-art { width: 100%; height: 100%; display: block; filter: drop-shadow(0 5px 9px rgba(5,20,35,.25)); }
+.pump-rotor { transform-box: view-box; transform-origin: 48px 48px; }
+.pump-symbol[data-running="true"] .pump-rotor,
+.pump-symbol[data-preview="true"] .pump-rotor { animation: pump-turn 1.8s linear infinite; }
+.pump-symbol[data-running="true"] { filter: drop-shadow(0 0 7px rgba(74,239,219,.25)); }
+.irrigation-panel .pump-preview-button { font-size: .8rem; padding: 7px 12px; align-self: flex-start; }
+@keyframes pump-turn { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    .pump-symbol .pump-rotor { animation: none !important; }
+}
