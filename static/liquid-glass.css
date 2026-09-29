@@ -923,9 +923,12 @@ footer { color: #a9c5b8; }
 @media(max-width:420px) { .overview-profile-value { justify-content:flex-start; } }
 
 /* Overview grow light: reference-inspired lamp and seedling, without controls. */
-.glass-icon--grow-lamp { --icon-color:255,213,139; }
-.overview-equipment-card header > .glass-icon--grow-lamp.live-lamp-icon { width:68px; height:74px; flex-basis:68px; border-radius:22px; }
-.overview-equipment-card header > .glass-icon--grow-lamp.live-lamp-icon .glass-glyph { width:60px; height:60px; }
+.overview-equipment-card header > .overview-grow-lamp.live-lamp-icon {
+    display:grid; place-items:center; width:58px; height:58px; flex:0 0 58px;
+}
+.overview-equipment-card header > .overview-grow-lamp.live-lamp-icon .glass-glyph {
+    width:100%; height:100%;
+}
 .grow-lamp-rays,.grow-lamp-beam { opacity:0; }
 .live-lamp-icon[data-state="on"] .grow-lamp-rays,
 .live-lamp-icon[data-state="on"] .grow-lamp-beam { opacity:1; }
