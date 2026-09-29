@@ -962,3 +962,17 @@ footer { color: #a9c5b8; }
 @media(max-width:600px) {
     #fanFields .fan-form-actions .primary { width:100%; }
 }
+
+/* The control lamp uses the same sensor state as the overview lamp. */
+.lamp-control-state-icon .control-lamp-rays { opacity:0; }
+.lamp-control-state-icon:not([data-state="on"]) {
+    --icon-color:145,175,186;
+    box-shadow:inset 1px 1px 0 rgba(255,255,255,.12),inset -1px -1px 0 rgba(171,200,210,.12);
+}
+.lamp-control-state-icon:not([data-state="on"]) .control-lamp-body,
+.lamp-control-state-icon:not([data-state="on"]) .control-lamp-slider { fill:#809ca6; stroke:#bdd2da; }
+.lamp-control-state-icon:not([data-state="on"]) .control-lamp-wire { stroke:#a5bec8; }
+.lamp-control-state-icon[data-state="off"] .glass-glyph { opacity:.7; }
+.lamp-control-state-icon[data-state="unknown"] .glass-glyph { opacity:.45; }
+.lamp-control-state-icon[data-state="on"] .control-lamp-rays { opacity:1; }
+.lamp-control-state-icon[data-state="on"] .control-lamp-body { filter:drop-shadow(0 0 2px rgba(255,209,103,.7)); }
