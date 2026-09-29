@@ -83,6 +83,30 @@ function formatDuration(
 
 
 // =====================================================
+// LICHTSTATUS ICONS
+// =====================================================
+
+function setLightStateIcons(
+    isOn
+) {
+
+    document
+        .querySelectorAll(
+            ".js-light-state-icon"
+        )
+        .forEach(
+            function(icon) {
+
+                icon.dataset.state =
+                    isOn
+                        ? "on"
+                        : "off";
+            }
+        );
+}
+
+
+// =====================================================
 // AKTUELLE SENSORWERTE
 // =====================================================
 
@@ -204,6 +228,8 @@ async function loadCurrent() {
             );
 
 
+        window.dispatchEvent(new CustomEvent("plant:current", {detail: data}));
+
         // PPFD
 
         $("ppfdSensor").textContent =
@@ -232,8 +258,9 @@ async function loadCurrent() {
                 "An";
 
 
-            $("lightIcon").textContent =
-                "☀️";
+            setLightStateIcons(
+                true
+            );
 
         } else {
 
@@ -245,8 +272,9 @@ async function loadCurrent() {
                 "Aus";
 
 
-            $("lightIcon").textContent =
-                "🌙";
+            setLightStateIcons(
+                false
+            );
         }
 
 
@@ -297,6 +325,8 @@ async function loadCurrent() {
             error
         );
 
+
+        window.dispatchEvent(new Event("plant:offline"));
 
         $("systemStatus").innerHTML =
 
@@ -935,6 +965,8 @@ async function loadSoilConfig() {
         const pots =
             data.pots || [];
 
+        window.dispatchEvent(new CustomEvent("plant:pots", {detail: pots}));
+
         if (pots.length !== 2) {
             return;
         }
@@ -978,8 +1010,9 @@ async function loadSoilConfig() {
                 function(pot) {
 
                     return (
-                        pot.dry_raw !== null
-                        && pot.wet_raw !== null
+                        Number.isFinite(pot.dry_raw)
+                        && Number.isFinite(pot.wet_raw)
+                        && pot.dry_raw !== pot.wet_raw
                     );
                 }
             );
@@ -1013,7 +1046,11 @@ function nullableNumberFromInput(
         return null;
     }
 
-    return Number(value);
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) {
+        throw new Error("Bitte einen gültigen Kalibrierwert eingeben.");
+    }
+    return parsed;
 }
 
 
@@ -1082,10 +1119,8 @@ async function saveSoilConfig() {
         );
 
         if (!response.ok) {
-            throw new Error(
-                "HTTP "
-                + response.status
-            );
+            const failure = await response.json().catch(() => ({}));
+            throw new Error(typeof failure.detail === "string" ? failure.detail : "Speichern fehlgeschlagen (HTTP " + response.status + ")");
         }
 
         const data =
@@ -1113,7 +1148,7 @@ async function saveSoilConfig() {
         );
 
         $("soilConfigMessage").textContent =
-            "Speichern fehlgeschlagen";
+            error.message || "Speichern fehlgeschlagen";
 
     } finally {
 
@@ -1132,6 +1167,241 @@ function setupSoilMoisture() {
         );
 
     loadSoilConfig();
+}
+
+
+// =====================================================
+// LAMPENSTEUERUNG
+// =====================================================
+
+function lampProfileLabel(
+    profile
+) {
+
+    if (profile === "growth") {
+        return "Wachstum";
+    }
+
+    if (profile === "flower") {
+        return "Blüte";
+    }
+
+    return "Benutzerdefiniert";
+}
+
+
+function updateLampControlPreview() {
+
+    const power = Number(
+        $("lampPowerInput").value
+        || 0
+    );
+
+    const enabled =
+        $("lampScheduleEnabled").checked;
+
+    const onTime =
+        $("lampOnTime").value
+        || "--:--";
+
+    const offTime =
+        $("lampOffTime").value
+        || "--:--";
+
+    const profile =
+        $("lampProfileInput").value;
+
+
+    $("lampPowerOutput").textContent =
+        power
+        + " %";
+
+    $("lampPowerPreview").textContent =
+        power
+        + " %";
+
+    $("lampSchedulePreview").textContent =
+        enabled
+            ? "Aktiv"
+            : "Aus";
+
+    $("lampScheduleTimes").textContent =
+        onTime
+        + " – "
+        + offTime;
+
+    const toMinutes = value => /^\d{2}:\d{2}$/.test(value) ? Number(value.slice(0, 2)) * 60 + Number(value.slice(3)) : null;
+    const start = toMinutes(onTime), end = toMinutes(offTime);
+    const duration = start === null || end === null ? null : (end - start + 1440) % 1440;
+    $("lampDurationPreview").textContent = duration === null ? "Dauer nicht verfügbar"
+        : duration === 0 ? "Gleiche Schaltzeiten · Dauer nicht eindeutig"
+        : Math.floor(duration / 60) + " h " + String(duration % 60).padStart(2, "0") + " min Einschaltzeit";
+
+    $("lampProfilePreview").textContent =
+        lampProfileLabel(
+            profile
+        );
+
+
+    const profileCard =
+        $("lampProfileCard");
+
+    const profileImage =
+        $("lampProfileImage");
+
+    const profilePlaceholder =
+        $("lampProfilePlaceholder");
+
+
+    profileCard.dataset.profile =
+        profile;
+
+    if (profile === "flower" || profile === "growth") {
+        const iconPath = profile === "growth"
+            ? "/static/profile-growth.svg?v=1"
+            : "/static/profile-flower.svg?v=2";
+        if (profileImage.getAttribute("src") !== iconPath) {
+            profileImage.setAttribute("src", iconPath);
+        }
+        profileImage.hidden = false;
+        profilePlaceholder.hidden = true;
+    } else {
+        profileImage.hidden = true;
+        profilePlaceholder.hidden = false;
+    }
+}
+
+
+let lampProfiles = {};
+let lampDrafts = {};
+let currentLampProfile = "custom";
+const lampFieldIds = ["lampNameInput", "lampProfileInput", "lampPowerInput", "lampScheduleEnabled", "lampOnTime", "lampOffTime", "saveLampConfigButton"];
+
+function lockLampForm(locked) {
+    lampFieldIds.forEach(id => { $(id).disabled = locked; });
+}
+
+function readLampDraft() {
+    return {schedule_enabled: $("lampScheduleEnabled").checked,
+        on_time: $("lampOnTime").value, off_time: $("lampOffTime").value,
+        power_percent: Number($("lampPowerInput").value)};
+}
+
+function showLampProfile(profile) {
+    const config = lampDrafts[profile] || lampProfiles[profile];
+    if (!config) return;
+    currentLampProfile = profile;
+    $("lampProfileInput").value = profile;
+    $("lampScheduleEnabled").checked = config.schedule_enabled;
+    $("lampOnTime").value = config.on_time;
+    $("lampOffTime").value = config.off_time;
+    $("lampPowerInput").value = String(config.power_percent);
+    updateLampControlPreview();
+}
+
+async function loadLampConfig() {
+    lockLampForm(true);
+    try {
+        const response = await fetch("/api/light/config", {cache: "no-store"});
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        if (!data.profiles) throw new Error("Bitte den Dienst plant-monitor neu starten.");
+        lampProfiles = data.profiles;
+        lampDrafts = {};
+        $("lampNameInput").value = data.name;
+        $("lampControlName").textContent = data.name;
+        showLampProfile(data.profile);
+        $("lampConfigMessage").textContent = "Profil geladen · Änderungen mit Speichern übernehmen";
+        lockLampForm(false);
+    } catch (error) {
+        $("lampConfigMessage").textContent = "Konfiguration konnte nicht geladen werden: " + error.message;
+    }
+}
+
+async function loadLampStatus() {
+
+    try {
+
+        const response = await fetch(
+            "/api/light/status",
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP "
+                + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        $("lampControlStatus").textContent =
+            data.hardware_connected
+                ? "GP8600 verbunden"
+                : "Hardware ausstehend";
+
+    } catch (error) {
+
+        console.error(
+            "Lamp status error:",
+            error
+        );
+
+        $("lampControlStatus").textContent =
+            "Status unbekannt";
+    }
+}
+
+
+async function saveLampConfig() {
+    lockLampForm(true);
+    const profile = currentLampProfile;
+    const draft = readLampDraft();
+    $("lampConfigMessage").textContent = "Speichere Profil …";
+    try {
+        const response = await fetch("/api/light/config", {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({name: $("lampNameInput").value.trim() || "Pflanzenlampe", profile, ...draft})
+        });
+        const data = await response.json();
+        if (!response.ok || data.status === "error") {
+            throw new Error(typeof data.detail === "string" ? data.detail : data.message || "Speichern fehlgeschlagen");
+        }
+        lampProfiles = data.profiles;
+        delete lampDrafts[profile];
+        showLampProfile(profile);
+        $("lampConfigMessage").textContent = lampProfileLabel(profile) + " gespeichert · bleibt nach Neustart erhalten";
+    } catch (error) {
+        $("lampConfigMessage").textContent = error.message || "Speichern fehlgeschlagen";
+    } finally {
+        lockLampForm(false);
+    }
+}
+
+function setupLampControl() {
+    ["lampPowerInput", "lampScheduleEnabled", "lampOnTime", "lampOffTime"].forEach(id => {
+        $(id).addEventListener("input", () => {
+            updateLampControlPreview();
+            $("lampConfigMessage").textContent = "Ungespeicherte Änderungen · Profil speichern";
+        });
+    });
+    $("lampProfileInput").addEventListener("change", () => {
+        lampDrafts[currentLampProfile] = readLampDraft();
+        const selected = $("lampProfileInput").value;
+        showLampProfile(selected);
+        $("lampConfigMessage").textContent = "Profilvorschau · mit Speichern als aktives Profil übernehmen";
+    });
+    $("lampNameInput").addEventListener("input", () => {
+        $("lampControlName").textContent = $("lampNameInput").value.trim() || "Pflanzenlampe";
+        $("lampConfigMessage").textContent = "Ungespeicherte Änderungen · Profil speichern";
+    });
+    $("saveLampConfigButton").addEventListener("click", saveLampConfig);
+    loadLampConfig();
+    loadLampStatus();
 }
 
 
@@ -1703,75 +1973,28 @@ function setupPhotoHistory() {
             }
         );
 
-    $("timelapseInterval")
-        .addEventListener(
-            "change",
-            async function() {
-
-                try {
-
-                    const statusResponse =
-                        await fetch(
-                            "/api/camera/timelapse",
-                            {
-                                cache: "no-store"
-                            }
-                        );
-
-                    if (!statusResponse.ok) {
-                        throw new Error(
-                            "HTTP "
-                            + statusResponse.status
-                        );
-                    }
-
-                    const status =
-                        await statusResponse.json();
-
-
-                    const response = await fetch(
-                        "/api/camera/timelapse",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-                            body: JSON.stringify({
-                                enabled:
-                                    Boolean(
-                                        status.enabled
-                                    ),
-
-                                interval_minutes:
-                                    Number(
-                                        $("timelapseInterval").value
-                                    )
-                            })
-                        }
-                    );
-
-                    if (!response.ok) {
-                        throw new Error(
-                            "HTTP "
-                            + response.status
-                        );
-                    }
-
-                    await loadTimelapseStatus();
-
-                } catch (error) {
-
-                    console.error(
-                        "Timelapse interval save error:",
-                        error
-                    );
-
-                    $("timelapseStatus").textContent =
-                        "Intervall konnte nicht gespeichert werden.";
-                }
+    $("timelapseInterval").addEventListener("change", async function() {
+        const input = $("timelapseInterval");
+        const interval = Number(input.value);
+        input.disabled = true;
+        try {
+            const response = await fetch("/api/camera/timelapse", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({interval_minutes: interval})
+            });
+            if (!response.ok) {
+                const failure = await response.json().catch(() => ({}));
+                throw new Error(typeof failure.detail === "string" ? failure.detail : "Intervall konnte nicht gespeichert werden.");
             }
-        );
+            await loadTimelapseStatus();
+        } catch (error) {
+            await loadTimelapseStatus();
+            $("timelapseStatus").textContent = error.message;
+        } finally {
+            input.disabled = false;
+        }
+    });
 
     $("timelapsePlayButton")
         .addEventListener(
@@ -1817,6 +2040,10 @@ document.addEventListener(
 
         setupSoilMoisture();
 
+        setupLampControl();
+
+        setupIrrigation();
+
 
         createCharts();
 
@@ -1846,3 +2073,104 @@ document.addEventListener(
         );
     }
 );
+
+
+
+// Display-only irrigation setup: no start/stop requests or hardware commands.
+function setupIrrigation() {
+    const form = $("irrigationForm");
+    const fields = $("irrigationFields");
+    const message = $("irrigationMessage");
+    const retry = $("irrigationRetry");
+
+    const waterFields = ["threshold_percent", "dose_ml", "pause_minutes",
+        "daily_limit_ml", "max_run_seconds", "calibration_ml", "calibration_seconds"];
+    function updateWaterSummary(id) {
+        const value = key => Number($("water_" + key + "_" + id).value);
+        const ml = value("calibration_ml"), seconds = value("calibration_seconds");
+        const dose = value("dose_ml");
+        const valid = ml > 0 && seconds > 0;
+        $("waterSummary" + id).textContent = valid
+            ? "Fördermenge: " + (ml / seconds).toFixed(2) + " ml/s"
+              + (dose > 0 ? " · berechnete Laufzeit: " + (dose * seconds / ml).toFixed(1) + " s" : "")
+              + " · Hardwareausgabe gesperrt"
+            : "Pumpenkalibrierung ausstehend · Hardwareausgabe gesperrt";
+    }
+
+    function showConfig(config) {
+        if (typeof config.tank_name !== "string" || !Array.isArray(config.pumps)
+                || config.pumps.length !== 2 || config.pumps.some((p, i) =>
+                    p.id !== i + 1 || typeof p.name !== "string")) {
+            throw new Error("Ungültige Antwort");
+        }
+        $("irrigationTankInput").value = config.tank_name;
+        $("irrigationTankName").textContent = config.tank_name;
+        config.pumps.forEach((pump) => {
+            $("irrigationPumpInput" + pump.id).value = pump.name;
+            $("irrigationPumpName" + pump.id).textContent = pump.name;
+            $("waterEnabled" + pump.id).checked = pump.enabled === true;
+            waterFields.forEach(key => {
+                $("water_" + key + "_" + pump.id).value = pump[key] ?? "";
+            });
+            updateWaterSummary(pump.id);
+        });
+    }
+
+    async function load() {
+        fields.disabled = true;
+        retry.hidden = true;
+        message.textContent = "Einstellungen werden geladen …";
+        try {
+            const response = await fetch("/api/irrigation/config", {cache: "no-store"});
+            if (!response.ok) throw new Error("Laden fehlgeschlagen");
+            showConfig(await response.json());
+            fields.disabled = false;
+            message.textContent = "Einstellungen können gespeichert werden. Hardwareausgabe bleibt gesperrt.";
+        } catch (error) {
+            message.textContent = "Einstellungen konnten nicht geladen werden.";
+            retry.hidden = false;
+        }
+    }
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (fields.disabled) return;
+        const payload = {
+            tank_name: $("irrigationTankInput").value.trim(),
+            pumps: [1, 2].map(id => ({
+                id, name: $("irrigationPumpInput" + id).value.trim(),
+                enabled: $("waterEnabled" + id).checked,
+                ...Object.fromEntries(waterFields.map(key => {
+                    const raw = $("water_" + key + "_" + id).value;
+                    return [key, raw === "" ? null : Number(raw)];
+                }))
+            }))
+        };
+        if (!payload.tank_name || payload.pumps.some(p => !p.name)) {
+            message.textContent = "Bitte alle Namen ausfüllen.";
+            return;
+        }
+        fields.disabled = true;
+        message.textContent = "Wird gespeichert …";
+        try {
+            const response = await fetch("/api/irrigation/config", {
+                method: "POST", headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                const body = await response.json().catch(() => ({}));
+                throw new Error(typeof body.detail === "string" ? body.detail : "Speichern fehlgeschlagen.");
+            }
+            showConfig(await response.json());
+            message.textContent = "Gespeichert. Hardware bleibt deaktiviert.";
+        } catch (error) {
+            message.textContent = error.message || "Speichern fehlgeschlagen. Bitte erneut versuchen.";
+        } finally {
+            fields.disabled = false;
+        }
+    });
+    [1, 2].forEach(id => waterFields.forEach(key =>
+        $("water_" + key + "_" + id).addEventListener("input", () => updateWaterSummary(id))));
+    retry.addEventListener("click", load);
+    load();
+}

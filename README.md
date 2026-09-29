@@ -8,6 +8,8 @@ Das System erfasst Klima-, Licht- und später Bodenfeuchtedaten, speichert Messw
 
 # Status
 
+Stand: **29.09.2026**, Entwicklungsbranch **`test/overview-controls`**. Die folgenden Software-Erweiterungen beziehen sich auf diesen Branch; sie sind nicht automatisch auf `main` verfügbar.
+
 ## Bereits funktionsfähig
 
 - ✅ Raspberry Pi 4
@@ -26,6 +28,15 @@ Das System erfasst Klima-, Licht- und später Bodenfeuchtedaten, speichert Messw
 - ✅ systemd-Autostart
 - ✅ Chart.js lokal
 - ✅ History für 24 h, 7 d, 30 d und 1 Jahr
+- ✅ Liquid-Glass-Oberfläche mit Übersicht und Steuerung
+- ✅ Kamera-Livestream, Galerie und Zeitraffer
+- ✅ Bodenfeuchte-Konfiguration und Kalibrierungsoberfläche für zwei Töpfe
+- ✅ getrennt speicherbare Lampenprofile mit eigenen SVG-Symbolen
+- ✅ Bewässerungs-Konfiguration, Pumpenkalibrierungsberechnung und reine Entscheidungsvorschau
+- ✅ animierbare Pumpensymbole mit separatem Animationstest
+- ✅ vorbereitete Lüftersteuerung für Zu-/Abluft mit speicherbaren Sollwerten und Symbolvorschau
+
+**Hardwaregrenze:** Lampendimmung, Bewässerung und Lüftersteuerung geben weiterhin keine Steuersignale aus. Die Bodenfeuchtesensoren müssen noch angebunden werden. Gespeicherte Automatik-Einstellungen sind keine aktive Bewässerung.
 
 ## In Arbeit / Hardware bestellt
 
@@ -180,15 +191,32 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 ├── app.py
 ├── sensor.py
 ├── database.py
+├── configuration.py       # Validierung und atomare JSON-Speicherung
+├── lamp_profiles.py       # getrennte Profileinstellungen
+├── irrigation.py          # Konfiguration und reine Entscheidungsvorschau
+├── fan_control.py         # Lüftereinstellungen ohne PWM-Ausgabe
 ├── templates/
 │   └── index.html
 ├── static/
 │   ├── style.css
 │   ├── app.js
+│   ├── overview.js
+│   ├── overview-equipment.js
+│   ├── liquid-glass.css
+│   ├── pump-icons.js
+│   ├── fans.js
+│   ├── profile-growth.svg
+│   ├── profile-flower.svg
 │   └── chart.umd.min.js
+├── tests/                  # hardwareunabhängige Python-Tests
 ├── photos/
 └── data/
-    └── plant.db
+    ├── plant.db
+    ├── soil_moisture.json
+    ├── timelapse.json
+    ├── lamp_control.json
+    ├── irrigation.json
+    └── fan_control.json
 ```
 
 ---
@@ -451,6 +479,20 @@ GET /api/light/today
 
 # Dashboard
 
+## Gestaltung und Ansichten
+
+- Liquid-Glass-Design mit farbigen Symbolen für Klima, Licht und Bodenfeuchte
+- **Übersicht:** kompakte Kennzahlen und Kameradarstellung
+- Zusätzliche kompakte Versorgungskarten: Lampenprofil, gespeicherte Leistung, Zeitplan und geplante Dauer; Tankstatus sowie Automatik-Vormerkung, Feuchteschwelle und Einzelmenge je Topf; Lüftermodi und gespeicherte Sollwerte
+- Direkte Links aus den Karten zum jeweiligen Steuerungsbereich
+- Gespeicherte Sollwerte und tatsächliche Ausgänge werden getrennt bezeichnet; nicht verbundene Hardware bleibt erkennbar.
+- Die Versorgungskarten werden bei sichtbarer Übersicht alle 15 Sekunden sowie bei Rückkehr zur Ansicht aktualisiert. Fehler werden pro Karte angezeigt; alte Werte werden dabei ausgeblendet.
+
+- **Steuerung:** Konfiguration von Bodenfeuchte, Lampe, Bewässerung und Kamera
+- Bilder und Livestream bleiben bewusst kompakt
+- eigene SVG-Symbole für Wachstum und Blüte; beim Profilwechsel wird das passende Symbol angezeigt
+- rundes gläsernes Pumpensymbol je Topf mit unabhängig animierbarem Rotor
+
 ## Aktuell
 
 Live-Anzeige:
@@ -482,18 +524,21 @@ History:
 - Licht
 - Zeiträume 24 h / 7 d / 30 d / 1 Jahr
 
-## Geplant
+## Vorbereitet, Hardware noch ausstehend
 
-- Feuchtigkeit Topf 1 / Topf 2
-- Tankstatus
-- letzte Bewässerung je Topf
-- manueller Bewässerungsstart
-- Pumpenstatus
-- Lampenleistung 0–100 %
-- aktives Lichtprofil
-- Zuluft-/Abluftleistung
-- Automatik-/Manuell-Modi
-- Kamera-Livestream / Bild-History / Zeitraffer
+- Bodenfeuchte je Topf mit Rohwert, Prozentwert, Namen und Kalibrierung
+- Lampenleistung 0–100 % und getrennte Lichtprofile als speicherbare Einstellungen
+- Tank- und Pumpenkarten; Tankstatus derzeit unbekannt, Pumpen nicht verbunden
+- Bewässerungsmenge, Feuchteschwelle und Pumpenkalibrierung je Topf
+- Lüfternamen, AUS/MANUELL-Modus, gewünschte Leistung und Mindestleistung je Zu-/Abluft
+
+## Noch offen
+
+- tatsächliche Sensor-, Tank- und Pumpen-Anbindung
+- letzte Bewässerung und dauerhaftes Ereignisprotokoll
+- manueller Bewässerungsstart und aktive Automatik
+- tatsächliche Lampendimmung und Ausführung der Zeitpläne
+- tatsächliche PWM-Ausgabe, Lüfterdrehzahl und automatische Lüfterregelung
 
 ---
 
@@ -544,13 +589,75 @@ POST /api/soil/config
 GET  /api/soil/status
 ```
 
-Die Konfiguration bleibt nach Browser-Neuladen und Raspberry-Pi-Neustart erhalten.
+Die Konfiguration bleibt nach Browser-Neuladen und Raspberry-Pi-Neustart erhalten. Trocken- und Nassreferenz müssen gültige, unterschiedliche Zahlen sein. Die daraus berechneten Prozentwerte sind eine relative Kalibrierung, kein exakt gemessener volumetrischer Wassergehalt.
 
 ---
 
 # Bewässerung
 
 Die komplette Pumpen- und Tanktechnik befindet sich **außerhalb des Pflanzenschranks**.
+
+## Software-Vorbereitung
+
+Auf dem Test-Branch sind Oberfläche, persistente Konfiguration und eine hardwareunabhängige Entscheidungsvorschau vorhanden:
+
+- Liquid-Glass-Bereich unter Steuerung für Tank und beide Pumpen
+- persistent speicherbare Namen in `data/irrigation.json`
+- `GET /api/irrigation/config`, `POST /api/irrigation/config`
+- `GET /api/irrigation/status` meldet ausdrücklich nicht verfügbare Hardware
+- Tankstatus unbekannt; keine erfundenen Füllstände oder Bewässerungsereignisse
+- deaktivierte Start-Schaltflächen; keine GPIO-Ausgabe, Timer oder Automatik
+- konkrete GPIO-Zuordnung, reale Fördermengenmessung, aktive Abschaltung und Ereignisprotokollierung bleiben ausstehend
+
+Zusätzlich werden pro Topf gespeichert:
+
+- Automatik vorgemerkt (standardmäßig AUS; Hardwareausgabe bleibt gesperrt)
+- Feuchteschwelle, feste Wassermenge pro Vorgang in ml und Tageslimit (bewusst ohne Pflanzenvorgaben)
+- Einziehpause und maximale Laufzeit
+- Kalibrierung: aufgefangene ml / gemessene Sekunden; daraus berechnete ml/s und Dosierdauer
+
+Bestehende reine Namenskonfigurationen werden beim Laden ergänzt. Die Bodenfeuchtekalibrierung bleibt im vorhandenen Bodenfeuchtebereich.
+
+Die reine Entscheidungsfunktion prüft Automatik, Tankstatus, Sensoralter (max. 120 s), Einziehpause, Tagesverbrauch, Feuchteschwelle und maximale Laufzeit. Unterhalb der Schwelle ist eine feste Einzelgabe vorgesehen; weitere Gaben brauchen eine neue Prüfung nach der Pause. Ungültige oder fehlende Statusdaten sperren die Entscheidung.
+
+`POST /api/irrigation/preview` erlaubt ausschließlich eine Simulation mit `pot_id`, `moisture`, `sensor_age_seconds`, `tank_ok`, `seconds_since_last` und `used_today_ml`. Die Antwort enthält immer `simulation: true` und `output_available: false`.
+
+**Noch nicht aktiv:** GPIO-Pumpentreiber, Regelungs-Worker, dauerhafte Verbrauchs-/Ereignisspeicherung und Live-Tanküberwachung. Es werden keine Pumpen gestartet. Vor realem Betrieb muss die Steuerung kalibrierte Sensorwerte verwenden, Verbrauch und Pause über Neustarts erhalten, Pumpenzugriff serialisieren und Tank-/Laufzeitabschaltung während des Pumpens überwachen. Die reine Vorschau ersetzt diese Hardwareintegration nicht.
+
+## Einstellungen und Kalibrierung
+
+Unter **Steuerung → Bewässerung → Bewässerung einrichten** lassen sich beide Pumpen unabhängig konfigurieren.
+
+| Einstellung | Bedeutung |
+|---|---|
+| Automatik vormerken | speichert die Absicht; aktiviert derzeit keine Hardware |
+| Feuchteschwelle (%) | eine Einzelgabe ist nur bei einem Wert **unterhalb** der Schwelle vorgesehen |
+| Wassermenge (ml) | feste Menge pro Vorgang, frei konfigurierbar |
+| Einziehpause (Minuten) | Wartezeit vor der nächsten Prüfung |
+| Tageslimit (ml) | eine Einzelgabe, die das Limit überschreiten würde, wird in der Vorschau blockiert |
+| Maximale Laufzeit (Sekunden) | obere Grenze für die berechnete Dauer |
+| Gemessene Menge / Laufzeit | je Pumpe separat erfasste Kalibrierwerte |
+
+Schwelle, Wassermenge, Tageslimit und Pumpenkalibrierung sind zunächst leer; Automatik ist AUS. Die anfängliche Einziehpause von 30 Minuten und Laufzeitgrenze von 60 Sekunden sind technische Startwerte, keine Empfehlung für bestimmte Pflanzen.
+
+Nach Aufbau und Messung werden für **jede Pumpe separat** die tatsächlich aufgefangenen ml und die zugehörigen Sekunden eingetragen. Diese Messwerte stehen noch aus. Das Eingabeformular führt keinen Kalibrierlauf aus.
+
+```text
+Fördermenge (ml/s) = gemessene Menge (ml) / gemessene Laufzeit (s)
+Berechnete Pumpdauer (s) = gewünschte Wassermenge (ml) / Fördermenge (ml/s)
+```
+
+Die Oberfläche zeigt Fördermenge und berechnete Laufzeit direkt an. Unvollständige Kalibrierpaare, ungültige Zahlen, eine Einzelmenge über dem Tageslimit oder eine berechnete Dauer über der Laufzeitgrenze werden beim Speichern abgelehnt.
+
+## Pumpensymbole und Animation
+
+- Je Pumpenkarte ein SVG mit rundem Glasgehäuse, Schlauchanschlüssen und Rotor.
+- **Animation testen** dreht nur das jeweilige Symbol für etwa 3,6 Sekunden; es wird kein Pumpenbefehl gesendet.
+- Die Statusanzeige fragt `GET /api/irrigation/status` regelmäßig ab.
+- Eine Betriebsanimation setzt `hardware_connected: true`, `output_available: true` und `state: "running"` für die jeweilige Pumpe voraus.
+- Ohne Verbindung oder bei einem Abruffehler stoppt die Betriebsanimation. Die separate Symbolvorschau ist weiterhin möglich.
+- Die Betriebssystem-Einstellung für reduzierte Bewegung wird berücksichtigt; dann bleibt der Rotor auch im Vorschautest stehen.
+- Der aktuelle Backend-Status meldet weiterhin fehlende Hardware. Dauerhafte Rotation ist daher noch kein realer Betriebszustand.
 
 ## Wasserkreis
 
@@ -586,7 +693,9 @@ Raspberry Pi
 
 Die Pumpen werden niemals direkt vom Raspberry Pi versorgt.
 
-## Sicherheitslogik
+## Sicherheitslogik für den späteren Hardwarebetrieb
+
+Die Entscheidungsvorschau prüft bereits die konfigurierten Grenzen. Die folgende aktive Durchsetzung einschließlich Abschaltung und Protokollierung muss noch an die Hardware angebunden werden:
 
 - maximale Pumpdauer pro Vorgang
 - Mindestpause zwischen Bewässerungen
@@ -622,32 +731,75 @@ GP8600 0–10-V-DAC
 
 Der vorhandene manuelle Dimmer soll durch den GP8600 ersetzt werden.
 
-Geplante Funktionen:
+Die Software-Seite ist jetzt wie bei der Bodenfeuchte bereits vorbereitet, obwohl der GP8600 noch nicht angeschlossen ist.
 
-- manuelle Leistung 0–100 %
-- speicherbare Lichtprofile
-- Ein-/Ausschaltzeiten
-- Anzeige des aktiven Profils
-- nächste Umschaltung
-- manueller Override
-- manueller AUS-Modus
-- Zeitpläne über Mitternacht
-- Wiederherstellung nach Neustart
-- Kalibrierung von Dimmwert zu Lux / PPFD
+Bereits umgesetzt:
 
-Geplante API:
+- eigenes Liquid-Glass-Panel für die Lampensteuerung
+- persistenter Lampenname
+- vorbereitete Profile: Benutzerdefiniert / Wachstum / Blüte
+- pro Profil separat gespeicherte Leistung, Ein-/Ausschaltzeiten und Zeitplanstatus
+- Profilwechsel lädt die zugehörigen Werte und berechnet die angezeigte Dauer neu, auch über Mitternacht
+- Wachstum und Blüte mit eigenen Liquid-Glass-SVG-Symbolen
+- persistenter Zielwert 0–100 %
+- vorbereiteter Ein-/Ausschaltzeitplan
+- Zeitplan kann vorab aktiviert/deaktiviert und gespeichert werden
+- Speicherung in `data/lamp_control.json`
+- sicherer Standard: **0 % Leistung und Zeitplan AUS**
+- Status zeigt weiterhin **Hardware ausstehend**
+- solange der GP8600 nicht angebunden ist, wird **kein 0–10-V-Ausgang angesteuert**
+
+Neue Profile beginnen derzeit alle mit **08:00–20:00**, 0 % Leistung und deaktiviertem Zeitplan. Es gibt noch keine unterschiedlichen Standardzeiten je Phase. Alte Konfigurationen werden unter dem zuvor ausgewählten Profil übernommen. Änderungen müssen über **Einstellungen speichern** gesichert werden.
+
+Bereits verfügbare API:
 
 ```text
 GET  /api/light/config
 POST /api/light/config
-POST /api/light/mode
-POST /api/light/override
 GET  /api/light/status
 ```
+
+Für die spätere Hardwareintegration vorgesehen:
+
+- tatsächliche 0–100-%-Ausgabe über GP8600
+- nächste Umschaltung
+- manueller Override
+- manueller AUS-Modus
+- tatsächliche Ausführung der bereits darstellbaren Zeitpläne über Mitternacht
+- sichere Wiederherstellung nach Neustart
+- Kalibrierung von Dimmwert zu Lux / PPFD
+- spätere Endpunkte `POST /api/light/mode` und `POST /api/light/override`
 
 ---
 
 # Lüftersteuerung
+
+## Software-Vorbereitung
+
+Unter **Steuerung → Lüftersteuerung** gibt es zwei Karten für **Zuluft unten** und **Abluft oben**. Beide haben ein eigenes Liquid-Glass-Lüftersymbol. **Animation testen** dreht nur das jeweilige Symbol für drei Sekunden; dabei wird kein Steuerbefehl gesendet. Reduzierte Bewegung wird berücksichtigt.
+
+Unter **Lüfter einrichten** sind getrennt speicherbar:
+
+| Einstellung | Bedeutung |
+|---|---|
+| Name | Bezeichnung des jeweiligen Lüfters |
+| AUS / MANUELL | vorgemerkter Modus; standardmäßig AUS |
+| Gewünschte Leistung | ganzzahliger Sollwert von 0 bis 100 %, standardmäßig 0 % |
+| Mindestleistung bei Betrieb | untere Grenze für positive manuelle Sollwerte; standardmäßig 0 % und noch am Lüfter zu prüfen |
+
+AUS oder ein gewünschter Wert von 0 % ergibt einen Sollwert von 0 %. Bei einem positiven manuellen Wert gilt der größere Wert aus gewünschter Leistung und Mindestleistung. Die Oberfläche zeigt den Entwurf und den gespeicherten Sollwert getrennt. Diese Prozentangaben sind keine gemessene Drehzahl.
+
+- Persistente Einstellungen in `data/fan_control.json`
+- `GET /api/fans/config` und `POST /api/fans/config`
+- `GET /api/fans/status` mit berechnetem Sollwert, `hardware_connected: false` und `output_available: false`
+- Tatsächliche Leistung und Drehzahl bleiben unbekannt (`null` / „—“).
+- Keine GPIO-Zugriffe, PWM-Signale oder automatische Regelung
+- AUTO ist in der Oberfläche als spätere Funktion gekennzeichnet und nicht auswählbar.
+- Laden, Validierung und atomare Speicherung sind vorbereitet; ein Speicherfehler übernimmt keine neue aktive Konfiguration.
+
+**Kanalzuordnung noch offen:** Die zwei getrennten Softwareeinstellungen bedeuten nicht, dass der vorhandene NA-FC1 bereits zwei unabhängig steuerbare PWM-Kanäle bereitstellt. Die tatsächliche Anbindung und Zuordnung muss vor der Hardwareintegration geprüft werden.
+
+## Geplante Hardware-Anbindung
 
 Vorhanden:
 
@@ -753,7 +905,8 @@ Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet wer
 - [ ] SEN0308 Topf 2 an A1 anschließen
 - [ ] Rohwerte testen
 - [ ] beide Sensoren separat kalibrieren
-- [ ] Prozentwerte berechnen
+- [x] Prozentberechnung aus Kalibrierwerten vorbereiten
+- [ ] Prozentwerte mit angeschlossenen Sensoren prüfen
 - [x] Datenbank für Bodenfeuchte vorbereiten
 - [x] persistente Konfigurations-API vorbereiten
 - [x] Dashboard und History vorbereiten
@@ -766,13 +919,24 @@ Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet wer
 - [ ] vorhandenen manuellen Dimmer dokumentieren und abklemmen
 - [ ] GP8600 mit DIM+ / DIM− verbinden
 - [ ] 0–100-%-Steuerung testen
-- [ ] Dashboard-Steuerung ergänzen
-- [ ] Lichtprofile und Timer ergänzen
+- [x] Dashboard-Steuerung vorbereiten
+- [x] persistente Konfigurations-API vorbereiten
+- [ ] GP8600-Ausgabe an Dashboard-Steuerung anbinden
+- [ ] Lichtprofile und Timer aktiv ausführen
 - [ ] Override / AUS ergänzen
-- [ ] Konfiguration nach Neustart wiederherstellen
+- [x] gespeicherte Profileinstellungen nach Neustart laden
+- [ ] Hardwareausgabe nach Neustart sicher wiederherstellen
 - [ ] Dimmwert gegen Lux / PPFD kalibrieren
 
 ## Phase 4 – Bewässerung
+
+- [x] Liquid-Glass-Bereich für Tank und beide Pumpen
+- [x] persistente Namen und Einstellungen je Topf
+- [x] einstellbare Feuchteschwelle, Einzelmenge, Pause und Grenzen
+- [x] Eingabe der Pumpenkalibrierung und Berechnung der Dosierdauer
+- [x] hardwareunabhängige Entscheidungslogik und Vorschau-API
+- [x] Unit-Tests für Kalibrierung, Grenzwerte und Sperrbedingungen
+- [x] überarbeitete Pumpensymbole mit Statusanimation und Animationstest
 
 - [ ] Pumpen und Elektronik außerhalb des Schranks montieren
 - [ ] 12-V-Netzteil installieren
@@ -781,21 +945,30 @@ Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet wer
 - [ ] Kanister, T-Stück und Schläuche montieren
 - [ ] NetBow je Topf anschließen
 - [ ] Schwimmerschalter installieren
-- [ ] Tankstatus ins Dashboard integrieren
+- [ ] echten Schwimmerschalterstatus an die vorbereitete Tankanzeige anbinden
 - [ ] Fördermenge pro Pumpe kalibrieren
 - [ ] manuellen Bewässerungsstart ergänzen
-- [ ] Sicherheitsgrenzen implementieren
+- [ ] Regelungs-Worker und GPIO-Treiber anbinden
+- [ ] Sicherheitsgrenzen während realer Pumpenläufe durchsetzen
+- [ ] Verbrauch und Einziehpause über Neustarts erhalten
 - [ ] Bewässerungsereignisse protokollieren
 - [ ] Automatik erst nach erfolgreicher Kalibrierung aktivieren
 
 ## Phase 5 – Lüfter
 
+- [x] Liquid-Glass-Karten für Zu- und Abluft
+- [x] getrennte Namen, AUS/MANUELL-Sollwerte und Mindestleistung speichern
+- [x] Konfigurations-/Status-API ohne Hardwareausgabe
+- [x] Lüftersymbole mit separatem Animationstest
+- [x] Validierung und Speicherung hardwareunabhängig testen
+- [ ] tatsächliche PWM-Kanalzuordnung am vorhandenen NA-FC1 klären
+
 - [ ] aktuelle Verkabelung dokumentieren
 - [ ] Zuluft / Abluft eindeutig kennzeichnen
 - [ ] NA-FC1-PWM-Eingang mit Pi-GPIO bei ca. 25 kHz testen
 - [ ] Verhalten des beschädigten Reglers prüfen
-- [ ] manuelle Lüftersteuerung ins Dashboard integrieren
-- [ ] AUS / AUTO / MANUELL ergänzen
+- [ ] gespeicherte manuelle Sollwerte an die reale PWM-Ausgabe anbinden
+- [ ] aktive AUS-/MANUELL-Ausgabe und AUTO-Regelung ergänzen
 - [ ] Mindestdrehzahl festlegen
 - [ ] Automatik auf Temperatur / RH / VPD abstimmen
 
@@ -840,6 +1013,20 @@ Diese Punkte sind nicht Teil der unmittelbar geplanten Hardwareintegration:
 ---
 
 # Betrieb
+
+## Test-Branch aktualisieren
+
+```bash
+cd ~/plant-monitor
+git switch test/overview-controls
+git pull --ff-only
+```
+
+Nach Python-Änderungen den Dienst neu starten; anschließend die Website mit **Strg + F5** neu laden. Für reine HTML-/CSS-/JavaScript-Änderungen genügt der Browser-Reload. Eine reine README-Änderung benötigt keinen Neustart.
+
+## Konfiguration speichern
+
+Bodenfeuchte-, Lampen-, Zeitraffer-, Bewässerungs- und Lüftereinstellungen werden in JSON-Dateien unter `data/` gespeichert. Die Speicherung erfolgt über eine temporäre Datei und atomaren Austausch. Bei einem Speicherfehler meldet die API einen Fehler, statt die neue Konfiguration im Arbeitsspeicher als erfolgreich gespeichert zu übernehmen.
 
 ## Uvicorn manuell starten
 
@@ -924,15 +1111,29 @@ http://raspberrypi.local/
 
 # Tests
 
+Hardwareunabhängige Python-Tests vom Repository-Verzeichnis aus:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Die Bewässerungstests prüfen unter anderem Dosierdauer, getrennte Topfeinstellungen, Migration alter Namenskonfigurationen sowie Sperren bei ungültigen/veralteten Sensorwerten, unbekanntem Tankstatus, laufender Einziehpause und überschrittenem Tageslimit. Diese Tests ersetzen keinen Hardwaretest.
+
+API-Abfragen:
+
 ```bash
 curl http://127.0.0.1:8000/api/status
 curl http://127.0.0.1:8000/api/current
 curl http://127.0.0.1:8000/api/history?range=24h
 curl http://127.0.0.1:8000/api/light/today
 curl http://raspberrypi.local/api/current
+curl http://127.0.0.1:8000/api/irrigation/config
+curl http://127.0.0.1:8000/api/irrigation/status
+curl http://127.0.0.1:8000/api/fans/config
+curl http://127.0.0.1:8000/api/fans/status
 ```
 
-Nach Änderungen an `app.py`, `sensor.py` oder `database.py`:
+Nach Änderungen an Python-Code (z. B. `app.py`, `sensor.py`, `database.py`, `configuration.py`, `lamp_profiles.py`, `irrigation.py` oder `fan_control.py`):
 
 ```bash
 sudo systemctl restart plant-monitor

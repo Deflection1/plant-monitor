@@ -9,6 +9,7 @@ venv/
 # Messdaten
 data/*.db
 data/*.db-*
+data/*.json
 
 # Fotos
 photos/*
