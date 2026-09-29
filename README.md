@@ -202,6 +202,7 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 │   ├── app.js
 │   ├── overview.js
 │   ├── overview-equipment.js
+│   ├── layout.js
 │   ├── liquid-glass.css
 │   ├── pump-icons.js
 │   ├── fans.js
@@ -481,17 +482,28 @@ GET /api/light/today
 
 ## Gestaltung und Ansichten
 
-- Liquid-Glass-Design mit farbigen Symbolen für Klima, Licht und Bodenfeuchte
-- **Übersicht:** kompakte Kennzahlen und Kameradarstellung
-- Zusätzliche kompakte Versorgungskarten: Lampenprofil, gespeicherte Leistung, Zeitplan und geplante Dauer; Tankstatus sowie Automatik-Vormerkung, Feuchteschwelle und Einzelmenge je Topf; Lüftermodi und gespeicherte Sollwerte
-- Direkte Links aus den Karten zum jeweiligen Steuerungsbereich
-- Gespeicherte Sollwerte und tatsächliche Ausgänge werden getrennt bezeichnet; nicht verbundene Hardware bleibt erkennbar.
-- Die Versorgungskarten werden bei sichtbarer Übersicht alle 15 Sekunden sowie bei Rückkehr zur Ansicht aktualisiert. Fehler werden pro Karte angezeigt; alte Werte werden dabei ausgeblendet.
+Die Seite trennt Beobachten und Einstellen; das Liquid-Glass-Design und die vorhandenen Symbole bleiben erhalten.
 
-- **Steuerung:** Konfiguration von Bodenfeuchte, Lampe, Bewässerung und Kamera
-- Bilder und Livestream bleiben bewusst kompakt
-- eigene SVG-Symbole für Wachstum und Blüte; beim Profilwechsel wird das passende Symbol angezeigt
-- rundes gläsernes Pumpensymbol je Topf mit unabhängig animierbarem Rotor
+**Übersicht**, von oben nach unten:
+
+1. Verbindungsstatus und letzte Messung
+2. Temperatur, Luftfeuchtigkeit, VPD und Licht
+3. Topf 1/2 mit Bodenfeuchte, vorgemerktem Bewässerungsmodus und Einzelmenge
+4. kompakte Versorgungskarten für Lampe, Tank/Bewässerung und Lüfter
+5. Kamera mit maximal 320 px breiter Vorschau; Archiv bei Bedarf
+6. aufklappbarer Klima- und Lichtverlauf einschließlich Beleuchtungsstatistik
+
+Gespeicherte Sollwerte bleiben ausdrücklich von tatsächlichen Ausgängen getrennt. Die Versorgungskarten aktualisieren sich bei sichtbarer Übersicht alle 15 Sekunden und bei Rückkehr zur Ansicht. Abruffehler blenden alte Werte der betroffenen Karte aus. Direkte Links führen zur passenden Steuerung.
+
+**Steuerung**, mit Sprungnavigation:
+
+1. Licht: Profil, Leistung und Zeitplan
+2. Wasser & Töpfe: gemeinsame Tankanzeige; je Topf Bodenfeuchte und passende Pumpe zusammen; Bewässerungseinstellungen und separate Sensorkalibrierung
+3. Lüftung: Zu- und Abluft nebeneinander
+4. Kamera und Zeitraffer
+5. aufklappbare Systemdiagnose mit Rohwerten und CPU-Temperatur
+
+Technische Grenzen und Pumpenkalibrierung sind pro Topf aufklappbar, ebenso die Mindestleistung der Lüfter. Speichern erfolgt weiterhin über die bestehenden Formulare. Die Kamera bleibt in beiden Ansichten kompakt; Vollbild ist weiterhin verfügbar. Auf Tablets können zwei Versorgungskarten nebeneinander stehen, auf schmalen Bildschirmen eine.
 
 ## Aktuell
 
@@ -626,7 +638,7 @@ Die reine Entscheidungsfunktion prüft Automatik, Tankstatus, Sensoralter (max. 
 
 ## Einstellungen und Kalibrierung
 
-Unter **Steuerung → Bewässerung → Bewässerung einrichten** lassen sich beide Pumpen unabhängig konfigurieren.
+Unter **Steuerung → Wasser & Töpfe → Bewässerung einrichten** lassen sich beide Pumpen unabhängig konfigurieren.
 
 | Einstellung | Bedeutung |
 |---|---|

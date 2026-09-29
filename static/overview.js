@@ -9,7 +9,7 @@
         el(controls ? 'controlsCameraSlot' : 'overviewCameraSlot').append(el('sharedCameraPanel'));
         el(controls ? 'controlsHistorySlot' : 'overviewHistorySlot').append(el('photoHistoryPanel'));
         document.querySelectorAll('[data-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
-        if (controls) requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+        requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
     }
     function route() { selectView(location.hash === '#steuerung' ? 'controls' : 'overview'); }
     document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => {
