@@ -763,3 +763,21 @@ footer { color: #a9c5b8; }
         height: 34px;
     }
 }
+
+/* Botanical flower phase icon: preserve the complete SVG glass tile. */
+.lamp-profile-image {
+    width: 76px;
+    height: 76px;
+    flex-basis: 76px;
+    object-fit: contain;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    filter: drop-shadow(0 5px 9px rgba(10, 17, 22, .24));
+}
+@media (max-width: 600px) {
+    .lamp-profile-image { width: 64px; height: 64px; flex-basis: 64px; }
+}
+@media (forced-colors: active) {
+    .lamp-profile-image { filter: none; }
+}
