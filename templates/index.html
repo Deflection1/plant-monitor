@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/static/style.css?v=12">
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-fan-sliders">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-fan-save-layout">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -1310,9 +1310,10 @@
 <p class="camera-meta" id="fanDraft-exhaust" aria-live="polite">Vorgemerkter Sollwert: 0 %</p>
 <details class="advanced-settings"><summary>Technische Einstellung</summary><label for="fanMinimumSlider-exhaust">Mindestleistung bei Betrieb (%)</label><div class="fan-range-row"><input id="fanMinimumSlider-exhaust" type="range" min="0" max="100" step="1" value="0" aria-describedby="fanDraft-exhaust"><div class="fan-percent-input"><input id="fanMinimum-exhaust" type="number" min="0" max="100" step="1" value="0" required aria-label="Mindestleistung bei Betrieb (%) – Abluft"><span aria-hidden="true">%</span></div></div>
 </details></section></div>
+<div class="fan-form-actions"><button type="submit" class="primary">Einstellungen speichern</button></div>
 <p class="camera-meta">AUS und 0 % ergeben einen Sollwert von 0 %. Bei positivem manuellem Wert gilt mindestens die eingestellte Mindestleistung. Diese Werte sind noch keine gemessene Drehzahl oder tatsächliche PWM-Ausgabe.</p>
 <p class="camera-meta">Die Mindestleistung muss später am Lüfter geprüft werden. Ob Zu- und Abluft unabhängig ansteuerbar sind, hängt von der noch offenen Kanalzuordnung am NA-FC1 ab.</p>
-<button type="submit" class="primary">Einstellungen speichern</button>
+
 </fieldset><p id="fanMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p><button type="button" id="fanRetry" hidden>Erneut laden</button></form>
 </details></section>
 
