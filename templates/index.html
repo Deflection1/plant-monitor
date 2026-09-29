@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/static/style.css?v=12">
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-tank-order">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-control-lamp-state">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -676,8 +676,8 @@
 
             <div class="lamp-control-heading">
 
-                <span class="glass-icon glass-icon--lamp-control" aria-hidden="true">
-                    <svg viewBox="0 0 48 48" class="glass-glyph" focusable="false">
+                <span class="glass-icon glass-icon--lamp-control lamp-control-state-icon" data-state="unknown" role="img" aria-label="Lichtstatus unbekannt">
+                    <svg aria-hidden="true" viewBox="0 0 48 48" class="glass-glyph" focusable="false">
                         <defs>
                             <linearGradient id="glass-lamp-control-body" x1="0" y1="0" x2="1" y2="1">
                                 <stop stop-color="#fff2b6"/>
@@ -691,21 +691,21 @@
                             </linearGradient>
                         </defs>
 
-                        <rect x="9" y="8" width="30" height="9" rx="4.5"
+                        <rect class="control-lamp-body" x="9" y="8" width="30" height="9" rx="4.5"
                               fill="url(#glass-lamp-control-body)"
                               stroke="#fff4c7" stroke-opacity=".7" stroke-width="1.2"/>
 
-                        <path d="M14 8V5M34 8V5"
+                        <path class="control-lamp-wire" d="M14 8V5M34 8V5"
                               stroke="#ffd978" stroke-width="1.8" stroke-linecap="round"/>
 
-                        <path d="M16 21L13 29M24 21V31M32 21L35 29"
+                        <path class="control-lamp-rays" d="M16 21L13 29M24 21V31M32 21L35 29"
                               stroke="#ffd46b" stroke-width="2.2" stroke-linecap="round"/>
 
                         <rect x="11" y="35" width="26" height="4" rx="2"
                               fill="rgba(255,255,255,.12)"
                               stroke="rgba(255,241,195,.35)" stroke-width="1"/>
 
-                        <circle cx="29" cy="37" r="4"
+                        <circle class="control-lamp-slider" cx="29" cy="37" r="4"
                                 fill="url(#glass-lamp-control-slider)"
                                 stroke="#fff1c0" stroke-opacity=".75" stroke-width="1.2"/>
                     </svg>
@@ -1589,7 +1589,7 @@
 <script src="/static/pump-icons.js?v=2"></script>
 <script src="/static/fans.js?v=2"></script>
 <script src="/static/overview-equipment.js?v=4"></script>
-<script src="/static/layout.js?v=2"></script><script src="/static/lamp-visual.js?v=2"></script>
+<script src="/static/layout.js?v=2"></script><script src="/static/lamp-visual.js?v=3"></script>
 </body>
 
 </html>
