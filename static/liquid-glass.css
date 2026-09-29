@@ -857,7 +857,7 @@ footer { color: #a9c5b8; }
 .system-diagnostics .sensor-grid { margin-bottom:0; }
 .advanced-settings { margin:14px 0; padding:0 12px; border:1px solid rgba(215,255,245,.12); border-radius:12px; }
 .water-top-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-.water-top-grid>article:first-child { grid-column:1/-1; }
+.water-top-grid>.water-tank-card { grid-column:1/-1; }
 .integrated-soil-reading { background:transparent; border:0; box-shadow:none; padding:0 0 16px; border-bottom:1px solid rgba(210,255,235,.12); margin-bottom:6px; }
 #irrigationControlSection>.badge { display:inline-block; margin-bottom:14px; }
 #irrigationControlSection .soil-config { margin-top:20px; }
