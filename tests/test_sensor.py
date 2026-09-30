@@ -34,6 +34,31 @@ class FakeBus:
 
 
 class SensorTests(unittest.TestCase):
+    def test_uv_zero_missing_and_saturation(self):
+        self.assertEqual(sensor.uv_irradiance(0), 0.0)
+        self.assertIsNone(sensor.uv_irradiance(None))
+        self.assertIsNone(sensor.uv_irradiance(65535))
+        self.assertAlmostEqual(sensor.uv_irradiance(2300), 0.325433, places=6)
+        self.assertAlmostEqual(sensor.uv_irradiance(1), 0.000141, places=6)
+        for invalid in (-1, 65536, float('nan'), True):
+            with self.assertRaises(ValueError):
+                sensor.uv_irradiance(invalid)
+
+    def test_uv_failure_preserves_climate_readings(self):
+        fake = types.SimpleNamespace(SMBus=FakeBus)
+        original = FakeBus.read_i2c_block_data
+        def fail_uv(bus, address, register, count):
+            if register == 0x10:
+                raise OSError('UV unavailable')
+            return original(bus, address, register, count)
+        with patch.dict(sys.modules, {"smbus2": fake}), \
+                patch.object(FakeBus, "read_i2c_block_data", fail_uv), \
+                patch.object(sensor, "get_cpu_temperature", return_value=40):
+            result = sensor.read_sensors()
+        self.assertEqual(result['temperature'], 25.0)
+        self.assertIsNone(result['uv_raw'])
+        self.assertIsNone(result['uv_mw_cm2'])
+
     def test_import_does_not_open_hardware(self):
         with patch.dict(sys.modules, {"smbus2": None, "bme280": None, "ltr559": None}):
             importlib.reload(sensor)

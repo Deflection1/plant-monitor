@@ -9,12 +9,12 @@
         glass: {
             tick: "#89988e", grid: "rgba(255,255,255,0.05)", barRadius: 3,
             water: ["#68d7ba", "#71b9ee"],
-            series: {temperatureChart:"#67d391", humidityChart:"#6ebce4", vpdChart:"#e8bd6c", luxChart:"#f1dc78", soilMoisture1Chart:"#74c69d", soilMoisture2Chart:"#95d5b2"}
+            series: {temperatureChart:"#67d391", humidityChart:"#6ebce4", vpdChart:"#e8bd6c", luxChart:"#f1dc78", uvChart:"#c59bff", soilMoisture1Chart:"#74c69d", soilMoisture2Chart:"#95d5b2"}
         },
         "windows-2000": {
             tick: "#404040", grid: "#d4d0c8", barRadius: 0,
             water: ["#000080", "#008000"],
-            series: {temperatureChart:"#b02020", humidityChart:"#000080", vpdChart:"#008000", luxChart:"#a08000", soilMoisture1Chart:"#000080", soilMoisture2Chart:"#008000"}
+            series: {temperatureChart:"#b02020", humidityChart:"#000080", vpdChart:"#008000", luxChart:"#a08000", uvChart:"#800080", soilMoisture1Chart:"#000080", soilMoisture2Chart:"#008000"}
         }
     };
     const profileIcon = profile => {
@@ -85,3 +85,4 @@
         }
     });
 })();
+

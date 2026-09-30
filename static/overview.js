@@ -23,6 +23,9 @@
         el('ovVpd').textContent = valid(data.vpd) ? data.vpd.toLocaleString('de-CH', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '—';
         el('ovLight').textContent = data.light_on === true ? 'An' : data.light_on === false ? 'Aus' : '—';
         el('ovLux').textContent = valueText(data.lux);
+        el('ovUv').textContent = valid(data.uv_mw_cm2)
+            ? data.uv_mw_cm2.toLocaleString('de-CH', {minimumFractionDigits: 4, maximumFractionDigits: 4})
+            : data.uv_saturated ? 'Bereich überschritten' : '—';
         el('overviewFreshness').textContent = 'Verbunden · letzte Messung ' + new Date().toLocaleTimeString('de-CH');
         for (const i of [1, 2]) {
             const moisture = data['soil_moisture_' + i];
@@ -34,7 +37,7 @@
     });
     window.addEventListener('plant:offline', () => {
         el('overviewFreshness').textContent = 'Keine aktuellen Messwerte · Verbindung prüfen';
-        for (const id of ['ovTemperature', 'ovHumidity', 'ovVpd', 'ovLux', 'ovLight', 'ovSoil1', 'ovSoil2']) el(id).textContent = '—';
+        for (const id of ['ovTemperature', 'ovHumidity', 'ovVpd', 'ovLux', 'ovUv', 'ovLight', 'ovSoil1', 'ovSoil2']) el(id).textContent = '—';
         for (const i of [1, 2]) { el('ovProgress' + i).hidden = true; el('ovSoilNote' + i).textContent = 'Messwerte nicht verfügbar'; }
     });
     window.addEventListener('plant:pots', event => event.detail.slice(0, 2).forEach((pot, index) => {
@@ -42,3 +45,4 @@
         el('ovProgress' + (index + 1)).setAttribute('aria-label', 'Bodenfeuchtigkeit ' + pot.name);
     }));
 })();
+

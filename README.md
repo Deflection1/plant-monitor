@@ -62,10 +62,22 @@ sudo systemctl restart plant-monitor
 
 Temperatur und RH werden ohne Enviro+-CPU-Korrektur übernommen. Lux und VPD
 verwenden das bestehende Datenmodell. `/api/current` liefert zusätzlich
-`pressure_hpa`, `uv_raw` und `sensor_model`; diese Zusatzwerte sind noch
-nicht als Diagramm oder Datenbank-History angebunden. UV wird bewusst als
-Rohwert ausgegeben: Die V2-Umrechnung der Herstellerbibliothek ist noch zu
-verifizieren; es wird kein unbestätigter UV-Index angezeigt.
+`pressure_hpa`, `uv_raw`, `uv_mw_cm2`, `uv_saturated` und `sensor_model`.
+UV wird im Überblick, in der Diagnose und als eigener Verlauf angezeigt;
+Rohwert und geschätzte Bestrahlungsstärke werden in der Datenbank gespeichert.
+Die Datenbankmigration ergänzt vorhandene Tabellen automatisch. Frühere
+Messungen ohne UV bleiben im UV-Verlauf leer.
+
+Die Umrechnung folgt der auf der [DFRobot-Produktseite](https://wiki.dfrobot.com/sen0501/docs/21745)
+verlinkten [V2-Bibliothek](https://github.com/cdjq/DFRobot_EnvironmentalSensor):
+`uv_mw_cm2 = uv_raw / (2300 / 3) * (0.23 * 1.58 / 3.35)`.
+Sie setzt die V2-Firmwarekonfiguration des LTR390 voraus (20 Bit, Gain 6)
+und liefert eine **geschätzte äquivalente UV-A-Bestrahlungsstärke in mW/cm²**.
+Das ist kein kalibrierter UV-Index und keine präzise Dosismessung einer UV-Lampe.
+Rohwert 0 wird als echte Null angezeigt, ein fehlender UV-Wert als nicht
+verfügbar. Der 16-Bit-Maximalwert 65535 wird vorsorglich als Sättigung markiert.
+Ein einzelner UV-Lesefehler lässt die übrigen Klimawerte verfügbar.
+Luftdruck bleibt vorerst ein API-Wert ohne eigenes Diagramm.
 
 Beim Import wird keine Hardware geöffnet. Sensorfehler lassen die Website
 starten; die betroffenen Live-Endpunkte antworten mit HTTP 503, und der
@@ -1410,4 +1422,3 @@ Für exakte PPFD-/DLI-Werte wäre ein PAR-/Quantum-Sensor erforderlich.
 Noch nicht festgelegt.
 
 Für ein öffentliches Open-Source-Repository kann später beispielsweise eine MIT-Lizenz ergänzt werden.
-

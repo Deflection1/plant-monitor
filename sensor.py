@@ -1,8 +1,8 @@
 """SEN0501 V2 I2C readings; no Enviro+ hardware is opened at import time.
 
 Register layout and T/RH/lux conversions follow DFRobot's MIT-licensed
-DFRobot_EnvironmentalSensor implementation. UV is exposed as a raw register
-value until the V2 conversion has been verified on this hardware.
+DFRobot_EnvironmentalSensor implementation. UV uses the V2 conversion from the DFRobot-linked cdjq library; the
+result is estimated equivalent UVA irradiance, not a calibrated UV index.
 """
 import math
 import subprocess
@@ -38,6 +38,20 @@ def _read_word(bus, register):
     return (data[0] << 8) | data[1]
 
 
+def uv_irradiance(raw):
+    """Estimated equivalent UVA mW/cm², SEN0501 V2 firmware (20-bit, gain 6).
+    
+    DFRobot-linked V2 library: counts/(2300/3) * (0.23*1.58/3.35).
+    The module exposes only a 16-bit register; its maximum is treated as
+    saturation rather than a reliable intensity.
+    """
+    if raw is None or raw == 65535:
+        return None
+    if type(raw) is not int or not 0 <= raw <= 65535:
+        raise ValueError("SEN0501: ungültiger UV-Rohwert")
+    return round(raw / (2300.0 / 3.0) * (0.23 * 1.58 / 3.35), 6)
+
+
 def read_sensors():
     # Lazy import and bus opening keep the website available if hardware fails.
     from smbus2 import SMBus
@@ -50,7 +64,10 @@ def read_sensors():
         humidity = _read_word(bus, 0x16) * 100.0 / 65536
         light_raw = _read_word(bus, 0x12)
         pressure_hpa = _read_word(bus, 0x18)
-        uv_raw = _read_word(bus, 0x10)
+        try:
+            uv_raw = _read_word(bus, 0x10)
+        except OSError:
+            uv_raw = None
 
     lux = light_raw * (
         1.0023 + light_raw * (
@@ -74,5 +91,7 @@ def read_sensors():
         "lux": round(lux, 1),
         "pressure_hpa": pressure_hpa,
         "uv_raw": uv_raw,
+        "uv_mw_cm2": uv_irradiance(uv_raw),
+        "uv_saturated": uv_raw == 65535,
         "sensor_model": "SEN0501 V2.0",
     }

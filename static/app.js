@@ -9,6 +9,7 @@ let temperatureChart;
 let humidityChart;
 let vpdChart;
 let luxChart;
+let uvChart;
 let soilMoisture1Chart;
 let soilMoisture2Chart;
 
@@ -159,6 +160,10 @@ async function loadCurrent() {
                 data.lux || 0
             );
 
+
+        $("uvIntensity").textContent = data.uv_saturated
+            ? "Bereich überschritten" : number(data.uv_mw_cm2, 4);
+        $("uvRaw").textContent = number(data.uv_raw, 0);
 
         $("cpuTemperature").textContent =
             number(
@@ -327,6 +332,8 @@ async function loadCurrent() {
 
 
         window.dispatchEvent(new Event("plant:offline"));
+        $("uvIntensity").textContent = "--";
+        $("uvRaw").textContent = "--";
 
         $("systemStatus").innerHTML =
 
@@ -590,6 +597,8 @@ function createCharts() {
         );
 
 
+    uvChart = makeChart("uvChart", "mW/cm²", "#8050b0");
+
     soilMoisture1Chart =
         makeChart(
             "soilMoisture1Chart",
@@ -821,6 +830,10 @@ async function loadHistory() {
                     }
                 );
 
+
+        uvChart.data.labels = labels;
+        uvChart.data.datasets[0].data = points.map(point => point.uv_mw_cm2 ?? null);
+        uvChart.update();
 
         temperatureChart.update();
 
