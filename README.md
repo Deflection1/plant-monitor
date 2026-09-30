@@ -8,7 +8,38 @@ Das System erfasst Klima-, Licht- und später Bodenfeuchtedaten, speichert Messw
 
 # Status
 
-Stand: **29.09.2026**, Entwicklungsbranch **`test/overview-controls`**. Die folgenden Software-Erweiterungen beziehen sich auf diesen Branch; sie sind nicht automatisch auf `main` verfügbar.
+Stand: **30.09.2026**. Diese Dokumentation beschreibt den geprüften Code auf **`main`**. Spätere Änderungen auf **`test/overview-controls`** sind unten separat aufgeführt. Ein angeschlossenes Gerät gilt erst nach Treiber-Anbindung und Funktionstest als softwareseitig in Betrieb.
+
+## Branches und tatsächlicher Funktionsumfang
+
+| Funktion | `main` | `test/overview-controls` |
+|---|---|---|
+| Übersicht/Steuerung, Klima- und Lichtverlauf, kompakte Kamera | vorhanden | vorhanden |
+| Getrennte Lampenprofile und kompakter Luxwert unter dem Profil | vorhanden | vorhanden |
+| Eigenes Lampen-/Keimling-SVG in der Übersicht, sensorabhängiges Leuchten | vorhanden | zusätzlich kräftigere Glasreflexe/Konturen |
+| Dynamisches Lampensymbol mit Schiebregler in der Steuerung | noch statisch | sensorabhängiges Leuchten |
+| Bewässerungshistorie mit Tagesmengen und 7-Tage-Balken | noch nicht vorhanden | Oberfläche, SQLite-Ereignisspeicher und lesende API vorbereitet |
+| Lüfterleistung und Mindestleistung | Zahlenfelder | zusätzlich synchronisierte Schieberegler |
+| Lüfter-Speichern-Button | bisherige Position | eigene Zeile unter beiden Karten |
+| Tankstatus in der Steuerung | vor den Topf-/Pumpenkarten | nach den Topf-/Pumpenkarten, vor den Einstellungen |
+| Reale Pumpen-, Lampen- und Lüfterausgabe | nicht implementiert | nicht implementiert |
+
+Der Test-Branch ist damit nicht vollständig in `main` enthalten. Ein Merge ist ein eigener Arbeitsschritt; eine README-Aktualisierung übernimmt keinen Programmcode.
+
+### Bewässerungsverlauf auf dem Test-Branch
+
+Dort zeigt die Übersicht die letzte protokollierte Gabe, heutige Mengen je Topf und
+einen kompakten 7-Tage-Verlauf. `GET /api/irrigation/history` liest die in SQLite
+gespeicherten `watering_events`; die Tagesgrenzen verwenden `Europe/Zurich`.
+Die Menge wird aus tatsächlicher Laufzeit und gespeicherter Pumpenfördermenge
+berechnet, nicht durch einen Durchflusssensor gemessen. Kalibrierläufe werden
+nicht als Topfbewässerung gezählt; stabile Vorgangs-IDs verhindern Doppelbuchungen.
+
+**Auch dort fehlen noch echte Pumpentreiber:** Die interne Schreibfunktion
+`record_watering_event` muss nach realen Pumpenläufen angebunden werden.
+Einstellungen, Vorschauen und Animationstests erzeugen keine Bewässerungen.
+Ohne Ereignisse erscheint ein Leerzustand; die Historie ersetzt keine aktive
+Durchsetzung von Tageslimit, Abschaltungen oder Einziehpause.
 
 ## Bereits funktionsfähig
 
@@ -48,7 +79,7 @@ Stand: **29.09.2026**, Entwicklungsbranch **`test/overview-controls`**. Die folg
 - 📦 Mean Well 12 V / 3 A Pumpennetzteil
 - 📦 Schwimmerschalter für Tankstatus
 - 🟨 DFRobot Gravity Umgebungssensor als Enviro+-Ersatz geplant
-- 🟨 PWM-Test der Noctua-Lüfter über den vorhandenen NA-FC1 geplant
+- 🟨 getrennte PWM-Regelung beider Noctua-Lüfter nach Enviro+-Demontage geplant; elektrische Schnittstelle noch offen
 - 🟨 E-Ink-Statusdisplay außen am Schrank geplant
 
 ---
@@ -76,7 +107,8 @@ Raspberry Pi 4
 ├── GPIO -> Pumpe 1
 ├── GPIO -> Pumpe 2
 ├── GPIO -> Schwimmerschalter
-├── PWM GPIO -> Noctua NA-FC1
+├── PWM-Kanal 1 -> noch festzulegende Signalschnittstelle -> Zuluft
+├── PWM-Kanal 2 -> noch festzulegende Signalschnittstelle -> Abluft
 ├── CSI -> Raspberry Pi Camera v2.1
 │
 ├── FastAPI / SQLite / Dashboard
@@ -96,11 +128,12 @@ Die Pumpen bleiben vollständig auf einer separaten 12-V-Leistungsseite. Der Ras
 - Pimoroni Enviro+ HAT
 - Raspberry Pi Camera Module v2.1 / IMX219
 - Mean Well XLG-150-H-AB LED-Netzteil
-- LED-Pflanzenlampe
-- 2× Noctua 4-Pin-PWM-Lüfter
+- 120-W-Quantum-Board (Nennangabe; tatsächliche Steckdosenaufnahme noch nicht gemessen)
+- 2× Noctua NF-F12 industrialPPC-3000 PWM, 12 V
   - Zuluft unten
   - Abluft oben
-- Noctua NA-FC1
+- Noctua NA-FC1, derzeit zur gemeinsamen Lüfterregelung genutzt
+- separates 12-V-Netzteil für die Lüfter; nicht mit dem bestellten Pumpennetzteil gleichsetzen
 
 ## Bestellt am 28.09.2026
 
@@ -206,6 +239,7 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 │   ├── liquid-glass.css
 │   ├── pump-icons.js
 │   ├── tank-status.js
+│   ├── lamp-visual.js       # sensorbasierter Lichtzustand in der Übersicht
 │   ├── fans.js
 │   ├── profile-growth.svg
 │   ├── profile-flower.svg
@@ -300,13 +334,13 @@ Enviro+ bei voller Lampe:     ca. 13.352 Lux
 Direkt unter Lampenmitte:     ca. 22.600 Lux
 ```
 
-Die Lampe gilt ab:
+Die Software meldet „Licht erkannt“ ab:
 
 ```python
 LIGHT_ON_LUX = 100.0
 ```
 
-als eingeschaltet.
+als Schwellenwert. Das ist eine Aussage über das Licht am Sensor, keine elektrische Rückmeldung des LED-Treibers; auch Fremdlicht kann den Status beeinflussen.
 
 ---
 
@@ -399,7 +433,14 @@ lux
 raw_temperature
 raw_humidity
 cpu_temperature
+soil_raw_1
+soil_raw_2
+soil_moisture_1
+soil_moisture_2
 ```
+
+Die Bodenfeuchtespalten bleiben ohne angebundene Sensoren leer (`NULL`).
+Auf `main` gibt es noch keine Tabelle `watering_events`; diese liegt bislang nur auf dem Test-Branch.
 
 PPFD und DLI werden derzeit aus Lux berechnet.
 
@@ -449,12 +490,12 @@ Beispiel:
 
 ```json
 {
-  "raw_temperature": 40.1,
-  "cpu_temperature": 57.4,
-  "temperature": 32.5,
-  "raw_humidity": 20.5,
-  "humidity": 31.2,
-  "vpd": 3.35,
+  "raw_temperature": 40.5,
+  "cpu_temperature": 60.3,
+  "temperature": 31.7,
+  "raw_humidity": 27.7,
+  "humidity": 44.9,
+  "vpd": 2.58,
   "lux": 13352.0,
   "ppfd_sensor": 254.3,
   "ppfd_center": 437.4,
@@ -544,7 +585,21 @@ History:
 - Bewässerungsmenge, Feuchteschwelle und Pumpenkalibrierung je Topf
 - Lüfternamen, AUS/MANUELL-Modus, gewünschte Leistung und Mindestleistung je Zu-/Abluft
 
-## Noch offen
+## Lichtsymbol und Statusqualität
+
+In der Übersicht steht links das eigenständige Lampen-/Keimling-SVG; das
+Profilbild erscheint rechts neben dem Profilnamen. Darunter folgt der Luxwert
+als normale Wertezeile. `lamp-visual.js` setzt das Leuchten anhand gültiger
+Lux- und `light_on`-Werte. Ohne Licht bleibt es unbeleuchtet; bei Abruffehlern
+oder mehr als 20 Sekunden ohne gültigen Empfang wird der Zustand unbekannt.
+
+Die Frischeprüfung verwendet derzeit den Empfangszeitpunkt im Browser.
+`GET /api/status` meldet pauschal „online“ und ist noch kein umfassender
+Nachweis für gesunde Sensoren oder erfolgreiche Datenaufzeichnung.
+Die spätere Trennung von Messzeitpunkt, letztem Speichervorgang und
+Gerätegesundheit bleibt offen.
+
+## Noch offen auf `main`
 
 - tatsächliche Sensor-, Tank- und Pumpen-Anbindung
 - letzte Bewässerung und dauerhaftes Ereignisprotokoll
@@ -591,7 +646,7 @@ Bereits umgesetzt:
 - API für Konfiguration und Status
 - Prozentberechnung automatisch aus Rohwert + Kalibrierung
 
-Sobald die Hardware angeschlossen ist, muss `sensor.py` nur noch `soil_raw_1` und `soil_raw_2` liefern. Die Prozentberechnung, Speicherung, API und Dashboard-Anzeige sind bereits vorbereitet.
+Für den Hardwarebetrieb muss ein ADS1115-Lesetreiber in `sensor.py` gültige `soil_raw_1` und `soil_raw_2` liefern; Messfehler und fehlende Sensoren müssen als nicht verfügbar behandelt werden. Die Prozentberechnung, Speicherung, API und Dashboard-Anzeige sind bereits vorbereitet.
 
 API:
 
@@ -607,11 +662,11 @@ Die Konfiguration bleibt nach Browser-Neuladen und Raspberry-Pi-Neustart erhalte
 
 # Bewässerung
 
-Die komplette Pumpen- und Tanktechnik befindet sich **außerhalb des Pflanzenschranks**.
+Die komplette Pumpen- und Tanktechnik soll **außerhalb des Pflanzenschranks** montiert werden. Die reale Inbetriebnahme steht noch aus.
 
 ## Software-Vorbereitung
 
-Auf dem Test-Branch sind Oberfläche, persistente Konfiguration und eine hardwareunabhängige Entscheidungsvorschau vorhanden:
+Auf `main` sind Oberfläche, persistente Konfiguration und eine hardwareunabhängige Entscheidungsvorschau vorhanden:
 
 - Liquid-Glass-Bereich unter Steuerung für Tank und beide Pumpen
 - persistent speicherbare Namen in `data/irrigation.json`
@@ -737,7 +792,7 @@ Vorhandener LED-Treiber:
 Mean Well XLG-150-H-AB
 ```
 
-Die Steuerung erfolgt über dessen Dimm-Eingang, nicht über die 230-V-Seite.
+Die geplante Steuerung erfolgt über dessen Dimm-Eingang, nicht über die 230-V-Seite. Der GP8600-Treiber ist noch nicht implementiert.
 
 ```text
 Raspberry Pi
@@ -819,33 +874,42 @@ AUS oder ein gewünschter Wert von 0 % ergibt einen Sollwert von 0 %. Bei einem 
 - AUTO ist in der Oberfläche als spätere Funktion gekennzeichnet und nicht auswählbar.
 - Laden, Validierung und atomare Speicherung sind vorbereitet; ein Speicherfehler übernimmt keine neue aktive Konfiguration.
 
-**Kanalzuordnung noch offen:** Die zwei getrennten Softwareeinstellungen bedeuten nicht, dass der vorhandene NA-FC1 bereits zwei unabhängig steuerbare PWM-Kanäle bereitstellt. Die tatsächliche Anbindung und Zuordnung muss vor der Hardwareintegration geprüft werden.
+## Vorhandene Lüfter und geplanter Anschluss
 
-## Geplante Hardware-Anbindung
+Vorhanden sind zwei **Noctua NF-F12 industrialPPC-3000 PWM (12 V)** für
+Zuluft unten und Abluft oben. Der **NA-FC1** wird derzeit mit einem separaten
+12-V-Netzteil verwendet. Ein einzelner NA-FC1 samt Verteiler liefert ein
+gemeinsames PWM-Signal; er ermöglicht keine unabhängigen Sollwerte für beide Lüfter.
 
-Vorhanden:
+Geplant ist stattdessen eine getrennte Regelung aus der Pi-Software:
 
-```text
-Zuluft unten
-Abluft oben
-```
+| Verbindung | Geplant |
+|---|---|
+| Lüfterversorgung | weiterhin externes 12-V-Netzteil |
+| Gemeinsame Masse | Lüfter-GND, Netzteil-GND und Pi-GND |
+| Zuluft | eigener PWM-Kanal, Kandidat BCM GPIO18 / physischer Pin 12 |
+| Abluft | eigener PWM-Kanal, Kandidat BCM GPIO13 / physischer Pin 33 |
+| PWM-Frequenz | etwa 25 kHz |
+| Drehzahlrückmeldung | optional, noch nicht verdrahtet oder implementiert |
 
-Beide Lüfter sind 4-Pin-Noctua-PWM-Lüfter.
+**Diese Belegung ist ein Plan, keine freigegebene Verdrahtungsanleitung.**
+Sie setzt die geplante Enviro+-Demontage und den Abgleich aller neuen Sensor-
+und Geräteanschlüsse voraus. GPIO18 gehört beim Enviro+ zum Mikrofon;
+GPIO12 wird für die Displaybeleuchtung verwendet. BCM-Nummern nicht mit
+physischen Steckleisten-Pins verwechseln.
 
-Als erster Schritt bleibt der **NA-FC1** erhalten. Der Raspberry Pi soll ein PWM-Signal mit etwa 25 kHz an dessen PWM-Eingang liefern.
+Der Nutzer hat am PWM-Anschluss eines Lüfters etwa **3,3 V** gemessen.
+Das ist eine Einzelbeobachtung, kein Nachweis für alle Betriebszustände.
+Die Signalschnittstelle und das Verhalten bei laufender Lüfterversorgung
+und stromlosem Pi sind noch festzulegen. Ein beliebiger Pegelwandler ist
+nicht automatisch gegen Rückspeisung geschützt. Die Lüfter erhalten
+konstante 12 V; geregelt wird über ihren separaten PWM-Eingang.
+12 V dürfen weder an einen Pi-GPIO noch an den PWM-Eingang gelangen.
 
-```text
-Raspberry Pi
-   ├── GND -> NA-FC1 GND
-   └── PWM -> NA-FC1 PWM-Eingang
-
-NA-FC1
-   └── Noctua-Lüfter
-```
-
-Die 12-V-Versorgung der Lüfter bleibt separat.
-
-Zuerst wird geprüft, ob der beschädigte Drehregler des NA-FC1 das externe PWM-Signal beeinflusst. Ein zusätzlicher Pegelwandler oder Lüftertreiber wird deshalb vorerst nicht beschafft.
+Der NA-FC1 wird für die geplante direkte Zweikanal-Regelung nicht benötigt.
+Bis zur geprüften Umstellung bleibt die bisherige manuelle Lösung maßgeblich.
+Die Website speichert weiterhin nur Sollwerte: kein automatischer Wechsel
+auf GPIO-Ausgabe, keine gemessene Drehzahl und kein bestätigter Stillstand bei 0 %.
 
 Später vorgesehen:
 
@@ -879,7 +943,20 @@ Vorteile gegenüber dem Enviro+:
 - 40-Pin-Header des Raspberry Pi wird frei
 - mehr direkte GPIOs für Pumpen, Schwimmerschalter und Lüfter-PWM
 
-Das Enviro+ wird bis zur erfolgreichen Migration weiterverwendet.
+Das Enviro+ soll vor der neuen Lüfterverdrahtung demontiert werden. Der externe
+Umgebungssensor ist noch nicht im Code angebunden; genaue Modell-/Artikelnummer,
+Versorgung, I²C-Adresse und Treiber müssen vor dem Anschluss bestätigt werden.
+Die genannten Messgrößen sind das bisher geplante Funktionspaket, keine
+bereits geprüfte Sensorintegration.
+
+Aktuell importiert `sensor.py` den BME280 und LTR-559 des Enviro+ unmittelbar.
+Ein bloßes Abziehen des Boards stellt die Software nicht um und kann den
+Dienststart oder die Messabfrage scheitern lassen. Migration und Demontage
+deshalb zusammen planen; bis dahin ist keine lückenlose Messung zugesichert.
+
+Bei thermisch vom Pi getrennter Messung die bisherige CPU-Korrektur entfernen.
+Die neue Luftfeuchtigkeit darf nicht nochmals mit dem alten Enviro+-Modell
+umgerechnet werden. Positionierung und Vergleichsmessung sind Teil der Inbetriebnahme.
 
 ---
 
@@ -905,6 +982,22 @@ Mögliche Inhalte:
 # Roadmap
 
 Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet werden kann.
+Die Checklisten beziehen sich auf `main`, sofern nicht ausdrücklich anders angegeben.
+Die Enviro+-Migration ist Voraussetzung für die hier geplante PWM-Pinbelegung;
+die Phasennummern sind keine zwingende Reihenfolge.
+
+## Inbetriebnahmeübersicht
+
+| Gerät | Software auf `main` | Anschluss / Kalibrierung / Funktionstest |
+|---|---|---|
+| Enviro+ | Messung und heuristische Korrektur aktiv | in Nutzung; Temperatur-/RH-Abweichung ungeklärt |
+| Externer Umgebungssensor | Treiber fehlt | geplant; genaues Modell und Messvergleich offen |
+| SEN0308 / ADS1115 | Anzeige, Speicherung und Prozentberechnung vorbereitet | Anschluss, Rohwerttreiber und Kalibrierung offen |
+| Quantum-Board / GP8600 | Profile und Sollwerte gespeichert | DAC-Ausgabe, Dimmung und Timerbetrieb offen |
+| Zwei PPFL-1-Pumpen | Konfiguration und Entscheidungsvorschau | Anschluss, Fördermengenmessung und reale Abschaltungen offen |
+| WLSW1 | Statusdarstellung vorbereitet | Live-Einlesen und Tank-leer-Sperre offen |
+| Noctua Zu-/Abluft | getrennte Sollwerte gespeichert | aktuell NA-FC1; Pi-PWM und Drehzahlerfassung offen |
+| IMX219 | Stream, Fotos und Zeitraffer implementiert | bereits in Betrieb |
 
 ## Phase 1 – Kamera
 
@@ -983,12 +1076,12 @@ Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet wer
 - [x] Konfigurations-/Status-API ohne Hardwareausgabe
 - [x] Lüftersymbole mit separatem Animationstest
 - [x] Validierung und Speicherung hardwareunabhängig testen
-- [ ] tatsächliche PWM-Kanalzuordnung am vorhandenen NA-FC1 klären
+- [ ] getrennte PWM-Kanäle nach Enviro+-Demontage und Sensorplanung verbindlich zuordnen
 
 - [ ] aktuelle Verkabelung dokumentieren
 - [ ] Zuluft / Abluft eindeutig kennzeichnen
-- [ ] NA-FC1-PWM-Eingang mit Pi-GPIO bei ca. 25 kHz testen
-- [ ] Verhalten des beschädigten Reglers prüfen
+- [ ] Signalschnittstelle einschließlich Verhalten bei stromlosem Pi festlegen
+- [ ] beide PWM-Kanäle bei ca. 25 kHz einzeln testen
 - [ ] gespeicherte manuelle Sollwerte an die reale PWM-Ausgabe anbinden
 - [ ] aktive AUS-/MANUELL-Ausgabe und AUTO-Regelung ergänzen
 - [ ] Mindestdrehzahl festlegen
@@ -1036,13 +1129,24 @@ Diese Punkte sind nicht Teil der unmittelbar geplanten Hardwareintegration:
 
 # Betrieb
 
-## Test-Branch aktualisieren
+## Hauptbranch aktualisieren
+
+```bash
+cd ~/plant-monitor
+git switch main
+git pull --ff-only
+```
+
+Wer ausdrücklich die oben getrennt aufgeführten neuen Funktionen testen möchte:
 
 ```bash
 cd ~/plant-monitor
 git switch test/overview-controls
 git pull --ff-only
 ```
+
+Lokale Änderungen vor einem Branchwechsel prüfen; Konfiguration und Messdaten
+nicht durch Zurücksetzen oder Überschreiben verlieren.
 
 Nach Python-Änderungen den Dienst neu starten; anschließend die Website mit **Strg + F5** neu laden. Für reine HTML-/CSS-/JavaScript-Änderungen genügt der Browser-Reload. Eine reine README-Änderung benötigt keinen Neustart.
 
@@ -1171,7 +1275,21 @@ Das Projekt ist ein Monitoring- und Automatisierungssystem und kein kalibriertes
 
 ## Temperatur / Feuchte
 
-Die aktuelle Enviro+-Messung wird durch die Raspberry-Pi-Abwärme beeinflusst. Dieser Punkt soll mit dem extern montierten Gravity-Umgebungssensor behoben werden.
+Die aktuelle Enviro+-Messung wird durch die Raspberry-Pi-Abwärme beeinflusst.
+`TEMP_FACTOR = 2.25` ist eine heuristische Korrektur, keine abgeschlossene Kalibrierung.
+
+Beim Vergleich am 30.09.2026 zeigte das analoge Gerät ungefähr 30 °C / 80 % RH.
+Die nahe beieinander aufgenommenen Dashboard-Bilder zeigten etwa 32,1 °C / 44,7 % RH
+und Rohwerte von 40,5 °C / 27,7 % RH bei 60,3 °C CPU-Temperatur.
+Aus diesen Rohwerten berechnet der aktuelle Code etwa 31,7 °C / 44,9 % RH.
+Auch eine Umrechnung auf 30 °C ergäbe nur etwa 49 % RH; die Abweichung ist
+damit noch nicht geklärt. Weder identische Messposition und Angleichzeit noch
+die Kalibrierung des analogen Geräts sind bestätigt.
+
+Keinen pauschalen Feuchteoffset aus diesem Einzelvergleich übernehmen.
+Den neuen externen Sensor unter gleichen Bedingungen vergleichen und die
+CPU-Korrektur bei der Migration deaktivieren. VPD ist aus Temperatur und RH
+abgeleitet und übernimmt deren Unsicherheit.
 
 ## PPFD / DLI
 
@@ -1183,11 +1301,7 @@ Aktueller Arbeitswert:
 52,5 Lux pro µmol/m²/s
 ```
 
-Geschätzte Unsicherheit:
-
-```text
-±15–20 %
-```
+Eine belastbare prozentuale Messunsicherheit wurde nicht ermittelt. Der bisher genannte Bereich ±15–20 % ist keine verifizierte Genauigkeitsangabe.
 
 Für exakte PPFD-/DLI-Werte wäre ein PAR-/Quantum-Sensor erforderlich.
 
