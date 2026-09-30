@@ -458,7 +458,7 @@ function chartOptions(
                 ticks: {
 
                     color:
-                        "#89988e",
+                        "#404040",
 
                     maxTicksLimit: 6,
                     autoSkip: true,
@@ -470,7 +470,7 @@ function chartOptions(
                 grid: {
 
                     color:
-                        "rgba(255,255,255,0.03)"
+                        "#e0e0e0"
                 }
             },
 
@@ -480,14 +480,14 @@ function chartOptions(
                 ticks: {
 
                     color:
-                        "#89988e"
+                        "#404040"
                 },
 
 
                 grid: {
 
                     color:
-                        "rgba(255,255,255,0.05)"
+                        "#d4d0c8"
                 }
             }
         }
@@ -561,7 +561,7 @@ function createCharts() {
         makeChart(
             "temperatureChart",
             "°C",
-            "#67d391"
+            "#b02020"
         );
 
 
@@ -569,7 +569,7 @@ function createCharts() {
         makeChart(
             "humidityChart",
             "%",
-            "#6ebce4"
+            "#000080"
         );
 
 
@@ -577,7 +577,7 @@ function createCharts() {
         makeChart(
             "vpdChart",
             "kPa",
-            "#e8bd6c"
+            "#008000"
         );
 
 
@@ -585,7 +585,7 @@ function createCharts() {
         makeChart(
             "luxChart",
             "Lux",
-            "#f1dc78"
+            "#a08000"
         );
 
 
@@ -593,7 +593,7 @@ function createCharts() {
         makeChart(
             "soilMoisture1Chart",
             "%",
-            "#74c69d"
+            "#000080"
         );
 
 
@@ -601,7 +601,7 @@ function createCharts() {
         makeChart(
             "soilMoisture2Chart",
             "%",
-            "#95d5b2"
+            "#008000"
         );
 }
 

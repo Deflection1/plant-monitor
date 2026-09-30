@@ -6,6 +6,20 @@ Das System erfasst Klima-, Licht- und später Bodenfeuchtedaten, speichert Messw
 
 ---
 
+## Design-Branch: Windows 2000
+
+Dieser Branch `design/windows-2000` gestaltet Übersicht und Steuerung im
+klassischen Windows-2000-Stil neu: graue Fensterflächen, blaue Titelleisten,
+3D-Schaltflächen, eingelassene Eingabefelder und klassische Schieberegler.
+`static/windows-2000.css` ist das einzige eingebundene Stylesheet und enthält
+auch die Anpassungen für schmale Bildschirme, Tastaturbedienung und reduzierte
+Bewegung. Diagramme verwenden dunkle Linien auf weißem Grund; die Profil-SVGs
+sind im gleichen klassischen Stil gestaltet.
+
+Die vorhandenen IDs, Formulare, API-Aufrufe und Funktionen bleiben erhalten.
+Die Gestaltung aktiviert keine Hardwareausgänge. Der bisherige Funktionsstand
+auf `main` ist die Grundlage dieses Branches.
+
 # Status
 
 Stand: **30.09.2026**. Der Stand von `test/overview-controls` wurde über
@@ -62,7 +76,7 @@ Durchsetzung von Tageslimit, Abschaltungen oder Einziehpause.
 - ✅ systemd-Autostart
 - ✅ Chart.js lokal
 - ✅ History für 24 h, 7 d, 30 d und 1 Jahr
-- ✅ Liquid-Glass-Oberfläche mit Übersicht und Steuerung
+- ✅ Windows-2000-Oberfläche mit Übersicht und Steuerung
 - ✅ Kamera-Livestream, Galerie und Zeitraffer
 - ✅ Bodenfeuchte-Konfiguration und Kalibrierungsoberfläche für zwei Töpfe
 - ✅ getrennt speicherbare Lampenprofile mit eigenen SVG-Symbolen
@@ -234,12 +248,11 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 ├── templates/
 │   └── index.html
 ├── static/
-│   ├── style.css
+│   ├── windows-2000.css    # vollständiges klassisches Design
 │   ├── app.js
 │   ├── overview.js
 │   ├── overview-equipment.js
 │   ├── layout.js
-│   ├── liquid-glass.css
 │   ├── pump-icons.js
 │   ├── tank-status.js
 │   ├── lamp-visual.js       # sensorbasierter Lichtzustand in beiden Ansichten
@@ -529,7 +542,7 @@ GET /api/light/today
 
 ## Gestaltung und Ansichten
 
-Die Seite trennt Beobachten und Einstellen; das Liquid-Glass-Design und die vorhandenen Symbole bleiben erhalten.
+Die Seite trennt Beobachten und Einstellen. In diesem Branch erhalten beide Ansichten ein Windows-2000-Design; die Symbole behalten ihre Statusfunktionen.
 
 **Übersicht**, von oben nach unten:
 
@@ -673,7 +686,7 @@ Die komplette Pumpen- und Tanktechnik soll **außerhalb des Pflanzenschranks** m
 
 Auf `main` sind Oberfläche, persistente Konfiguration und eine hardwareunabhängige Entscheidungsvorschau vorhanden:
 
-- Liquid-Glass-Bereich unter Steuerung für Tank und beide Pumpen
+- klassischer Bereich unter Steuerung für Tank und beide Pumpen
 - persistent speicherbare Namen in `data/irrigation.json`
 - `GET /api/irrigation/config`, `POST /api/irrigation/config`
 - `GET /api/irrigation/status` meldet ausdrücklich nicht verfügbare Hardware
@@ -723,7 +736,7 @@ Die Oberfläche zeigt Fördermenge und berechnete Laufzeit direkt an. Unvollstä
 
 ## Tanksymbol
 
-Übersicht und Steuerung zeigen ein Liquid-Glass-Tanksymbol mit Deckel und Wasserlinie. Die vorhandene Statusabfrage aktualisiert beide Symbole:
+Übersicht und Steuerung zeigen ein Tanksymbol im klassischen Stil mit Deckel und Wasserlinie. Die vorhandene Statusabfrage aktualisiert beide Symbole:
 
 - Rot mit Ausrufezeichen: Tank leer (`tank_state: "empty"`)
 - Blau: Wasser vorhanden (`"ok"` oder `"full"`)
@@ -817,12 +830,12 @@ Die Software-Seite ist jetzt wie bei der Bodenfeuchte bereits vorbereitet, obwoh
 
 Bereits umgesetzt:
 
-- eigenes Liquid-Glass-Panel für die Lampensteuerung
+- eigenes klassisches Panel für die Lampensteuerung
 - persistenter Lampenname
 - vorbereitete Profile: Benutzerdefiniert / Wachstum / Blüte
 - pro Profil separat gespeicherte Leistung, Ein-/Ausschaltzeiten und Zeitplanstatus
 - Profilwechsel lädt die zugehörigen Werte und berechnet die angezeigte Dauer neu, auch über Mitternacht
-- Wachstum und Blüte mit eigenen Liquid-Glass-SVG-Symbolen
+- Wachstum und Blüte mit eigenen klassischen SVG-Symbolen
 - persistenter Zielwert 0–100 %
 - vorbereiteter Ein-/Ausschaltzeitplan
 - Zeitplan kann vorab aktiviert/deaktiviert und gespeichert werden
@@ -858,7 +871,7 @@ Für die spätere Hardwareintegration vorgesehen:
 
 ## Software-Vorbereitung
 
-Unter **Steuerung → Lüftersteuerung** gibt es zwei Karten für **Zuluft unten** und **Abluft oben**. Beide haben ein eigenes Liquid-Glass-Lüftersymbol. **Animation testen** dreht nur das jeweilige Symbol für drei Sekunden; dabei wird kein Steuerbefehl gesendet. Reduzierte Bewegung wird berücksichtigt.
+Unter **Steuerung → Lüftersteuerung** gibt es zwei Karten für **Zuluft unten** und **Abluft oben**. Beide haben ein eigenes Lüftersymbol im klassischen Stil. **Animation testen** dreht nur das jeweilige Symbol für drei Sekunden; dabei wird kein Steuerbefehl gesendet. Reduzierte Bewegung wird berücksichtigt.
 
 Unter **Lüfter einrichten** sind getrennt speicherbar:
 
@@ -1053,7 +1066,7 @@ die Phasennummern sind keine zwingende Reihenfolge.
 
 ## Phase 4 – Bewässerung
 
-- [x] Liquid-Glass-Bereich für Tank und beide Pumpen
+- [x] klassischer Bereich für Tank und beide Pumpen
 - [x] persistente Namen und Einstellungen je Topf
 - [x] einstellbare Feuchteschwelle, Einzelmenge, Pause und Grenzen
 - [x] Eingabe der Pumpenkalibrierung und Berechnung der Dosierdauer
@@ -1080,7 +1093,7 @@ die Phasennummern sind keine zwingende Reihenfolge.
 
 ## Phase 5 – Lüfter
 
-- [x] Liquid-Glass-Karten für Zu- und Abluft
+- [x] klassische Karten für Zu- und Abluft
 - [x] getrennte Namen, AUS/MANUELL-Sollwerte und Mindestleistung speichern
 - [x] Konfigurations-/Status-API ohne Hardwareausgabe
 - [x] Lüftersymbole mit separatem Animationstest
@@ -1331,3 +1344,4 @@ Für exakte PPFD-/DLI-Werte wäre ein PAR-/Quantum-Sensor erforderlich.
 Noch nicht festgelegt.
 
 Für ein öffentliches Open-Source-Repository kann später beispielsweise eine MIT-Lizenz ergänzt werden.
+

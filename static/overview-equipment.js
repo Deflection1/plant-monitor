@@ -111,8 +111,8 @@
             labels:data.days.map(d => d.date.slice(8,10) + "." + d.date.slice(5,7)),
             datasets:[0,1].map(i => ({
                 label:"Topf " + (i+1), data:data.days.map(d => d.ml[i]),
-                backgroundColor:i === 0 ? "#68d7ba" : "#71b9ee",
-                borderRadius:3, maxBarThickness:12
+                backgroundColor:i === 0 ? "#000080" : "#008000",
+                borderRadius:0, maxBarThickness:12
             }))
         };
         const summary = data.days.map(d => d.date + ": Topf 1 " + fmt(d.ml[0]) + " ml, Topf 2 " + fmt(d.ml[1]) + " ml").join("; ");
@@ -132,8 +132,8 @@
                     responsive:true, maintainAspectRatio:false, animation:false,
                     plugins:{legend:{display:false},tooltip:{callbacks:{label:tooltip}}},
                     scales:{
-                        x:{grid:{display:false},ticks:{color:"#b9d1cb",font:{size:10},maxRotation:0}},
-                        y:{beginAtZero:true,grid:{color:"rgba(190,230,220,.08)"},ticks:{color:"#b9d1cb",maxTicksLimit:3,font:{size:9}}}
+                        x:{grid:{display:false},ticks:{color:"#404040",font:{size:10},maxRotation:0}},
+                        y:{beginAtZero:true,grid:{color:"#d4d0c8"},ticks:{color:"#404040",maxTicksLimit:3,font:{size:9}}}
                     }
                 }
             });
@@ -185,3 +185,4 @@
     setInterval(refresh, 15000);
     refresh();
 })();
+

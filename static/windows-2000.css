@@ -1,0 +1,529 @@
+/* Plant Monitor — Windows 2000 classic desktop.
+   Standalone theme: does not depend on the previous glass stylesheets. */
+:root {
+    color-scheme: light;
+    --desktop: #3a6ea5;
+    --face: #d4d0c8;
+    --light: #ffffff;
+    --shadow: #808080;
+    --dark: #404040;
+    --title: #0a246a;
+    --title-end: #a6caf0;
+    --text: #000000;
+    --muted: #555555;
+    --border: #a0a0a0;
+    --green: #008000;
+    --green-light: #008000;
+    --green-soft: #e5f1e5;
+    --background: var(--desktop);
+    --panel: var(--face);
+    --panel-light: #ffffff;
+    --radius: 0px;
+    --raised: inset 1px 1px #ffffff, inset -1px -1px #404040,
+              inset 2px 2px #dfdfdf, inset -2px -2px #808080;
+    --sunken: inset 1px 1px #808080, inset -1px -1px #ffffff,
+              inset 2px 2px #404040, inset -2px -2px #dfdfdf;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--desktop); scroll-padding-top: 70px; }
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    background: var(--desktop);
+    font: 13px/1.5 Tahoma, "MS Sans Serif", Arial, sans-serif;
+}
+::selection { background: var(--title); color: white; }
+button, input, select, textarea, output { font: inherit; }
+h1, h2, h3, p { margin: 0; }
+h1 { font-size: 15px; }
+h2 { font-size: 15px; }
+h3 { font-size: 13px; }
+small { font-size: 11px; }
+a { color: #000080; text-decoration: underline; text-underline-offset: 2px; }
+a:visited { color: #000080; }
+a:hover { color: #0000ff; }
+svg { vertical-align: middle; }
+img { max-width: 100%; }
+button, a, input, select, summary { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 1px dotted black;
+    outline-offset: -5px;
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--title);
+    outline-offset: 1px;
+}
+button {
+    min-height: 29px;
+    padding: 5px 14px;
+    border: 0;
+    border-radius: 0;
+    background: var(--face);
+    color: black;
+    box-shadow: var(--raised);
+    cursor: pointer;
+}
+button:hover:not(:disabled) { background: #e1ddd5; }
+button:active:not(:disabled), .range.active {
+    box-shadow: var(--sunken);
+    background: #c6c2ba;
+}
+button.primary { outline: 1px solid black; outline-offset: 0; font-weight: bold; }
+button:disabled, input:disabled, select:disabled {
+    color: #767676;
+    cursor: default;
+}
+button:disabled { text-shadow: 1px 1px white; }
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 30px;
+    padding: 5px 8px;
+    border: 0;
+    border-radius: 0;
+    background: white;
+    color: black;
+    box-shadow: var(--sunken);
+}
+select { padding-right: 24px; }
+select option { background: white; color: black; }
+input[type="checkbox"], input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--title);
+    flex: none;
+}
+input[type="range"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    min-width: 0;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 5px;
+    background: #c3bfb7;
+    border: 0;
+    box-shadow: var(--sunken);
+}
+input[type="range"]::-moz-range-track {
+    height: 5px;
+    background: #c3bfb7;
+    border: 0;
+    box-shadow: var(--sunken);
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 13px;
+    height: 23px;
+    margin-top: -9px;
+    border: 0;
+    border-radius: 0;
+    background: var(--face);
+    box-shadow: var(--raised);
+}
+input[type="range"]::-moz-range-thumb {
+    width: 13px;
+    height: 23px;
+    border: 0;
+    border-radius: 0;
+    background: var(--face);
+    box-shadow: var(--raised);
+}
+label { display: flex; flex-direction: column; gap: 5px; }
+fieldset { min-width: 0; margin: 12px 0; padding: 14px; border: 1px solid var(--shadow); }
+legend { padding: 0 5px; }
+details { min-width: 0; }
+summary { padding: 7px 10px; cursor: pointer; font-weight: bold; }
+summary:hover { background: #e1ddd5; }
+details[open] > summary { margin-bottom: 12px; }
+.page {
+    width: min(1240px, calc(100% - 40px));
+    margin: 24px auto;
+    padding: 4px;
+    background: var(--face);
+    box-shadow: var(--raised), 3px 3px 0 #1d3957;
+}
+.header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 31px;
+    padding: 6px 9px;
+    background: linear-gradient(90deg, var(--title), var(--title-end));
+    color: white;
+}
+.header h1 { display: flex; align-items: center; gap: 8px; line-height: 1.3; }
+.header h1 .line-icon { width: 19px; height: 19px; color: #ffffcc; }
+.header .eyebrow, .header .subtitle { display: none; }
+.status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex: none;
+    padding: 1px 7px;
+    background: var(--face);
+    color: black;
+    box-shadow: var(--sunken);
+    font-size: 11px;
+}
+.status-dot { display: inline-block; width: 8px; height: 8px; flex: none; background: #008000; border: 1px solid #004000; }
+.view-switch {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    margin: 15px 12px 0;
+    padding: 0 4px;
+    border-bottom: 1px solid #808080;
+}
+.view-switch button {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 128px;
+    padding: 7px 16px;
+    margin-bottom: 1px;
+    box-shadow: inset 1px 1px white, inset -1px 0 #808080;
+    border: 1px solid #808080;
+    border-bottom: 0;
+    background: #c4c0b8;
+}
+.view-switch button[aria-pressed="true"] {
+    position: relative;
+    margin-bottom: -1px;
+    padding-bottom: 9px;
+    background: var(--face);
+    font-weight: bold;
+    box-shadow: inset 1px 1px white, inset -1px 0 #808080;
+}
+.line-icon { width: 18px; height: 18px; flex: none; }
+.view-switch .line-icon { width: 16px; height: 16px; color: #000080; }
+.overview-freshness {
+    margin: 0 12px 12px;
+    padding: 6px 9px;
+    background: #eeece6;
+    border: 1px solid #808080;
+    border-top: 0;
+    font-size: 11px;
+}
+#overviewView, #controlsView { padding: 0 12px; }
+.overview-heading, .overview-equipment-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 10px;
+}
+.overview-heading h2, .overview-equipment-heading h2 { font-size: 14px; }
+.overview-heading > p { color: var(--muted); font-size: 11px; }
+.eyebrow { margin-bottom: 2px; color: var(--muted); font-size: 10px; letter-spacing: .04em; }
+.panel, .overview-pot, .overview-stat, .sensor-card {
+    min-width: 0;
+    background: var(--face);
+    box-shadow: var(--raised);
+    padding: 14px;
+    margin-bottom: 14px;
+}
+.panel-header, .lamp-control-heading, .bottom-panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: -10px -10px 14px;
+    padding: 5px 8px;
+    color: white;
+    background: linear-gradient(90deg, var(--title), #7196c0);
+}
+.panel-header .eyebrow, .lamp-control-heading .eyebrow, .bottom-panel-heading .eyebrow { display: none; }
+.panel-header h2, .lamp-control-heading h2, .bottom-panel-heading h2 { font-size: 13px; }
+.bottom-panel-heading { justify-content: flex-start; }
+.badge { display: inline-block; padding: 2px 6px; background: #ffffe1; border: 1px solid #808080; color: #333; font-size: 11px; }
+.panel-header .badge { background: transparent; color: white; border: 0; }
+.overview-climate { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.overview-stat { display: flex; align-items: center; gap: 10px; padding: 13px; margin: 0; }
+.overview-stat > div { min-width: 0; }
+.reading-label { display: flex; align-items: center; gap: 5px; font-size: 11px; }
+.reading-label .line-icon { width: 14px; height: 14px; }
+.overview-stat strong { display: block; margin: 3px 0; font-size: 27px; line-height: 1.2; font-weight: normal; font-variant-numeric: tabular-nums; }
+.overview-stat small { font-size: 11px; }
+.overview-stat p { color: var(--muted); font-size: 10px; }
+.glass-icon { display: inline-grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; }
+.glass-glyph { display: block; width: 32px; height: 32px; overflow: visible; }
+.glass-glyph, .pump-art, .fan-art, .tank-symbol svg, .lamp-profile-image { filter: none; }
+.glass-glyph [stroke-opacity] { stroke: #404040; stroke-opacity: 1; }
+.overview-equipment-card header .glass-glyph [stroke-opacity] { stroke: #e6e3dc; }
+.glass-icon--temperature { color: #b02020; }
+.glass-icon--humidity { color: #000080; }
+.glass-icon--vpd, .glass-icon--plant { color: #008000; }
+.glass-icon--light { color: #806000; }
+.overview-pots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 0; }
+.overview-pot { display: grid; grid-template-columns: 38px minmax(0, 1fr); align-items: center; gap: 7px 10px; margin: 0; }
+.pot-title h3 { font-size: 14px; overflow-wrap: anywhere; }
+.pot-reading {
+    grid-column: 1 / -1;
+    margin-top: 5px;
+    padding: 12px;
+    background: white;
+    box-shadow: var(--sunken);
+}
+.pot-reading > strong { display: block; margin: 4px 0; font-size: 30px; line-height: 1.2; font-weight: normal; font-variant-numeric: tabular-nums; }
+.pot-reading p { color: var(--muted); font-size: 11px; }
+progress { appearance: none; width: 100%; height: 16px; margin-top: 10px; border: 0; border-radius: 0; padding: 2px; background: var(--face); box-shadow: var(--sunken); }
+progress::-webkit-progress-bar { background: var(--face); }
+progress::-webkit-progress-value { background: repeating-linear-gradient(90deg, #0a246a 0 9px, transparent 9px 11px); }
+progress::-moz-progress-bar { background: repeating-linear-gradient(90deg, #0a246a 0 9px, transparent 9px 11px); }
+.overview-pot-water, .pot-control-link { grid-column: 1 / -1; font-size: 11px; }
+.overview-equipment { margin: 18px 0; }
+.overview-equipment-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.overview-equipment-card { display: flex; flex-direction: column; margin-bottom: 0; }
+.overview-equipment-card header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: -10px -10px 10px;
+    padding: 5px 8px;
+    background: linear-gradient(90deg, var(--title), #7196c0);
+    color: white;
+}
+.overview-equipment-card h3 { font-size: 13px; }
+.ov-equipment-icon, .overview-grow-lamp.live-lamp-icon { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 34px; }
+.ov-equipment-icon svg, .ov-equipment-icon img { width: 100%; height: 100%; object-fit: contain; }
+.ov-equipment-status { font-size: 10px; color: white; }
+.overview-equipment-card dl { margin: 0 0 12px; background: white; padding: 2px 8px; box-shadow: var(--sunken); }
+.overview-equipment-card dl > div { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.2fr); gap: 8px; padding: 7px 0; border-bottom: 1px solid #d4d0c8; font-size: 11px; }
+.overview-equipment-card dl > div:last-child { border-bottom: 0; }
+.overview-equipment-card dt { color: #444; }
+.overview-equipment-card dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+.overview-equipment-card > a { margin-top: auto; font-size: 11px; }
+.overview-profile-value, .overview-tank-value { display: flex; align-items: center; justify-content: flex-end; gap: 5px; }
+.overview-profile-icon { display: grid; place-items: center; width: 24px; height: 24px; flex: 0 0 24px; }
+.overview-profile-icon img { width: 100%; height: 100%; object-fit: contain; }
+#ovLampFallback { font-size: 21px; }
+.watering-history { margin: 0 0 12px; min-width: 0; }
+.watering-today, .watering-history-heading { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 11px; }
+.watering-history-heading { margin-top: 12px; font-size: 10px; }
+.water-key { display: inline-block; width: 7px; height: 7px; margin: 0 3px 0 6px; }
+.pot-one { background: #000080; }
+.pot-two { background: #008000; }
+.watering-chart-wrap { position: relative; height: 118px; margin-top: 5px; padding: 6px; background: white; box-shadow: var(--sunken); }
+.watering-chart-wrap canvas { width: 100%; height: 100%; }
+#ovWaterEmpty { display: flex; align-items: center; justify-content: center; height: 100%; padding: 8px; text-align: center; color: var(--muted); font-size: 11px; }
+.watering-estimate { margin-top: 5px; font-size: 10px; color: var(--muted); }
+.overview-analysis { padding-top: 12px; }
+.overview-analysis > h2 { margin: -8px -10px 14px; padding: 5px 8px; background: linear-gradient(90deg, var(--title), #7196c0); color: white; font-size: 13px; }
+.history-panel { box-shadow: none; padding: 0; }
+.history-panel .panel-header { margin: 0 0 12px; background: transparent; color: black; padding: 0; }
+.range-buttons { display: flex; flex-wrap: wrap; gap: 4px; }
+.range { min-width: 45px; padding: 4px 9px; }
+.history-charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.chart-box { min-width: 0; padding: 8px; background: white; box-shadow: var(--sunken); }
+.chart-title { display: flex; align-items: center; gap: 5px; margin: 0 0 7px; font-size: 11px; font-weight: bold; }
+.chart-title-icon { width: 15px; height: 15px; }
+.chart-title--temperature { color: #b02020; }
+.chart-title--humidity { color: #000080; }
+.chart-title--vpd, .chart-title--soil { color: #008000; }
+.chart-title--light { color: #806000; }
+.chart-canvas { position: relative; height: 180px; }
+.bottom-grid, .main-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.bottom-grid { margin-top: 14px; }
+.bottom-grid > .panel { margin: 0; }
+.big-status { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
+.big-status strong { display: block; font-size: 20px; }
+.big-status small { display: block; color: var(--muted); }
+.light-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+.light-stat { padding: 8px; background: white; box-shadow: var(--sunken); }
+.light-stat span, .light-stat small { display: block; color: var(--muted); font-size: 10px; }
+.light-stat strong { font-size: 18px; font-weight: normal; }
+.estimate-note { font-size: 10px; color: var(--muted); margin-top: 12px; }
+.climate-state { padding: 12px; background: #ffffe1; border: 1px solid #808080; font-size: 12px; }
+.climate-state.good { background: #e5f1e5; color: #004000; }
+.climate-state.warning { background: #ffffe1; color: #604000; }
+.camera-placeholder { position: relative; width: 100%; max-width: 480px; min-height: 170px; background: #eeece6; box-shadow: var(--sunken); padding: 2px; }
+.camera-empty { display: grid; justify-items: center; align-content: center; gap: 6px; min-height: 170px; padding: 14px; text-align: center; }
+.camera-empty p { color: var(--muted); font-size: 11px; }
+.camera-icon { font-size: 24px; }
+.camera-image { display: block; width: 100%; max-height: 270px; object-fit: contain; background: black; }
+.camera-image:fullscreen { width: 100vw; height: 100vh; max-width: none; max-height: none; }
+.button-row { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.camera-meta { color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); gap: 10px; margin-top: 14px; }
+.photo-thumb { display: block; padding: 4px; background: white; box-shadow: var(--sunken); text-decoration: none; }
+.photo-thumb img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.photo-thumb span { display: block; padding: 4px 2px; color: black; font-size: 10px; }
+.timelapse-controls { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 10px; }
+.timelapse-controls label { min-width: 170px; }
+.timelapse-player { max-width: 480px; padding: 3px; margin-top: 14px; background: var(--face); box-shadow: var(--sunken); }
+.timelapse-player img { display: block; width: 100%; max-height: 270px; object-fit: contain; background: black; }
+.timelapse-player-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 5px; font-size: 11px; }
+.camera-panel-slot { display: contents; }
+#controlsHistorySlot:empty, #overviewHistorySlot:empty { display: none; }
+.control-jump-nav { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 14px; padding: 7px; background: var(--face); box-shadow: var(--raised); }
+.control-jump-nav button { padding: 5px 12px; font-size: 11px; }
+#lampControlSection, #irrigationControlSection, #fanControlSection, #cameraControlSection, #systemDiagnostics { scroll-margin-top: 62px; }
+.lamp-control-heading { justify-content: flex-start; }
+.panel-header .lamp-control-heading { margin: 0; padding: 0; background: transparent; }
+.lamp-control-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+.lamp-control-card, .lamp-config-card, .soil-config-card, .soil-card {
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #808080;
+    box-shadow: 1px 1px white;
+    background: #e6e3dc;
+}
+.lamp-control-card { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.lamp-control-label { font-size: 11px; color: var(--muted); }
+.lamp-control-card > strong { font-size: 21px; line-height: 1.25; overflow-wrap: anywhere; }
+.lamp-control-card > small { color: var(--muted); }
+.lamp-config { padding-top: 8px; border-top: 1px solid #808080; }
+.lamp-config > summary, .soil-config > summary, .irrigation-history > summary { padding-left: 0; }
+.lamp-config-grid, .soil-config-grid, .fan-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 0; }
+.lamp-config-card > strong { display: block; margin-bottom: 8px; }
+.lamp-config-card label, .soil-config-card label { margin-top: 10px; font-size: 11px; }
+.lamp-config-card h3 { margin-bottom: 6px; }
+.lamp-range-row { display: grid; grid-template-columns: minmax(0, 1fr) 50px; align-items: center; gap: 10px; }
+.lamp-range-row output { text-align: right; font-variant-numeric: tabular-nums; }
+.lamp-toggle-row { flex-direction: row; align-items: center; gap: 7px; }
+.lamp-time-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.lamp-safety-note { margin-top: 12px; font-size: 11px; color: var(--muted); }
+.lamp-profile-display { display: flex; align-items: center; gap: 10px; min-height: 64px; }
+.lamp-profile-image, .lamp-profile-placeholder { display: grid; place-items: center; width: 52px; height: 52px; flex: 0 0 52px; object-fit: contain; }
+.lamp-profile-placeholder { color: #008000; }
+.lamp-profile-placeholder svg { width: 32px; height: 32px; }
+.lamp-profile-copy { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.lamp-profile-copy strong { font-size: 16px; }
+.lamp-profile-copy small { color: var(--muted); }
+.water-top-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.water-top-grid > .water-tank-card { grid-column: 1 / -1; display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: center; column-gap: 12px; }
+.water-tank-card .tank-symbol { grid-column: 1; grid-row: 1 / 5; }
+.water-tank-card > :not(.tank-symbol) { grid-column: 2; }
+.irrigation-panel > .badge { margin-bottom: 12px; }
+.integrated-soil-reading { width: 100%; padding: 0 0 10px; margin-bottom: 5px; border: 0; box-shadow: none; background: transparent; border-bottom: 1px solid #a0a0a0; }
+.soil-details { display: flex; flex-wrap: wrap; gap: 6px; font-size: 11px; color: var(--muted); }
+.soil-config { margin-top: 14px; border-top: 1px solid #808080; }
+.advanced-settings { margin: 12px 0 0; border: 1px solid #a0a0a0; padding: 0 10px 10px; }
+.advanced-settings > summary { padding-left: 0; font-weight: normal; font-size: 11px; }
+.irrigation-history { margin-top: 14px; border-top: 1px solid #808080; }
+.irrigation-panel fieldset, .fan-panel fieldset { border: 0; margin: 0; padding: 0; }
+.irrigation-panel legend, .fan-panel legend { padding: 4px 0; }
+.pump-symbol, .fan-symbol { display: block; width: 56px; height: 56px; flex: none; }
+.pump-art, .fan-art { width: 100%; height: 100%; }
+.pump-rotor, .fan-rotor { transform-box: view-box; transform-origin: 48px 48px; }
+.pump-symbol[data-running="true"] .pump-rotor, .pump-symbol[data-preview="true"] .pump-rotor { animation: equipment-turn 1.8s linear infinite; }
+.fan-symbol[data-preview="true"] .fan-rotor { animation: equipment-turn 1.5s linear infinite; }
+@keyframes equipment-turn { to { transform: rotate(360deg); } }
+.fan-card { gap: 7px; }
+.fan-card > strong { font-size: 15px; }
+.fan-card > small { font-size: 10px; }
+.fan-range-row { display: flex; align-items: center; gap: 12px; margin: 5px 0 10px; }
+.fan-range-row input[type="range"] { flex: 1; }
+.fan-percent-input { display: flex; align-items: center; gap: 5px; flex: none; }
+.fan-percent-input input[type="number"] { width: 68px; }
+.fan-form-actions { display: flex; justify-content: flex-end; margin: 14px 0; }
+#fanFields > .camera-meta { margin: 8px 0; }
+.tank-symbol { display: block; width: 48px; height: 48px; flex: none; --tank-light: #a0a0a0; --tank-dark: #808080; }
+.tank-symbol svg { display: block; width: 100%; height: 100%; }
+.tank-liquid-light { stop-color: var(--tank-light); }
+.tank-liquid-dark { stop-color: var(--tank-dark); }
+.tank-unknown-mark { stroke: #404040; }
+.tank-empty-mark { stroke: #800000; }
+.tank-symbol[data-tank-state="ok"] { --tank-light: #387bd4; --tank-dark: #000080; }
+.tank-symbol[data-tank-state="empty"] { --tank-light: #c04040; --tank-dark: #800000; }
+.tank-fill-full, .tank-wave-full, .tank-fill-empty, .tank-empty-mark { display: none; }
+.tank-symbol[data-tank-state="ok"] .tank-fill-full, .tank-symbol[data-tank-state="ok"] .tank-wave-full { display: block; }
+.tank-symbol[data-tank-state="empty"] .tank-fill-empty, .tank-symbol[data-tank-state="empty"] .tank-empty-mark { display: block; }
+.tank-symbol:not([data-tank-state="unknown"]) .tank-unknown-mark { display: none; }
+.overview-tank-value .tank-symbol { width: 24px; height: 24px; }
+.js-light-state-icon[data-state="on"] .light-state-moon, .js-light-state-icon[data-state="off"] .light-state-sun { display: none; }
+.js-light-state-icon[data-state="on"] .light-state-sun, .js-light-state-icon[data-state="off"] .light-state-moon { display: block; }
+.grow-lamp-rays, .grow-lamp-beam, .control-lamp-rays { opacity: 0; }
+.live-lamp-icon[data-state="on"] .grow-lamp-rays, .live-lamp-icon[data-state="on"] .grow-lamp-beam, .lamp-control-state-icon[data-state="on"] .control-lamp-rays { opacity: 1; }
+.live-lamp-icon[data-state="on"] .grow-lamp-emitter { fill: #ffcc00; }
+.live-lamp-icon:not([data-state="on"]) .grow-lamp-emitter,
+.lamp-control-state-icon:not([data-state="on"]) .control-lamp-body,
+.lamp-control-state-icon:not([data-state="on"]) .control-lamp-slider { fill: #808080; stroke: #404040; }
+.lamp-control-state-icon[data-state="unknown"] .glass-glyph { opacity: .5; }
+.system-diagnostics > summary { margin: -10px -10px 12px; background: linear-gradient(90deg, var(--title), #7196c0); color: white; }
+.system-diagnostics > summary:hover { background: var(--title); }
+.system-only-grid { grid-template-columns: 1fr; }
+.system-only-grid > .panel { box-shadow: none; padding: 0; }
+.system-only-grid .panel-header { margin: 0 0 10px; background: transparent; color: black; }
+.info-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; padding: 7px 8px; border-bottom: 1px solid var(--face); background: white; }
+.api-state { display: flex; align-items: center; gap: 7px; padding: 8px; font-size: 11px; }
+.sensor-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.sensor-card { margin: 0; }
+.sensor-header { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+.sensor-value { margin: 6px 0; font-size: 26px; font-variant-numeric: tabular-nums; }
+.sensor-value small { font-size: 11px; }
+.sensor-note { font-size: 10px; color: var(--muted); }
+footer { padding: 5px 8px; margin: 4px 2px 2px; box-shadow: inset 1px 1px #808080, inset -1px -1px white; font-size: 10px; color: #444; }
+@media (max-width: 1050px) {
+    .overview-stat { gap: 6px; padding: 10px; }
+    .overview-stat strong { font-size: 23px; }
+    .overview-stat .glass-icon { width: 28px; flex-basis: 28px; }
+    .overview-stat .glass-glyph { width: 26px; height: 26px; }
+    .overview-equipment-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .overview-equipment-card:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) {
+    .page { width: calc(100% - 20px); margin: 10px auto; }
+    .overview-climate, .sensor-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .overview-stat strong { font-size: 25px; }
+    .lamp-control-grid { grid-template-columns: 1fr; }
+    .lamp-control-card { gap: 5px; }
+    .control-jump-nav { position: static; }
+    .lamp-config-grid { grid-template-columns: 1fr; }
+    .overview-heading > p { display: none; }
+}
+@media (max-width: 540px) {
+    body { font-size: 12px; }
+    .page { width: calc(100% - 12px); margin: 6px auto; }
+    #overviewView, #controlsView { padding: 0 7px; }
+    .header { padding: 6px; gap: 6px; flex-wrap: wrap; }
+    .header h1 { font-size: 14px; }
+    .status { font-size: 10px; }
+    .view-switch { margin: 12px 7px 0; }
+    .view-switch button { min-width: 0; flex: 1; justify-content: center; }
+    .overview-freshness { margin-right: 7px; margin-left: 7px; }
+    .overview-pots, .overview-equipment-grid, .history-charts, .bottom-grid,
+    .fan-grid, .water-top-grid, .soil-config-grid { grid-template-columns: 1fr; }
+    .overview-equipment-card:last-child { grid-column: auto; }
+    .overview-stat { align-items: flex-start; flex-direction: column; gap: 5px; }
+    .overview-stat strong { font-size: 26px; overflow-wrap: anywhere; }
+    .overview-stat .glass-icon { height: 26px; }
+    .overview-equipment-heading { align-items: flex-start; }
+    .overview-equipment-card dl > div { font-size: 11px; }
+    .chart-canvas { height: 165px; }
+    .panel-header { align-items: flex-start; }
+    .history-header { flex-direction: column; }
+    .button-row button, .timelapse-controls button, .control-jump-nav button { min-height: 34px; }
+    .timelapse-controls label { width: 100%; }
+    .fan-form-actions button { width: 100%; }
+    .lamp-time-grid { gap: 7px; }
+    .camera-placeholder, .timelapse-player { max-width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; }
+}
+@media (forced-colors: active) {
+    .page, .panel, .overview-stat, .overview-pot, .sensor-card, button,
+    .pot-reading, .chart-box, .watering-chart-wrap, .overview-equipment-card dl {
+        border: 1px solid CanvasText;
+        box-shadow: none;
+    }
+    .view-switch button[aria-pressed="true"], .range.active { outline: 2px solid Highlight; }
+    input[type="range"] { appearance: auto; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: auto; }
+    .glass-glyph [fill]:not([fill="none"]) { fill: CanvasText; }
+    .glass-glyph [stroke]:not([stroke="none"]) { stroke: CanvasText; }
+}
