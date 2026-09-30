@@ -228,10 +228,10 @@ Die beiden Busse haben getrennte Datenleitungen und gemeinsame Versorgung/Masse.
 
 ### Temperatur, Feuchte und VPD
 
-Temperatur und Feuchte werden ohne CPU-Korrektur übernommen.
-`raw_temperature` und `temperature` beziehungsweise `raw_humidity` und
-`humidity` enthalten deshalb dieselben gerundeten Sensorwerte.
-Die CPU-Temperatur dient nur der Diagnose.
+Temperatur und Feuchte werden ohne CPU-Korrektur als `temperature` und
+`humidity` geliefert. Die früheren doppelten Felder `raw_temperature` und
+`raw_humidity` entfallen in der Live-API und Diagnose. Die CPU-Temperatur
+bleibt als `cpu_temperature` für die Pi-Diagnose erhalten.
 
 Beim ersten Vergleich lieferte der SEN0501 **25,1 °C / 51,2 % RH**,
 das analoge Gerät ungefähr **25 °C / 53 % RH**. Das ist ein
@@ -474,6 +474,10 @@ JSON-Konfigurationen werden validiert und atomar ersetzt.
 Geräteeinstellungen bleiben nach Browser- und Pi-Neustart erhalten.
 Die Designauswahl wird dagegen nur im Browser gespeichert.
 
+Die alten Spalten `raw_temperature` und `raw_humidity` bleiben für historische
+Enviro+-Messungen erhalten; neue Messungen befüllen sie nicht mehr (`NULL`).
+UV- und Bodenfeuchte-Rohwerte bleiben Bestandteil der aktuellen Messungen.
+
 Fehlende Bodenfeuchtewerte sind `NULL`. UV-Spalten werden beim Dienststart
 automatisch ergänzt; alte Messungen ohne UV bleiben im UV-Verlauf leer.
 PPFD und DLI werden aus Lux berechnet und nicht als eigene Messspalten gespeichert.
@@ -512,9 +516,7 @@ Beispiel eines aktuellen Sensorwertsatzes mit berechneten Lichtwerten
 
 ```json
 {
-  "raw_temperature": 25.9,
   "temperature": 25.9,
-  "raw_humidity": 58.8,
   "humidity": 58.8,
   "cpu_temperature": 47.2,
   "vpd": 1.38,

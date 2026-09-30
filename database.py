@@ -86,6 +86,7 @@ def init_db():
                 humidity REAL,
                 vpd REAL,
                 lux REAL,
+                -- Legacy Enviro+ values; retained for historical measurements only.
                 raw_temperature REAL,
                 raw_humidity REAL,
                 cpu_temperature REAL
@@ -153,8 +154,6 @@ def insert_measurement(data):
                 humidity,
                 vpd,
                 lux,
-                raw_temperature,
-                raw_humidity,
                 cpu_temperature,
                 soil_raw_1,
                 soil_raw_2,
@@ -163,7 +162,7 @@ def insert_measurement(data):
                 uv_raw,
                 uv_mw_cm2
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             timestamp,
 
@@ -181,14 +180,6 @@ def insert_measurement(data):
 
             data.get(
                 "lux"
-            ),
-
-            data.get(
-                "raw_temperature"
-            ),
-
-            data.get(
-                "raw_humidity"
             ),
 
             data.get(

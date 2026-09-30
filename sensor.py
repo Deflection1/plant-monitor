@@ -80,9 +80,7 @@ def read_sensors():
         raise ValueError("SEN0501: Luftdruck unplausibel")
     cpu_temperature = get_cpu_temperature()
     return {
-        "raw_temperature": round(temperature, 1),
         "temperature": round(temperature, 1),
-        "raw_humidity": round(humidity, 1),
         "humidity": round(humidity, 1),
         "cpu_temperature": (
             round(cpu_temperature, 1) if cpu_temperature is not None else None

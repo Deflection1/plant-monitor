@@ -9,6 +9,29 @@ import database
 
 
 class UVDatabaseTests(unittest.TestCase):
+    def test_legacy_climate_values_preserved_and_new_rows_leave_them_empty(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.object(database, 'DB_PATH', Path(directory) / 'plant.db'):
+                database.init_db()
+                with database.get_connection() as db:
+                    db.execute('''INSERT INTO measurements
+                        (timestamp,temperature,humidity,raw_temperature,raw_humidity)
+                        VALUES(?,?,?,?,?)''', (int(time.time()), 25, 50, 40, 28))
+                # Repeated startup must preserve historical Enviro+ data.
+                database.init_db()
+                database.insert_measurement({
+                    'temperature': 26, 'humidity': 55, 'cpu_temperature': 42,
+                    'raw_temperature': 99, 'raw_humidity': 99,
+                    'soil_raw_1': 123, 'uv_raw': 8, 'uv_mw_cm2': 0.001132})
+                with database.get_connection() as db:
+                    rows = db.execute('''SELECT temperature,humidity,
+                        raw_temperature,raw_humidity,cpu_temperature,soil_raw_1,
+                        uv_raw,uv_mw_cm2 FROM measurements ORDER BY id''').fetchall()
+                self.assertEqual(tuple(rows[0]),
+                                 (25, 50, 40, 28, None, None, None, None))
+                self.assertEqual(tuple(rows[1]),
+                                 (26, 55, None, None, 42, 123, 8, 0.001132))
+
     def test_existing_database_migration_and_uv_history(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'plant.db'

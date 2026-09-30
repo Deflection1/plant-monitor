@@ -171,18 +171,6 @@ async function loadCurrent() {
             );
 
 
-        $("rawTemperature").textContent =
-            number(
-                data.raw_temperature
-            );
-
-
-        $("rawHumidity").textContent =
-            number(
-                data.raw_humidity
-            );
-
-
         $("soilMoisture1").textContent =
             number(
                 data.soil_moisture_1,
