@@ -1,0 +1,20 @@
+/* Shared design selector and SVG visibility; loaded after either theme. */
+[data-icon-theme="windows-2000"] { display: none !important; }
+html[data-theme="windows-2000"] [data-icon-theme="glass"] { display: none !important; }
+html[data-theme="windows-2000"] [data-icon-theme="windows-2000"] { display: block !important; }
+html[data-theme="windows-2000"] .line-icon[data-icon-theme="windows-2000"] { display: inline-block !important; }
+/* Light state rules must also apply to the selected SVG variant. */
+html[data-theme="windows-2000"] .js-light-state-icon[data-state="off"] .light-state-sun,
+html[data-theme="windows-2000"] .js-light-state-icon[data-state="on"] .light-state-moon { display: none !important; }
+.appearance-settings { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px 16px; margin: 0 0 18px; }
+.appearance-settings label { display: flex; flex-direction: row; align-items: center; gap: 9px; color: var(--text); font-size: 12px; }
+.appearance-settings select { min-width: 195px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); color: var(--text); font: inherit; }
+.appearance-settings select:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+html[data-theme="windows-2000"] .appearance-settings { justify-content: space-between; margin: 10px 12px 0; }
+html[data-theme="windows-2000"] .appearance-settings select { width: auto; border: 0; border-radius: 0; background: white; color: black; }
+@media (max-width: 540px) {
+    .appearance-settings { justify-content: flex-start; }
+    .appearance-settings label { width: 100%; }
+    .appearance-settings select { flex: 1; min-width: 0; }
+    html[data-theme="windows-2000"] .appearance-settings { margin-right: 7px; margin-left: 7px; }
+}

@@ -6,19 +6,21 @@ Das System erfasst Klima-, Licht- und später Bodenfeuchtedaten, speichert Messw
 
 ---
 
-## Design-Branch: Windows 2000
+## Designauswahl
 
-Dieser Branch `design/windows-2000` gestaltet Übersicht und Steuerung im
-klassischen Windows-2000-Stil neu: graue Fensterflächen, blaue Titelleisten,
-3D-Schaltflächen, eingelassene Eingabefelder und klassische Schieberegler.
-`static/windows-2000.css` ist das einzige eingebundene Stylesheet und enthält
-auch die Anpassungen für schmale Bildschirme, Tastaturbedienung und reduzierte
-Bewegung. Diagramme verwenden dunkle Linien auf weißem Grund; die Profil-SVGs
-sind im gleichen klassischen Stil gestaltet.
+Oben im Dashboard lässt sich zwischen **Standard · Glasdesign** und
+**Windows 2000** wechseln. Das Glasdesign ist die Voreinstellung.
+Die Auswahl gilt für Übersicht und Steuerung und wird unter
+`plant-monitor.design` im lokalen Browser gespeichert; andere Geräte haben
+unabhängige Einstellungen. Ist Browserspeicherung blockiert, funktioniert
+der Wechsel trotzdem für die aktuelle Seite.
 
-Die vorhandenen IDs, Formulare, API-Aufrufe und Funktionen bleiben erhalten.
-Die Gestaltung aktiviert keine Hardwareausgänge. Der bisherige Funktionsstand
-auf `main` ist die Grundlage dieses Branches.
+Beide Designs verwenden dieselben Formulare, APIs und Hardwarezustände.
+Stylesheets, SVG-Symbole, Profilbilder und Diagrammfarben wechseln gemeinsam,
+ohne die Seite neu zu laden oder Geräteeinstellungen zu verändern.
+`static/theme.js` aktiviert die gespeicherte Auswahl bereits im Seitenkopf.
+`static/theme-switch.css` enthält die gemeinsame Auswahl und Symbolanzeige;
+die klassischen Profil-SVGs liegen separat in `static/windows-2000/`.
 
 # Status
 
@@ -76,7 +78,7 @@ Durchsetzung von Tageslimit, Abschaltungen oder Einziehpause.
 - ✅ systemd-Autostart
 - ✅ Chart.js lokal
 - ✅ History für 24 h, 7 d, 30 d und 1 Jahr
-- ✅ Windows-2000-Oberfläche mit Übersicht und Steuerung
+- ✅ Oberfläche mit Übersicht, Steuerung und Designauswahl
 - ✅ Kamera-Livestream, Galerie und Zeitraffer
 - ✅ Bodenfeuchte-Konfiguration und Kalibrierungsoberfläche für zwei Töpfe
 - ✅ getrennt speicherbare Lampenprofile mit eigenen SVG-Symbolen
@@ -248,7 +250,13 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 ├── templates/
 │   └── index.html
 ├── static/
-│   ├── windows-2000.css    # vollständiges klassisches Design
+│   ├── style.css
+│   ├── overview.css
+│   ├── liquid-glass.css
+│   ├── windows-2000.css    # separates klassisches Design
+│   ├── theme.js            # browserlokale Designauswahl
+│   ├── theme-switch.css
+│   ├── windows-2000/       # klassische Profil-SVGs
 │   ├── app.js
 │   ├── overview.js
 │   ├── overview-equipment.js
@@ -542,7 +550,7 @@ GET /api/light/today
 
 ## Gestaltung und Ansichten
 
-Die Seite trennt Beobachten und Einstellen. In diesem Branch erhalten beide Ansichten ein Windows-2000-Design; die Symbole behalten ihre Statusfunktionen.
+Die Seite trennt Beobachten und Einstellen. Beide Ansichten verwenden das gewählte Design; die Symbole behalten ihre Statusfunktionen.
 
 **Übersicht**, von oben nach unten:
 

@@ -458,7 +458,7 @@ function chartOptions(
                 ticks: {
 
                     color:
-                        "#404040",
+                        window.plantTheme.palette().tick,
 
                     maxTicksLimit: 6,
                     autoSkip: true,
@@ -470,7 +470,7 @@ function chartOptions(
                 grid: {
 
                     color:
-                        "#e0e0e0"
+                        window.plantTheme.palette().grid
                 }
             },
 
@@ -480,14 +480,14 @@ function chartOptions(
                 ticks: {
 
                     color:
-                        "#404040"
+                        window.plantTheme.palette().tick
                 },
 
 
                 grid: {
 
                     color:
-                        "#d4d0c8"
+                        window.plantTheme.palette().grid
                 }
             }
         }
@@ -505,6 +505,7 @@ function makeChart(
     color
 ) {
 
+    color = window.plantTheme.palette().series[id] || color;
     return new Chart(
 
         $(id),
@@ -1259,9 +1260,7 @@ function updateLampControlPreview() {
         profile;
 
     if (profile === "flower" || profile === "growth") {
-        const iconPath = profile === "growth"
-            ? "/static/profile-growth.svg?v=classic-2"
-            : "/static/profile-flower.svg?v=classic-2";
+        const iconPath = window.plantTheme.profileIcon(profile);
         if (profileImage.getAttribute("src") !== iconPath) {
             profileImage.setAttribute("src", iconPath);
         }

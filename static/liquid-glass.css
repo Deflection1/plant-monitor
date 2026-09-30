@@ -1,0 +1,978 @@
+/* Liquid Glass-inspired theme. Local SVGs and static lighting keep the Pi UI lightweight. */
+:root {
+    color-scheme: dark;
+    --background: #0c2223;
+    --panel: #173a37;
+    --panel-light: #23483f;
+    --text: #f6faf8;
+    --muted: #b8cec8;
+    --green: #9ce3c3;
+    --green-light: #d2f6de;
+    --green-soft: rgba(157, 227, 193, .14);
+    --border: rgba(227, 255, 244, .19);
+    --radius: 26px;
+    --glass-shadow: inset 0 1px 0 rgba(255,255,255,.26), inset 0 -1px 0 rgba(255,255,255,.035), 0 12px 36px rgba(2,17,19,.22);
+}
+html { background: #0c2223; }
+body {
+    background: #0c2223;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    isolation: isolate;
+}
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 3% 3%, rgba(83,157,135,.5), transparent 48%),
+        radial-gradient(ellipse at 95% 20%, rgba(78,123,166,.38), transparent 46%),
+        radial-gradient(ellipse at 15% 85%, rgba(52,124,96,.32), transparent 45%),
+        radial-gradient(ellipse at 75% 98%, rgba(129,135,78,.2), transparent 42%),
+        linear-gradient(135deg, #0f292b, #102b2b 55%, #162d26);
+}
+.page { width: min(1280px, calc(100% - 48px)); padding: 36px 0; }
+.header { margin-bottom: 26px; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 650; letter-spacing: -.05em; }
+.header h1 > .line-icon { color: #c4f2d3; }
+.subtitle { color: #c1d7d0; font-size: .88rem; }
+.eyebrow { color: #b5e9d0; letter-spacing: .14em; font-size: .65rem; }
+.overview-heading h2 { font-size: clamp(1.45rem, 3vw, 2rem); font-weight: 550; }
+.overview-heading > p { color: #bed1cc; }
+.overview-freshness { color: #c0d6ce; margin: 14px 0 28px; font-size: .76rem; }
+/* Solid base is the fallback when backdrop-filter is unavailable. */
+.panel, .sensor-card, .overview-pot, .overview-stat {
+    background: linear-gradient(145deg, rgba(255,255,255,.085), rgba(255,255,255,.015)), #193c37;
+    border: 1px solid var(--border);
+    border-top-color: rgba(242,255,250,.31);
+    border-radius: 26px;
+    box-shadow: var(--glass-shadow);
+    color: var(--text);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .panel, .sensor-card, .overview-pot, .overview-stat {
+        background: linear-gradient(145deg, rgba(225,255,240,.11), rgba(225,255,250,.025) 65%), rgba(13,40,35,.59);
+        -webkit-backdrop-filter: blur(18px) saturate(135%);
+        backdrop-filter: blur(18px) saturate(135%);
+    }
+    .view-switch, .status {
+        -webkit-backdrop-filter: blur(16px) saturate(140%);
+        backdrop-filter: blur(16px) saturate(140%);
+    }
+}
+.view-switch {
+    padding: 5px;
+    border-radius: 999px;
+    border: 1px solid rgba(236,255,247,.23);
+    background: rgba(192,237,221,.09);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.17), 0 6px 22px rgba(0,0,0,.13);
+}
+.view-switch button { border-radius: 999px; padding: 12px 24px; color: #d7e9e2; }
+.view-switch button[aria-pressed='true'] {
+    background: linear-gradient(160deg, rgba(255,255,255,.92), rgba(217,243,230,.8));
+    color: #19372f;
+    box-shadow: inset 0 1px 0 #fff, 0 3px 10px rgba(0,0,0,.14);
+}
+.status, .badge {
+    background: rgba(149,230,190,.11);
+    border: 1px solid rgba(196,255,224,.19);
+    border-radius: 999px;
+    color: #d2f6df;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+}
+.status-dot { background: #a4efc2; box-shadow: 0 0 9px rgba(127,232,176,.3); }
+/* Colored glass capsules contain vector artwork, with highlights away from labels. */
+.glass-icon {
+    --icon-color: 110,220,166;
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 54px;
+    height: 58px;
+    border-radius: 19px;
+    overflow: hidden;
+    background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(var(--icon-color),.12) 50%, rgba(var(--icon-color),.25));
+    border: 1px solid rgba(var(--icon-color),.35);
+    border-top-color: rgba(255,255,255,.48);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,.14), inset -1px -1px 0 rgba(var(--icon-color),.17), 0 5px 14px rgba(0,0,0,.15);
+}
+.glass-icon::after {
+    content: '';
+    position: absolute;
+    width: 85%; height: 45%;
+    top: -21%; left: -12%;
+    border-radius: 50%;
+    background: rgba(255,255,255,.22);
+    transform: rotate(-25deg);
+    pointer-events: none;
+}
+.glass-icon--temperature { --icon-color: 255,147,118; }
+.glass-icon--humidity { --icon-color: 107,216,255; }
+.glass-icon--vpd, .glass-icon--plant { --icon-color: 130,231,161; }
+.glass-icon--soil { --icon-color: 91,220,174; }
+.glass-icon--light { --icon-color: 255,210,108; }
+.glass-glyph { width: 38px; height: 38px; overflow: visible; filter: drop-shadow(0 2px 2px rgba(0,0,0,.16)); }
+.overview-pot > .glass-icon { width: 68px; height: 76px; border-radius: 30px 30px 22px 22px; }
+.overview-pot > .glass-icon .glass-glyph { width: 48px; height: 48px; }
+.overview-pots { gap: 18px; margin: 18px 0; }
+.overview-pot { padding: 25px; gap: 18px; }
+.pot-title h3 { font-size: 1.35rem; color: #f6faf7; }
+.pot-reading { border-top-color: rgba(223,248,234,.15); padding-top: 18px; }
+.pot-reading > strong { font-size: 2.65rem; font-weight: 550; font-variant-numeric: tabular-nums; }
+.pot-reading p, .reading-label { color: #c3d7ce; }
+.pot-reading progress { background: rgba(201,246,221,.13); }
+.pot-reading progress::-webkit-progress-bar { background: rgba(201,246,221,.13); }
+.pot-reading progress::-webkit-progress-value { background: linear-gradient(90deg, #77cda9, #d2f1c3); }
+.pot-reading progress::-moz-progress-bar { background: #b4e9c8; }
+.overview-climate {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+}
+.overview-stat { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 22px; }
+.overview-stat:last-child { border-right: 1px solid var(--border); }
+.overview-stat > div { width: 100%; min-width: 0; }
+.overview-stat .reading-label { font-size: .8rem; }
+.overview-stat strong { font-size: clamp(1.7rem, 3vw, 2.7rem); font-weight: 550; margin: 10px 0 8px; color: #f8fbf9; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.overview-stat small { font-size: .85rem; color: #c4d8d0; letter-spacing: 0; font-weight: 450; }
+.overview-stat p { color: #bbd1c7; font-size: .73rem; }
+/* The same glass treatment carries through the functional controls. */
+.sensor-header { color: #d6e8e0; gap: 13px; }
+.sensor-header .glass-icon { width: 46px; height: 50px; border-radius: 16px; }
+.sensor-header .glass-glyph { width: 32px; height: 32px; }
+.sensor-value { color: #f8fbf9; font-variant-numeric: tabular-nums; }
+.sensor-note, .sensor-value small, .camera-meta, .estimate-note { color: #bfd3cb; }
+button, .range, .timelapse-controls select {
+    background: linear-gradient(150deg, rgba(255,255,255,.12), rgba(255,255,255,.035));
+    border: 1px solid rgba(231,255,243,.2);
+    border-top-color: rgba(255,255,255,.29);
+    border-radius: 13px;
+    color: #eff8f3;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 3px 10px rgba(0,0,0,.07);
+    transition: background-color .16s, border-color .16s, box-shadow .16s;
+}
+button.primary, .range.active {
+    background: linear-gradient(150deg, #c2efd6, #82cdae);
+    color: #123c2b;
+    border: 1px solid rgba(239,255,246,.65);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 4px 14px rgba(56,156,117,.15);
+}
+@media (hover:hover) {
+    button:hover:not(:disabled) { border-color: rgba(243,255,250,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.24), 0 3px 13px rgba(0,0,0,.12); }
+}
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid #b1e4ff; outline-offset: 4px; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.soil-card, .soil-config-card, .chart-box, .light-stat {
+    background: rgba(7,28,24,.24);
+    border: 1px solid rgba(227,255,238,.12);
+    border-radius: 18px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.055);
+}
+.soil-config-card input { background: rgba(7,28,24,.5); color: #f4faf7; border: 1px solid rgba(228,255,242,.24); border-radius: 10px; }
+select option { background: #173a32; color: #f4faf7; }
+.info-row, .soil-config { border-color: rgba(227,255,238,.13); }
+#cameraArea { border: 1px solid rgba(235,255,244,.24); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); }
+#cameraArea .camera-image { object-fit: contain; }
+
+/* Camera stays compact in overview, but uses the available width in controls. */
+#overviewCameraSlot #cameraArea {
+    max-width: 320px;
+}
+
+#overviewCameraSlot #cameraArea .camera-image {
+    max-height: 180px;
+}
+
+#controlsCameraSlot #cameraArea {
+    width: 100%;
+    max-width: none;
+}
+
+#controlsCameraSlot #cameraArea .camera-image {
+    width: 100%;
+    max-height: 560px;
+}
+
+.system-only-grid {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.controls-camera-bottom {
+    margin-top: 16px;
+}
+
+#controlsCameraSlot #sharedCameraPanel {
+    width: 100%;
+}
+#sharedCameraPanel .button-row { gap: 9px; }
+.photo-thumb, .timelapse-player { border: 1px solid rgba(225,255,240,.19); background: rgba(4,25,18,.4); }
+.photo-thumb span, .timelapse-player-meta { color: #c9dfd3; }
+footer { color: #a9c5b8; }
+@media (max-width: 1000px) {
+    .overview-climate { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .overview-stat { flex-direction: row; align-items: center; gap: 16px; }
+    .overview-stat strong { font-size: 2rem; }
+}
+@media (max-width: 600px) {
+    .page { width: calc(100% - 28px); padding: 24px 0; }
+    .header { gap: 16px; }
+    .overview-heading { margin-bottom: 16px; }
+    .overview-pots { grid-template-columns: 1fr; gap: 14px; }
+    .overview-pot { padding: 22px; }
+    .overview-climate { gap: 12px; }
+    .overview-stat { flex-direction: column; align-items: flex-start; gap: 12px; padding: 17px; border-bottom: 1px solid var(--border); }
+    .overview-stat > div { display: block; }
+    .overview-stat:last-child { border-bottom: 1px solid var(--border); }
+    .overview-stat strong { font-size: 1.65rem; white-space: normal; }
+    .overview-stat small { font-size: .72rem; }
+    .overview-stat .reading-label { font-size: .73rem; }
+    .glass-icon { width: 46px; height: 50px; border-radius: 16px; }
+    .glass-glyph { width: 33px; height: 33px; }
+    .view-switch button { padding: 11px 19px; }
+    .panel { padding: 20px; }
+    .panel, .sensor-card, .overview-pot, .overview-stat { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+}
+@media (prefers-reduced-transparency: reduce) {
+    .panel, .sensor-card, .overview-pot, .overview-stat, .status, .view-switch { -webkit-backdrop-filter: none; backdrop-filter: none; background: #1c3c32; }
+}
+@media (prefers-reduced-motion: reduce) { button, .range { transition: none; } }
+@media (forced-colors: active) {
+    body::before { display: none; }
+    .panel, .sensor-card, .overview-pot, .overview-stat, .glass-icon { background: Canvas; border: 1px solid CanvasText; box-shadow: none; }
+    .glass-glyph * { fill: Canvas; stroke: CanvasText; }
+    .view-switch button[aria-pressed='true'], .range.active { outline: 2px solid Highlight; }
+}
+
+
+/* CONSISTENT HISTORY + LOWER PANEL ICONS */
+
+.chart-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-title-icon {
+    width: 17px;
+    height: 17px;
+    flex: none;
+}
+
+.chart-title--temperature .chart-title-icon {
+    color: #ff9476;
+}
+
+.chart-title--humidity .chart-title-icon {
+    color: #6bd8ff;
+}
+
+.chart-title--vpd .chart-title-icon,
+.chart-title--soil .chart-title-icon {
+    color: #82e7a1;
+}
+
+.chart-title--light .chart-title-icon {
+    color: #ffd26c;
+}
+
+.bottom-panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.bottom-panel-heading .eyebrow {
+    margin-bottom: 5px;
+}
+
+.bottom-panel-icon {
+    width: 46px;
+    height: 50px;
+    border-radius: 16px;
+}
+
+.bottom-panel-icon .glass-glyph {
+    width: 32px;
+    height: 32px;
+}
+
+.light-state-icon {
+    width: 64px;
+    height: 68px;
+    border-radius: 23px;
+}
+
+.light-state-icon .glass-glyph {
+    width: 44px;
+    height: 44px;
+}
+
+.js-light-state-icon[data-state="on"] .light-state-moon,
+.js-light-state-icon[data-state="off"] .light-state-sun {
+    display: none;
+}
+
+.js-light-state-icon[data-state="on"] .light-state-sun,
+.js-light-state-icon[data-state="off"] .light-state-moon {
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .bottom-panel-heading {
+        gap: 12px;
+    }
+
+    .light-state-icon {
+        width: 54px;
+        height: 58px;
+    }
+
+    .light-state-icon .glass-glyph {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+
+/* LIGHT PANEL: one clear visual focus, no duplicate sun icon */
+
+.big-status--light {
+    margin-top: 22px;
+    align-items: center;
+}
+
+.big-status--light .light-state-icon {
+    width: 58px;
+    height: 62px;
+    border-radius: 20px;
+}
+
+.big-status--light .light-state-icon .glass-glyph {
+    width: 39px;
+    height: 39px;
+}
+
+.big-status--light strong {
+    font-size: 1.45rem;
+}
+
+.big-status--light small {
+    color: #c2d6ce;
+}
+
+@media (max-width: 600px) {
+    .big-status--light .light-state-icon {
+        width: 52px;
+        height: 56px;
+        border-radius: 18px;
+    }
+
+    .big-status--light .light-state-icon .glass-glyph {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+
+/* LIGHT PANEL: dynamic state icon lives in the heading */
+
+.light-panel-heading {
+    align-items: center;
+}
+
+.light-heading-icon {
+    width: 44px;
+    height: 48px;
+    border-radius: 16px;
+}
+
+.light-heading-icon .glass-glyph {
+    width: 31px;
+    height: 31px;
+}
+
+.light-heading-icon[data-state="off"] {
+    --icon-color: 123, 151, 176;
+    opacity: .82;
+}
+
+.light-heading-icon[data-state="on"] {
+    --icon-color: 255, 205, 92;
+    opacity: 1;
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,.18),
+        inset -1px -1px 0 rgba(255,205,92,.2),
+        0 5px 16px rgba(244,181,46,.16);
+}
+
+.big-status--light-text {
+    margin-top: 22px;
+    margin-bottom: 24px;
+    gap: 0;
+}
+
+.big-status--light-text > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.big-status--light-text strong {
+    font-size: 1.45rem;
+}
+
+.big-status--light-text small {
+    color: #c2d6ce;
+}
+
+@media (max-width: 600px) {
+    .light-heading-icon {
+        width: 42px;
+        height: 46px;
+        border-radius: 15px;
+    }
+
+    .light-heading-icon .glass-glyph {
+        width: 29px;
+        height: 29px;
+    }
+}
+
+
+/* GLOBAL DYNAMIC LIGHT STATE */
+
+.js-light-state-icon {
+    transition:
+        opacity .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+.js-light-state-icon[data-state="off"] {
+    --icon-color: 123, 151, 176;
+    opacity: .82;
+}
+
+.js-light-state-icon[data-state="on"] {
+    --icon-color: 255, 205, 92;
+    opacity: 1;
+}
+
+.sensor-header .js-light-state-icon[data-state="on"],
+.overview-stat .js-light-state-icon[data-state="on"] {
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,.16),
+        inset -1px -1px 0 rgba(255,205,92,.18),
+        0 4px 14px rgba(244,181,46,.12);
+}
+
+
+/* LAMPENSTEUERUNG */
+
+.lamp-control-panel {
+    margin-bottom: 16px;
+}
+
+.lamp-control-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.glass-icon--lamp-control {
+    --icon-color: 255,196,76;
+    width: 50px;
+    height: 54px;
+    border-radius: 17px;
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,.17),
+        inset -1px -1px 0 rgba(255,196,76,.14),
+        0 6px 16px rgba(244,181,46,.13);
+}
+
+.glass-icon--lamp-control .glass-glyph {
+    width: 35px;
+    height: 35px;
+}
+
+.lamp-control-grid {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.lamp-control-card,
+.lamp-config-card {
+    background: rgba(7,28,24,.24);
+    border: 1px solid rgba(227,255,238,.12);
+    border-radius: 18px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.055);
+}
+
+.lamp-control-card {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 18px;
+}
+
+.lamp-control-label {
+    color: #bfd3cb;
+    font-size: .78rem;
+}
+
+.lamp-control-card strong {
+    color: #f8fbf9;
+    font-size: 1.45rem;
+    font-weight: 600;
+}
+
+.lamp-control-card small {
+    color: #afc7bd;
+    font-size: .72rem;
+}
+
+.lamp-config {
+    border-top: 1px solid rgba(227,255,238,.13);
+    padding-top: 16px;
+}
+
+.lamp-config summary {
+    cursor: pointer;
+    color: #d9e9e2;
+    font-weight: 600;
+}
+
+.lamp-config-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.lamp-config-card {
+    padding: 17px;
+}
+
+.lamp-config-card > strong {
+    display: block;
+    margin-bottom: 14px;
+    color: #eef8f3;
+}
+
+.lamp-config-card label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 12px;
+    color: #bfd3cb;
+    font-size: .76rem;
+}
+
+.lamp-config-card input[type="text"],
+.lamp-config-card input[type="time"],
+.lamp-config-card select {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 11px;
+    border: 1px solid rgba(228,255,242,.24);
+    border-radius: 10px;
+    background: rgba(7,28,24,.5);
+    color: #f4faf7;
+    font: inherit;
+}
+
+.lamp-range-row {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 58px;
+    align-items: center;
+    gap: 12px;
+}
+
+.lamp-range-row input[type="range"] {
+    width: 100%;
+    accent-color: #ffd26c;
+}
+
+.lamp-range-row output {
+    color: #fff1bd;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.lamp-toggle-row {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 10px !important;
+}
+
+.lamp-toggle-row input {
+    width: 18px;
+    height: 18px;
+    accent-color: #9ce3c3;
+}
+
+.lamp-time-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 10px;
+}
+
+.lamp-safety-note {
+    margin: 16px 0 0;
+    color: #9fbcb0;
+    font-size: .72rem;
+    line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+    .lamp-control-grid,
+    .lamp-config-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .glass-icon--lamp-control {
+        width: 44px;
+        height: 48px;
+        border-radius: 15px;
+    }
+
+    .glass-icon--lamp-control .glass-glyph {
+        width: 31px;
+        height: 31px;
+    }
+
+    .lamp-time-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* LAMP PROFILE ARTWORK */
+
+.lamp-profile-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.lamp-profile-display {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 72px;
+}
+
+.lamp-profile-image,
+.lamp-profile-placeholder {
+    width: 68px;
+    height: 68px;
+    flex: 0 0 68px;
+    border-radius: 22px;
+}
+
+.lamp-profile-image {
+    display: block;
+    object-fit: cover;
+    border: 1px solid rgba(242,235,255,.34);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        0 7px 20px rgba(13,7,22,.24),
+        0 0 18px rgba(191,145,255,.08);
+}
+
+.lamp-profile-image[hidden] {
+    display: none;
+}
+
+.lamp-profile-placeholder {
+    display: grid;
+    place-items: center;
+    color: #b9ead0;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.14),
+            rgba(116,220,165,.08) 55%,
+            rgba(116,220,165,.16)
+        );
+    border: 1px solid rgba(196,255,224,.18);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.13),
+        0 5px 15px rgba(0,0,0,.1);
+}
+
+.lamp-profile-placeholder[hidden] {
+    display: none;
+}
+
+.lamp-profile-placeholder svg {
+    width: 38px;
+    height: 38px;
+}
+
+.lamp-profile-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.lamp-profile-card[data-profile="flower"] {
+    border-color: rgba(221,190,255,.23);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(211,177,255,.08),
+            rgba(255,199,171,.025)
+        ),
+        rgba(7,28,24,.24);
+}
+
+.lamp-profile-card[data-profile="growth"] .lamp-profile-placeholder {
+    color: #b9f6bd;
+    border-color: rgba(170,245,178,.23);
+}
+
+.lamp-profile-card[data-profile="custom"] .lamp-profile-placeholder {
+    color: #ffe09a;
+    border-color: rgba(255,218,132,.2);
+}
+
+@media (max-width: 600px) {
+    .lamp-profile-image,
+    .lamp-profile-placeholder {
+        width: 60px;
+        height: 60px;
+        flex-basis: 60px;
+        border-radius: 19px;
+    }
+
+    .lamp-profile-placeholder svg {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+/* Botanical flower phase icon: preserve the complete SVG glass tile. */
+.lamp-profile-image {
+    width: 76px;
+    height: 76px;
+    flex-basis: 76px;
+    object-fit: contain;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    filter: drop-shadow(0 5px 9px rgba(10, 17, 22, .24));
+}
+@media (max-width: 600px) {
+    .lamp-profile-image { width: 64px; height: 64px; flex-basis: 64px; }
+}
+@media (forced-colors: active) {
+    .lamp-profile-image { filter: none; }
+}
+
+/* Irrigation preparation */
+.irrigation-panel { margin-top: 24px; }
+.irrigation-icon { color: #76edff; background: linear-gradient(145deg, rgba(70,224,230,.2), rgba(57,108,228,.14)); }
+.irrigation-panel .lamp-control-card { display: flex; flex-direction: column; gap: 12px; }
+.irrigation-panel button:disabled { opacity: .5; cursor: not-allowed; }
+.irrigation-panel fieldset { min-width: 0; border: 0; padding: 16px 0 0; margin: 0; }
+.irrigation-panel label { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.irrigation-panel input:not([type="checkbox"]) { width: 100%; box-sizing: border-box; }
+.irrigation-history { margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(200,255,244,.12); }
+
+/* Peristaltic pump icon: rotor moves only for reported running state or preview. */
+.pump-symbol { width: 84px; height: 84px; flex-shrink: 0; }
+.pump-art { width: 100%; height: 100%; display: block; filter: drop-shadow(0 5px 7px rgba(5,20,35,.18)); }
+.pump-rotor { transform-box: view-box; transform-origin: 48px 48px; }
+.pump-symbol[data-running="true"] .pump-rotor,
+.pump-symbol[data-preview="true"] .pump-rotor { animation: pump-turn 1.8s linear infinite; }
+.pump-symbol[data-running="true"] { filter: drop-shadow(0 0 7px rgba(74,239,219,.25)); }
+.irrigation-panel .pump-preview-button { font-size: .8rem; padding: 7px 12px; align-self: flex-start; }
+@keyframes pump-turn { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    .pump-symbol .pump-rotor { animation: none !important; }
+}
+
+/* Fan setup: requested settings only, hardware not connected. */
+.fan-panel { margin-top: 24px; }
+.fan-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; margin: 18px 0; }
+.fan-card { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.fan-card h3, .fan-card p { margin: 0; }
+.fan-symbol { width: 84px; height: 84px; }
+.fan-art { width: 100%; height: 100%; filter: drop-shadow(0 5px 8px rgba(15,20,45,.18)); }
+.fan-rotor { transform-box: view-box; transform-origin: 48px 48px; }
+.fan-symbol[data-preview="true"] .fan-rotor { animation: pump-turn 1.5s linear infinite; }
+.fan-panel fieldset { border: 0; padding: 16px 0 0; margin: 0; min-width: 0; }
+.fan-panel label { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.fan-panel input, .fan-panel select { width: 100%; box-sizing: border-box; }
+.fan-panel button:disabled { opacity: .5; cursor: not-allowed; }
+@media (max-width: 600px) { .fan-grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .fan-symbol .fan-rotor { animation: none !important; } }
+
+/* Compact read-only equipment summaries; live readings stay above them. */
+.overview-equipment { margin: 24px 0; }
+.overview-equipment-heading { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+.overview-equipment-heading h2 { margin:4px 0; font-size:1.3rem; }
+.overview-equipment-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.overview-equipment-card { min-width:0; display:flex; flex-direction:column; }
+.overview-equipment-card header { display:flex; align-items:center; gap:12px; }
+.overview-equipment-card h3 { margin:0 0 5px; font-size:1.05rem; overflow-wrap:anywhere; }
+.ov-equipment-icon { width:58px; height:58px; flex:0 0 58px; display:grid; place-items:center; }
+.ov-equipment-icon img,.ov-equipment-icon svg { width:100%; height:100%; object-fit:contain; }
+#ovLampFallback { font-size:40px; color:#ffda83; text-shadow:0 2px 14px rgba(255,194,73,.3); }
+.ov-equipment-status { margin:0; font-size:.78rem; color:#c6d9d7; }
+.overview-equipment-card dl { margin:18px 0; font-size:.85rem; }
+.overview-equipment-card dl>div { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr); gap:12px; padding:9px 0; border-bottom:1px solid rgba(200,255,244,.08); }
+.overview-equipment-card dt { color:#b8cbc7; }
+.overview-equipment-card dd { margin:0; text-align:right; overflow-wrap:anywhere; line-height:1.5; }
+.overview-equipment-card>a { margin-top:auto; padding-top:12px; color:#abeee2; font-size:.85rem; }
+.overview-equipment-card>a:focus-visible { outline:2px solid #abeee2; outline-offset:4px; }
+#lampControlSection,#irrigationControlSection,#fanControlSection { scroll-margin-top:20px; }
+@media(max-width:1100px) { .overview-equipment-grid { grid-template-columns:1fr; } }
+@media(max-width:420px) { .overview-equipment-card dl>div { grid-template-columns:1fr; gap:4px; } .overview-equipment-card dd { text-align:left; } }
+
+/* Layout: observe in overview, configure in controls. */
+.control-jump-nav { position:sticky; top:8px; z-index:10; display:flex; gap:8px; flex-wrap:wrap; padding:10px; margin:0 0 20px; border:1px solid rgba(215,255,245,.2); border-radius:18px; background:rgba(18,48,43,.96); box-shadow:0 6px 22px rgba(0,0,0,.15); }
+.control-jump-nav button { padding:9px 14px; font:inherit; font-size:.85rem; border-radius:12px; color:#daf2eb; background:rgba(220,255,245,.06); border:1px solid rgba(220,255,245,.12); cursor:pointer; }
+#lampControlSection,#irrigationControlSection,#fanControlSection,#cameraControlSection,#systemDiagnostics { scroll-margin-top:90px; }
+.overview-pot-water { grid-column:1/-1; margin:0; padding-top:6px; line-height:1.5; }
+.pot-control-link { grid-column:1/-1; color:#b8eee0; font-size:.8rem; }
+.overview-analysis { margin:24px 0; }
+.overview-analysis>summary,.system-diagnostics>summary,.advanced-settings>summary,.irrigation-history>summary { cursor:pointer; color:#d8eee8; font-weight:500; padding:10px 0; }
+.overview-analysis .history-panel { margin-top:18px; }
+.overview-analysis .bottom-grid { margin-bottom:0; }
+.system-diagnostics { margin:24px 0; }
+.system-diagnostics .sensor-grid { margin-bottom:0; }
+.advanced-settings { margin:14px 0; padding:0 12px; border:1px solid rgba(215,255,245,.12); border-radius:12px; }
+.water-top-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.water-top-grid>.water-tank-card { grid-column:1/-1; }
+.integrated-soil-reading { background:transparent; border:0; box-shadow:none; padding:0 0 16px; border-bottom:1px solid rgba(210,255,235,.12); margin-bottom:6px; }
+#irrigationControlSection>.badge { display:inline-block; margin-bottom:14px; }
+#irrigationControlSection .soil-config { margin-top:20px; }
+#irrigationControlSection .lamp-config-card { margin-bottom:16px; }
+#overviewCameraSlot #cameraArea,#controlsCameraSlot #cameraArea { width:100%; max-width:320px; }
+#overviewCameraSlot #cameraArea .camera-image,#controlsCameraSlot #cameraArea .camera-image { max-height:180px; object-fit:contain; }
+#overviewCameraSlot #cameraArea .camera-image:fullscreen,#controlsCameraSlot #cameraArea .camera-image:fullscreen { max-width:none; max-height:none; width:100vw; height:100vh; }
+@media(min-width:761px) and (max-width:1100px) { .overview-equipment-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:760px) { .water-top-grid { grid-template-columns:1fr; } .control-jump-nav { position:static; } }
+@media(prefers-reduced-transparency:reduce) { .control-jump-nav { background:#183d34; } }
+
+.overview-analysis>h2 { margin:0 0 18px; font-size:1.3rem; color:#d8eee8; }
+
+/* Tank color represents the switch state, never a measured percentage. */
+.tank-symbol { --tank-light:#b9d2df; --tank-dark:#708c9e; display:inline-block; width:84px; height:84px; flex-shrink:0; }
+.tank-symbol svg { display:block; width:100%; height:100%; filter:drop-shadow(0 4px 7px rgba(5,25,35,.18)); }
+.tank-symbol[data-tank-state="ok"] { --tank-light:#a2edff; --tank-dark:#367cf1; }
+.tank-symbol[data-tank-state="empty"] { --tank-light:#ffabb5; --tank-dark:#e54960; }
+.tank-fill-full,.tank-wave-full,.tank-fill-empty,.tank-empty-mark { display:none; }
+.tank-symbol[data-tank-state="ok"] .tank-fill-full,.tank-symbol[data-tank-state="ok"] .tank-wave-full { display:block; }
+.tank-symbol[data-tank-state="empty"] .tank-fill-empty,.tank-symbol[data-tank-state="empty"] .tank-empty-mark { display:block; }
+.tank-symbol:not([data-tank-state="unknown"]) .tank-unknown-mark { display:none; }
+.overview-equipment-card dl .tank-symbol { width:42px; height:42px; }
+
+.overview-tank-value { display:flex; justify-content:flex-end; align-items:center; gap:8px; }
+@media(max-width:420px) { .overview-tank-value { justify-content:flex-start; } }
+
+/* Profile identity and measured light state remain separate. */
+.overview-lamp-live { display:flex; align-items:center; gap:12px; margin:16px 0 0; padding:8px 12px; border:1px solid rgba(211,245,239,.12); border-radius:16px; background:rgba(4,25,27,.12); }
+.live-lamp-icon { display:block; width:84px; height:84px; flex:0 0 84px; }
+.live-lamp-icon svg { display:block; width:100%; height:100%; }
+.live-lamp-panel { fill:#55717c; }
+.live-lamp-leds { fill:#8cabb6; }
+.live-lamp-beam,.live-lamp-rays { opacity:0; }
+.live-lamp-icon[data-state="on"] .live-lamp-panel { fill:#ffe7a3; filter:drop-shadow(0 0 5px rgba(255,209,103,.8)); }
+.live-lamp-icon[data-state="on"] .live-lamp-leds { fill:#fffbea; }
+.live-lamp-icon[data-state="on"] .live-lamp-beam,.live-lamp-icon[data-state="on"] .live-lamp-rays { opacity:1; }
+.live-lamp-icon[data-state="off"] { opacity:.65; }
+.live-lamp-icon[data-state="unknown"] { opacity:.45; }
+.overview-lamp-live strong { display:block; font-size:.95rem; margin:5px 0; color:#dbeee8; }
+.overview-lamp-live small { display:block; font-size:.73rem; color:#b4cbc4; line-height:1.4; }
+#ovLampFallback { color:#b7cad0; text-shadow:none; }
+@media(max-width:420px) { .live-lamp-icon { width:64px; height:64px; flex-basis:64px; } }
+
+/* Main lamp identity on the left; selected profile beside its value. */
+.overview-equipment-card header > .glass-icon.live-lamp-icon {
+    display:grid; place-items:center; width:58px; height:64px; flex:0 0 58px;
+}
+.overview-equipment-card header > .live-lamp-icon .glass-glyph { width:44px; height:44px; }
+.overview-profile-value { display:flex; justify-content:flex-end; align-items:center; gap:8px; }
+.overview-profile-icon { display:grid; place-items:center; width:40px; height:40px; flex:0 0 40px; }
+.overview-profile-icon img { width:100%; height:100%; object-fit:contain; }
+.overview-profile-icon [hidden] { display:none; }
+.live-lamp-icon .lamp-main-rays { opacity:0; }
+.live-lamp-icon:not([data-state="on"]) {
+    --icon-color:145,175,186; box-shadow:none; filter:none;
+}
+.live-lamp-icon:not([data-state="on"]) .lamp-main-body,
+.live-lamp-icon:not([data-state="on"]) .lamp-main-knob { fill:#809ca6; stroke:#c1d4dc; }
+.live-lamp-icon:not([data-state="on"]) .lamp-main-wire { stroke:#a5bec8; }
+.live-lamp-icon[data-state="on"] .lamp-main-rays { opacity:1; }
+.live-lamp-icon[data-state="on"] .lamp-main-body { filter:drop-shadow(0 0 3px rgba(255,209,103,.6)); }
+@media(max-width:420px) { .overview-profile-value { justify-content:flex-start; } }
+
+/* Overview grow light: reference-inspired lamp and seedling, without controls. */
+.overview-equipment-card header > .overview-grow-lamp.live-lamp-icon {
+    display:grid; place-items:center; width:58px; height:58px; flex:0 0 58px;
+}
+.overview-equipment-card header > .overview-grow-lamp.live-lamp-icon .glass-glyph {
+    width:100%; height:100%;
+}
+.grow-lamp-rays,.grow-lamp-beam { opacity:0; }
+.live-lamp-icon[data-state="on"] .grow-lamp-rays,
+.live-lamp-icon[data-state="on"] .grow-lamp-beam { opacity:1; }
+.live-lamp-icon[data-state="on"] .grow-lamp-emitter { fill:url(#overviewGrowLight); filter:drop-shadow(0 0 3px rgba(255,210,135,.8)); }
+
+/* Compact watering journal within the overview equipment card. */
+.watering-history { margin:12px 0 16px; min-width:0; }
+.watering-today,.watering-history-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; font-size:.78rem; color:#b9d1cb; }
+.watering-today strong { color:#e1f6ef; font-weight:500; }
+.watering-history-heading { margin-top:16px; font-size:.7rem; }
+.water-key { display:inline-block; width:7px; height:7px; border-radius:2px; margin:0 4px 0 8px; }
+.pot-one { background:#68d7ba; }.pot-two { background:#71b9ee; }
+.watering-chart-wrap { height:112px; position:relative; margin-top:6px; }
+.watering-chart-wrap canvas { width:100%; height:100%; }
+.watering-chart-wrap canvas[hidden] { display:none; }
+#ovWaterEmpty { margin:0; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; font-size:.8rem; color:#b9d1cb; padding:12px; box-sizing:border-box; }
+#ovWaterEmpty[hidden] { display:none; }
+.watering-estimate { margin:6px 0 0; color:#a9c4bc; font-size:.65rem; line-height:1.4; }
+
+/* Fan sliders and exact percentage inputs share the existing saved values. */
+.fan-range-row { display:flex; align-items:center; gap:16px; margin:8px 0 16px; }
+.fan-range-row input[type="range"] { flex:1; min-width:0; width:100%; min-height:36px; accent-color:#75ddc2; cursor:pointer; }
+.fan-percent-input { display:flex; align-items:center; gap:6px; flex:0 0 auto; color:#cce8df; }
+.fan-percent-input input[type="number"] { box-sizing:border-box; width:74px; min-height:42px; border:1px solid rgba(203,243,231,.25); border-radius:10px; padding:8px; color:#edf9f3; background:rgba(5,29,27,.45); font:inherit; }
+.fan-range-row input:focus-visible { outline:2px solid #97f2db; outline-offset:3px; }
+@media(max-width:420px) { .fan-range-row { gap:10px; } .fan-percent-input input[type="number"] { width:64px; } }
+
+/* Keep the shared save action separate from technical notes. */
+#fanFields .fan-form-actions { display:flex; justify-content:flex-end; width:100%; clear:both; margin:18px 0 22px; }
+#fanFields > .camera-meta { display:block; }
+@media(max-width:600px) {
+    #fanFields .fan-form-actions .primary { width:100%; }
+}
+
+/* The control lamp uses the same sensor state as the overview lamp. */
+.lamp-control-state-icon .control-lamp-rays { opacity:0; }
+.lamp-control-state-icon:not([data-state="on"]) {
+    --icon-color:145,175,186;
+    box-shadow:inset 1px 1px 0 rgba(255,255,255,.12),inset -1px -1px 0 rgba(171,200,210,.12);
+}
+.lamp-control-state-icon:not([data-state="on"]) .control-lamp-body,
+.lamp-control-state-icon:not([data-state="on"]) .control-lamp-slider { fill:#809ca6; stroke:#bdd2da; }
+.lamp-control-state-icon:not([data-state="on"]) .control-lamp-wire { stroke:#a5bec8; }
+.lamp-control-state-icon[data-state="off"] .glass-glyph { opacity:.7; }
+.lamp-control-state-icon[data-state="unknown"] .glass-glyph { opacity:.45; }
+.lamp-control-state-icon[data-state="on"] .control-lamp-rays { opacity:1; }
+.lamp-control-state-icon[data-state="on"] .control-lamp-body { filter:drop-shadow(0 0 2px rgba(255,209,103,.7)); }

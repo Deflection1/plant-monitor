@@ -36,7 +36,7 @@
         const scheduled = c.schedule_enabled === true;
         set("ovLampSchedule", scheduled ? "Vorgemerkt" : "Deaktiviert");
         set("ovLampActual", available(status) ? percent(status.output_percent) : "Nicht verfügbar");
-        const path = {growth:"/static/profile-growth.svg?v=classic-2",flower:"/static/profile-flower.svg?v=classic-2"}[c.profile];
+        const path = window.plantTheme.profileIcon(c.profile);
         $("ovLampProfileIcon").hidden = !path;
         $("ovLampFallback").hidden = !!path;
         if (path && $("ovLampProfileIcon").getAttribute("src") !== path) $("ovLampProfileIcon").setAttribute("src", path);
@@ -111,8 +111,8 @@
             labels:data.days.map(d => d.date.slice(8,10) + "." + d.date.slice(5,7)),
             datasets:[0,1].map(i => ({
                 label:"Topf " + (i+1), data:data.days.map(d => d.ml[i]),
-                backgroundColor:i === 0 ? "#000080" : "#008000",
-                borderRadius:0, maxBarThickness:12
+                backgroundColor:window.plantTheme.palette().water[i],
+                borderRadius:window.plantTheme.palette().barRadius, maxBarThickness:12
             }))
         };
         const summary = data.days.map(d => d.date + ": Topf 1 " + fmt(d.ml[0]) + " ml, Topf 2 " + fmt(d.ml[1]) + " ml").join("; ");
@@ -132,8 +132,8 @@
                     responsive:true, maintainAspectRatio:false, animation:false,
                     plugins:{legend:{display:false},tooltip:{callbacks:{label:tooltip}}},
                     scales:{
-                        x:{grid:{display:false},ticks:{color:"#404040",font:{size:10},maxRotation:0}},
-                        y:{beginAtZero:true,grid:{color:"#d4d0c8"},ticks:{color:"#404040",maxTicksLimit:3,font:{size:9}}}
+                        x:{grid:{display:false},ticks:{color:window.plantTheme.palette().tick,font:{size:10},maxRotation:0}},
+                        y:{beginAtZero:true,grid:{color:window.plantTheme.palette().grid},ticks:{color:window.plantTheme.palette().tick,maxTicksLimit:3,font:{size:9}}}
                     }
                 }
             });
