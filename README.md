@@ -8,34 +8,37 @@ Das System erfasst Klima-, Licht- und später Bodenfeuchtedaten, speichert Messw
 
 # Status
 
-Stand: **30.09.2026**. Diese Dokumentation beschreibt den geprüften Code auf **`main`**. Spätere Änderungen auf **`test/overview-controls`** sind unten separat aufgeführt. Ein angeschlossenes Gerät gilt erst nach Treiber-Anbindung und Funktionstest als softwareseitig in Betrieb.
+Stand: **30.09.2026**. Der Stand von `test/overview-controls` wurde über
+[PR #3](https://github.com/Deflection1/plant-monitor/pull/3) in **`main`** gemergt.
+Diese Dokumentation beschreibt den gemeinsamen Funktionsstand.
+Ein angeschlossenes Gerät gilt erst nach Treiber-Anbindung und Funktionstest
+als softwareseitig in Betrieb.
 
-## Branches und tatsächlicher Funktionsumfang
+## Neu auf main
 
-| Funktion | `main` | `test/overview-controls` |
-|---|---|---|
-| Übersicht/Steuerung, Klima- und Lichtverlauf, kompakte Kamera | vorhanden | vorhanden |
-| Getrennte Lampenprofile und kompakter Luxwert unter dem Profil | vorhanden | vorhanden |
-| Eigenes Lampen-/Keimling-SVG in der Übersicht, sensorabhängiges Leuchten | vorhanden | zusätzlich kräftigere Glasreflexe/Konturen |
-| Dynamisches Lampensymbol mit Schiebregler in der Steuerung | noch statisch | sensorabhängiges Leuchten |
-| Bewässerungshistorie mit Tagesmengen und 7-Tage-Balken | noch nicht vorhanden | Oberfläche, SQLite-Ereignisspeicher und lesende API vorbereitet |
-| Lüfterleistung und Mindestleistung | Zahlenfelder | zusätzlich synchronisierte Schieberegler |
-| Lüfter-Speichern-Button | bisherige Position | eigene Zeile unter beiden Karten |
-| Tankstatus in der Steuerung | vor den Topf-/Pumpenkarten | nach den Topf-/Pumpenkarten, vor den Einstellungen |
-| Reale Pumpen-, Lampen- und Lüfterausgabe | nicht implementiert | nicht implementiert |
+- Kompakte Luxzeile unter dem aktiven Profil und eigenständiges Lampen-/Keimling-SVG.
+- Sensorabhängiges Leuchten der Lampensymbole in Übersicht und Steuerung;
+  das Steuerungssymbol behält seine Schiebreglerdarstellung.
+- Bewässerungshistorie mit Tagesmengen je Topf, 7-Tage-Balken, SQLite-Ereignisspeicher
+  und lesender API.
+- Synchronisierte Schieberegler und Zahlenfelder für Lüfterleistung und Mindestleistung.
+- Speichern-Button in eigener Zeile unter beiden Lüfterkarten.
+- Gemeinsamer Tankstatus unter den Topf-/Pumpenkarten und vor den Einstellungen.
 
-Der Test-Branch ist damit nicht vollständig in `main` enthalten. Ein Merge ist ein eigener Arbeitsschritt; eine README-Aktualisierung übernimmt keinen Programmcode.
+**Die Hardwareausgabe bleibt gesperrt:** Der Merge aktiviert weder Pumpen noch
+Lampen- oder Lüfterausgänge. Neue Bewässerungseinträge erfordern die spätere
+Anbindung des Pumpentreibers.
 
-### Bewässerungsverlauf auf dem Test-Branch
+### Bewässerungsverlauf
 
-Dort zeigt die Übersicht die letzte protokollierte Gabe, heutige Mengen je Topf und
+Die Übersicht zeigt die letzte protokollierte Gabe, heutige Mengen je Topf und
 einen kompakten 7-Tage-Verlauf. `GET /api/irrigation/history` liest die in SQLite
 gespeicherten `watering_events`; die Tagesgrenzen verwenden `Europe/Zurich`.
 Die Menge wird aus tatsächlicher Laufzeit und gespeicherter Pumpenfördermenge
 berechnet, nicht durch einen Durchflusssensor gemessen. Kalibrierläufe werden
 nicht als Topfbewässerung gezählt; stabile Vorgangs-IDs verhindern Doppelbuchungen.
 
-**Auch dort fehlen noch echte Pumpentreiber:** Die interne Schreibfunktion
+**Echte Pumpentreiber fehlen noch:** Die interne Schreibfunktion
 `record_watering_event` muss nach realen Pumpenläufen angebunden werden.
 Einstellungen, Vorschauen und Animationstests erzeugen keine Bewässerungen.
 Ohne Ereignisse erscheint ein Leerzustand; die Historie ersetzt keine aktive
@@ -239,7 +242,7 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 │   ├── liquid-glass.css
 │   ├── pump-icons.js
 │   ├── tank-status.js
-│   ├── lamp-visual.js       # sensorbasierter Lichtzustand in der Übersicht
+│   ├── lamp-visual.js       # sensorbasierter Lichtzustand in beiden Ansichten
 │   ├── fans.js
 │   ├── profile-growth.svg
 │   ├── profile-flower.svg
@@ -440,7 +443,9 @@ soil_moisture_2
 ```
 
 Die Bodenfeuchtespalten bleiben ohne angebundene Sensoren leer (`NULL`).
-Auf `main` gibt es noch keine Tabelle `watering_events`; diese liegt bislang nur auf dem Test-Branch.
+Zusätzlich speichert `watering_events` reale Bewässerungsvorgänge mit Vorgangs-ID,
+Zeitpunkt, Topf, tatsächlicher Laufzeit, Fördermenge und Auslöser. Die Tabelle
+wird beim Dienststart angelegt; ohne angebundenen Pumpentreiber bleibt sie leer.
 
 PPFD und DLI werden derzeit aus Lux berechnet.
 
@@ -540,7 +545,7 @@ Gespeicherte Sollwerte bleiben ausdrücklich von tatsächlichen Ausgängen getre
 **Steuerung**, mit Sprungnavigation:
 
 1. Licht: Profil, Leistung und Zeitplan
-2. Wasser & Töpfe: gemeinsame Tankanzeige; je Topf Bodenfeuchte und passende Pumpe zusammen; Bewässerungseinstellungen und separate Sensorkalibrierung
+2. Wasser & Töpfe: je Topf Bodenfeuchte und passende Pumpe zusammen; anschließend gemeinsame Tankanzeige, Bewässerungseinstellungen und separate Sensorkalibrierung
 3. Lüftung: Zu- und Abluft nebeneinander
 4. aufklappbare Systemdiagnose mit Rohwerten und CPU-Temperatur
 
@@ -602,7 +607,7 @@ Gerätegesundheit bleibt offen.
 ## Noch offen auf `main`
 
 - tatsächliche Sensor-, Tank- und Pumpen-Anbindung
-- letzte Bewässerung und dauerhaftes Ereignisprotokoll
+- Anbindung realer Pumpenläufe an den vorhandenen Ereignisspeicher und Verlauf
 - manueller Bewässerungsstart und aktive Automatik
 - tatsächliche Lampendimmung und Ausführung der Zeitpläne
 - tatsächliche PWM-Ausgabe, Lüfterdrehzahl und automatische Lüfterregelung
@@ -674,7 +679,7 @@ Auf `main` sind Oberfläche, persistente Konfiguration und eine hardwareunabhän
 - `GET /api/irrigation/status` meldet ausdrücklich nicht verfügbare Hardware
 - Tankstatus unbekannt; keine erfundenen Füllstände oder Bewässerungsereignisse
 - deaktivierte Start-Schaltflächen; keine GPIO-Ausgabe, Timer oder Automatik
-- konkrete GPIO-Zuordnung, reale Fördermengenmessung, aktive Abschaltung und Ereignisprotokollierung bleiben ausstehend
+- konkrete GPIO-Zuordnung, reale Fördermengenmessung, aktive Abschaltung und Anbindung realer Ereignisse an den vorhandenen Speicher bleiben ausstehend
 
 Zusätzlich werden pro Topf gespeichert:
 
@@ -689,7 +694,7 @@ Die reine Entscheidungsfunktion prüft Automatik, Tankstatus, Sensoralter (max. 
 
 `POST /api/irrigation/preview` erlaubt ausschließlich eine Simulation mit `pot_id`, `moisture`, `sensor_age_seconds`, `tank_ok`, `seconds_since_last` und `used_today_ml`. Die Antwort enthält immer `simulation: true` und `output_available: false`.
 
-**Noch nicht aktiv:** GPIO-Pumpentreiber, Regelungs-Worker, dauerhafte Verbrauchs-/Ereignisspeicherung und Live-Tanküberwachung. Es werden keine Pumpen gestartet. Vor realem Betrieb muss die Steuerung kalibrierte Sensorwerte verwenden, Verbrauch und Pause über Neustarts erhalten, Pumpenzugriff serialisieren und Tank-/Laufzeitabschaltung während des Pumpens überwachen. Die reine Vorschau ersetzt diese Hardwareintegration nicht.
+**Noch nicht aktiv:** GPIO-Pumpentreiber, Regelungs-Worker und Live-Tanküberwachung. Der dauerhafte Ereignisspeicher ist vorhanden, erhält aber noch keine realen Pumpenereignisse. Tageslimits und Einziehpausen werden noch nicht durch einen aktiven Hardware-Controller durchgesetzt. Es werden keine Pumpen gestartet. Vor realem Betrieb muss die Steuerung kalibrierte Sensorwerte verwenden, Verbrauch und Pause über Neustarts erhalten, Pumpenzugriff serialisieren und Tank-/Laufzeitabschaltung während des Pumpens überwachen. Die reine Vorschau ersetzt diese Hardwareintegration nicht.
 
 ## Einstellungen und Kalibrierung
 
@@ -861,8 +866,8 @@ Unter **Lüfter einrichten** sind getrennt speicherbar:
 |---|---|
 | Name | Bezeichnung des jeweiligen Lüfters |
 | AUS / MANUELL | vorgemerkter Modus; standardmäßig AUS |
-| Gewünschte Leistung | ganzzahliger Sollwert von 0 bis 100 %, standardmäßig 0 % |
-| Mindestleistung bei Betrieb | untere Grenze für positive manuelle Sollwerte; standardmäßig 0 % und noch am Lüfter zu prüfen |
+| Gewünschte Leistung | Schieberegler und synchronisiertes Zahlenfeld, ganzzahlig 0–100 %, standardmäßig 0 % |
+| Mindestleistung bei Betrieb | Schieberegler und Zahlenfeld in den technischen Einstellungen; untere Grenze positiver manueller Sollwerte, standardmäßig 0 %, noch am Lüfter zu prüfen |
 
 AUS oder ein gewünschter Wert von 0 % ergibt einen Sollwert von 0 %. Bei einem positiven manuellen Wert gilt der größere Wert aus gewünschter Leistung und Mindestleistung. Die Oberfläche zeigt den Entwurf und den gespeicherten Sollwert getrennt. Diese Prozentangaben sind keine gemessene Drehzahl.
 
@@ -873,6 +878,9 @@ AUS oder ein gewünschter Wert von 0 % ergibt einen Sollwert von 0 %. Bei einem 
 - Keine GPIO-Zugriffe, PWM-Signale oder automatische Regelung
 - AUTO ist in der Oberfläche als spätere Funktion gekennzeichnet und nicht auswählbar.
 - Laden, Validierung und atomare Speicherung sind vorbereitet; ein Speicherfehler übernimmt keine neue aktive Konfiguration.
+
+Der gemeinsame Speichern-Button steht in einer eigenen Zeile rechts unter den beiden
+Lüfterkarten, vor den technischen Hinweisen; auf schmalen Bildschirmen ist er vollbreit.
 
 ## Vorhandene Lüfter und geplanter Anschluss
 
@@ -982,7 +990,7 @@ Mögliche Inhalte:
 # Roadmap
 
 Die Hardware wird schrittweise integriert, damit jede Stufe einzeln getestet werden kann.
-Die Checklisten beziehen sich auf `main`, sofern nicht ausdrücklich anders angegeben.
+Die Checklisten beziehen sich auf den zusammengeführten Stand von `main`.
 Die Enviro+-Migration ist Voraussetzung für die hier geplante PWM-Pinbelegung;
 die Phasennummern sind keine zwingende Reihenfolge.
 
@@ -1066,7 +1074,8 @@ die Phasennummern sind keine zwingende Reihenfolge.
 - [ ] Regelungs-Worker und GPIO-Treiber anbinden
 - [ ] Sicherheitsgrenzen während realer Pumpenläufe durchsetzen
 - [ ] Verbrauch und Einziehpause über Neustarts erhalten
-- [ ] Bewässerungsereignisse protokollieren
+- [x] SQLite-Ereignisspeicher, History-API, Tagesmengen und 7-Tage-Diagramm vorbereiten
+- [ ] reale Pumpenvorgänge nach dem Stopp mit tatsächlicher Laufzeit protokollieren
 - [ ] Automatik erst nach erfolgreicher Kalibrierung aktivieren
 
 ## Phase 5 – Lüfter
@@ -1075,6 +1084,8 @@ die Phasennummern sind keine zwingende Reihenfolge.
 - [x] getrennte Namen, AUS/MANUELL-Sollwerte und Mindestleistung speichern
 - [x] Konfigurations-/Status-API ohne Hardwareausgabe
 - [x] Lüftersymbole mit separatem Animationstest
+- [x] synchronisierte Schieberegler und Zahlenfelder für Leistung/Mindestleistung
+- [x] eigene Speicherzeile unter beiden Lüfterkarten
 - [x] Validierung und Speicherung hardwareunabhängig testen
 - [ ] getrennte PWM-Kanäle nach Enviro+-Demontage und Sensorplanung verbindlich zuordnen
 
@@ -1113,7 +1124,7 @@ die Phasennummern sind keine zwingende Reihenfolge.
 
 Diese Punkte sind nicht Teil der unmittelbar geplanten Hardwareintegration:
 
-- erweiterte Bewässerungs-History und Statistiken
+- Bewässerungsauswertungen über den vorhandenen 7-Tage-Verlauf hinaus
 - Min / Max / Durchschnitt je Zeitraum
 - frei konfigurierbare Zielbereiche
 - Warnungen bei Temperatur-, RH- oder VPD-Grenzwerten
@@ -1137,7 +1148,8 @@ git switch main
 git pull --ff-only
 ```
 
-Wer ausdrücklich die oben getrennt aufgeführten neuen Funktionen testen möchte:
+Optional kann für weitere Entwicklung weiterhin der Test-Branch verwendet werden.
+Der hier beschriebene Funktionsstand ist bereits auf `main`:
 
 ```bash
 cd ~/plant-monitor
@@ -1148,7 +1160,13 @@ git pull --ff-only
 Lokale Änderungen vor einem Branchwechsel prüfen; Konfiguration und Messdaten
 nicht durch Zurücksetzen oder Überschreiben verlieren.
 
-Nach Python-Änderungen den Dienst neu starten; anschließend die Website mit **Strg + F5** neu laden. Für reine HTML-/CSS-/JavaScript-Änderungen genügt der Browser-Reload. Eine reine README-Änderung benötigt keinen Neustart.
+**Nach diesem Merge den Dienst neu starten**, damit die neue History-API und Datenbanktabelle verfügbar werden:
+
+```bash
+sudo systemctl restart plant-monitor
+```
+
+Allgemein gilt: Nach Python-Änderungen den Dienst neu starten; anschließend die Website mit **Strg + F5** neu laden. Für reine HTML-/CSS-/JavaScript-Änderungen genügt der Browser-Reload. Eine reine README-Änderung benötigt keinen Neustart.
 
 ## Konfiguration speichern
 
@@ -1255,6 +1273,7 @@ curl http://127.0.0.1:8000/api/light/today
 curl http://raspberrypi.local/api/current
 curl http://127.0.0.1:8000/api/irrigation/config
 curl http://127.0.0.1:8000/api/irrigation/status
+curl http://127.0.0.1:8000/api/irrigation/history
 curl http://127.0.0.1:8000/api/fans/config
 curl http://127.0.0.1:8000/api/fans/status
 ```
@@ -1312,26 +1331,3 @@ Für exakte PPFD-/DLI-Werte wäre ein PAR-/Quantum-Sensor erforderlich.
 Noch nicht festgelegt.
 
 Für ein öffentliches Open-Source-Repository kann später beispielsweise eine MIT-Lizenz ergänzt werden.
-
-
-### Bewässerungsverlauf in der Übersicht
-
-Die Bewässerungskachel zeigt die letzte protokollierte Gabe, heutige Mengen
-je Topf sowie einen kompakten 7-Tage-Balkenverlauf (Zeitzone Europe/Zurich).
-Leere Historie und nicht erreichbare Daten werden getrennt angezeigt.
-Die Mengen sind aus tatsächlicher Laufzeit und der zum Vorgang gespeicherten
-Pumpenfördermenge berechnet, nicht durch einen Durchflusssensor gemessen.
-
-SQLite speichert Vorgänge dauerhaft in `watering_events`; die lesende API
-`GET /api/irrigation/history` liefert Tagesmengen, Anzahl und letzten Vorgang.
-Die interne Funktion `record_watering_event` ist für die spätere
-Hardware-Anbindung vorbereitet: erst nach Pumpenstopp mit tatsächlicher
-Laufzeit aufrufen, auch bei abgebrochenen Gaben. Eine stabile Vorgangs-ID
-verhindert doppelte Buchungen. Kalibrierläufe zählen nicht als Topfbewässerung.
-
-**Noch offen:** Der Hardware-Treiber muss diese Funktion anbinden. Aktuell
-erzeugen Einstellungen, Simulationen und Animationstests keine Einträge.
-Tagesmengen zeigen nur protokollierte Vorgänge, keine außerhalb der Software
-erfolgten Gaben. Nach dem Update den Dienst neu starten, damit die neue
-Datenbanktabelle angelegt wird. Die Historie ersetzt keine ausfallsichere
-Pumpensteuerung oder Durchsetzung der Mengenlimits.
