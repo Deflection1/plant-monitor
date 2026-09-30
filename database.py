@@ -18,18 +18,16 @@ DB_PATH.parent.mkdir(
 # LICHT-KALIBRIERUNG
 # =====================================================
 
-# Deine Kalibrierung:
-# 52.5 Lux entsprechen ungefähr
-# 1 µmol/m²/s PPFD
+# Vorläufige spektrale Schätzung, keine PPFD-Referenzkalibrierung.
+# 52.5 Lux entsprechen ungefähr 1 µmol/m²/s PPFD.
 LUX_PER_PPFD = 52.5
 
 
-# Verhältnis:
-# ca. 430 PPFD Pflanzenmitte
-# ca. 250 PPFD Sensorposition
-#
-# 430 / 250 ≈ 1.72
-CENTER_FACTOR = 1.72
+# SEN0501-Vergleich vom 30.09.2026 bei gleicher Dimmung:
+# Wandposition ca. 4060 Lux; mittig 24 cm über dem Topf 18000–20000 Lux.
+# Messseite am Referenzpunkt nach oben; Arbeitswert 19000 / 4060 ≈ 4.68.
+# Gilt nur für diese Positionen, Ausrichtungen und Lampengeometrie.
+CENTER_FACTOR = 4.68
 
 
 # Ab diesem Lux-Wert gilt die Lampe als eingeschaltet.

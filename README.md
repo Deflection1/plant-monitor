@@ -462,26 +462,30 @@ Beispiele:
 
 Die PPFD-Werte sind Schätzwerte. Für exakte Messungen wäre ein PAR-/Quantum-Sensor nötig.
 
-## Pflanzenmitte
+## Referenzpunkt über dem Topf
 
-Vergleichsmessung:
+Neue Vergleichsmessung mit SEN0501 am 30.09.2026 bei gleicher Dimmung:
 
-```text
-Pflanzen-/Lampenmitte:  ~430 µmol/m²/s
-Sensorposition:          ~250 µmol/m²/s
-```
+| Position | Lux |
+|---|---:|
+| Feste Wandposition | ca. 4060 |
+| Mittig, 24 cm über dem Topf, Messseite nach oben | 18000–20000 |
 
-Daraus:
+Arbeitswert: `19000 / 4060 ≈ 4.68`; gemessene Spanne ca. 4.43–4.93.
 
 ```python
-CENTER_FACTOR = 1.72
+CENTER_FACTOR = 4.68
 ```
 
 ```text
-PPFD Pflanzenmitte = PPFD Sensor × 1,72
+Geschätzte PPFD Referenzpunkt = geschätzte PPFD Sensor × 4,68
 ```
 
-Dieser Faktor gilt nur für die aktuelle Position von Lampe und Sensor.
+Dies ersetzt den früheren Enviro+-Positionsfaktor 1.72. Der neue Faktor
+beschreibt nur das Verhältnis dieser Messpunkte bei der vermessenen
+Anordnung, einschließlich Sensorausrichtung. Bei geänderter Lampenposition,
+Messhöhe oder Sensorposition erneut messen. Die spektrale Umrechnung 52.5
+bleibt eine unbestätigte Schätzung, keine Referenzkalibrierung.
 
 ## DLI
 
@@ -493,6 +497,9 @@ Summe(PPFD × Messintervall in Sekunden)
 ```
 
 Das Dashboard integriert die aufgezeichneten Lichtwerte über den Tag.
+Die abgeleiteten Tageswerte werden mit dem aktuellen Positionsfaktor berechnet.
+Vorhandene Luxmessungen bleiben erhalten; gemischte Enviro+/SEN0501-Tage sind
+keine reine Messreihe des neuen Sensors.
 
 Zum Schutz vor Datenlücken:
 
