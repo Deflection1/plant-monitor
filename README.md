@@ -83,9 +83,48 @@ Beim Import wird keine Hardware geöffnet. Sensorfehler lassen die Website
 starten; die betroffenen Live-Endpunkte antworten mit HTTP 503, und der
 Messworker protokolliert den Fehler statt erfundene Messungen zu speichern.
 
-**Die GP8600-Ausgabe bleibt unverändert ausstehend.** Keine automatische
-Aktivierung der Lampe, Pumpen oder Lüfter. OUT/GND erst nach separatem
-0–10-V-Ausgangstest mit dem Lampentreiber verbinden.
+## GP8600: vorbereiteter Treiber und manueller Ausgangstest
+
+`gp8600.py` implementiert den 16-Bit-Ausgang auf Bus 1, Adresse `0x58`.
+Grundlage: [DFRobot_GP8XXX](https://github.com/DFRobot/DFRobot_GP8XXX),
+`DFRobot_GP8600_I2C`: Register `0x01`, Wert `0x08` für 0–10 V;
+Register `0x02` für den DAC-Wert, Low-Byte zuerst, 0–65535.
+Das ist das GP8600-Protokoll, nicht die GP8403-Bereichskonfiguration.
+Die DIP-Schalter A0/A1/A2 bestimmen im I2C-Betrieb die Adresse; den
+Ausgangsbereich setzt die Software. EEPROM-Speicherbefehle werden nicht gesendet.
+
+Die Website und der Dienst rufen diesen Treiber noch nicht auf. Gespeicherte
+Lampenprofile bleiben Einstellungen ohne Hardwareausgabe. Der Import beider
+neuen Module öffnet keinen Bus und schaltet keinen Ausgang.
+
+**Jetzt ohne Hardwarezugriff prüfen:**
+
+```bash
+cd ~/plant-monitor
+/home/pi/.virtualenvs/pimoroni/bin/python lamp_dac_test.py --volts 5
+```
+
+**Erst mit Multimeter und abgetrennter DIM-Verbindung ausführen:**
+
+```bash
+/home/pi/.virtualenvs/pimoroni/bin/python lamp_dac_test.py --volts 1 --seconds 20 --apply --output-disconnected
+```
+
+Danach separat mit `--volts 5` und `--volts 10` wiederholen. DC-Spannung
+zwischen OUT (rote Messspitze) und GND (schwarze Messspitze) messen und die
+Ergebnisse protokollieren. Das Flag `--output-disconnected` bestätigt nur
+manuell die Trennung; die Software kann sie nicht erkennen.
+
+Der Test setzt vor der Bereichswahl den DAC-Wert auf Null, aktiviert 0–10 V
+und gibt den gewählten Sollwert für höchstens 60 Sekunden aus. Bei regulärem
+Ende, Strg+C, SIGTERM oder einem Fehler versucht er, den Ausgang auf Null
+zurückzusetzen. Parallele Testprozesse sind gesperrt. Bei Busausfall,
+Prozessabsturz/SIGKILL oder Stromproblemen ist ein Rücksetzen nicht garantiert;
+es gibt keine Spannungsrückmessung. Ein gesendeter 0-V-Sollwert bestätigt keine
+physisch gemessene Spannung und keinen sicheren Aus-Zustand der Lampe.
+Die automatische Dimmung und die Ein/Aus-Funktion des Lampentreibers werden
+nach der Ausgangsprüfung separat aktiviert und geprüft.
+
 
 Die Register- und T/RH/Lux-Umrechnung folgt der
 [DFRobot-Herstellerbibliothek](https://github.com/DFRobot/DFRobot_EnvironmentalSensor/tree/7b49ec64e605dd764f0897b9a5cde4eec1afa3c4).
