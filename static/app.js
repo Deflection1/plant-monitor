@@ -9,6 +9,7 @@ let temperatureChart;
 let humidityChart;
 let vpdChart;
 let luxChart;
+let uvChart;
 let soilMoisture1Chart;
 let soilMoisture2Chart;
 
@@ -159,6 +160,10 @@ async function loadCurrent() {
                 data.lux || 0
             );
 
+
+        $("uvIntensity").textContent = data.uv_saturated
+            ? "Bereich überschritten" : number(data.uv_mw_cm2, 4);
+        $("uvRaw").textContent = number(data.uv_raw, 0);
 
         $("cpuTemperature").textContent =
             number(
@@ -327,6 +332,8 @@ async function loadCurrent() {
 
 
         window.dispatchEvent(new Event("plant:offline"));
+        $("uvIntensity").textContent = "--";
+        $("uvRaw").textContent = "--";
 
         $("systemStatus").innerHTML =
 
@@ -458,7 +465,7 @@ function chartOptions(
                 ticks: {
 
                     color:
-                        "#89988e",
+                        window.plantTheme.palette().tick,
 
                     maxTicksLimit: 6,
                     autoSkip: true,
@@ -470,7 +477,7 @@ function chartOptions(
                 grid: {
 
                     color:
-                        "rgba(255,255,255,0.03)"
+                        window.plantTheme.palette().grid
                 }
             },
 
@@ -480,14 +487,14 @@ function chartOptions(
                 ticks: {
 
                     color:
-                        "#89988e"
+                        window.plantTheme.palette().tick
                 },
 
 
                 grid: {
 
                     color:
-                        "rgba(255,255,255,0.05)"
+                        window.plantTheme.palette().grid
                 }
             }
         }
@@ -505,6 +512,7 @@ function makeChart(
     color
 ) {
 
+    color = window.plantTheme.palette().series[id] || color;
     return new Chart(
 
         $(id),
@@ -561,7 +569,7 @@ function createCharts() {
         makeChart(
             "temperatureChart",
             "°C",
-            "#67d391"
+            "#b02020"
         );
 
 
@@ -569,7 +577,7 @@ function createCharts() {
         makeChart(
             "humidityChart",
             "%",
-            "#6ebce4"
+            "#000080"
         );
 
 
@@ -577,7 +585,7 @@ function createCharts() {
         makeChart(
             "vpdChart",
             "kPa",
-            "#e8bd6c"
+            "#008000"
         );
 
 
@@ -585,15 +593,17 @@ function createCharts() {
         makeChart(
             "luxChart",
             "Lux",
-            "#f1dc78"
+            "#a08000"
         );
 
+
+    uvChart = makeChart("uvChart", "mW/cm²", "#8050b0");
 
     soilMoisture1Chart =
         makeChart(
             "soilMoisture1Chart",
             "%",
-            "#74c69d"
+            "#000080"
         );
 
 
@@ -601,7 +611,7 @@ function createCharts() {
         makeChart(
             "soilMoisture2Chart",
             "%",
-            "#95d5b2"
+            "#008000"
         );
 }
 
@@ -820,6 +830,10 @@ async function loadHistory() {
                     }
                 );
 
+
+        uvChart.data.labels = labels;
+        uvChart.data.datasets[0].data = points.map(point => point.uv_mw_cm2 ?? null);
+        uvChart.update();
 
         temperatureChart.update();
 
@@ -1259,9 +1273,7 @@ function updateLampControlPreview() {
         profile;
 
     if (profile === "flower" || profile === "growth") {
-        const iconPath = profile === "growth"
-            ? "/static/profile-growth.svg?v=1"
-            : "/static/profile-flower.svg?v=2";
+        const iconPath = window.plantTheme.profileIcon(profile);
         if (profileImage.getAttribute("src") !== iconPath) {
             profileImage.setAttribute("src", iconPath);
         }

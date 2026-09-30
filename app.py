@@ -800,6 +800,17 @@ def status():
     }
 
 
+def read_available_sensors():
+    try:
+        return read_sensors()
+    except (OSError, ValueError, ImportError) as error:
+        print("Umgebungssensor nicht verfügbar:", error)
+        raise HTTPException(
+            status_code=503,
+            detail="SEN0501 nicht erreichbar oder Messwerte ungültig."
+        ) from error
+
+
 # =====================================================
 # AKTUELLE WERTE
 # =====================================================
@@ -809,7 +820,7 @@ def status():
 )
 def current():
 
-    data = read_sensors()
+    data = read_available_sensors()
 
     data = add_soil_values(
         data
@@ -1259,7 +1270,7 @@ def soil_config_update(payload: dict = Body(...)):
 def soil_status():
 
     data = add_soil_values(
-        read_sensors()
+        read_available_sensors()
     )
 
     return {
@@ -1308,3 +1319,4 @@ def soil_status():
             }
         ]
     }
+

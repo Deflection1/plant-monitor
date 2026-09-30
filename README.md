@@ -6,6 +6,131 @@ Das System erfasst Klima-, Licht- und später Bodenfeuchtedaten, speichert Messw
 
 ---
 
+## Designauswahl
+
+Oben im Dashboard lässt sich zwischen **Standard · Glasdesign** und
+**Windows 2000** wechseln. Das Glasdesign ist die Voreinstellung.
+Die Auswahl gilt für Übersicht und Steuerung und wird unter
+`plant-monitor.design` im lokalen Browser gespeichert; andere Geräte haben
+unabhängige Einstellungen. Ist Browserspeicherung blockiert, funktioniert
+der Wechsel trotzdem für die aktuelle Seite.
+
+Beide Designs verwenden dieselben Formulare, APIs und Hardwarezustände.
+Stylesheets, SVG-Symbole, Profilbilder und Diagrammfarben wechseln gemeinsam,
+ohne die Seite neu zu laden oder Geräteeinstellungen zu verändern.
+`static/theme.js` aktiviert die gespeicherte Auswahl bereits im Seitenkopf.
+`static/theme-switch.css` enthält die gemeinsame Auswahl und Symbolanzeige;
+die klassischen Profil-SVGs liegen separat in `static/windows-2000/`.
+
+## SEN0501-Inbetriebnahme auf `design/windows-2000`
+
+Der Sensorcode dieses Branches verwendet jetzt **SEN0501 V2.0** an
+**I²C-Bus 3 / Adresse 0x22**. Die unten beschriebenen Enviro+-Messungen und
+CPU-Korrekturen dokumentieren den bisherigen Stand von main, nicht die neue
+Messquelle dieses Branches. Beim Nutzer wurde die I²C-Erkennung bestätigt;
+echte Messwerte und Messvergleich stehen noch aus.
+
+| Gerät | Signal | Physischer Pi-Pin |
+|---|---|---:|
+| SEN0501 | + / 3,3 V | 17 |
+| SEN0501 | − / GND | 9 |
+| SEN0501 | D/T / SDA (GPIO4) | 7 |
+| SEN0501 | C/R / SCL (GPIO5) | 29 |
+| GP8600 | + / 3,3 V | 1 |
+| GP8600 | − / GND | 6 |
+| GP8600 | D / SDA (GPIO2) | 3 |
+| GP8600 | C / SCL (GPIO3) | 5 |
+
+Sensor-Schalter auf I²C. In `/boot/firmware/config.txt` unter `[all]`:
+
+```ini
+dtparam=i2c_arm=on
+dtoverlay=i2c3,pins_4_5
+```
+
+Nach Neustart müssen `i2cdetect -y 3` die Adresse 22 und
+`i2cdetect -y 1` die Adresse 58 zeigen (GP8600-Schalter A0/A1/A2 auf 0).
+Die Datenleitungspins sind getrennt; 3,3 V und GND gehören zur selben Versorgung.
+
+```bash
+cd ~/plant-monitor
+git pull --ff-only
+/home/pi/.virtualenvs/pimoroni/bin/python -m pip install smbus2
+/home/pi/.virtualenvs/pimoroni/bin/python -c 'from sensor import read_sensors; print(read_sensors())'
+sudo systemctl restart plant-monitor
+```
+
+Temperatur und RH werden ohne Enviro+-CPU-Korrektur übernommen. Lux und VPD
+verwenden das bestehende Datenmodell. `/api/current` liefert zusätzlich
+`pressure_hpa`, `uv_raw`, `uv_mw_cm2`, `uv_saturated` und `sensor_model`.
+UV wird im Überblick, in der Diagnose und als eigener Verlauf angezeigt;
+Rohwert und geschätzte Bestrahlungsstärke werden in der Datenbank gespeichert.
+Die Datenbankmigration ergänzt vorhandene Tabellen automatisch. Frühere
+Messungen ohne UV bleiben im UV-Verlauf leer.
+
+Die Umrechnung folgt der auf der [DFRobot-Produktseite](https://wiki.dfrobot.com/sen0501/docs/21745)
+verlinkten [V2-Bibliothek](https://github.com/cdjq/DFRobot_EnvironmentalSensor):
+`uv_mw_cm2 = uv_raw / (2300 / 3) * (0.23 * 1.58 / 3.35)`.
+Sie setzt die V2-Firmwarekonfiguration des LTR390 voraus (20 Bit, Gain 6)
+und liefert eine **geschätzte äquivalente UV-A-Bestrahlungsstärke in mW/cm²**.
+Das ist kein kalibrierter UV-Index und keine präzise Dosismessung einer UV-Lampe.
+Rohwert 0 wird als echte Null angezeigt, ein fehlender UV-Wert als nicht
+verfügbar. Der 16-Bit-Maximalwert 65535 wird vorsorglich als Sättigung markiert.
+Ein einzelner UV-Lesefehler lässt die übrigen Klimawerte verfügbar.
+Luftdruck bleibt vorerst ein API-Wert ohne eigenes Diagramm.
+
+Beim Import wird keine Hardware geöffnet. Sensorfehler lassen die Website
+starten; die betroffenen Live-Endpunkte antworten mit HTTP 503, und der
+Messworker protokolliert den Fehler statt erfundene Messungen zu speichern.
+
+## GP8600: vorbereiteter Treiber und manueller Ausgangstest
+
+`gp8600.py` implementiert den 16-Bit-Ausgang auf Bus 1, Adresse `0x58`.
+Grundlage: [DFRobot_GP8XXX](https://github.com/DFRobot/DFRobot_GP8XXX),
+`DFRobot_GP8600_I2C`: Register `0x01`, Wert `0x08` für 0–10 V;
+Register `0x02` für den DAC-Wert, Low-Byte zuerst, 0–65535.
+Das ist das GP8600-Protokoll, nicht die GP8403-Bereichskonfiguration.
+Die DIP-Schalter A0/A1/A2 bestimmen im I2C-Betrieb die Adresse; den
+Ausgangsbereich setzt die Software. EEPROM-Speicherbefehle werden nicht gesendet.
+
+Die Website und der Dienst rufen diesen Treiber noch nicht auf. Gespeicherte
+Lampenprofile bleiben Einstellungen ohne Hardwareausgabe. Der Import beider
+neuen Module öffnet keinen Bus und schaltet keinen Ausgang.
+
+**Jetzt ohne Hardwarezugriff prüfen:**
+
+```bash
+cd ~/plant-monitor
+/home/pi/.virtualenvs/pimoroni/bin/python lamp_dac_test.py --volts 5
+```
+
+**Erst mit Multimeter und abgetrennter DIM-Verbindung ausführen:**
+
+```bash
+/home/pi/.virtualenvs/pimoroni/bin/python lamp_dac_test.py --volts 1 --seconds 20 --apply --output-disconnected
+```
+
+Danach separat mit `--volts 5` und `--volts 10` wiederholen. DC-Spannung
+zwischen OUT (rote Messspitze) und GND (schwarze Messspitze) messen und die
+Ergebnisse protokollieren. Das Flag `--output-disconnected` bestätigt nur
+manuell die Trennung; die Software kann sie nicht erkennen.
+
+Der Test setzt vor der Bereichswahl den DAC-Wert auf Null, aktiviert 0–10 V
+und gibt den gewählten Sollwert für höchstens 60 Sekunden aus. Bei regulärem
+Ende, Strg+C, SIGTERM oder einem Fehler versucht er, den Ausgang auf Null
+zurückzusetzen. Parallele Testprozesse sind gesperrt. Bei Busausfall,
+Prozessabsturz/SIGKILL oder Stromproblemen ist ein Rücksetzen nicht garantiert;
+es gibt keine Spannungsrückmessung. Ein gesendeter 0-V-Sollwert bestätigt keine
+physisch gemessene Spannung und keinen sicheren Aus-Zustand der Lampe.
+Die automatische Dimmung und die Ein/Aus-Funktion des Lampentreibers werden
+nach der Ausgangsprüfung separat aktiviert und geprüft.
+
+
+Die Register- und T/RH/Lux-Umrechnung folgt der
+[DFRobot-Herstellerbibliothek](https://github.com/DFRobot/DFRobot_EnvironmentalSensor/tree/7b49ec64e605dd764f0897b9a5cde4eec1afa3c4).
+
+---
+
 # Status
 
 Stand: **30.09.2026**. Der Stand von `test/overview-controls` wurde über
@@ -62,7 +187,7 @@ Durchsetzung von Tageslimit, Abschaltungen oder Einziehpause.
 - ✅ systemd-Autostart
 - ✅ Chart.js lokal
 - ✅ History für 24 h, 7 d, 30 d und 1 Jahr
-- ✅ Liquid-Glass-Oberfläche mit Übersicht und Steuerung
+- ✅ Oberfläche mit Übersicht, Steuerung und Designauswahl
 - ✅ Kamera-Livestream, Galerie und Zeitraffer
 - ✅ Bodenfeuchte-Konfiguration und Kalibrierungsoberfläche für zwei Töpfe
 - ✅ getrennt speicherbare Lampenprofile mit eigenen SVG-Symbolen
@@ -235,11 +360,16 @@ Das System wurde ursprünglich von Bullseye auf Bookworm aktualisiert.
 │   └── index.html
 ├── static/
 │   ├── style.css
+│   ├── overview.css
+│   ├── liquid-glass.css
+│   ├── windows-2000.css    # separates klassisches Design
+│   ├── theme.js            # browserlokale Designauswahl
+│   ├── theme-switch.css
+│   ├── windows-2000/       # klassische Profil-SVGs
 │   ├── app.js
 │   ├── overview.js
 │   ├── overview-equipment.js
 │   ├── layout.js
-│   ├── liquid-glass.css
 │   ├── pump-icons.js
 │   ├── tank-status.js
 │   ├── lamp-visual.js       # sensorbasierter Lichtzustand in beiden Ansichten
@@ -371,26 +501,30 @@ Beispiele:
 
 Die PPFD-Werte sind Schätzwerte. Für exakte Messungen wäre ein PAR-/Quantum-Sensor nötig.
 
-## Pflanzenmitte
+## Referenzpunkt über dem Topf
 
-Vergleichsmessung:
+Neue Vergleichsmessung mit SEN0501 am 30.09.2026 bei gleicher Dimmung:
 
-```text
-Pflanzen-/Lampenmitte:  ~430 µmol/m²/s
-Sensorposition:          ~250 µmol/m²/s
-```
+| Position | Lux |
+|---|---:|
+| Feste Wandposition | ca. 4060 |
+| Mittig, 24 cm über dem Topf, Messseite nach oben | 18000–20000 |
 
-Daraus:
+Arbeitswert: `19000 / 4060 ≈ 4.68`; gemessene Spanne ca. 4.43–4.93.
 
 ```python
-CENTER_FACTOR = 1.72
+CENTER_FACTOR = 4.68
 ```
 
 ```text
-PPFD Pflanzenmitte = PPFD Sensor × 1,72
+Geschätzte PPFD Referenzpunkt = geschätzte PPFD Sensor × 4,68
 ```
 
-Dieser Faktor gilt nur für die aktuelle Position von Lampe und Sensor.
+Dies ersetzt den früheren Enviro+-Positionsfaktor 1.72. Der neue Faktor
+beschreibt nur das Verhältnis dieser Messpunkte bei der vermessenen
+Anordnung, einschließlich Sensorausrichtung. Bei geänderter Lampenposition,
+Messhöhe oder Sensorposition erneut messen. Die spektrale Umrechnung 52.5
+bleibt eine unbestätigte Schätzung, keine Referenzkalibrierung.
 
 ## DLI
 
@@ -402,6 +536,9 @@ Summe(PPFD × Messintervall in Sekunden)
 ```
 
 Das Dashboard integriert die aufgezeichneten Lichtwerte über den Tag.
+Die abgeleiteten Tageswerte werden mit dem aktuellen Positionsfaktor berechnet.
+Vorhandene Luxmessungen bleiben erhalten; gemischte Enviro+/SEN0501-Tage sind
+keine reine Messreihe des neuen Sensors.
 
 Zum Schutz vor Datenlücken:
 
@@ -529,7 +666,7 @@ GET /api/light/today
 
 ## Gestaltung und Ansichten
 
-Die Seite trennt Beobachten und Einstellen; das Liquid-Glass-Design und die vorhandenen Symbole bleiben erhalten.
+Die Seite trennt Beobachten und Einstellen. Beide Ansichten verwenden das gewählte Design; die Symbole behalten ihre Statusfunktionen.
 
 **Übersicht**, von oben nach unten:
 
@@ -673,7 +810,7 @@ Die komplette Pumpen- und Tanktechnik soll **außerhalb des Pflanzenschranks** m
 
 Auf `main` sind Oberfläche, persistente Konfiguration und eine hardwareunabhängige Entscheidungsvorschau vorhanden:
 
-- Liquid-Glass-Bereich unter Steuerung für Tank und beide Pumpen
+- klassischer Bereich unter Steuerung für Tank und beide Pumpen
 - persistent speicherbare Namen in `data/irrigation.json`
 - `GET /api/irrigation/config`, `POST /api/irrigation/config`
 - `GET /api/irrigation/status` meldet ausdrücklich nicht verfügbare Hardware
@@ -723,7 +860,7 @@ Die Oberfläche zeigt Fördermenge und berechnete Laufzeit direkt an. Unvollstä
 
 ## Tanksymbol
 
-Übersicht und Steuerung zeigen ein Liquid-Glass-Tanksymbol mit Deckel und Wasserlinie. Die vorhandene Statusabfrage aktualisiert beide Symbole:
+Übersicht und Steuerung zeigen ein Tanksymbol im klassischen Stil mit Deckel und Wasserlinie. Die vorhandene Statusabfrage aktualisiert beide Symbole:
 
 - Rot mit Ausrufezeichen: Tank leer (`tank_state: "empty"`)
 - Blau: Wasser vorhanden (`"ok"` oder `"full"`)
@@ -817,12 +954,12 @@ Die Software-Seite ist jetzt wie bei der Bodenfeuchte bereits vorbereitet, obwoh
 
 Bereits umgesetzt:
 
-- eigenes Liquid-Glass-Panel für die Lampensteuerung
+- eigenes klassisches Panel für die Lampensteuerung
 - persistenter Lampenname
 - vorbereitete Profile: Benutzerdefiniert / Wachstum / Blüte
 - pro Profil separat gespeicherte Leistung, Ein-/Ausschaltzeiten und Zeitplanstatus
 - Profilwechsel lädt die zugehörigen Werte und berechnet die angezeigte Dauer neu, auch über Mitternacht
-- Wachstum und Blüte mit eigenen Liquid-Glass-SVG-Symbolen
+- Wachstum und Blüte mit eigenen klassischen SVG-Symbolen
 - persistenter Zielwert 0–100 %
 - vorbereiteter Ein-/Ausschaltzeitplan
 - Zeitplan kann vorab aktiviert/deaktiviert und gespeichert werden
@@ -858,7 +995,7 @@ Für die spätere Hardwareintegration vorgesehen:
 
 ## Software-Vorbereitung
 
-Unter **Steuerung → Lüftersteuerung** gibt es zwei Karten für **Zuluft unten** und **Abluft oben**. Beide haben ein eigenes Liquid-Glass-Lüftersymbol. **Animation testen** dreht nur das jeweilige Symbol für drei Sekunden; dabei wird kein Steuerbefehl gesendet. Reduzierte Bewegung wird berücksichtigt.
+Unter **Steuerung → Lüftersteuerung** gibt es zwei Karten für **Zuluft unten** und **Abluft oben**. Beide haben ein eigenes Lüftersymbol im klassischen Stil. **Animation testen** dreht nur das jeweilige Symbol für drei Sekunden; dabei wird kein Steuerbefehl gesendet. Reduzierte Bewegung wird berücksichtigt.
 
 Unter **Lüfter einrichten** sind getrennt speicherbar:
 
@@ -1053,7 +1190,7 @@ die Phasennummern sind keine zwingende Reihenfolge.
 
 ## Phase 4 – Bewässerung
 
-- [x] Liquid-Glass-Bereich für Tank und beide Pumpen
+- [x] klassischer Bereich für Tank und beide Pumpen
 - [x] persistente Namen und Einstellungen je Topf
 - [x] einstellbare Feuchteschwelle, Einzelmenge, Pause und Grenzen
 - [x] Eingabe der Pumpenkalibrierung und Berechnung der Dosierdauer
@@ -1080,7 +1217,7 @@ die Phasennummern sind keine zwingende Reihenfolge.
 
 ## Phase 5 – Lüfter
 
-- [x] Liquid-Glass-Karten für Zu- und Abluft
+- [x] klassische Karten für Zu- und Abluft
 - [x] getrennte Namen, AUS/MANUELL-Sollwerte und Mindestleistung speichern
 - [x] Konfigurations-/Status-API ohne Hardwareausgabe
 - [x] Lüftersymbole mit separatem Animationstest

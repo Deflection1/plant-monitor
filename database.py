@@ -18,18 +18,16 @@ DB_PATH.parent.mkdir(
 # LICHT-KALIBRIERUNG
 # =====================================================
 
-# Deine Kalibrierung:
-# 52.5 Lux entsprechen ungefähr
-# 1 µmol/m²/s PPFD
+# Vorläufige spektrale Schätzung, keine PPFD-Referenzkalibrierung.
+# 52.5 Lux entsprechen ungefähr 1 µmol/m²/s PPFD.
 LUX_PER_PPFD = 52.5
 
 
-# Verhältnis:
-# ca. 430 PPFD Pflanzenmitte
-# ca. 250 PPFD Sensorposition
-#
-# 430 / 250 ≈ 1.72
-CENTER_FACTOR = 1.72
+# SEN0501-Vergleich vom 30.09.2026 bei gleicher Dimmung:
+# Wandposition ca. 4060 Lux; mittig 24 cm über dem Topf 18000–20000 Lux.
+# Messseite am Referenzpunkt nach oben; Arbeitswert 19000 / 4060 ≈ 4.68.
+# Gilt nur für diese Positionen, Ausrichtungen und Lampengeometrie.
+CENTER_FACTOR = 4.68
 
 
 # Ab diesem Lux-Wert gilt die Lampe als eingeschaltet.
@@ -105,7 +103,9 @@ def init_db():
             "soil_raw_1",
             "soil_raw_2",
             "soil_moisture_1",
-            "soil_moisture_2"
+            "soil_moisture_2",
+            "uv_raw",
+            "uv_mw_cm2"
         ):
 
             if column not in columns:
@@ -159,9 +159,11 @@ def insert_measurement(data):
                 soil_raw_1,
                 soil_raw_2,
                 soil_moisture_1,
-                soil_moisture_2
+                soil_moisture_2,
+                uv_raw,
+                uv_mw_cm2
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             timestamp,
 
@@ -207,7 +209,9 @@ def insert_measurement(data):
 
             data.get(
                 "soil_moisture_2"
-            )
+            ),
+            data.get("uv_raw"),
+            data.get("uv_mw_cm2")
         ))
 
         db.commit()
@@ -250,6 +254,9 @@ def get_history(
 
                 AVG(lux)
                     AS lux,
+
+                AVG(uv_mw_cm2)
+                    AS uv_mw_cm2,
 
                 AVG(soil_moisture_1)
                     AS soil_moisture_1,
@@ -316,6 +323,11 @@ def get_history(
                 if row["lux"]
                 is not None
                 else None,
+
+            "uv_mw_cm2": (
+                round(row["uv_mw_cm2"], 6)
+                if row["uv_mw_cm2"] is not None else None
+            ),
 
             "soil_moisture_1":
                 round(
