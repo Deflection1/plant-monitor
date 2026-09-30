@@ -22,6 +22,64 @@ ohne die Seite neu zu laden oder Geräteeinstellungen zu verändern.
 `static/theme-switch.css` enthält die gemeinsame Auswahl und Symbolanzeige;
 die klassischen Profil-SVGs liegen separat in `static/windows-2000/`.
 
+## SEN0501-Inbetriebnahme auf `design/windows-2000`
+
+Der Sensorcode dieses Branches verwendet jetzt **SEN0501 V2.0** an
+**I²C-Bus 3 / Adresse 0x22**. Die unten beschriebenen Enviro+-Messungen und
+CPU-Korrekturen dokumentieren den bisherigen Stand von main, nicht die neue
+Messquelle dieses Branches. Beim Nutzer wurde die I²C-Erkennung bestätigt;
+echte Messwerte und Messvergleich stehen noch aus.
+
+| Gerät | Signal | Physischer Pi-Pin |
+|---|---|---:|
+| SEN0501 | + / 3,3 V | 17 |
+| SEN0501 | − / GND | 9 |
+| SEN0501 | D/T / SDA (GPIO4) | 7 |
+| SEN0501 | C/R / SCL (GPIO5) | 29 |
+| GP8600 | + / 3,3 V | 1 |
+| GP8600 | − / GND | 6 |
+| GP8600 | D / SDA (GPIO2) | 3 |
+| GP8600 | C / SCL (GPIO3) | 5 |
+
+Sensor-Schalter auf I²C. In `/boot/firmware/config.txt` unter `[all]`:
+
+```ini
+dtparam=i2c_arm=on
+dtoverlay=i2c3,pins_4_5
+```
+
+Nach Neustart müssen `i2cdetect -y 3` die Adresse 22 und
+`i2cdetect -y 1` die Adresse 58 zeigen (GP8600-Schalter A0/A1/A2 auf 0).
+Die Datenleitungspins sind getrennt; 3,3 V und GND gehören zur selben Versorgung.
+
+```bash
+cd ~/plant-monitor
+git pull --ff-only
+/home/pi/.virtualenvs/pimoroni/bin/python -m pip install smbus2
+/home/pi/.virtualenvs/pimoroni/bin/python -c 'from sensor import read_sensors; print(read_sensors())'
+sudo systemctl restart plant-monitor
+```
+
+Temperatur und RH werden ohne Enviro+-CPU-Korrektur übernommen. Lux und VPD
+verwenden das bestehende Datenmodell. `/api/current` liefert zusätzlich
+`pressure_hpa`, `uv_raw` und `sensor_model`; diese Zusatzwerte sind noch
+nicht als Diagramm oder Datenbank-History angebunden. UV wird bewusst als
+Rohwert ausgegeben: Die V2-Umrechnung der Herstellerbibliothek ist noch zu
+verifizieren; es wird kein unbestätigter UV-Index angezeigt.
+
+Beim Import wird keine Hardware geöffnet. Sensorfehler lassen die Website
+starten; die betroffenen Live-Endpunkte antworten mit HTTP 503, und der
+Messworker protokolliert den Fehler statt erfundene Messungen zu speichern.
+
+**Die GP8600-Ausgabe bleibt unverändert ausstehend.** Keine automatische
+Aktivierung der Lampe, Pumpen oder Lüfter. OUT/GND erst nach separatem
+0–10-V-Ausgangstest mit dem Lampentreiber verbinden.
+
+Die Register- und T/RH/Lux-Umrechnung folgt der
+[DFRobot-Herstellerbibliothek](https://github.com/DFRobot/DFRobot_EnvironmentalSensor/tree/7b49ec64e605dd764f0897b9a5cde4eec1afa3c4).
+
+---
+
 # Status
 
 Stand: **30.09.2026**. Der Stand von `test/overview-controls` wurde über
