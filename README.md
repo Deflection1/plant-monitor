@@ -1312,3 +1312,26 @@ Für exakte PPFD-/DLI-Werte wäre ein PAR-/Quantum-Sensor erforderlich.
 Noch nicht festgelegt.
 
 Für ein öffentliches Open-Source-Repository kann später beispielsweise eine MIT-Lizenz ergänzt werden.
+
+
+### Bewässerungsverlauf in der Übersicht
+
+Die Bewässerungskachel zeigt die letzte protokollierte Gabe, heutige Mengen
+je Topf sowie einen kompakten 7-Tage-Balkenverlauf (Zeitzone Europe/Zurich).
+Leere Historie und nicht erreichbare Daten werden getrennt angezeigt.
+Die Mengen sind aus tatsächlicher Laufzeit und der zum Vorgang gespeicherten
+Pumpenfördermenge berechnet, nicht durch einen Durchflusssensor gemessen.
+
+SQLite speichert Vorgänge dauerhaft in `watering_events`; die lesende API
+`GET /api/irrigation/history` liefert Tagesmengen, Anzahl und letzten Vorgang.
+Die interne Funktion `record_watering_event` ist für die spätere
+Hardware-Anbindung vorbereitet: erst nach Pumpenstopp mit tatsächlicher
+Laufzeit aufrufen, auch bei abgebrochenen Gaben. Eine stabile Vorgangs-ID
+verhindert doppelte Buchungen. Kalibrierläufe zählen nicht als Topfbewässerung.
+
+**Noch offen:** Der Hardware-Treiber muss diese Funktion anbinden. Aktuell
+erzeugen Einstellungen, Simulationen und Animationstests keine Einträge.
+Tagesmengen zeigen nur protokollierte Vorgänge, keine außerhalb der Software
+erfolgten Gaben. Nach dem Update den Dienst neu starten, damit die neue
+Datenbanktabelle angelegt wird. Die Historie ersetzt keine ausfallsichere
+Pumpensteuerung oder Durchsetzung der Mengenlimits.

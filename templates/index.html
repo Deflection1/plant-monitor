@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/static/style.css?v=12">
 
 <link rel="stylesheet" href="/static/overview.css?v=4">
-<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-unified-equipment-icons">
+<link rel="stylesheet" href="/static/liquid-glass.css?v=20260929-control-lamp-state">
 <meta name="theme-color" content="#102c2b">
 </head>
 
@@ -77,22 +77,22 @@
 <article class="panel overview-equipment-card">
 <header><span class="ov-equipment-icon overview-grow-lamp live-lamp-icon" data-state="unknown" role="img" aria-label="Lichtstatus unbekannt"><svg viewBox="0 0 96 96" class="glass-glyph" aria-hidden="true" focusable="false">
 <defs>
-<linearGradient id="overviewGrowShell" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#f1fcff" stop-opacity=".9"/><stop offset=".45" stop-color="#afcbd3" stop-opacity=".4"/><stop offset="1" stop-color="#608693" stop-opacity=".65"/></linearGradient>
+<linearGradient id="overviewGrowShell" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#f1fcff" stop-opacity=".9"/><stop offset=".45" stop-color="#afdae5" stop-opacity=".58"/><stop offset="1" stop-color="#659dab" stop-opacity=".78"/></linearGradient>
 <linearGradient id="overviewGrowLeaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c4ffdb" stop-opacity=".95"/><stop offset=".5" stop-color="#69dba6" stop-opacity=".8"/><stop offset="1" stop-color="#23846e" stop-opacity=".75"/></linearGradient>
 <linearGradient id="overviewGrowBeam" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffe4a2" stop-opacity=".35"/><stop offset="1" stop-color="#ffe4a2" stop-opacity="0"/></linearGradient>
 <linearGradient id="overviewGrowLight"><stop stop-color="#ffe0ab"/><stop offset=".5" stop-color="#fff5cf"/><stop offset="1" stop-color="#ffbf97"/></linearGradient>
 </defs>
 <path d="M20 7v14M25 7v14M71 7v14M76 7v14" fill="none" stroke="#c7e1e7" stroke-opacity=".75" stroke-width="1.8" stroke-linecap="round"/>
 <path class="grow-lamp-beam" d="M14 38 5 80h86L82 38Z" fill="url(#overviewGrowBeam)"/>
-<path d="M9 35V28a7 7 0 0 1 7-7h64a7 7 0 0 1 7 7v7Z" fill="url(#overviewGrowShell)" stroke="#daf4f7" stroke-opacity=".8" stroke-width="1.2"/>
-<path d="M15 25h62" fill="none" stroke="white" stroke-opacity=".7" stroke-linecap="round"/>
-<path d="M9 35h78v5H9Z" fill="#91b4bf" fill-opacity=".65" stroke="#d4edf0" stroke-opacity=".6"/>
-<path class="grow-lamp-emitter" d="M14 40h68l-3 5H17Z" fill="#6f8f9b" stroke="#c7e1e5" stroke-opacity=".6"/>
+<path d="M9 35V28a7 7 0 0 1 7-7h64a7 7 0 0 1 7 7v7Z" fill="url(#overviewGrowShell)" stroke="#e0f8ff" stroke-opacity=".95" stroke-width="1.8"/>
+<path d="M15 25h62" fill="none" stroke="white" stroke-opacity=".85" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M9 35h78v5H9Z" fill="#9ad0df" fill-opacity=".8" stroke="#d4edf0" stroke-opacity=".8" stroke-width="1.4"/>
+<path class="grow-lamp-emitter" d="M14 40h68l-3 5H17Z" fill="#6f8f9b" stroke="#d4eff3" stroke-opacity=".8" stroke-width="1.3"/>
 <g class="grow-lamp-rays" fill="none" stroke="#ffe5b1" stroke-width="2" stroke-linecap="round">
 <path d="m20 50-3 6m17-6-2 6m16-6v6m14-6 2 6m12-6 3 6"/>
 </g>
-<path d="M48 78C37 60 18 57 15 67c-4 13 18 12 33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".7" stroke-width="1"/>
-<path d="M48 78c11-18 30-21 33-11 4 13-18 12-33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".7" stroke-width="1"/>
+<path d="M48 78C37 60 18 57 15 67c-4 13 18 12 33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".8" stroke-width="1.3"/>
+<path d="M48 78c11-18 30-21 33-11 4 13-18 12-33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".8" stroke-width="1.3"/>
 <path d="M28 69q12 0 20 9m20-9q-12 0-20 9v10" fill="none" stroke="#d1ffe4" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/>
 <path d="M12 89q16-3 36-1t36-2" fill="none" stroke="#aacfc4" stroke-opacity=".6" stroke-width="1.4" stroke-linecap="round"/>
 <path d="M19 66q9-4 19 4M59 70q10-8 17-5" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1" stroke-linecap="round"/>
@@ -144,7 +144,12 @@
 <path d="M78 57v12q0 9-9 9" fill="none" stroke="#dbffff" stroke-opacity=".42" stroke-width="1.2" stroke-linecap="round"/>
 <g class="tank-unknown-mark" fill="none" stroke="#d2e4ed" stroke-width="2.4" stroke-linecap="round"><path d="M43 51c0-7 12-7 12 0 0 4-6 4-6 9"/><path d="M49 66v.3"/></g>
 <g class="tank-empty-mark" stroke="#ffd8db" stroke-width="2.7" stroke-linecap="round"><path d="M49 46v12M49 64v.3"/></g>
-</svg></span><span id="ovWaterTank">—</span></dd></div><div><dt>Letzte Bewässerung</dt><dd id="ovWaterLast">—</dd></div></dl><a href="#steuerung" data-control-target="irrigationControlSection">Zur Bewässerung →</a>
+</svg></span><span id="ovWaterTank">—</span></dd></div><div><dt>Letzte Bewässerung</dt><dd id="ovWaterLast">—</dd></div></dl><div class="watering-history">
+<div class="watering-today"><span>Heute · protokolliert</span><strong id="ovWaterToday">—</strong></div>
+<div class="watering-history-heading"><span>Letzte 7 Tage · ml</span><span><i class="water-key pot-one"></i>Topf 1 <i class="water-key pot-two"></i>Topf 2</span></div>
+<div class="watering-chart-wrap"><canvas id="ovWaterChart" role="img" aria-label="Bewässerung pro Tag und Topf"></canvas><p id="ovWaterEmpty" role="status">Verlauf wird geladen …</p></div>
+<p class="watering-estimate">Mengen aus Laufzeit und Kalibrierung berechnet.</p>
+</div><a href="#steuerung" data-control-target="irrigationControlSection">Zur Bewässerung →</a>
 </article>
 <article class="panel overview-equipment-card">
 <header><div class="ov-equipment-icon"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
@@ -671,8 +676,8 @@
 
             <div class="lamp-control-heading">
 
-                <span class="glass-icon glass-icon--lamp-control" aria-hidden="true">
-                    <svg viewBox="0 0 48 48" class="glass-glyph" focusable="false">
+                <span class="glass-icon glass-icon--lamp-control lamp-control-state-icon" data-state="unknown" role="img" aria-label="Lichtstatus unbekannt">
+                    <svg aria-hidden="true" viewBox="0 0 48 48" class="glass-glyph" focusable="false">
                         <defs>
                             <linearGradient id="glass-lamp-control-body" x1="0" y1="0" x2="1" y2="1">
                                 <stop stop-color="#fff2b6"/>
@@ -686,21 +691,21 @@
                             </linearGradient>
                         </defs>
 
-                        <rect x="9" y="8" width="30" height="9" rx="4.5"
+                        <rect class="control-lamp-body" x="9" y="8" width="30" height="9" rx="4.5"
                               fill="url(#glass-lamp-control-body)"
                               stroke="#fff4c7" stroke-opacity=".7" stroke-width="1.2"/>
 
-                        <path d="M14 8V5M34 8V5"
+                        <path class="control-lamp-wire" d="M14 8V5M34 8V5"
                               stroke="#ffd978" stroke-width="1.8" stroke-linecap="round"/>
 
-                        <path d="M16 21L13 29M24 21V31M32 21L35 29"
+                        <path class="control-lamp-rays" d="M16 21L13 29M24 21V31M32 21L35 29"
                               stroke="#ffd46b" stroke-width="2.2" stroke-linecap="round"/>
 
                         <rect x="11" y="35" width="26" height="4" rx="2"
                               fill="rgba(255,255,255,.12)"
                               stroke="rgba(255,241,195,.35)" stroke-width="1"/>
 
-                        <circle cx="29" cy="37" r="4"
+                        <circle class="control-lamp-slider" cx="29" cy="37" r="4"
                                 fill="url(#glass-lamp-control-slider)"
                                 stroke="#fff1c0" stroke-opacity=".75" stroke-width="1.2"/>
                     </svg>
@@ -937,29 +942,7 @@
 
         <p class="camera-meta">Zwei getrennte Pumpen · gemeinsamer Tank · noch keine Pumpenansteuerung</p>
         <div class="lamp-control-grid water-top-grid">
-            <article class="lamp-control-card">
-                <span class="tank-symbol" data-tank-state="unknown" role="img" aria-label="Tankstatus unbekannt">
-<svg viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="tank-control-shell" x1="17" y1="24" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#e7ffff" stop-opacity=".52"/><stop offset=".5" stop-color="#9ccee0" stop-opacity=".13"/><stop offset="1" stop-color="#8acbde" stop-opacity=".38"/></linearGradient>
-<linearGradient id="tank-control-water" x1="27" y1="40" x2="73" y2="82" gradientUnits="userSpaceOnUse"><stop class="tank-liquid-light" stop-color="var(--tank-light)"/><stop offset="1" class="tank-liquid-dark" stop-color="var(--tank-dark)"/></linearGradient>
-</defs>
-<path d="M25 27V18h17v9" fill="url(#tank-control-shell)" stroke="#c5ecf1" stroke-opacity=".65" stroke-width="1.2"/>
-<rect x="20" y="9" width="28" height="12" rx="4" fill="url(#tank-control-shell)" stroke="#d9faff" stroke-opacity=".75"/>
-<path d="M25 13h18" stroke="white" stroke-opacity=".65" stroke-linecap="round"/>
-<rect x="10" y="27" width="76" height="58" rx="15" fill="url(#tank-control-shell)" stroke="#d7faff" stroke-opacity=".7" stroke-width="1.3"/>
-<path class="tank-fill-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46V70Q81 80 70 80H26Q15 80 15 70Z" fill="url(#tank-control-water)" fill-opacity=".86"/>
-<path class="tank-fill-empty" d="M15 72Q23 69 31 72T47 72T63 72T81 72Q80 80 70 80H26Q16 80 15 72Z" fill="url(#tank-control-water)" fill-opacity=".9"/>
-<path class="tank-wave-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46" fill="none" stroke="var(--tank-light)" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M16 50V42q0-9 10-9h30" fill="none" stroke="white" stroke-opacity=".62" stroke-width="1.7" stroke-linecap="round"/>
-<path d="M78 57v12q0 9-9 9" fill="none" stroke="#dbffff" stroke-opacity=".42" stroke-width="1.2" stroke-linecap="round"/>
-<g class="tank-unknown-mark" fill="none" stroke="#d2e4ed" stroke-width="2.4" stroke-linecap="round"><path d="M43 51c0-7 12-7 12 0 0 4-6 4-6 9"/><path d="M49 66v.3"/></g>
-<g class="tank-empty-mark" stroke="#ffd8db" stroke-width="2.7" stroke-linecap="round"><path d="M49 46v12M49 64v.3"/></g>
-</svg></span>
-<span class="lamp-control-label" id="irrigationTankName">Wassertank</span>
-                <strong id="irrigationTankState">Tankstatus unbekannt</strong>
-                <small>WLSW1 noch nicht angebunden. Der Schalter erkennt den Tankzustand, keinen Füllstand in Prozent.</small>
-            </article>
+            
             <article class="lamp-control-card">
                 <div class="soil-card integrated-soil-reading">
 
@@ -1102,6 +1085,29 @@
                 <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
                 <button type="button" class="pump-preview-button" data-pump-preview="2" aria-describedby="pumpPreviewNote2">Animation testen</button>
                 <small id="pumpPreviewNote2" role="status">Symbolvorschau ohne Pumpenansteuerung</small>
+            </article>
+<article class="lamp-control-card water-tank-card">
+                <span class="tank-symbol" data-tank-state="unknown" role="img" aria-label="Tankstatus unbekannt">
+<svg viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="tank-control-shell" x1="17" y1="24" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#e7ffff" stop-opacity=".52"/><stop offset=".5" stop-color="#9ccee0" stop-opacity=".13"/><stop offset="1" stop-color="#8acbde" stop-opacity=".38"/></linearGradient>
+<linearGradient id="tank-control-water" x1="27" y1="40" x2="73" y2="82" gradientUnits="userSpaceOnUse"><stop class="tank-liquid-light" stop-color="var(--tank-light)"/><stop offset="1" class="tank-liquid-dark" stop-color="var(--tank-dark)"/></linearGradient>
+</defs>
+<path d="M25 27V18h17v9" fill="url(#tank-control-shell)" stroke="#c5ecf1" stroke-opacity=".65" stroke-width="1.2"/>
+<rect x="20" y="9" width="28" height="12" rx="4" fill="url(#tank-control-shell)" stroke="#d9faff" stroke-opacity=".75"/>
+<path d="M25 13h18" stroke="white" stroke-opacity=".65" stroke-linecap="round"/>
+<rect x="10" y="27" width="76" height="58" rx="15" fill="url(#tank-control-shell)" stroke="#d7faff" stroke-opacity=".7" stroke-width="1.3"/>
+<path class="tank-fill-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46V70Q81 80 70 80H26Q15 80 15 70Z" fill="url(#tank-control-water)" fill-opacity=".86"/>
+<path class="tank-fill-empty" d="M15 72Q23 69 31 72T47 72T63 72T81 72Q80 80 70 80H26Q16 80 15 72Z" fill="url(#tank-control-water)" fill-opacity=".9"/>
+<path class="tank-wave-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46" fill="none" stroke="var(--tank-light)" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M16 50V42q0-9 10-9h30" fill="none" stroke="white" stroke-opacity=".62" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M78 57v12q0 9-9 9" fill="none" stroke="#dbffff" stroke-opacity=".42" stroke-width="1.2" stroke-linecap="round"/>
+<g class="tank-unknown-mark" fill="none" stroke="#d2e4ed" stroke-width="2.4" stroke-linecap="round"><path d="M43 51c0-7 12-7 12 0 0 4-6 4-6 9"/><path d="M49 66v.3"/></g>
+<g class="tank-empty-mark" stroke="#ffd8db" stroke-width="2.7" stroke-linecap="round"><path d="M49 46v12M49 64v.3"/></g>
+</svg></span>
+<span class="lamp-control-label" id="irrigationTankName">Wassertank</span>
+                <strong id="irrigationTankState">Tankstatus unbekannt</strong>
+                <small>WLSW1 noch nicht angebunden. Der Schalter erkennt den Tankzustand, keinen Füllstand in Prozent.</small>
             </article>
         </div>
         <p class="camera-meta" id="irrigationUnavailable">Ausgabe gesperrt: GPIO-Anbindung, Live-Tankstatus und Pumpentreiber fehlen. Gespeicherte Automatik-Einstellungen starten keine Bewässerung.</p>
@@ -1295,19 +1301,20 @@
 <div class="fan-grid"><section class="lamp-config-card"><h3>Zuluft unten</h3>
 <label>Name<input id="fanName-intake" value="Zuluft unten" maxlength="40" required></label>
 <label>Modus<select id="fanMode-intake"><option value="off">AUS</option><option value="manual">MANUELL (vorgemerkt)</option><option disabled>AUTO – später verfügbar</option></select></label>
-<label>Gewünschte Leistung (%)<input id="fanPower-intake" type="number" min="0" max="100" step="1" value="0" required></label>
+<label for="fanPowerSlider-intake">Gewünschte Leistung (%)</label><div class="fan-range-row"><input id="fanPowerSlider-intake" type="range" min="0" max="100" step="1" value="0" aria-describedby="fanDraft-intake"><div class="fan-percent-input"><input id="fanPower-intake" type="number" min="0" max="100" step="1" value="0" required aria-label="Gewünschte Leistung (%) – Zuluft"><span aria-hidden="true">%</span></div></div>
 <p class="camera-meta" id="fanDraft-intake" aria-live="polite">Vorgemerkter Sollwert: 0 %</p>
-<details class="advanced-settings"><summary>Technische Einstellung</summary><label>Mindestleistung bei Betrieb (%)<input id="fanMinimum-intake" type="number" min="0" max="100" step="1" value="0" required></label>
+<details class="advanced-settings"><summary>Technische Einstellung</summary><label for="fanMinimumSlider-intake">Mindestleistung bei Betrieb (%)</label><div class="fan-range-row"><input id="fanMinimumSlider-intake" type="range" min="0" max="100" step="1" value="0" aria-describedby="fanDraft-intake"><div class="fan-percent-input"><input id="fanMinimum-intake" type="number" min="0" max="100" step="1" value="0" required aria-label="Mindestleistung bei Betrieb (%) – Zuluft"><span aria-hidden="true">%</span></div></div>
 </details></section><section class="lamp-config-card"><h3>Abluft oben</h3>
 <label>Name<input id="fanName-exhaust" value="Abluft oben" maxlength="40" required></label>
 <label>Modus<select id="fanMode-exhaust"><option value="off">AUS</option><option value="manual">MANUELL (vorgemerkt)</option><option disabled>AUTO – später verfügbar</option></select></label>
-<label>Gewünschte Leistung (%)<input id="fanPower-exhaust" type="number" min="0" max="100" step="1" value="0" required></label>
+<label for="fanPowerSlider-exhaust">Gewünschte Leistung (%)</label><div class="fan-range-row"><input id="fanPowerSlider-exhaust" type="range" min="0" max="100" step="1" value="0" aria-describedby="fanDraft-exhaust"><div class="fan-percent-input"><input id="fanPower-exhaust" type="number" min="0" max="100" step="1" value="0" required aria-label="Gewünschte Leistung (%) – Abluft"><span aria-hidden="true">%</span></div></div>
 <p class="camera-meta" id="fanDraft-exhaust" aria-live="polite">Vorgemerkter Sollwert: 0 %</p>
-<details class="advanced-settings"><summary>Technische Einstellung</summary><label>Mindestleistung bei Betrieb (%)<input id="fanMinimum-exhaust" type="number" min="0" max="100" step="1" value="0" required></label>
+<details class="advanced-settings"><summary>Technische Einstellung</summary><label for="fanMinimumSlider-exhaust">Mindestleistung bei Betrieb (%)</label><div class="fan-range-row"><input id="fanMinimumSlider-exhaust" type="range" min="0" max="100" step="1" value="0" aria-describedby="fanDraft-exhaust"><div class="fan-percent-input"><input id="fanMinimum-exhaust" type="number" min="0" max="100" step="1" value="0" required aria-label="Mindestleistung bei Betrieb (%) – Abluft"><span aria-hidden="true">%</span></div></div>
 </details></section></div>
+<div class="fan-form-actions"><button type="submit" class="primary">Einstellungen speichern</button></div>
 <p class="camera-meta">AUS und 0 % ergeben einen Sollwert von 0 %. Bei positivem manuellem Wert gilt mindestens die eingestellte Mindestleistung. Diese Werte sind noch keine gemessene Drehzahl oder tatsächliche PWM-Ausgabe.</p>
 <p class="camera-meta">Die Mindestleistung muss später am Lüfter geprüft werden. Ob Zu- und Abluft unabhängig ansteuerbar sind, hängt von der noch offenen Kanalzuordnung am NA-FC1 ab.</p>
-<button type="submit" class="primary">Einstellungen speichern</button>
+
 </fieldset><p id="fanMessage" class="camera-meta" role="status" aria-live="polite">Einstellungen werden geladen …</p><button type="button" id="fanRetry" hidden>Erneut laden</button></form>
 </details></section>
 
@@ -1580,9 +1587,9 @@
 <script src="/static/overview.js?v=8"></script>
 <script src="/static/tank-status.js?v=1"></script>
 <script src="/static/pump-icons.js?v=2"></script>
-<script src="/static/fans.js?v=1"></script>
-<script src="/static/overview-equipment.js?v=3"></script>
-<script src="/static/layout.js?v=2"></script><script src="/static/lamp-visual.js?v=2"></script>
+<script src="/static/fans.js?v=2"></script>
+<script src="/static/overview-equipment.js?v=4"></script>
+<script src="/static/layout.js?v=2"></script><script src="/static/lamp-visual.js?v=3"></script>
 </body>
 
 </html>

@@ -50,6 +50,7 @@ from database import (
     insert_measurement,
     get_history,
     get_light_today,
+    get_watering_history,
     lux_to_ppfd,
     CENTER_FACTOR,
     LIGHT_ON_LUX,
@@ -936,6 +937,11 @@ def irrigation_preview(payload: dict = Body(...)):
         used_today_ml=payload.get("used_today_ml"),
     )
     return {"simulation": True, "output_available": False, **decision}
+
+
+@app.get("/api/irrigation/history")
+def irrigation_history_read():
+    return get_watering_history()
 
 
 @app.get("/api/irrigation/status")

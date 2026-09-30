@@ -1,9 +1,9 @@
 // Light detected by the existing lux sensor, not inferred from the saved dimmer setting.
 (() => {
-    const icons = document.querySelectorAll(".live-lamp-icon");
+    const icons = document.querySelectorAll(".live-lamp-icon, .lamp-control-state-icon");
     const label = document.getElementById("ovLampLiveState");
     const note = document.getElementById("ovLampLiveNote");
-    if (!note) return;
+    if (!icons.length && !note) return;
     let receivedAt = null;
     function render(state, lux) {
         const text = state === "on" ? "Licht erkannt" :
@@ -13,7 +13,7 @@
             icon.setAttribute("aria-label", text);
         });
         if (label) label.textContent = text;
-        note.textContent = state === "unknown" ? "— Lux" :
+        if (note) note.textContent = state === "unknown" ? "— Lux" :
             lux.toLocaleString("de-CH", {maximumFractionDigits:1}) + " Lux";
     }
     window.addEventListener("plant:current", event => {

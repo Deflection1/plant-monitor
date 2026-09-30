@@ -15,6 +15,14 @@
     });
     function preview(id) {
         const fan = read(id);
+        for (const prefix of ["fanPower", "fanMinimum"]) {
+            const number = $(prefix + "-" + id);
+            const slider = $(prefix + "Slider-" + id);
+            if (slider && number.value !== "" && number.validity.valid) {
+                slider.value = number.value;
+                slider.setAttribute("aria-valuetext", number.value + " Prozent");
+            }
+        }
         $("fanDraft-" + id).textContent =
             fan.power_percent === null || fan.minimum_percent === null
             ? "Bitte beide Prozentwerte ausfüllen."
@@ -84,6 +92,14 @@
     });
     ids.forEach(id => ["fanMode-", "fanPower-", "fanMinimum-"].forEach(prefix =>
         $(prefix + id).addEventListener("input", () => preview(id))));
+    ids.forEach(id => ["fanPower", "fanMinimum"].forEach(prefix => {
+        const slider = $(prefix + "Slider-" + id);
+        if (!slider) return;
+        slider.addEventListener("input", () => {
+            $(prefix + "-" + id).value = slider.value;
+            preview(id);
+        });
+    }));
     document.querySelectorAll("[data-fan]").forEach(button => {
         button.addEventListener("click", () => {
             const id = button.dataset.fan;

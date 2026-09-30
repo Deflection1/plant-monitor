@@ -14,7 +14,7 @@
     }
     const fields = {
         lamp: ["ovLampProfile", "ovLampPower", "ovLampSchedule", "ovLampActual"],
-        water: ["ovWaterTank", "ovWaterPot1", "ovWaterPot2", "ovWaterLast"],
+        water: ["ovWaterTank", "ovWaterPot1", "ovWaterPot2"],
         fan: ["ovFanIntake", "ovFanExhaust", "ovFanActual"]
     };
     function failed(group) {
@@ -53,8 +53,7 @@
             const dose = number(p.dose_ml) ? fmt(p.dose_ml) + " ml je Gabe" : "Menge offen";
             set("ovWaterPot" + id, (p.enabled === true ? "Automatik vorgemerkt" : "Automatik aus") + " · " + dose);
         }
-        // Backend does not yet record events. Do not infer watering from settings.
-        set("ovWaterLast", "Noch nicht protokolliert");
+
     }
     function fans(config, status) {
         if (!Array.isArray(config?.fans) || !Array.isArray(status?.fans)) throw new Error("Invalid fan configuration");
@@ -71,6 +70,76 @@
         }
         set("ovFanActual", available(status) ? outputs.join(" / ") : "Nicht verfügbar");
     }
+
+    let waterChart = null;
+    const waterNumber = value => typeof value === "number" && Number.isFinite(value) && value >= 0;
+    function historyUnavailable() {
+        if (waterChart) { waterChart.destroy(); waterChart = null; }
+        $("ovWaterChart").hidden = true;
+        $("ovWaterEmpty").hidden = false;
+        $("ovWaterEmpty").textContent = "Bewässerungsverlauf nicht erreichbar";
+        set("ovWaterToday", "—");
+        set("ovWaterLast", "Nicht erreichbar");
+    }
+    function wateringHistory(data) {
+        if (!Array.isArray(data?.days) || data.days.length !== 7 ||
+            !Array.isArray(data.today_ml) || data.today_ml.length !== 2 || !data.today_ml.every(waterNumber) ||
+            !data.days.every(d => /^\d{4}-\d{2}-\d{2}$/.test(d.date) &&
+                Array.isArray(d.ml) && d.ml.length === 2 && d.ml.every(waterNumber) &&
+                Array.isArray(d.counts) && d.counts.length === 2 && d.counts.every(v => Number.isInteger(v) && v >= 0))) {
+            throw new Error("Invalid watering history");
+        }
+        const last = data.last;
+        if (last && (!waterNumber(last.timestamp) || ![1,2].includes(last.pot_id) || !waterNumber(last.ml))) {
+            throw new Error("Invalid last watering");
+        }
+        const stamp = ts => new Date(ts * 1000).toLocaleString("de-CH", {
+            timeZone:"Europe/Zurich", day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"
+        });
+        set("ovWaterLast", last ? stamp(last.timestamp) + " · Topf " + last.pot_id + " · " + fmt(last.ml) + " ml" : "Noch keine aufgezeichnet");
+        set("ovWaterToday", "Topf 1: " + fmt(data.today_ml[0]) + " ml · Topf 2: " + fmt(data.today_ml[1]) + " ml");
+        const any = data.days.some(d => d.counts.some(v => v > 0));
+        $("ovWaterEmpty").hidden = any;
+        $("ovWaterEmpty").textContent = last ? "Keine Bewässerung in den letzten 7 Tagen" : "Noch keine Bewässerungen aufgezeichnet";
+        const canvas = $("ovWaterChart");
+        canvas.hidden = !any;
+        if (!any) {
+            if (waterChart) { waterChart.destroy(); waterChart = null; }
+            return;
+        }
+        const chartData = {
+            labels:data.days.map(d => d.date.slice(8,10) + "." + d.date.slice(5,7)),
+            datasets:[0,1].map(i => ({
+                label:"Topf " + (i+1), data:data.days.map(d => d.ml[i]),
+                backgroundColor:i === 0 ? "#68d7ba" : "#71b9ee",
+                borderRadius:3, maxBarThickness:12
+            }))
+        };
+        const summary = data.days.map(d => d.date + ": Topf 1 " + fmt(d.ml[0]) + " ml, Topf 2 " + fmt(d.ml[1]) + " ml").join("; ");
+        canvas.setAttribute("aria-label", summary);
+        const tooltip = context => {
+            const count = data.days[context.dataIndex].counts[context.datasetIndex];
+            return context.dataset.label + ": " + fmt(context.parsed.y) + " ml · " + count + " Vorgänge";
+        };
+        if (waterChart) {
+            waterChart.data = chartData;
+            waterChart.options.plugins.tooltip.callbacks.label = tooltip;
+            waterChart.update("none");
+        } else {
+            waterChart = new Chart(canvas, {
+                type:"bar", data:chartData,
+                options:{
+                    responsive:true, maintainAspectRatio:false, animation:false,
+                    plugins:{legend:{display:false},tooltip:{callbacks:{label:tooltip}}},
+                    scales:{
+                        x:{grid:{display:false},ticks:{color:"#b9d1cb",font:{size:10},maxRotation:0}},
+                        y:{beginAtZero:true,grid:{color:"rgba(190,230,220,.08)"},ticks:{color:"#b9d1cb",maxTicksLimit:3,font:{size:9}}}
+                    }
+                }
+            });
+        }
+    }
+
     async function get(path) {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), 8000);
@@ -86,6 +155,7 @@
         if (busy) { again = true; return; }
         busy = true;
         const results = await Promise.allSettled([
+            get("/api/irrigation/history").then(wateringHistory).catch(error => {historyUnavailable(); throw error;}),
             get("/api/light/status").then(lamp).catch(error => {failed("lamp"); throw error;}),
             Promise.all([get("/api/irrigation/config"),get("/api/irrigation/status")])
                 .then(([c,s]) => water(c,s)).catch(error => {failed("water"); throw error;}),
