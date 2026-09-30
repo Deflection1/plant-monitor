@@ -1260,8 +1260,8 @@ function updateLampControlPreview() {
 
     if (profile === "flower" || profile === "growth") {
         const iconPath = profile === "growth"
-            ? "/static/profile-growth.svg?v=1"
-            : "/static/profile-flower.svg?v=2";
+            ? "/static/profile-growth.svg?v=classic-2"
+            : "/static/profile-flower.svg?v=classic-2";
         if (profileImage.getAttribute("src") !== iconPath) {
             profileImage.setAttribute("src", iconPath);
         }

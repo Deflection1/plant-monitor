@@ -36,7 +36,7 @@
         const scheduled = c.schedule_enabled === true;
         set("ovLampSchedule", scheduled ? "Vorgemerkt" : "Deaktiviert");
         set("ovLampActual", available(status) ? percent(status.output_percent) : "Nicht verfügbar");
-        const path = {growth:"/static/profile-growth.svg?v=1",flower:"/static/profile-flower.svg?v=2"}[c.profile];
+        const path = {growth:"/static/profile-growth.svg?v=classic-2",flower:"/static/profile-flower.svg?v=classic-2"}[c.profile];
         $("ovLampProfileIcon").hidden = !path;
         $("ovLampFallback").hidden = !!path;
         if (path && $("ovLampProfileIcon").getAttribute("src") !== path) $("ovLampProfileIcon").setAttribute("src", path);

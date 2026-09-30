@@ -10,7 +10,7 @@
     <title>
         Pflanzenschrank
     </title>
-<link rel="stylesheet" href="/static/windows-2000.css?v=1">
+<link rel="stylesheet" href="/static/windows-2000.css?v=2">
 <meta name="theme-color" content="#3a6ea5">
 </head>
 
@@ -31,7 +31,7 @@
             </p>
 
             <h1>
-                <svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8m0 4c-5 0-8-3-8-7 5 0 8 2 8 7Zm0-3c0-5 3-8 8-8 0 5-3 8-8 8Z"/><path d="M9 21h6"/></svg> Pflanzenschrank
+                <svg viewBox="0 0 48 48" class="line-icon classic-icon" aria-hidden="true" focusable="false"><path d="M24 33V17" stroke="#004000" stroke-width="2"/><path d="M24 25H16V21H12V12H17V15H21V19H24Zm0-7h7v-4h5V5h-6v4h-4v4h-2Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="M12 32h24v5h-3v7H15v-7h-3Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M15 34h18M17 38v4" stroke="#e8c890" stroke-width="2"/></svg> Pflanzenschrank
             </h1>
 
             <p class="subtitle">
@@ -55,92 +55,28 @@
 
 
 <nav class="view-switch" aria-label="Dashboard-Ansicht">
-    <button type="button" data-view="overview" aria-pressed="true"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Übersicht</button>
-    <button type="button" data-view="controls" aria-pressed="false"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h6m4 0h6M4 17h10m4 0h2"/><circle cx="12" cy="7" r="2"/><circle cx="16" cy="17" r="2"/></svg>Steuerung</button>
+    <button type="button" data-view="overview" aria-pressed="true"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="0"/><rect x="14" y="3" width="7" height="7" rx="0"/><rect x="3" y="14" width="7" height="7" rx="0"/><rect x="14" y="14" width="7" height="7" rx="0"/></svg>Übersicht</button>
+    <button type="button" data-view="controls" aria-pressed="false"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M4 7h6m4 0h6M4 17h10m4 0h2"/><circle cx="12" cy="7" r="2"/><circle cx="16" cy="17" r="2"/></svg>Steuerung</button>
 </nav>
 <div class="overview-freshness" id="overviewFreshness" role="status">Verbindung wird geprüft …</div>
 <main id="overviewView" aria-label="Pflanzenübersicht">
 <div class="overview-heading"><div><p class="eyebrow">PFLANZEN &amp; UMGEBUNG</p><h2>Pflanzenübersicht</h2></div><p>Pflanzen · Klima · Wachstum</p></div>
 <section class="overview-climate" aria-label="Klima und Licht">
-<article class="overview-stat metric-temperature"><span class="glass-icon glass-icon--temperature" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-temperature-5" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff8080"/><stop offset=".48" stop-color="#cc2020"/><stop offset="1" stop-color="#800000"/></linearGradient></defs><path d="M19 29V12a5 5 0 0 1 10 0v17a9 9 0 1 1-10 0Z" fill="url(#glass-temperature-5)" stroke="#ffdbc5" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 15v20" stroke="#fff7ed" stroke-opacity=".8" stroke-width="3.5" stroke-linecap="round"/><circle cx="24" cy="35" r="4" fill="#fff1df" fill-opacity=".9"/><path d="M32 15h5m-5 7h3" stroke="#ffc6b8" stroke-width="2" stroke-linecap="round"/></svg></span><div><span class="reading-label">Temperatur</span><strong><span id="ovTemperature">—</span><small> °C</small></strong><p>Korrigierter Wert</p></div></article>
-<article class="overview-stat metric-humidity"><span class="glass-icon glass-icon--humidity" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-humidity-6" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a6caf0"/><stop offset=".48" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient></defs><path d="M28 6S15 21 15 30a13 13 0 0 0 26 0C41 21 28 6 28 6Z" fill="url(#glass-humidity-6)" stroke="#c7ffff" stroke-opacity=".65" stroke-width="1.2"/><path d="M11 10S4 19 4 24a7 7 0 0 0 11 5" fill="#89e9ff" fill-opacity=".45" stroke="#c6f7ff" stroke-opacity=".6" stroke-width="1.2"/><path d="M22 29c-1 5 2 8 5 8" fill="none" stroke="#e5ffff" stroke-opacity=".85" stroke-width="2.5" stroke-linecap="round"/></svg></span><div><span class="reading-label">Luftfeuchtigkeit</span><strong><span id="ovHumidity">—</span><small> %</small></strong><p>Relative Feuchte</p></div></article>
-<article class="overview-stat metric-vpd"><span class="glass-icon glass-icon--vpd" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-vpd-7" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#80c080"/><stop offset=".48" stop-color="#008000"/><stop offset="1" stop-color="#004000"/></linearGradient></defs><path d="M10 34C1 13 27 9 40 7c1 14-3 36-23 32" fill="url(#glass-vpd-7)" stroke="#e4ffc0" stroke-opacity=".65" stroke-width="1.2"/><path d="M8 42c5-13 12-21 23-27M19 27l-1-8m1 8 10 1" fill="none" stroke="#ebffdb" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/></svg></span><div><span class="reading-label">VPD</span><strong><span id="ovVpd">—</span><small> kPa</small></strong><p>Berechnet</p></div></article>
-<article class="overview-stat metric-light"><span class="glass-icon glass-icon--light js-light-state-icon" data-state="off" aria-hidden="true"><svg class="glass-glyph light-state-sun" viewBox="0 0 48 48" focusable="false"><defs><linearGradient id="glass-light-overview" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffff80"/><stop offset=".48" stop-color="#ffcc00"/><stop offset="1" stop-color="#a08000"/></linearGradient></defs><g stroke="#ffc64f" stroke-width="2.5" stroke-linecap="round"><path d="M24 3v5m0 32v5M3 24h5m32 0h5M9 9l4 4m22 22 4 4M9 39l4-4m22-22 4-4"/></g><circle cx="24" cy="24" r="11" fill="url(#glass-light-overview)" stroke="#fff4bf" stroke-opacity=".65" stroke-width="1.2"/><path d="M17 23a7 7 0 0 1 7-7" fill="none" stroke="#fff9df" stroke-width="2" stroke-linecap="round"/></svg><svg class="glass-glyph light-state-moon" viewBox="0 0 48 48" fill="none" focusable="false"><path d="M34 37c-13 2-22-7-20-20 1-6 5-10 10-13-2 12 7 21 19 18-1 7-4 12-9 15Z" fill="#d7ecff" fill-opacity=".8" stroke="#eff8ff" stroke-opacity=".75" stroke-width="1.3"/><path d="M31 12h1m7 5h1m-6 8h1" stroke="#fff7c7" stroke-width="2.5" stroke-linecap="round"/></svg></span><div><span class="reading-label">Licht</span><strong><span id="ovLux">—</span><small> Lux</small></strong><p><span id="ovLight">—</span> · am Sensor</p></div></article>
+<article class="overview-stat metric-temperature"><span class="glass-icon glass-icon--temperature" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M19 29V9l3-4h4l3 4v20l5 5v6l-4 4H18l-4-4v-6Z" fill="#ffffff" stroke="#404040" stroke-width="2"/><path d="M23 15h2v18h5v7H18v-7h5Z" fill="#cc2020"/><path d="M32 10h7m-7 6h4m-4 6h7" stroke="#404040" stroke-width="2"/></svg></span><div><span class="reading-label">Temperatur</span><strong><span id="ovTemperature">—</span><small> °C</small></strong><p>Korrigierter Wert</p></div></article>
+<article class="overview-stat metric-humidity"><span class="glass-icon glass-icon--humidity" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 5 10 25v10l5 7h18l5-7V25Z" fill="#387bd4" stroke="#000080" stroke-width="2"/><path d="m24 9-10 17v9l3 4" fill="none" stroke="#a6caf0" stroke-width="3"/><path d="M28 37h5v-8" fill="none" stroke="#000080" stroke-width="2"/></svg></span><div><span class="reading-label">Luftfeuchtigkeit</span><strong><span id="ovHumidity">—</span><small> %</small></strong><p>Relative Feuchte</p></div></article>
+<article class="overview-stat metric-vpd"><span class="glass-icon glass-icon--vpd" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M8 34V20h4v-6h8v-4h20v16h-4v8h-8v4H12Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="m8 42 24-24m-10 6v-8m-6 14h12" fill="none" stroke="#80c080" stroke-width="2"/></svg></span><div><span class="reading-label">VPD</span><strong><span id="ovVpd">—</span><small> kPa</small></strong><p>Berechnet</p></div></article>
+<article class="overview-stat metric-light"><span class="glass-icon glass-icon--light js-light-state-icon" data-state="off" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph light-state-sun classic-icon" aria-hidden="true" focusable="false"><path d="M24 2v6m0 32v6M2 24h6m32 0h6M8 8l5 5m22 22 5 5M8 40l5-5m22-22 5-5" stroke="#a08000" stroke-width="2"/><path d="M18 12h12l6 6v12l-6 6H18l-6-6V18Z" fill="#ffcc00" stroke="#806000" stroke-width="2"/><path d="M19 15h10M15 19v10" stroke="#ffff80" stroke-width="2"/></svg><svg viewBox="0 0 48 48" class="glass-glyph light-state-moon classic-icon" aria-hidden="true" focusable="false"><path d="M24 5H14l-7 7v19l7 9h17l10-10H28l-8-8V12Z" fill="#c0c0c0" stroke="#404040" stroke-width="2"/><path d="M16 8h5M10 15v15l6 7" fill="none" stroke="#ffffff" stroke-width="2"/><path d="M35 6v8m-4-4h8M39 18v6m-3-3h6" stroke="#000080" stroke-width="2"/></svg></span><div><span class="reading-label">Licht</span><strong><span id="ovLux">—</span><small> Lux</small></strong><p><span id="ovLight">—</span> · am Sensor</p></div></article>
 </section>
-<section class="overview-pots" aria-label="Deine Pflanzen"><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-plant-9" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#80c080"/><stop offset=".48" stop-color="#008000"/><stop offset="1" stop-color="#004000"/></linearGradient></defs><path d="M24 35C7 36 5 25 6 17c11-1 19 5 18 18Z" fill="url(#glass-plant-9)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 27c-1-13 7-19 18-19 1 12-7 20-18 19Z" fill="url(#glass-plant-9)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 43V25M24 34 13 24m11 3 10-10" fill="none" stroke="#e7ffdb" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 01</p><h3 id="ovName1">Topf 1</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil1">—</strong><p id="ovSoilNote1">Messwert ausstehend</p><progress id="ovProgress1" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 1" hidden></progress></div><p id="ovWaterPot1" class="camera-meta overview-pot-water">—</p><a class="pot-control-link" href="#steuerung" data-control-target="irrigationControlSection">Topf &amp; Bewässerung einstellen →</a></article><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-plant-10" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#80c080"/><stop offset=".48" stop-color="#008000"/><stop offset="1" stop-color="#004000"/></linearGradient></defs><path d="M24 35C7 36 5 25 6 17c11-1 19 5 18 18Z" fill="url(#glass-plant-10)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 27c-1-13 7-19 18-19 1 12-7 20-18 19Z" fill="url(#glass-plant-10)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 43V25M24 34 13 24m11 3 10-10" fill="none" stroke="#e7ffdb" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 02</p><h3 id="ovName2">Topf 2</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil2">—</strong><p id="ovSoilNote2">Messwert ausstehend</p><progress id="ovProgress2" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 2" hidden></progress></div><p id="ovWaterPot2" class="camera-meta overview-pot-water">—</p><a class="pot-control-link" href="#steuerung" data-control-target="irrigationControlSection">Topf &amp; Bewässerung einstellen →</a></article></section><section class="overview-equipment" aria-labelledby="ovEquipmentHeading">
+<section class="overview-pots" aria-label="Deine Pflanzen"><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 33V17" stroke="#004000" stroke-width="2"/><path d="M24 25H16V21H12V12H17V15H21V19H24Zm0-7h7v-4h5V5h-6v4h-4v4h-2Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="M12 32h24v5h-3v7H15v-7h-3Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M15 34h18M17 38v4" stroke="#e8c890" stroke-width="2"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 01</p><h3 id="ovName1">Topf 1</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil1">—</strong><p id="ovSoilNote1">Messwert ausstehend</p><progress id="ovProgress1" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 1" hidden></progress></div><p id="ovWaterPot1" class="camera-meta overview-pot-water">—</p><a class="pot-control-link" href="#steuerung" data-control-target="irrigationControlSection">Topf &amp; Bewässerung einstellen →</a></article><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 33V17" stroke="#004000" stroke-width="2"/><path d="M24 25H16V21H12V12H17V15H21V19H24Zm0-7h7v-4h5V5h-6v4h-4v4h-2Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="M12 32h24v5h-3v7H15v-7h-3Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M15 34h18M17 38v4" stroke="#e8c890" stroke-width="2"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 02</p><h3 id="ovName2">Topf 2</h3></div><div class="pot-reading"><span class="reading-label"><svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil2">—</strong><p id="ovSoilNote2">Messwert ausstehend</p><progress id="ovProgress2" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 2" hidden></progress></div><p id="ovWaterPot2" class="camera-meta overview-pot-water">—</p><a class="pot-control-link" href="#steuerung" data-control-target="irrigationControlSection">Topf &amp; Bewässerung einstellen →</a></article></section><section class="overview-equipment" aria-labelledby="ovEquipmentHeading">
 <div class="overview-equipment-heading"><div><p class="eyebrow">VERSORGUNG &amp; TECHNIK</p><h2 id="ovEquipmentHeading">Gerätestatus</h2></div><p id="ovEquipmentUpdated" class="camera-meta">Status wird geladen …</p></div>
 <div class="overview-equipment-grid">
 <article class="panel overview-equipment-card">
-<header><span class="ov-equipment-icon overview-grow-lamp live-lamp-icon" data-state="unknown" role="img" aria-label="Lichtstatus unbekannt"><svg viewBox="0 0 96 96" class="glass-glyph" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="overviewGrowShell" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#ffffff"/><stop offset=".45" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="overviewGrowLeaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#80c080"/><stop offset=".5" stop-color="#008000"/><stop offset="1" stop-color="#004000"/></linearGradient>
-<linearGradient id="overviewGrowBeam" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffe4a2" stop-opacity=".35"/><stop offset="1" stop-color="#ffe4a2" stop-opacity="0"/></linearGradient>
-<linearGradient id="overviewGrowLight"><stop stop-color="#ffff80"/><stop offset=".5" stop-color="#ffcc00"/><stop offset="1" stop-color="#a08000"/></linearGradient>
-</defs>
-<path d="M20 7v14M25 7v14M71 7v14M76 7v14" fill="none" stroke="#c7e1e7" stroke-opacity=".75" stroke-width="1.8" stroke-linecap="round"/>
-<path class="grow-lamp-beam" d="M14 38 5 80h86L82 38Z" fill="url(#overviewGrowBeam)"/>
-<path d="M9 35V28a7 7 0 0 1 7-7h64a7 7 0 0 1 7 7v7Z" fill="url(#overviewGrowShell)" stroke="#e0f8ff" stroke-opacity=".95" stroke-width="1.8"/>
-<path d="M15 25h62" fill="none" stroke="white" stroke-opacity=".85" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M9 35h78v5H9Z" fill="#9ad0df" fill-opacity=".8" stroke="#d4edf0" stroke-opacity=".8" stroke-width="1.4"/>
-<path class="grow-lamp-emitter" d="M14 40h68l-3 5H17Z" fill="#6f8f9b" stroke="#d4eff3" stroke-opacity=".8" stroke-width="1.3"/>
-<g class="grow-lamp-rays" fill="none" stroke="#ffe5b1" stroke-width="2" stroke-linecap="round">
-<path d="m20 50-3 6m17-6-2 6m16-6v6m14-6 2 6m12-6 3 6"/>
-</g>
-<path d="M48 78C37 60 18 57 15 67c-4 13 18 12 33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".8" stroke-width="1.3"/>
-<path d="M48 78c11-18 30-21 33-11 4 13-18 12-33 11Z" fill="url(#overviewGrowLeaf)" stroke="#c0fbe0" stroke-opacity=".8" stroke-width="1.3"/>
-<path d="M28 69q12 0 20 9m20-9q-12 0-20 9v10" fill="none" stroke="#d1ffe4" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M12 89q16-3 36-1t36-2" fill="none" stroke="#aacfc4" stroke-opacity=".6" stroke-width="1.4" stroke-linecap="round"/>
-<path d="M19 66q9-4 19 4M59 70q10-8 17-5" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1" stroke-linecap="round"/>
-</svg></span><div><h3 id="ovLampTitle">Pflanzenlampe</h3><p id="ovLampStatus" class="ov-equipment-status">Wird geladen …</p></div></header><dl><div><dt>Profil</dt><dd class="overview-profile-value"><span class="overview-profile-icon"><img id="ovLampProfileIcon" src="/static/profile-growth.svg?v=1" alt="" hidden><span id="ovLampFallback" aria-hidden="true">◇</span></span><span id="ovLampProfile">—</span></dd></div><div><dt>Beleuchtungsstärke</dt><dd id="ovLampLiveNote" aria-live="polite">— Lux</dd></div><div><dt>Gespeicherte Leistung</dt><dd id="ovLampPower">—</dd></div><div><dt>Zeitplan</dt><dd id="ovLampSchedule">—</dd></div><div><dt>Tatsächlicher Ausgang</dt><dd id="ovLampActual">—</dd></div></dl><a href="#steuerung" data-control-target="lampControlSection">Zur Lampensteuerung →</a>
+<header><span class="ov-equipment-icon overview-grow-lamp live-lamp-icon" data-state="unknown" role="img" aria-label="Lichtstatus unbekannt"><svg viewBox="0 0 96 96" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 5v17M72 5v17" stroke="#404040" stroke-width="2"/><path d="M12 22h72v15H12Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M15 25h66" stroke="#ffffff" stroke-width="3"/><path class="grow-lamp-emitter" d="M16 37h64v6H16Z" fill="#808080" stroke="#000000" stroke-width="2"/><g class="grow-lamp-rays" stroke="#a08000" stroke-width="3"><path d="m24 47-5 9m29-9v11m24-11 5 9"/></g><g transform="translate(24 42) scale(1)" ><path d="M24 33V17" stroke="#004000" stroke-width="2"/><path d="M24 25H16V21H12V12H17V15H21V19H24Zm0-7h7v-4h5V5h-6v4h-4v4h-2Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="M12 32h24v5h-3v7H15v-7h-3Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M15 34h18M17 38v4" stroke="#e8c890" stroke-width="2"/></g></svg></span><div><h3 id="ovLampTitle">Pflanzenlampe</h3><p id="ovLampStatus" class="ov-equipment-status">Wird geladen …</p></div></header><dl><div><dt>Profil</dt><dd class="overview-profile-value"><span class="overview-profile-icon"><img id="ovLampProfileIcon" src="/static/profile-growth.svg?v=classic-2" alt="" hidden><span id="ovLampFallback" aria-hidden="true">◇</span></span><span id="ovLampProfile">—</span></dd></div><div><dt>Beleuchtungsstärke</dt><dd id="ovLampLiveNote" aria-live="polite">— Lux</dd></div><div><dt>Gespeicherte Leistung</dt><dd id="ovLampPower">—</dd></div><div><dt>Zeitplan</dt><dd id="ovLampSchedule">—</dd></div><div><dt>Tatsächlicher Ausgang</dt><dd id="ovLampActual">—</dd></div></dl><a href="#steuerung" data-control-target="lampControlSection">Zur Lampensteuerung →</a>
 </article>
 <article class="panel overview-equipment-card">
-<header><div class="ov-equipment-icon"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="overview-pumpShell1" x1="24" y1="17" x2="74" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".4" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="overview-pumpPipe1" x1="9" y1="18" x2="88" y2="81" gradientUnits="userSpaceOnUse"><stop stop-color="#a6caf0"/><stop offset=".45" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient>
-<linearGradient id="overview-pumpEdge1" x1="24" y1="20" x2="70" y2="77" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="overview-pumpRotor1" x1="30" y1="25" x2="65" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#a6caf0"/><stop offset=".5" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient>
-<radialGradient id="overview-pumpHub1" cx=".3" cy=".2" r=".9"><stop stop-color="#ffffff"/><stop offset=".55" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></radialGradient>
-</defs>
-<!-- Opposing tangential pipe ports, matching the supplied pump silhouette. -->
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="#1c4c61" stroke-opacity=".65" stroke-width="8" stroke-linecap="round"/>
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="url(#overview-pumpPipe1)" stroke-width="5" stroke-linecap="round"/>
-<path d="M50 16.5H78Q88 16.5 89 27M46 76.5H18Q10 76.5 10 69" fill="none" stroke="#ebffff" stroke-opacity=".7" stroke-width="1" stroke-linecap="round"/>
-<rect x="91" y="15" width="4" height="25" rx="2" fill="url(#overview-pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<rect x="1" y="56" width="4" height="25" rx="2" fill="url(#overview-pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<!-- Glass casing remains stationary while the four-vane impeller turns. -->
-<circle cx="48" cy="48" r="31" fill="url(#overview-pumpShell1)" stroke="url(#overview-pumpEdge1)" stroke-width="1.8"/>
-<circle cx="48" cy="48" r="27.5" fill="#163e50" fill-opacity=".48" stroke="#c2fcff" stroke-opacity=".28" stroke-width=".7"/>
-<g class="pump-rotor">
-<g fill="url(#overview-pumpRotor1)" stroke="#d4fff5" stroke-opacity=".65" stroke-width=".6"><path transform="rotate(0 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(90 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(180 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(270 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/></g>
-<g transform="rotate(0 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(90 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(180 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(270 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g>
-<circle cx="48" cy="48" r="9.5" fill="#244d62" stroke="#cdf9fb" stroke-width="1"/>
-<circle cx="48" cy="48" r="6.6" fill="url(#overview-pumpHub1)"/>
-<circle cx="48" cy="48" r="2" fill="#e1ffff" fill-opacity=".8"/>
-</g>
-<path d="M23 38Q30 18 49 20" fill="none" stroke="white" stroke-opacity=".65" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
-<path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
-</svg></div><div><h3>Bewässerung</h3><p id="ovWaterStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
+<header><div class="ov-equipment-icon"><svg viewBox="0 0 96 96" class="pump-art classic-icon" aria-hidden="true" focusable="false"><path d="M46 16h32v20h-6M50 80H18V60h6" fill="none" stroke="#000000" stroke-width="10"/><path d="M46 16h32v20h-6M50 80H18V60h6" fill="none" stroke="#c0c0c0" stroke-width="6"/><path d="M30 18h36l14 14v32L66 78H30L16 64V32Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M32 21h32M20 35v27" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="48" cy="48" r="23" fill="#808080" stroke="#404040" stroke-width="2"/><g class="pump-rotor" fill="#a6caf0" stroke="#000080" stroke-width="2"><path transform="rotate(0 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(90 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(180 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(270 48 48)" d="M45 42 34 28h13v14Z"/><circle cx="48" cy="48" r="7" fill="#c0c0c0" stroke="#000000"/></g></svg></div><div><h3>Bewässerung</h3><p id="ovWaterStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
 <dl><div><dt>Tank</dt><dd class="overview-tank-value"><span class="tank-symbol" data-tank-state="unknown" role="img" aria-label="Tankstatus unbekannt">
-<svg viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="tank-overview-shell" x1="17" y1="24" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="tank-overview-water" x1="27" y1="40" x2="73" y2="82" gradientUnits="userSpaceOnUse"><stop class="tank-liquid-light" stop-color="#ffffff"/><stop offset="1" class="tank-liquid-dark" stop-color="#c0c0c0"/></linearGradient>
-</defs>
-<path d="M25 27V18h17v9" fill="url(#tank-overview-shell)" stroke="#c5ecf1" stroke-opacity=".65" stroke-width="1.2"/>
-<rect x="20" y="9" width="28" height="12" rx="4" fill="url(#tank-overview-shell)" stroke="#d9faff" stroke-opacity=".75"/>
-<path d="M25 13h18" stroke="white" stroke-opacity=".65" stroke-linecap="round"/>
-<rect x="10" y="27" width="76" height="58" rx="15" fill="url(#tank-overview-shell)" stroke="#d7faff" stroke-opacity=".7" stroke-width="1.3"/>
-<path class="tank-fill-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46V70Q81 80 70 80H26Q15 80 15 70Z" fill="url(#tank-overview-water)" fill-opacity=".86"/>
-<path class="tank-fill-empty" d="M15 72Q23 69 31 72T47 72T63 72T81 72Q80 80 70 80H26Q16 80 15 72Z" fill="url(#tank-overview-water)" fill-opacity=".9"/>
-<path class="tank-wave-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46" fill="none" stroke="var(--tank-light)" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M16 50V42q0-9 10-9h30" fill="none" stroke="white" stroke-opacity=".62" stroke-width="1.7" stroke-linecap="round"/>
-<path d="M78 57v12q0 9-9 9" fill="none" stroke="#dbffff" stroke-opacity=".42" stroke-width="1.2" stroke-linecap="round"/>
-<g class="tank-unknown-mark" fill="none" stroke="#d2e4ed" stroke-width="2.4" stroke-linecap="round"><path d="M43 51c0-7 12-7 12 0 0 4-6 4-6 9"/><path d="M49 66v.3"/></g>
-<g class="tank-empty-mark" stroke="#ffd8db" stroke-width="2.7" stroke-linecap="round"><path d="M49 46v12M49 64v.3"/></g>
-</svg></span><span id="ovWaterTank">—</span></dd></div><div><dt>Letzte Bewässerung</dt><dd id="ovWaterLast">—</dd></div></dl><div class="watering-history">
+<svg viewBox="0 0 96 96" class=" classic-icon" aria-hidden="true" focusable="false"><path d="M31 23V12h26v11M28 10h32v8H28Z" fill="#c0c0c0" stroke="#000000" stroke-width="2"/><path d="M14 26h68v58H14Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M18 80V30h60" fill="none" stroke="#ffffff" stroke-width="3"/><path d="M23 36h50v38H23Z" fill="#ffffff" stroke="#808080" stroke-width="2"/><path class="tank-fill-full" d="M24 49h48v24H24Z" fill="var(--tank-dark)"/><path class="tank-wave-full" d="M24 48h48" stroke="var(--tank-light)" stroke-width="3"/><path class="tank-fill-empty" d="M24 69h48v4H24Z" fill="#800000"/><path class="tank-unknown-mark" d="M41 45v-5h14v10l-7 4v7m0 4v4" fill="none" stroke="#404040" stroke-width="3"/><path class="tank-empty-mark" d="M48 41v18m0 5v5" stroke="#800000" stroke-width="4"/></svg></span><span id="ovWaterTank">—</span></dd></div><div><dt>Letzte Bewässerung</dt><dd id="ovWaterLast">—</dd></div></dl><div class="watering-history">
 <div class="watering-today"><span>Heute · protokolliert</span><strong id="ovWaterToday">—</strong></div>
 <div class="watering-history-heading"><span>Letzte 7 Tage · ml</span><span><i class="water-key pot-one"></i>Topf 1 <i class="water-key pot-two"></i>Topf 2</span></div>
 <div class="watering-chart-wrap"><canvas id="ovWaterChart" role="img" aria-label="Bewässerung pro Tag und Topf"></canvas><p id="ovWaterEmpty" role="status">Verlauf wird geladen …</p></div>
@@ -148,28 +84,7 @@
 </div><a href="#steuerung" data-control-target="irrigationControlSection">Zur Bewässerung →</a>
 </article>
 <article class="panel overview-equipment-card">
-<header><div class="ov-equipment-icon"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="overview-fanGlassintake" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".32" stop-color="#c0c0c0"/><stop offset=".68" stop-color="#808080"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="overview-fanEdgeintake" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="overview-fanBladeintake" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#a6caf0"/><stop offset=".42" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient>
-<radialGradient id="overview-fanHubintake" cx=".32" cy=".22" r=".9"><stop stop-color="#ffffff"/><stop offset=".4" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></radialGradient>
-</defs>
-<!-- Square PC fan frame with four visible mounting holes. -->
-<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#overview-fanGlassintake)" stroke="url(#overview-fanEdgeintake)" stroke-width="1.1"/>
-<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
-<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#overview-fanEdgeintake)" stroke-width="1.6"/>
-<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
-<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
-<!-- Seven swept blades; the existing animation rotates around 48,48. -->
-<g class="fan-rotor" fill="url(#overview-fanBladeintake)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
-<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
-<circle cx="48" cy="48" r="8.7" fill="url(#overview-fanHubintake)"/>
-<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
-<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
-<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
-<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
-</svg></div><div><h3>Lüfter</h3><p id="ovFanStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
+<header><div class="ov-equipment-icon"><svg viewBox="0 0 96 96" class="fan-art classic-icon" aria-hidden="true" focusable="false"><path d="M8 8h80v80H8Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M11 84V11h73" fill="none" stroke="#ffffff" stroke-width="3"/><path d="M84 13v71H13" fill="none" stroke="#808080" stroke-width="3"/><circle cx="48" cy="48" r="29" fill="#404040" stroke="#000000" stroke-width="2"/><g class="fan-rotor" fill="#c0c0c0" stroke="#000000" stroke-width="2"><path transform="rotate(0 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><path transform="rotate(90 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><path transform="rotate(180 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><path transform="rotate(270 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><circle cx="48" cy="48" r="8" fill="#808080"/></g><rect x="14" y="14" width="4" height="4" fill="#404040"/><rect x="78" y="14" width="4" height="4" fill="#404040"/><rect x="14" y="78" width="4" height="4" fill="#404040"/><rect x="78" y="78" width="4" height="4" fill="#404040"/></svg></div><div><h3>Lüfter</h3><p id="ovFanStatus" class="ov-equipment-status">Wird geladen …</p></div></header>
 <dl><div><dt>Zuluft · gespeichert</dt><dd id="ovFanIntake">—</dd></div><div><dt>Abluft · gespeichert</dt><dd id="ovFanExhaust">—</dd></div><div><dt>Tatsächliche Leistung</dt><dd id="ovFanActual">—</dd></div></dl><p class="camera-meta">Sollwerte sind Einstellungen, keine gemessenen Drehzahlen.</p><a href="#steuerung" data-control-target="fanControlSection">Zur Lüftersteuerung →</a>
 </article>
 </div></section>
@@ -219,7 +134,7 @@
             <div class="chart-box">
 
                 <div class="chart-title chart-title--temperature">
-                    <svg class="chart-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14.8V5a3 3 0 0 1 6 0v9.8a5 5 0 1 1-6 0Z"/><path d="M12 7v10"/></svg>
+                    <svg viewBox="0 0 48 48" class="chart-title-icon classic-icon" aria-hidden="true" focusable="false"><path d="M19 29V9l3-4h4l3 4v20l5 5v6l-4 4H18l-4-4v-6Z" fill="#ffffff" stroke="#404040" stroke-width="2"/><path d="M23 15h2v18h5v7H18v-7h5Z" fill="#cc2020"/><path d="M32 10h7m-7 6h4m-4 6h7" stroke="#404040" stroke-width="2"/></svg>
                     Temperatur
                 </div>
 
@@ -235,7 +150,7 @@
             <div class="chart-box">
 
                 <div class="chart-title chart-title--humidity">
-                    <svg class="chart-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg>
+                    <svg viewBox="0 0 48 48" class="chart-title-icon classic-icon" aria-hidden="true" focusable="false"><path d="M24 5 10 25v10l5 7h18l5-7V25Z" fill="#387bd4" stroke="#000080" stroke-width="2"/><path d="m24 9-10 17v9l3 4" fill="none" stroke="#a6caf0" stroke-width="3"/><path d="M28 37h5v-8" fill="none" stroke="#000080" stroke-width="2"/></svg>
                     Luftfeuchtigkeit
                 </div>
 
@@ -251,7 +166,7 @@
             <div class="chart-box">
 
                 <div class="chart-title chart-title--vpd">
-                    <svg class="chart-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19c3-8 8-12 16-14 0 8-4 13-11 13"/><path d="M8 14c2 0 4 .7 5 2"/></svg>
+                    <svg viewBox="0 0 48 48" class="chart-title-icon classic-icon" aria-hidden="true" focusable="false"><path d="M8 34V20h4v-6h8v-4h20v16h-4v8h-8v4H12Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="m8 42 24-24m-10 6v-8m-6 14h12" fill="none" stroke="#80c080" stroke-width="2"/></svg>
                     VPD
                 </div>
 
@@ -267,7 +182,7 @@
             <div class="chart-box">
 
                 <div class="chart-title chart-title--light">
-                    <svg class="chart-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+                    <svg viewBox="0 0 48 48" class="chart-title-icon classic-icon" aria-hidden="true" focusable="false"><path d="M24 2v6m0 32v6M2 24h6m32 0h6M8 8l5 5m22 22 5 5M8 40l5-5m22-22 5-5" stroke="#a08000" stroke-width="2"/><path d="M18 12h12l6 6v12l-6 6H18l-6-6V18Z" fill="#ffcc00" stroke="#806000" stroke-width="2"/><path d="M19 15h10M15 19v10" stroke="#ffff80" stroke-width="2"/></svg>
                     Licht
                 </div>
 
@@ -282,7 +197,7 @@
             <div class="chart-box">
 
                 <div class="chart-title chart-title--soil">
-                    <svg class="chart-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8m0 4c-5 0-8-3-8-7 5 0 8 2 8 7Zm0-3c0-5 3-8 8-8 0 5-3 8-8 8Z"/><path d="M8 21h8"/></svg>
+                    <svg viewBox="0 0 48 48" class="chart-title-icon classic-icon" aria-hidden="true" focusable="false"><path d="M7 33h34v11H7Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M9 35h30M11 40h4m5-2h4m7 3h5" stroke="#e8c890" stroke-width="2"/><path d="M20 32V6h8v26" fill="#d4d0c8" stroke="#404040" stroke-width="2"/><path d="M22 8h4v10h-4Z" fill="#000080"/><path d="M23 22h2m-2 4h2" stroke="#000080" stroke-width="2"/></svg>
                     Bodenfeuchte Topf 1
                 </div>
 
@@ -298,7 +213,7 @@
             <div class="chart-box">
 
                 <div class="chart-title chart-title--soil">
-                    <svg class="chart-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8m0 4c-5 0-8-3-8-7 5 0 8 2 8 7Zm0-3c0-5 3-8 8-8 0 5-3 8-8 8Z"/><path d="M8 21h8"/></svg>
+                    <svg viewBox="0 0 48 48" class="chart-title-icon classic-icon" aria-hidden="true" focusable="false"><path d="M7 33h34v11H7Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M9 35h30M11 40h4m5-2h4m7 3h5" stroke="#e8c890" stroke-width="2"/><path d="M20 32V6h8v26" fill="#d4d0c8" stroke="#404040" stroke-width="2"/><path d="M22 8h4v10h-4Z" fill="#000080"/><path d="M23 22h2m-2 4h2" stroke="#000080" stroke-width="2"/></svg>
                     Bodenfeuchte Topf 2
                 </div>
 
@@ -325,8 +240,8 @@
             <div class="bottom-panel-heading light-panel-heading">
 
                 <span id="lightIcon" class="glass-icon glass-icon--light light-state-icon light-heading-icon js-light-state-icon" data-state="off" aria-hidden="true">
-                    <svg class="glass-glyph light-state-sun" viewBox="0 0 48 48" focusable="false"><defs><linearGradient id="glass-light-status" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffff80"/><stop offset=".48" stop-color="#ffcc00"/><stop offset="1" stop-color="#a08000"/></linearGradient></defs><g stroke="#ffc64f" stroke-width="2.5" stroke-linecap="round"><path d="M24 3v5m0 32v5M3 24h5m32 0h5M9 9l4 4m22 22 4 4M9 39l4-4m22-22 4-4"/></g><circle cx="24" cy="24" r="11" fill="url(#glass-light-status)" stroke="#fff4bf" stroke-opacity=".65" stroke-width="1.2"/><path d="M17 23a7 7 0 0 1 7-7" fill="none" stroke="#fff9df" stroke-width="2" stroke-linecap="round"/></svg>
-                    <svg class="glass-glyph light-state-moon" viewBox="0 0 48 48" fill="none" focusable="false"><path d="M34 37c-13 2-22-7-20-20 1-6 5-10 10-13-2 12 7 21 19 18-1 7-4 12-9 15Z" fill="#d7ecff" fill-opacity=".8" stroke="#eff8ff" stroke-opacity=".75" stroke-width="1.3"/><path d="M31 12h1m7 5h1m-6 8h1" stroke="#fff7c7" stroke-width="2.5" stroke-linecap="round"/></svg>
+                    <svg viewBox="0 0 48 48" class="glass-glyph light-state-sun classic-icon" aria-hidden="true" focusable="false"><path d="M24 2v6m0 32v6M2 24h6m32 0h6M8 8l5 5m22 22 5 5M8 40l5-5m22-22 5-5" stroke="#a08000" stroke-width="2"/><path d="M18 12h12l6 6v12l-6 6H18l-6-6V18Z" fill="#ffcc00" stroke="#806000" stroke-width="2"/><path d="M19 15h10M15 19v10" stroke="#ffff80" stroke-width="2"/></svg>
+                    <svg viewBox="0 0 48 48" class="glass-glyph light-state-moon classic-icon" aria-hidden="true" focusable="false"><path d="M24 5H14l-7 7v19l7 9h17l10-10H28l-8-8V12Z" fill="#c0c0c0" stroke="#404040" stroke-width="2"/><path d="M16 8h5M10 15v15l6 7" fill="none" stroke="#ffffff" stroke-width="2"/><path d="M35 6v8m-4-4h8M39 18v6m-3-3h6" stroke="#000080" stroke-width="2"/></svg>
                 </span>
 
                 <div>
@@ -484,7 +399,7 @@
 
             <div class="bottom-panel-heading">
 
-                <span class="glass-icon glass-icon--vpd bottom-panel-icon" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-climate-bottom" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#80c080"/><stop offset=".48" stop-color="#008000"/><stop offset="1" stop-color="#004000"/></linearGradient></defs><path d="M10 34C1 13 27 9 40 7c1 14-3 36-23 32" fill="url(#glass-climate-bottom)" stroke="#e4ffc0" stroke-opacity=".65" stroke-width="1.2"/><path d="M8 42c5-13 12-21 23-27M19 27l-1-8m1 8 10 1" fill="none" stroke="#ebffdb" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/></svg></span>
+                <span class="glass-icon glass-icon--vpd bottom-panel-icon" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M8 34V20h4v-6h8v-4h20v16h-4v8h-8v4H12Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="m8 42 24-24m-10 6v-8m-6 14h12" fill="none" stroke="#80c080" stroke-width="2"/></svg></span>
 
                 <div>
                     <p class="eyebrow">
@@ -537,7 +452,7 @@
                 <div class="camera-empty" id="cameraEmpty">
 
                     <span class="camera-icon">
-                        <svg class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7h5l2-3h4l2 3h5v13H3Z"/><circle cx="12" cy="13" r="4"/></svg>
+                        <svg viewBox="0 0 48 48" class="line-icon classic-icon" aria-hidden="true" focusable="false"><path d="M6 16h9l4-7h12l4 7h7v26H6Z" fill="#808080" stroke="#000000" stroke-width="2"/><path d="M8 18h30M8 20v19" fill="none" stroke="#ffffff" stroke-width="2"/><path d="M21 11h8v5h-8Z" fill="#c0c0c0"/><path d="M19 21h10l6 6v7l-6 5H19l-5-5v-7Z" fill="#000080" stroke="#000000" stroke-width="2"/><path d="M21 24h6v9h-6Z" fill="#387bd4"/><path d="M35 20h4v4h-4Z" fill="#ffcc00"/></svg>
                     </span>
 
                     <h3>
@@ -673,38 +588,7 @@
             <div class="lamp-control-heading">
 
                 <span class="glass-icon glass-icon--lamp-control lamp-control-state-icon" data-state="unknown" role="img" aria-label="Lichtstatus unbekannt">
-                    <svg aria-hidden="true" viewBox="0 0 48 48" class="glass-glyph" focusable="false">
-                        <defs>
-                            <linearGradient id="glass-lamp-control-body" x1="0" y1="0" x2="1" y2="1">
-                                <stop stop-color="#ffff80"/>
-                                <stop offset=".5" stop-color="#ffcc00"/>
-                                <stop offset="1" stop-color="#a08000"/>
-                            </linearGradient>
-                            <linearGradient id="glass-lamp-control-slider" x1="0" y1="0" x2="1" y2="1">
-                                <stop stop-color="#ffff80"/>
-                                <stop offset=".55" stop-color="#ffcc00"/>
-                                <stop offset="1" stop-color="#a08000"/>
-                            </linearGradient>
-                        </defs>
-
-                        <rect class="control-lamp-body" x="9" y="8" width="30" height="9" rx="4.5"
-                              fill="url(#glass-lamp-control-body)"
-                              stroke="#fff4c7" stroke-opacity=".7" stroke-width="1.2"/>
-
-                        <path class="control-lamp-wire" d="M14 8V5M34 8V5"
-                              stroke="#ffd978" stroke-width="1.8" stroke-linecap="round"/>
-
-                        <path class="control-lamp-rays" d="M16 21L13 29M24 21V31M32 21L35 29"
-                              stroke="#ffd46b" stroke-width="2.2" stroke-linecap="round"/>
-
-                        <rect x="11" y="35" width="26" height="4" rx="2"
-                              fill="rgba(255,255,255,.12)"
-                              stroke="rgba(255,241,195,.35)" stroke-width="1"/>
-
-                        <circle class="control-lamp-slider" cx="29" cy="37" r="4"
-                                fill="url(#glass-lamp-control-slider)"
-                                stroke="#fff1c0" stroke-opacity=".75" stroke-width="1.2"/>
-                    </svg>
+                    <svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path class="control-lamp-wire" d="M12 5v8M36 5v8" stroke="#404040" stroke-width="2"/><path class="control-lamp-body" d="M7 13h34v9H7Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M9 15h30" stroke="#ffffff" stroke-width="2"/><path class="control-lamp-emitter" d="M10 22h28v3H10Z" fill="#808080"/><path class="control-lamp-rays" d="m14 27-3 5m13-5v5m10-5 3 5" stroke="#a08000" stroke-width="2"/><path d="M8 39h32" stroke="#808080" stroke-width="4"/><path d="M8 40h32" stroke="#ffffff" stroke-width="1"/><path class="control-lamp-slider" d="M28 35h6v10h-6Z" fill="#d4d0c8" stroke="#404040" stroke-width="2"/><path d="M29 36v7" stroke="#ffffff"/></svg>
                 </span>
 
                 <div>
@@ -772,29 +656,10 @@
 
                 <div class="lamp-profile-display">
 
-                    <img id="lampProfileImage" class="lamp-profile-image" src="/static/profile-flower.svg?v=2" alt="" hidden>
+                    <img id="lampProfileImage" class="lamp-profile-image" src="/static/profile-flower.svg?v=classic-2" alt="" hidden>
 
                     <span id="lampProfilePlaceholder" class="lamp-profile-placeholder" aria-hidden="true">
-                        <svg
-                            viewBox="0 0 48 48"
-                            focusable="false"
-                        >
-                            <path
-                                d="M11 35C4 17 25 11 39 8c0 15-5 29-22 31"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                            <path
-                                d="M10 41c6-13 14-21 25-27"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.2"
-                                stroke-linecap="round"
-                            />
-                        </svg>
+                        <svg viewBox="0 0 48 48" class=" classic-icon" aria-hidden="true" focusable="false"><path d="M24 33V17" stroke="#004000" stroke-width="2"/><path d="M24 25H16V21H12V12H17V15H21V19H24Zm0-7h7v-4h5V5h-6v4h-4v4h-2Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="M12 32h24v5h-3v7H15v-7h-3Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M15 34h18M17 38v4" stroke="#e8c890" stroke-width="2"/></svg>
                     </span>
 
                     <div class="lamp-profile-copy">
@@ -921,12 +786,7 @@
         <div class="panel-header">
             <div class="lamp-control-heading">
                 <span class="glass-icon irrigation-icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" fill="none">
-                        <defs><linearGradient id="waterGlass" x1="12" y1="6" x2="52" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".45" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient></defs>
-                        <path d="M32 7C27 17 13 29 13 40a19 19 0 0 0 38 0C51 29 37 17 32 7Z" fill="url(#waterGlass)" stroke="#c8ffff" stroke-opacity=".65"/>
-                        <path d="M25 29c-5 6-7 10-6 15" stroke="white" stroke-opacity=".85" stroke-width="4" stroke-linecap="round"/>
-                        <path d="M30 53c9 1 15-5 16-12" stroke="#8bffff" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                    <svg viewBox="0 0 96 96" class=" classic-icon" aria-hidden="true" focusable="false"><path d="M46 16h32v20h-6M50 80H18V60h6" fill="none" stroke="#000000" stroke-width="10"/><path d="M46 16h32v20h-6M50 80H18V60h6" fill="none" stroke="#c0c0c0" stroke-width="6"/><path d="M30 18h36l14 14v32L66 78H30L16 64V32Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M32 21h32M20 35v27" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="48" cy="48" r="23" fill="#808080" stroke="#404040" stroke-width="2"/><g class="pump-rotor" fill="#a6caf0" stroke="#000080" stroke-width="2"><path transform="rotate(0 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(90 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(180 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(270 48 48)" d="M45 42 34 28h13v14Z"/><circle cx="48" cy="48" r="7" fill="#c0c0c0" stroke="#000000"/></g></svg>
                 </span>
                 <div><p class="eyebrow">WASSER &amp; VERSORGUNG</p><h2 id="irrigationHeading">Wasser &amp; Töpfe</h2></div>
             </div>
@@ -943,7 +803,7 @@
                 <div class="soil-card integrated-soil-reading">
 
                 <div class="sensor-header">
-                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-soil-1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient></defs><path d="M12 32h24l-3 10H15l-3-10Z" fill="url(#glass-soil-1)" stroke="#d9fff0" stroke-opacity=".62" stroke-width="1.2"/><path d="M24 33V18" fill="none" stroke="#efffe9" stroke-width="2" stroke-linecap="round"/><path d="M24 25c-8 0-11-5-11-10 7 0 11 3 11 10Zm0-4c0-7 4-11 11-11 0 7-4 11-11 11Z" fill="url(#glass-soil-1)" stroke="#e4ffd8" stroke-opacity=".7" stroke-width="1.2"/><path d="M10 36h28" stroke="#b8e7cf" stroke-opacity=".7" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M7 33h34v11H7Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M9 35h30M11 40h4m5-2h4m7 3h5" stroke="#e8c890" stroke-width="2"/><path d="M20 32V6h8v26" fill="#d4d0c8" stroke="#404040" stroke-width="2"/><path d="M22 8h4v10h-4Z" fill="#000080"/><path d="M23 22h2m-2 4h2" stroke="#000080" stroke-width="2"/></svg></span>
 
                     <span id="soilName1">
                         Topf 1
@@ -976,34 +836,7 @@
             </div>
 
 
-            <div class="pump-symbol" id="pumpSymbol1" data-running="false" data-preview="false"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="pumpShell1" x1="24" y1="17" x2="74" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".4" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="pumpPipe1" x1="9" y1="18" x2="88" y2="81" gradientUnits="userSpaceOnUse"><stop stop-color="#a6caf0"/><stop offset=".45" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient>
-<linearGradient id="pumpEdge1" x1="24" y1="20" x2="70" y2="77" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="pumpRotor1" x1="30" y1="25" x2="65" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#a6caf0"/><stop offset=".5" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient>
-<radialGradient id="pumpHub1" cx=".3" cy=".2" r=".9"><stop stop-color="#ffffff"/><stop offset=".55" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></radialGradient>
-</defs>
-<!-- Opposing tangential pipe ports, matching the supplied pump silhouette. -->
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="#1c4c61" stroke-opacity=".65" stroke-width="8" stroke-linecap="round"/>
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="url(#pumpPipe1)" stroke-width="5" stroke-linecap="round"/>
-<path d="M50 16.5H78Q88 16.5 89 27M46 76.5H18Q10 76.5 10 69" fill="none" stroke="#ebffff" stroke-opacity=".7" stroke-width="1" stroke-linecap="round"/>
-<rect x="91" y="15" width="4" height="25" rx="2" fill="url(#pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<rect x="1" y="56" width="4" height="25" rx="2" fill="url(#pumpPipe1)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<!-- Glass casing remains stationary while the four-vane impeller turns. -->
-<circle cx="48" cy="48" r="31" fill="url(#pumpShell1)" stroke="url(#pumpEdge1)" stroke-width="1.8"/>
-<circle cx="48" cy="48" r="27.5" fill="#163e50" fill-opacity=".48" stroke="#c2fcff" stroke-opacity=".28" stroke-width=".7"/>
-<g class="pump-rotor">
-<g fill="url(#pumpRotor1)" stroke="#d4fff5" stroke-opacity=".65" stroke-width=".6"><path transform="rotate(0 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(90 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(180 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(270 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/></g>
-<g transform="rotate(0 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(90 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(180 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(270 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g>
-<circle cx="48" cy="48" r="9.5" fill="#244d62" stroke="#cdf9fb" stroke-width="1"/>
-<circle cx="48" cy="48" r="6.6" fill="url(#pumpHub1)"/>
-<circle cx="48" cy="48" r="2" fill="#e1ffff" fill-opacity=".8"/>
-</g>
-<path d="M23 38Q30 18 49 20" fill="none" stroke="white" stroke-opacity=".65" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
-<path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
-</svg></div>
+            <div class="pump-symbol" id="pumpSymbol1" data-running="false" data-preview="false"><svg viewBox="0 0 96 96" class="pump-art classic-icon" aria-hidden="true" focusable="false"><path d="M46 16h32v20h-6M50 80H18V60h6" fill="none" stroke="#000000" stroke-width="10"/><path d="M46 16h32v20h-6M50 80H18V60h6" fill="none" stroke="#c0c0c0" stroke-width="6"/><path d="M30 18h36l14 14v32L66 78H30L16 64V32Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M32 21h32M20 35v27" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="48" cy="48" r="23" fill="#808080" stroke="#404040" stroke-width="2"/><g class="pump-rotor" fill="#a6caf0" stroke="#000080" stroke-width="2"><path transform="rotate(0 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(90 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(180 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(270 48 48)" d="M45 42 34 28h13v14Z"/><circle cx="48" cy="48" r="7" fill="#c0c0c0" stroke="#000000"/></g></svg></div>
                 <span class="lamp-control-label" id="irrigationPumpName1">Pumpe Topf 1</span>
                 <strong id="pumpState1">Nicht verbunden</strong>
                 <small>PPFL-1 · Topf 1 · letzte Bewässerung: —</small>
@@ -1015,7 +848,7 @@
                 <div class="soil-card integrated-soil-reading">
 
                 <div class="sensor-header">
-                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-soil-2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient></defs><path d="M12 32h24l-3 10H15l-3-10Z" fill="url(#glass-soil-2)" stroke="#d9fff0" stroke-opacity=".62" stroke-width="1.2"/><path d="M24 33V18" fill="none" stroke="#efffe9" stroke-width="2" stroke-linecap="round"/><path d="M24 25c-8 0-11-5-11-10 7 0 11 3 11 10Zm0-4c0-7 4-11 11-11 0 7-4 11-11 11Z" fill="url(#glass-soil-2)" stroke="#e4ffd8" stroke-opacity=".7" stroke-width="1.2"/><path d="M10 36h28" stroke="#b8e7cf" stroke-opacity=".7" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    <span class="glass-icon glass-icon--soil" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M7 33h34v11H7Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M9 35h30M11 40h4m5-2h4m7 3h5" stroke="#e8c890" stroke-width="2"/><path d="M20 32V6h8v26" fill="#d4d0c8" stroke="#404040" stroke-width="2"/><path d="M22 8h4v10h-4Z" fill="#000080"/><path d="M23 22h2m-2 4h2" stroke="#000080" stroke-width="2"/></svg></span>
 
                     <span id="soilName2">
                         Topf 2
@@ -1047,34 +880,7 @@
 
             </div>
 
-        <div class="pump-symbol" id="pumpSymbol2" data-running="false" data-preview="false"><svg class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="pumpShell2" x1="24" y1="17" x2="74" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".4" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="pumpPipe2" x1="9" y1="18" x2="88" y2="81" gradientUnits="userSpaceOnUse"><stop stop-color="#a6caf0"/><stop offset=".45" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient>
-<linearGradient id="pumpEdge2" x1="24" y1="20" x2="70" y2="77" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="pumpRotor2" x1="30" y1="25" x2="65" y2="72" gradientUnits="userSpaceOnUse"><stop stop-color="#a6caf0"/><stop offset=".5" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient>
-<radialGradient id="pumpHub2" cx=".3" cy=".2" r=".9"><stop stop-color="#ffffff"/><stop offset=".55" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></radialGradient>
-</defs>
-<!-- Opposing tangential pipe ports, matching the supplied pump silhouette. -->
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="#1c4c61" stroke-opacity=".65" stroke-width="8" stroke-linecap="round"/>
-<path d="M48 18H78Q88 18 88 29V31Q88 41 77 41H74M48 78H18Q8 78 8 67V65Q8 55 19 55H22" fill="none" stroke="url(#pumpPipe2)" stroke-width="5" stroke-linecap="round"/>
-<path d="M50 16.5H78Q88 16.5 89 27M46 76.5H18Q10 76.5 10 69" fill="none" stroke="#ebffff" stroke-opacity=".7" stroke-width="1" stroke-linecap="round"/>
-<rect x="91" y="15" width="4" height="25" rx="2" fill="url(#pumpPipe2)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<rect x="1" y="56" width="4" height="25" rx="2" fill="url(#pumpPipe2)" stroke="#ddffff" stroke-opacity=".5" stroke-width=".5"/>
-<!-- Glass casing remains stationary while the four-vane impeller turns. -->
-<circle cx="48" cy="48" r="31" fill="url(#pumpShell2)" stroke="url(#pumpEdge2)" stroke-width="1.8"/>
-<circle cx="48" cy="48" r="27.5" fill="#163e50" fill-opacity=".48" stroke="#c2fcff" stroke-opacity=".28" stroke-width=".7"/>
-<g class="pump-rotor">
-<g fill="url(#pumpRotor2)" stroke="#d4fff5" stroke-opacity=".65" stroke-width=".6"><path transform="rotate(0 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(90 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(180 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/><path transform="rotate(270 48 48)" d="M42 43 29 31A25 25 0 0 1 49 23V39Q45 39 42 43Z"/></g>
-<g transform="rotate(0 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(90 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(180 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g><g transform="rotate(270 48 48)"><path d="M52 25h7M52 29h6M52 33h4" fill="none" stroke="#a9eaf1" stroke-opacity=".5" stroke-width="1.8" stroke-linecap="round"/></g>
-<circle cx="48" cy="48" r="9.5" fill="#244d62" stroke="#cdf9fb" stroke-width="1"/>
-<circle cx="48" cy="48" r="6.6" fill="url(#pumpHub2)"/>
-<circle cx="48" cy="48" r="2" fill="#e1ffff" fill-opacity=".8"/>
-</g>
-<path d="M23 38Q30 18 49 20" fill="none" stroke="white" stroke-opacity=".65" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M29 28Q48 10 67 29Q50 23 37 36Z" fill="white" fill-opacity=".08"/>
-<path d="M61 74Q71 69 75 59" fill="none" stroke="#cefff0" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
-</svg></div>
+        <div class="pump-symbol" id="pumpSymbol2" data-running="false" data-preview="false"><svg viewBox="0 0 96 96" class="pump-art classic-icon" aria-hidden="true" focusable="false"><path d="M46 16h32v20h-6M50 80H18V60h6" fill="none" stroke="#000000" stroke-width="10"/><path d="M46 16h32v20h-6M50 80H18V60h6" fill="none" stroke="#c0c0c0" stroke-width="6"/><path d="M30 18h36l14 14v32L66 78H30L16 64V32Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M32 21h32M20 35v27" fill="none" stroke="#ffffff" stroke-width="3"/><circle cx="48" cy="48" r="23" fill="#808080" stroke="#404040" stroke-width="2"/><g class="pump-rotor" fill="#a6caf0" stroke="#000080" stroke-width="2"><path transform="rotate(0 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(90 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(180 48 48)" d="M45 42 34 28h13v14Z"/><path transform="rotate(270 48 48)" d="M45 42 34 28h13v14Z"/><circle cx="48" cy="48" r="7" fill="#c0c0c0" stroke="#000000"/></g></svg></div>
                 <span class="lamp-control-label" id="irrigationPumpName2">Pumpe Topf 2</span>
                 <strong id="pumpState2">Nicht verbunden</strong>
                 <small>PPFL-1 · Topf 2 · letzte Bewässerung: —</small>
@@ -1084,23 +890,7 @@
             </article>
 <article class="lamp-control-card water-tank-card">
                 <span class="tank-symbol" data-tank-state="unknown" role="img" aria-label="Tankstatus unbekannt">
-<svg viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="tank-control-shell" x1="17" y1="24" x2="78" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="tank-control-water" x1="27" y1="40" x2="73" y2="82" gradientUnits="userSpaceOnUse"><stop class="tank-liquid-light" stop-color="#ffffff"/><stop offset="1" class="tank-liquid-dark" stop-color="#c0c0c0"/></linearGradient>
-</defs>
-<path d="M25 27V18h17v9" fill="url(#tank-control-shell)" stroke="#c5ecf1" stroke-opacity=".65" stroke-width="1.2"/>
-<rect x="20" y="9" width="28" height="12" rx="4" fill="url(#tank-control-shell)" stroke="#d9faff" stroke-opacity=".75"/>
-<path d="M25 13h18" stroke="white" stroke-opacity=".65" stroke-linecap="round"/>
-<rect x="10" y="27" width="76" height="58" rx="15" fill="url(#tank-control-shell)" stroke="#d7faff" stroke-opacity=".7" stroke-width="1.3"/>
-<path class="tank-fill-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46V70Q81 80 70 80H26Q15 80 15 70Z" fill="url(#tank-control-water)" fill-opacity=".86"/>
-<path class="tank-fill-empty" d="M15 72Q23 69 31 72T47 72T63 72T81 72Q80 80 70 80H26Q16 80 15 72Z" fill="url(#tank-control-water)" fill-opacity=".9"/>
-<path class="tank-wave-full" d="M15 46Q23 41 31 46T47 46T63 46T81 46" fill="none" stroke="var(--tank-light)" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M16 50V42q0-9 10-9h30" fill="none" stroke="white" stroke-opacity=".62" stroke-width="1.7" stroke-linecap="round"/>
-<path d="M78 57v12q0 9-9 9" fill="none" stroke="#dbffff" stroke-opacity=".42" stroke-width="1.2" stroke-linecap="round"/>
-<g class="tank-unknown-mark" fill="none" stroke="#d2e4ed" stroke-width="2.4" stroke-linecap="round"><path d="M43 51c0-7 12-7 12 0 0 4-6 4-6 9"/><path d="M49 66v.3"/></g>
-<g class="tank-empty-mark" stroke="#ffd8db" stroke-width="2.7" stroke-linecap="round"><path d="M49 46v12M49 64v.3"/></g>
-</svg></span>
+<svg viewBox="0 0 96 96" class=" classic-icon" aria-hidden="true" focusable="false"><path d="M31 23V12h26v11M28 10h32v8H28Z" fill="#c0c0c0" stroke="#000000" stroke-width="2"/><path d="M14 26h68v58H14Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M18 80V30h60" fill="none" stroke="#ffffff" stroke-width="3"/><path d="M23 36h50v38H23Z" fill="#ffffff" stroke="#808080" stroke-width="2"/><path class="tank-fill-full" d="M24 49h48v24H24Z" fill="var(--tank-dark)"/><path class="tank-wave-full" d="M24 48h48" stroke="var(--tank-light)" stroke-width="3"/><path class="tank-fill-empty" d="M24 69h48v4H24Z" fill="#800000"/><path class="tank-unknown-mark" d="M41 45v-5h14v10l-7 4v7m0 4v4" fill="none" stroke="#404040" stroke-width="3"/><path class="tank-empty-mark" d="M48 41v18m0 5v5" stroke="#800000" stroke-width="4"/></svg></span>
 <span class="lamp-control-label" id="irrigationTankName">Wassertank</span>
                 <strong id="irrigationTankState">Tankstatus unbekannt</strong>
                 <small>WLSW1 noch nicht angebunden. Der Schalter erkennt den Tankzustand, keinen Füllstand in Prozent.</small>
@@ -1232,28 +1022,7 @@
 <div class="panel-header"><div><p class="eyebrow">LUFT &amp; KLIMA</p><h2 id="fanHeading">Lüftersteuerung</h2></div><span class="camera-meta">Keine PWM-Ausgabe</span></div>
 <p class="camera-meta">Noctua · Zuluft unten und Abluft oben · Anbindung über NA-FC1 vorgesehen</p>
 <div class="fan-grid"><article class="lamp-control-card fan-card">
-<div class="fan-symbol" id="fanIcon-intake" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="fanGlassintake" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".32" stop-color="#c0c0c0"/><stop offset=".68" stop-color="#808080"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="fanEdgeintake" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="fanBladeintake" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#a6caf0"/><stop offset=".42" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient>
-<radialGradient id="fanHubintake" cx=".32" cy=".22" r=".9"><stop stop-color="#ffffff"/><stop offset=".4" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></radialGradient>
-</defs>
-<!-- Square PC fan frame with four visible mounting holes. -->
-<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#fanGlassintake)" stroke="url(#fanEdgeintake)" stroke-width="1.1"/>
-<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
-<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#fanEdgeintake)" stroke-width="1.6"/>
-<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
-<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
-<!-- Seven swept blades; the existing animation rotates around 48,48. -->
-<g class="fan-rotor" fill="url(#fanBladeintake)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
-<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
-<circle cx="48" cy="48" r="8.7" fill="url(#fanHubintake)"/>
-<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
-<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
-<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
-<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
-</svg></div>
+<div class="fan-symbol" id="fanIcon-intake" data-preview="false"><svg viewBox="0 0 96 96" class="fan-art classic-icon" aria-hidden="true" focusable="false"><path d="M8 8h80v80H8Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M11 84V11h73" fill="none" stroke="#ffffff" stroke-width="3"/><path d="M84 13v71H13" fill="none" stroke="#808080" stroke-width="3"/><circle cx="48" cy="48" r="29" fill="#404040" stroke="#000000" stroke-width="2"/><g class="fan-rotor" fill="#c0c0c0" stroke="#000000" stroke-width="2"><path transform="rotate(0 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><path transform="rotate(90 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><path transform="rotate(180 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><path transform="rotate(270 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><circle cx="48" cy="48" r="8" fill="#808080"/></g><rect x="14" y="14" width="4" height="4" fill="#404040"/><rect x="78" y="14" width="4" height="4" fill="#404040"/><rect x="14" y="78" width="4" height="4" fill="#404040"/><rect x="78" y="78" width="4" height="4" fill="#404040"/></svg></div>
 <span class="lamp-control-label">Zuluft · unten</span>
 <h3 id="fanTitle-intake">Zuluft unten</h3>
 <strong>Hardware ausstehend</strong>
@@ -1262,28 +1031,7 @@
 <button type="button" class="fan-preview" data-fan="intake">Animation testen</button>
 <small id="fanPreviewNote-intake" role="status">Symbolvorschau ohne Lüfteransteuerung</small>
 </article><article class="lamp-control-card fan-card">
-<div class="fan-symbol" id="fanIcon-exhaust" data-preview="false"><svg class="fan-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="fanGlassexhaust" x1="9" y1="6" x2="86" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".32" stop-color="#c0c0c0"/><stop offset=".68" stop-color="#808080"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="fanEdgeexhaust" x1="10" y1="8" x2="85" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".5" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></linearGradient>
-<linearGradient id="fanBladeexhaust" x1="25" y1="18" x2="72" y2="79" gradientUnits="userSpaceOnUse"><stop stop-color="#a6caf0"/><stop offset=".42" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient>
-<radialGradient id="fanHubexhaust" cx=".32" cy=".22" r=".9"><stop stop-color="#ffffff"/><stop offset=".4" stop-color="#c0c0c0"/><stop offset="1" stop-color="#808080"/></radialGradient>
-</defs>
-<!-- Square PC fan frame with four visible mounting holes. -->
-<rect x="4" y="4" width="88" height="88" rx="11" fill="url(#fanGlassexhaust)" stroke="url(#fanEdgeexhaust)" stroke-width="1.1"/>
-<path d="M8 29V16a8 8 0 0 1 8-8h47" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
-<circle cx="48" cy="48" r="35.5" fill="#153746" fill-opacity=".65" stroke="url(#fanEdgeexhaust)" stroke-width="1.6"/>
-<circle cx="48" cy="48" r="33.5" fill="none" stroke="#9ddef2" stroke-opacity=".15" stroke-width=".7"/>
-<circle cx="13" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="13" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 11.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="13" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M11.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/><circle cx="83" cy="83" r="3.1" fill="#153c43" stroke="#d3faff" stroke-opacity=".65" stroke-width=".8"/><path d="M81.2 81.2q1.8-1.6 3.6 0" fill="none" stroke="white" stroke-opacity=".35" stroke-width=".6"/>
-<!-- Seven swept blades; the existing animation rotates around 48,48. -->
-<g class="fan-rotor" fill="url(#fanBladeexhaust)" stroke="#d9faff" stroke-opacity=".55" stroke-width=".65"><path transform="rotate(0.00000 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(51.42857 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(102.85714 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(154.28571 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(205.71429 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(257.14286 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/><path transform="rotate(308.57143 48 48)" d="M43 39C34 30 33 21 36 16Q48 12 58 16C51 24 50 31 51 38Z"/></g>
-<circle cx="48" cy="48" r="11.5" fill="#244f66" stroke="#d1f6ff" stroke-width="1.2"/>
-<circle cx="48" cy="48" r="8.7" fill="url(#fanHubexhaust)"/>
-<circle cx="48" cy="48" r="3" fill="#d6f8ff" fill-opacity=".8"/>
-<path d="M41 44q3-6 9-4" fill="none" stroke="white" stroke-opacity=".7" stroke-width="1.1" stroke-linecap="round"/>
-<path d="M21 33C29 17 47 10 62 18" fill="none" stroke="white" stroke-opacity=".26" stroke-width="1.2" stroke-linecap="round"/>
-<path d="M87 68v12q0 7-7 7H65" fill="none" stroke="#d0faff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
-</svg></div>
+<div class="fan-symbol" id="fanIcon-exhaust" data-preview="false"><svg viewBox="0 0 96 96" class="fan-art classic-icon" aria-hidden="true" focusable="false"><path d="M8 8h80v80H8Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M11 84V11h73" fill="none" stroke="#ffffff" stroke-width="3"/><path d="M84 13v71H13" fill="none" stroke="#808080" stroke-width="3"/><circle cx="48" cy="48" r="29" fill="#404040" stroke="#000000" stroke-width="2"/><g class="fan-rotor" fill="#c0c0c0" stroke="#000000" stroke-width="2"><path transform="rotate(0 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><path transform="rotate(90 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><path transform="rotate(180 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><path transform="rotate(270 48 48)" d="M43 42 30 30l6-7h18l-7 19Z"/><circle cx="48" cy="48" r="8" fill="#808080"/></g><rect x="14" y="14" width="4" height="4" fill="#404040"/><rect x="78" y="14" width="4" height="4" fill="#404040"/><rect x="14" y="78" width="4" height="4" fill="#404040"/><rect x="78" y="78" width="4" height="4" fill="#404040"/></svg></div>
 <span class="lamp-control-label">Abluft · oben</span>
 <h3 id="fanTitle-exhaust">Abluft oben</h3>
 <strong>Hardware ausstehend</strong>
@@ -1430,7 +1178,7 @@
 
             <div class="sensor-header">
 
-                <span class="glass-icon glass-icon--temperature" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-temperature-1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff8080"/><stop offset=".48" stop-color="#cc2020"/><stop offset="1" stop-color="#800000"/></linearGradient></defs><path d="M19 29V12a5 5 0 0 1 10 0v17a9 9 0 1 1-10 0Z" fill="url(#glass-temperature-1)" stroke="#ffdbc5" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 15v20" stroke="#fff7ed" stroke-opacity=".8" stroke-width="3.5" stroke-linecap="round"/><circle cx="24" cy="35" r="4" fill="#fff1df" fill-opacity=".9"/><path d="M32 15h5m-5 7h3" stroke="#ffc6b8" stroke-width="2" stroke-linecap="round"/></svg></span>
+                <span class="glass-icon glass-icon--temperature" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M19 29V9l3-4h4l3 4v20l5 5v6l-4 4H18l-4-4v-6Z" fill="#ffffff" stroke="#404040" stroke-width="2"/><path d="M23 15h2v18h5v7H18v-7h5Z" fill="#cc2020"/><path d="M32 10h7m-7 6h4m-4 6h7" stroke="#404040" stroke-width="2"/></svg></span>
 
                 <span>
                     Temperatur
@@ -1463,7 +1211,7 @@
 
             <div class="sensor-header">
 
-                <span class="glass-icon glass-icon--humidity" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-humidity-2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a6caf0"/><stop offset=".48" stop-color="#387bd4"/><stop offset="1" stop-color="#000080"/></linearGradient></defs><path d="M28 6S15 21 15 30a13 13 0 0 0 26 0C41 21 28 6 28 6Z" fill="url(#glass-humidity-2)" stroke="#c7ffff" stroke-opacity=".65" stroke-width="1.2"/><path d="M11 10S4 19 4 24a7 7 0 0 0 11 5" fill="#89e9ff" fill-opacity=".45" stroke="#c6f7ff" stroke-opacity=".6" stroke-width="1.2"/><path d="M22 29c-1 5 2 8 5 8" fill="none" stroke="#e5ffff" stroke-opacity=".85" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+                <span class="glass-icon glass-icon--humidity" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 5 10 25v10l5 7h18l5-7V25Z" fill="#387bd4" stroke="#000080" stroke-width="2"/><path d="m24 9-10 17v9l3 4" fill="none" stroke="#a6caf0" stroke-width="3"/><path d="M28 37h5v-8" fill="none" stroke="#000080" stroke-width="2"/></svg></span>
 
                 <span>
                     Luftfeuchtigkeit
@@ -1496,7 +1244,7 @@
 
             <div class="sensor-header">
 
-                <span class="glass-icon glass-icon--vpd" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-vpd-3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#80c080"/><stop offset=".48" stop-color="#008000"/><stop offset="1" stop-color="#004000"/></linearGradient></defs><path d="M10 34C1 13 27 9 40 7c1 14-3 36-23 32" fill="url(#glass-vpd-3)" stroke="#e4ffc0" stroke-opacity=".65" stroke-width="1.2"/><path d="M8 42c5-13 12-21 23-27M19 27l-1-8m1 8 10 1" fill="none" stroke="#ebffdb" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/></svg></span>
+                <span class="glass-icon glass-icon--vpd" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M8 34V20h4v-6h8v-4h20v16h-4v8h-8v4H12Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="m8 42 24-24m-10 6v-8m-6 14h12" fill="none" stroke="#80c080" stroke-width="2"/></svg></span>
 
                 <span>
                     VPD
@@ -1529,7 +1277,7 @@
 
             <div class="sensor-header">
 
-                <span class="glass-icon glass-icon--light js-light-state-icon" data-state="off" aria-hidden="true"><svg class="glass-glyph light-state-sun" viewBox="0 0 48 48" focusable="false"><defs><linearGradient id="glass-light-sensor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffff80"/><stop offset=".48" stop-color="#ffcc00"/><stop offset="1" stop-color="#a08000"/></linearGradient></defs><g stroke="#ffc64f" stroke-width="2.5" stroke-linecap="round"><path d="M24 3v5m0 32v5M3 24h5m32 0h5M9 9l4 4m22 22 4 4M9 39l4-4m22-22 4-4"/></g><circle cx="24" cy="24" r="11" fill="url(#glass-light-sensor)" stroke="#fff4bf" stroke-opacity=".65" stroke-width="1.2"/><path d="M17 23a7 7 0 0 1 7-7" fill="none" stroke="#fff9df" stroke-width="2" stroke-linecap="round"/></svg><svg class="glass-glyph light-state-moon" viewBox="0 0 48 48" fill="none" focusable="false"><path d="M34 37c-13 2-22-7-20-20 1-6 5-10 10-13-2 12 7 21 19 18-1 7-4 12-9 15Z" fill="#d7ecff" fill-opacity=".8" stroke="#eff8ff" stroke-opacity=".75" stroke-width="1.3"/><path d="M31 12h1m7 5h1m-6 8h1" stroke="#fff7c7" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+                <span class="glass-icon glass-icon--light js-light-state-icon" data-state="off" aria-hidden="true"><svg viewBox="0 0 48 48" class="glass-glyph light-state-sun classic-icon" aria-hidden="true" focusable="false"><path d="M24 2v6m0 32v6M2 24h6m32 0h6M8 8l5 5m22 22 5 5M8 40l5-5m22-22 5-5" stroke="#a08000" stroke-width="2"/><path d="M18 12h12l6 6v12l-6 6H18l-6-6V18Z" fill="#ffcc00" stroke="#806000" stroke-width="2"/><path d="M19 15h10M15 19v10" stroke="#ffff80" stroke-width="2"/></svg><svg viewBox="0 0 48 48" class="glass-glyph light-state-moon classic-icon" aria-hidden="true" focusable="false"><path d="M24 5H14l-7 7v19l7 9h17l10-10H28l-8-8V12Z" fill="#c0c0c0" stroke="#404040" stroke-width="2"/><path d="M16 8h5M10 15v15l6 7" fill="none" stroke="#ffffff" stroke-width="2"/><path d="M35 6v8m-4-4h8M39 18v6m-3-3h6" stroke="#000080" stroke-width="2"/></svg></span>
 
                 <span>
                     Licht
@@ -1578,13 +1326,13 @@
 
 <script src="/static/chart.umd.min.js?v=1"></script>
 
-<script src="/static/app.js?v=windows-2000-1"></script>
+<script src="/static/app.js?v=windows-2000-2"></script>
 
 <script src="/static/overview.js?v=8"></script>
 <script src="/static/tank-status.js?v=1"></script>
 <script src="/static/pump-icons.js?v=2"></script>
 <script src="/static/fans.js?v=2"></script>
-<script src="/static/overview-equipment.js?v=windows-2000-1"></script>
+<script src="/static/overview-equipment.js?v=windows-2000-2"></script>
 <script src="/static/layout.js?v=2"></script><script src="/static/lamp-visual.js?v=3"></script>
 </body>
 

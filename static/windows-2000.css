@@ -261,8 +261,8 @@ details[open] > summary { margin-bottom: 12px; }
 .glass-icon { display: inline-grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; }
 .glass-glyph { display: block; width: 32px; height: 32px; overflow: visible; }
 .glass-glyph, .pump-art, .fan-art, .tank-symbol svg, .lamp-profile-image { filter: none; }
-.glass-glyph [stroke-opacity] { stroke: #404040; stroke-opacity: 1; }
-.overview-equipment-card header .glass-glyph [stroke-opacity] { stroke: #e6e3dc; }
+.classic-icon { shape-rendering: geometricPrecision; }
+.irrigation-icon > svg { width: 32px; height: 32px; }
 .glass-icon--temperature { color: #b02020; }
 .glass-icon--humidity { color: #000080; }
 .glass-icon--vpd, .glass-icon--plant { color: #008000; }
@@ -449,6 +449,7 @@ progress::-moz-progress-bar { background: repeating-linear-gradient(90deg, #0a24
 .grow-lamp-rays, .grow-lamp-beam, .control-lamp-rays { opacity: 0; }
 .live-lamp-icon[data-state="on"] .grow-lamp-rays, .live-lamp-icon[data-state="on"] .grow-lamp-beam, .lamp-control-state-icon[data-state="on"] .control-lamp-rays { opacity: 1; }
 .live-lamp-icon[data-state="on"] .grow-lamp-emitter { fill: #ffcc00; }
+.lamp-control-state-icon[data-state="on"] .control-lamp-emitter { fill: #ffcc00; }
 .live-lamp-icon:not([data-state="on"]) .grow-lamp-emitter,
 .lamp-control-state-icon:not([data-state="on"]) .control-lamp-body,
 .lamp-control-state-icon:not([data-state="on"]) .control-lamp-slider { fill: #808080; stroke: #404040; }
