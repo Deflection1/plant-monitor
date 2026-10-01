@@ -4,7 +4,8 @@ Web-Dashboard für einen Pflanzenschrank auf einem Raspberry Pi 4.
 FastAPI erfasst Klima- und Lichtwerte, SQLite speichert den Verlauf und
 das responsive Dashboard zeigt Messwerte, Kamera und Geräteeinstellungen.
 
-Stand: **01.10.2026 · `main`**. Das Windows-2000-Design und die
+Stand: **01.10.2026 · `design/botanisch-minimalistisch`**. Dieser Branch
+ergänzt das botanische Design und den neuen Aufbau mit Seitennavigation. Das Windows-2000-Design und die
 SEN0501-Integration sind in den Hauptbranch übernommen.
 
 ## Funktionsstand
@@ -153,10 +154,15 @@ server {
 
 ## Oberfläche
 
-**Übersicht:** Livewerte für Temperatur, Feuchte, VPD und Licht, zwei Töpfe,
-Versorgungskarten für Lampe/Bewässerung/Lüfter, Messverläufe und Kamera.
-UV steht im Verlauf nach den beiden Bodenfeuchtediagrammen.
-Galerie und Zeitraffer sind bei Bedarf aufklappbar.
+**Übersicht:** Vier Livekarten, ein gemeinsames Temperatur-/Feuchtediagramm
+mit getrennten Achsen sowie eine Lichtkarte mit PPFD, UV-A, Tageswerten und
+Luxverlauf. Darunter folgen zwei Töpfe, Versorgungskarten und Kamera.
+Die Seitennavigation führt zu den vollständigen Messverläufen, Licht,
+Bewässerung, Lüftung, Kamera und Einstellungen. Auf kleinen Bildschirmen
+lässt sich die Navigation über den Menüknopf öffnen. Galerie und Zeitraffer
+sind bei Bedarf aufklappbar. Die vorhandenen Zeiträume (24h, 7/30 Tage,
+1 Jahr) gelten gemeinsam für Übersicht und vollständige Verläufe.
+Fehlende Messwerte erzeugen Lücken; Ladefehler werden gekennzeichnet.
 
 **Steuerung:** Sprungnavigation zu Licht, Wasser & Töpfen, Lüftung und
 Systemdiagnose. Geräteeinstellungen und Kalibrierungen bleiben von den
@@ -169,7 +175,7 @@ Oben lässt sich zwischen **Standard · Glasdesign**, **Windows 2000** und
 Das botanische Design wird auf `design/botanisch-minimalistisch` entwickelt.
 Alle drei Designs verwenden dieselben Funktionen und APIs.
 
-Die Auswahl gilt für beide Ansichten und wird im jeweiligen Browser unter
+Die Auswahl gilt für alle Ansichten und wird im jeweiligen Browser unter
 `plant-monitor.design` gespeichert. Symbole, Profilbilder und Diagrammfarben
 wechseln mit. Ist Browserspeicherung blockiert, funktioniert der Wechsel
 für die aktuelle Seite trotzdem. Geräteeinstellungen bleiben davon unabhängig.
@@ -177,7 +183,9 @@ für die aktuelle Seite trotzdem. Geräteeinstellungen bleiben davon unabhängig
 Das botanische Design verwendet matte Cremeflächen, Waldgrün, Salbei und
 Terrakotta, reduzierte SVG-Symbole und eigene Diagrammfarben. Es baut auf den
 bestehenden responsiven Layoutregeln auf; `static/botanical.css` überschreibt
-nur die Gestaltung. Die Profil-SVGs liegen in `static/botanical/`.
+nur die Gestaltung. `static/dashboard-layout.css` stellt den gemeinsamen
+Seitenaufbau bereit; `static/dashboard.js` verwendet die vorhandenen
+Messwert- und Verlaufsabfragen ohne zusätzliche API-Aufrufe. Die Profil-SVGs liegen in `static/botanical/`.
 
 ### Aktualisierung
 

@@ -3,13 +3,35 @@
     const valid = value => typeof value === 'number' && Number.isFinite(value);
     const valueText = value => valid(value) ? value.toLocaleString('de-CH', {maximumFractionDigits: 1}) : '—';
     function selectView(view) {
-        const controls = view === 'controls';
-        el('overviewView').hidden = controls;
-        el('controlsView').hidden = !controls;
+        el('overviewView').hidden = view !== 'overview';
+        el('controlsView').hidden = view !== 'controls';
+        if (el('historyView')) el('historyView').hidden = view !== 'history';
         document.querySelectorAll('[data-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
         requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
     }
-    function route() { selectView(location.hash === '#steuerung' ? 'controls' : 'overview'); }
+    const targets = {licht: 'lampControlSection', bewaesserung: 'irrigationControlSection', lueftung: 'fanControlSection', system: 'systemDiagnostics', kamera: 'sharedCameraPanel'};
+    function route() {
+        const hash = location.hash.slice(1);
+        const view = hash === 'klimaverlauf' ? 'history' : hash === 'steuerung' || (targets[hash] && hash !== 'kamera') ? 'controls' : 'overview';
+        selectView(view);
+        const activeRoute = hash === 'steuerung' ? 'system' : (targets[hash] || hash === 'klimaverlauf') ? hash : 'uebersicht';
+        document.querySelectorAll('[data-route]').forEach(link => {
+            const active = link.dataset.route === activeRoute;
+            if (active) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
+        });
+        if (targets[hash]) requestAnimationFrame(() => {
+            const target = el(targets[hash]);
+            if (!target) return;
+            if (target.tagName === 'DETAILS') target.open = true;
+            target.scrollIntoView({block: 'start'});
+            const heading = target.querySelector('h2, summary');
+            if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({preventScroll: true}); }
+        });
+    }
+    document.querySelectorAll('[data-route]').forEach(link => link.addEventListener('click', () => {
+        if (location.hash === '#' + link.dataset.route) route();
+    }));
     document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => {
         location.hash = button.dataset.view === 'controls' ? 'steuerung' : 'uebersicht';
         route();
@@ -45,4 +67,3 @@
         el('ovProgress' + (index + 1)).setAttribute('aria-label', 'Bodenfeuchtigkeit ' + pot.name);
     }));
 })();
-

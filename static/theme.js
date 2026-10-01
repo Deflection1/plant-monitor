@@ -29,19 +29,21 @@
     function updateCharts() {
         if (!window.Chart?.getChart) return;
         const palette = palettes[current];
-        const ids = [...Object.keys(palette.series), "ovWaterChart"];
+        const ids = [...Object.keys(palette.series), "ovWaterChart", "overviewClimateChart", "overviewLuxChart"];
         ids.forEach(id => {
             const chart = window.Chart.getChart(id);
             if (!chart) return;
-            for (const axis of ["x", "y"]) {
+            for (const axis of ["x", "y", "yHumidity"]) {
                 const scale = chart.options.scales?.[axis];
                 if (scale?.ticks) scale.ticks.color = palette.tick;
                 if (scale?.grid) scale.grid.color = palette.grid;
             }
+            if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = palette.tick;
             chart.data.datasets.forEach((dataset, i) => {
-                dataset.backgroundColor = id === "ovWaterChart" ? palette.water[i] : palette.series[id];
+                const color = id === "overviewClimateChart" ? [palette.series.temperatureChart, palette.series.humidityChart][i] : id === "overviewLuxChart" ? palette.series.luxChart : palette.series[id];
+                dataset.backgroundColor = id === "ovWaterChart" ? palette.water[i] : color;
                 if (id === "ovWaterChart") dataset.borderRadius = palette.barRadius;
-                else dataset.borderColor = palette.series[id];
+                else dataset.borderColor = color;
             });
             chart.update("none");
             chart.resize();
@@ -92,4 +94,3 @@
         }
     });
 })();
-

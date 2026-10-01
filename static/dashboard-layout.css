@@ -1,0 +1,89 @@
+/* Shared structure for all three appearances. Theme styles supply the colors. */
+.app-shell { display: grid; grid-template-columns: 220px minmax(0,1fr); min-height: 100vh; align-items: start; }
+html .app-shell > .page { width: 100%; max-width: 1500px; min-width: 0; margin: 0 auto; padding: 30px 32px; }
+.app-shell .sidebar { position: sticky; top: 0; height: 100dvh; padding: 30px 18px; background: var(--panel); color: var(--text); border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 34px; z-index: 30; }
+.sidebar-brand > a { display: block; color: var(--text); font-size: 19px; font-weight: 600; text-decoration: none; line-height: 1.4; }
+.sidebar-brand > a > span { display: block; font-size: 12px; font-weight: 400; color: var(--muted); margin-top: 3px; }
+.sidebar nav { display: grid; gap: 7px; }
+.sidebar nav a { display: flex; align-items: center; gap: 12px; padding: 13px 12px; border: 1px solid transparent; border-radius: 10px; color: var(--muted); text-decoration: none; font-size: 14px; }
+.sidebar nav a > span { display: inline-flex; justify-content: center; width: 20px; font-size: 21px; line-height: 1; }
+.sidebar nav a svg { width: 20px; height: 20px; flex: none; }
+.sidebar nav a:hover, .sidebar nav a[aria-current="page"] { background: var(--green-soft); color: var(--text); border-color: var(--border); }
+.sidebar nav a[aria-current="page"] { font-weight: 600; }
+.sidebar-note { margin-top: auto; font-size: 12px; color: var(--muted); }
+#navigationToggle { display: none; }
+.skip-link { position: fixed; top: -80px; left: 240px; background: var(--panel); padding: 12px; z-index: 100; color: var(--text); }
+.skip-link:focus { top: 8px; }
+.app-shell .view-switch { display: none; }
+.app-shell .header { margin-bottom: 18px; }
+.app-shell .overview-heading { margin: 10px 0 22px; }
+.app-shell .overview-heading h2 { font-size: 1.45rem; }
+.app-shell .overview-heading .eyebrow { display: none; }
+.app-shell .overview-climate { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; margin-bottom: 20px; border: 0; background: transparent; overflow: visible; }
+.app-shell .overview-stat { min-width: 0; padding: 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
+.app-shell .overview-stat > div { display: block; min-width: 0; }
+.app-shell .overview-stat strong { font-size: clamp(25px,3vw,42px); white-space: normal; overflow-wrap: anywhere; }
+.dashboard-primary { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); gap: 20px; margin-bottom: 24px; }
+.app-shell .dashboard-primary > .panel { min-width: 0; margin: 0; padding: 22px; }
+.dashboard-panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.dashboard-panel-heading h2 { margin: 0; }
+.dashboard-panel-heading a, .dashboard-detail-link { font-size: 13px; color: var(--green-light); text-underline-offset: 3px; }
+.dashboard-panel-heading .range-buttons { display: flex; flex-wrap: wrap; gap: 4px; }
+.dashboard-panel-heading .range { padding: 7px 9px; font-size: 12px; }
+.dashboard-note { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 8px 0; }
+.dashboard-chart { position: relative; height: 320px; min-width: 0; margin: 14px 0; }
+.dashboard-chart > canvas { width: 100% !important; height: 100% !important; }
+.dashboard-chart--light { height: 155px; margin: 8px 0; }
+.dashboard-light-values { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.dashboard-light-values > div { min-width: 0; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel-light); }
+.dashboard-light-values span, .dashboard-light-values small { display: block; font-size: 11px; color: var(--muted); line-height: 1.45; }
+.dashboard-light-values strong { display: block; font-size: 24px; line-height: 1.3; margin: 5px 0; overflow-wrap: anywhere; color: var(--text); }
+.app-shell .overview-pots { gap: 20px; margin: 0 0 24px; }
+.app-shell .overview-pot { padding: 22px; }
+.app-shell .overview-equipment-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
+.app-shell .overview-equipment-card { min-width: 0; padding: 20px; }
+.app-shell .watering-chart-wrap { height: 110px; }
+.app-shell #overviewAnalysis { margin-top: 0; }
+.app-shell #overviewAnalysis > h2 { margin-bottom: 20px; }
+.app-shell #overviewCameraSlot { margin-top: 24px; }
+.app-shell :is(#lampControlSection,#irrigationControlSection,#fanControlSection,#systemDiagnostics,#sharedCameraPanel) { scroll-margin-top: 24px; }
+.app-shell :is(a,button):focus-visible { outline: 2px solid var(--green-light); outline-offset: 4px; }
+html[data-theme="botanical"] .sidebar { background: #d2d7c7; }
+html[data-theme="botanical"] .sidebar-brand > a { font-family: Georgia,serif; font-weight: 500; }
+html[data-theme="windows-2000"] .sidebar { box-shadow: var(--raised); }
+html[data-theme="windows-2000"] .sidebar svg { stroke-linecap: square; stroke-linejoin: miter; }
+html[data-theme="windows-2000"] .sidebar nav a,
+html[data-theme="windows-2000"] .dashboard-light-values > div { border-radius: 0; }
+html[data-theme="windows-2000"] .sidebar nav a[aria-current="page"] { background: var(--title); color: white; }
+@media (min-width:901px) and (max-width:1200px) {
+  .app-shell { grid-template-columns: 185px minmax(0,1fr); }
+  html .app-shell > .page { padding: 24px; }
+  .dashboard-primary { grid-template-columns: 1fr; }
+  .dashboard-light-values { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .dashboard-chart--light { height: 180px; }
+  .app-shell .overview-equipment-grid { grid-template-columns: 1fr; }
+}
+@media (max-width:900px) {
+  .app-shell { display: block; }
+  .app-shell .sidebar { height: auto; padding: 12px 18px; gap: 0; border-right: 0; border-bottom: 1px solid var(--border); }
+  .sidebar-brand { display: flex; justify-content: space-between; align-items: center; }
+  .sidebar-brand > a { font-size: 17px; }
+  .sidebar-brand > a > span, .sidebar-note { display: none; }
+  #navigationToggle { display: block; padding: 7px 12px; font-size: 20px; background: var(--panel-light); color: var(--text); border: 1px solid var(--border); border-radius: 6px; }
+  .sidebar nav { display: none; padding-top: 12px; max-height: calc(100dvh - 70px); overflow-y: auto; }
+  .sidebar[data-open="true"] nav { display: grid; }
+  html .app-shell > .page { padding: 22px 18px; }
+  .skip-link { left: 18px; }
+  .dashboard-primary { grid-template-columns: 1fr; }
+  .app-shell .overview-equipment-grid { grid-template-columns: 1fr; }
+  .app-shell :is(#lampControlSection,#irrigationControlSection,#fanControlSection,#systemDiagnostics,#sharedCameraPanel) { scroll-margin-top: 80px; }
+}
+@media (max-width:600px) {
+  .app-shell .overview-climate { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+  .app-shell .overview-stat { padding: 16px; }
+  .app-shell .overview-pots { grid-template-columns: 1fr; }
+  .app-shell .dashboard-primary > .panel { padding: 16px; }
+  .dashboard-chart { height: 265px; }
+  .dashboard-chart--light { height: 150px; }
+  .dashboard-light-values strong { font-size: 21px; }
+}

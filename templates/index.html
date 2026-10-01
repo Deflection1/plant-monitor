@@ -19,12 +19,28 @@
 <link rel="stylesheet" data-theme-stylesheet="botanical" href="/static/botanical.css?v=1" disabled>
 <link rel="stylesheet" href="/static/theme-switch.css?v=botanical-1">
 <meta name="theme-color" content="#102c2b">
-<script src="/static/theme.js?v=botanical-1"></script>
+<link rel="stylesheet" href="/static/dashboard-layout.css?v=1">
+<script src="/static/theme.js?v=dashboard-1"></script>
 </head>
 
 
 <body>
 
+<div class="app-shell">
+<a class="skip-link" href="#overviewView">Zum Inhalt</a>
+<aside class="sidebar" id="appSidebar" data-open="false" aria-label="Hauptnavigation">
+  <div class="sidebar-brand"><a href="#uebersicht">Pflanzenschrank<span>Plant Monitor</span></a><button id="navigationToggle" type="button" aria-controls="sidebarNavigation" aria-expanded="false" aria-label="Navigation öffnen">☰</button></div>
+  <nav id="sidebarNavigation" aria-label="Bereiche">
+    <a href="#uebersicht" data-route="uebersicht"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m3 10 9-7 9 7v10h-6v-6H9v6H3Z"/></svg></span>Übersicht</a>
+    <a href="#klimaverlauf" data-route="klimaverlauf"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 3v18h18M6 15l5-6 5 3 5-7"/></svg></span>Klima &amp; Verlauf</a>
+    <a href="#licht" data-route="licht"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/></svg></span>Licht</a>
+    <a href="#bewaesserung" data-route="bewaesserung"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/></svg></span>Bewässerung</a>
+    <a href="#lueftung" data-route="lueftung"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 7h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 17h5a3 3 0 1 1-3 3"/></svg></span>Lüftung</a>
+    <a href="#kamera" data-route="kamera"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 7h4l2-3h6l2 3h4v14H3Z"/><circle cx="12" cy="13" r="4"/></svg></span>Kamera</a>
+    <a href="#system" data-route="system"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg></span>Einstellungen</a>
+  </nav>
+  <p class="sidebar-note">Dein Wachstum im Blick.</p>
+</aside>
 <div class="page">
 
 
@@ -77,6 +93,31 @@
 <article class="overview-stat metric-humidity"><span class="glass-icon glass-icon--humidity" aria-hidden="true"><svg data-icon-theme="glass" viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-humidity-6" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7ffff"/><stop offset=".48" stop-color="#54d5ff"/><stop offset="1" stop-color="#3176db"/></linearGradient></defs><path d="M28 6S15 21 15 30a13 13 0 0 0 26 0C41 21 28 6 28 6Z" fill="url(#glass-humidity-6)" stroke="#c7ffff" stroke-opacity=".65" stroke-width="1.2"/><path d="M11 10S4 19 4 24a7 7 0 0 0 11 5" fill="#89e9ff" fill-opacity=".45" stroke="#c6f7ff" stroke-opacity=".6" stroke-width="1.2"/><path d="M22 29c-1 5 2 8 5 8" fill="none" stroke="#e5ffff" stroke-opacity=".85" stroke-width="2.5" stroke-linecap="round"/></svg><svg data-icon-theme="windows-2000" viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 5 10 25v10l5 7h18l5-7V25Z" fill="#387bd4" stroke="#000080" stroke-width="2"/><path d="m24 9-10 17v9l3 4" fill="none" stroke="#a6caf0" stroke-width="3"/><path d="M28 37h5v-8" fill="none" stroke="#000080" stroke-width="2"/></svg></span><div><span class="reading-label">Luftfeuchtigkeit</span><strong><span id="ovHumidity">—</span><small> %</small></strong><p>Relative Feuchte</p></div></article>
 <article class="overview-stat metric-vpd"><span class="glass-icon glass-icon--vpd" aria-hidden="true"><svg data-icon-theme="glass" viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-vpd-7" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffc0"/><stop offset=".48" stop-color="#6ee5a2"/><stop offset="1" stop-color="#21977a"/></linearGradient></defs><path d="M10 34C1 13 27 9 40 7c1 14-3 36-23 32" fill="url(#glass-vpd-7)" stroke="#e4ffc0" stroke-opacity=".65" stroke-width="1.2"/><path d="M8 42c5-13 12-21 23-27M19 27l-1-8m1 8 10 1" fill="none" stroke="#ebffdb" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/></svg><svg data-icon-theme="windows-2000" viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M8 34V20h4v-6h8v-4h20v16h-4v8h-8v4H12Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="m8 42 24-24m-10 6v-8m-6 14h12" fill="none" stroke="#80c080" stroke-width="2"/></svg></span><div><span class="reading-label">VPD</span><strong><span id="ovVpd">—</span><small> kPa</small></strong><p>Berechnet</p></div></article>
 <article class="overview-stat metric-light"><span class="glass-icon glass-icon--light js-light-state-icon" data-state="off" aria-hidden="true"><svg data-icon-theme="glass" class="glass-glyph light-state-sun" viewBox="0 0 48 48" focusable="false"><defs><linearGradient id="glass-light-overview" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4bf"/><stop offset=".48" stop-color="#ffc64f"/><stop offset="1" stop-color="#f18134"/></linearGradient></defs><g stroke="#ffc64f" stroke-width="2.5" stroke-linecap="round"><path d="M24 3v5m0 32v5M3 24h5m32 0h5M9 9l4 4m22 22 4 4M9 39l4-4m22-22 4-4"/></g><circle cx="24" cy="24" r="11" fill="url(#glass-light-overview)" stroke="#fff4bf" stroke-opacity=".65" stroke-width="1.2"/><path d="M17 23a7 7 0 0 1 7-7" fill="none" stroke="#fff9df" stroke-width="2" stroke-linecap="round"/></svg><svg data-icon-theme="windows-2000" viewBox="0 0 48 48" class="glass-glyph light-state-sun classic-icon" aria-hidden="true" focusable="false"><path d="M24 2v6m0 32v6M2 24h6m32 0h6M8 8l5 5m22 22 5 5M8 40l5-5m22-22 5-5" stroke="#a08000" stroke-width="2"/><path d="M18 12h12l6 6v12l-6 6H18l-6-6V18Z" fill="#ffcc00" stroke="#806000" stroke-width="2"/><path d="M19 15h10M15 19v10" stroke="#ffff80" stroke-width="2"/></svg><svg data-icon-theme="glass" class="glass-glyph light-state-moon" viewBox="0 0 48 48" fill="none" focusable="false"><path d="M34 37c-13 2-22-7-20-20 1-6 5-10 10-13-2 12 7 21 19 18-1 7-4 12-9 15Z" fill="#d7ecff" fill-opacity=".8" stroke="#eff8ff" stroke-opacity=".75" stroke-width="1.3"/><path d="M31 12h1m7 5h1m-6 8h1" stroke="#fff7c7" stroke-width="2.5" stroke-linecap="round"/></svg><svg data-icon-theme="windows-2000" viewBox="0 0 48 48" class="glass-glyph light-state-moon classic-icon" aria-hidden="true" focusable="false"><path d="M24 5H14l-7 7v19l7 9h17l10-10H28l-8-8V12Z" fill="#c0c0c0" stroke="#404040" stroke-width="2"/><path d="M16 8h5M10 15v15l6 7" fill="none" stroke="#ffffff" stroke-width="2"/><path d="M35 6v8m-4-4h8M39 18v6m-3-3h6" stroke="#000080" stroke-width="2"/></svg></span><div><span class="reading-label">Licht</span><strong><span id="ovLux">—</span><small> Lux</small></strong><p><span id="ovLight">—</span> · am Sensor</p><p class="uv-reading" title="Geschätzte äquivalente UV-A-Bestrahlungsstärke">UV ≈ <span id="ovUv">—</span> mW/cm²</p></div></article>
+</section>
+<section class="dashboard-primary" aria-label="Klima und Licht">
+  <article class="panel dashboard-climate" aria-labelledby="dashboardClimateHeading">
+    <div class="dashboard-panel-heading"><h2 id="dashboardClimateHeading">Klima</h2><div class="range-buttons" aria-label="Zeitraum">
+      <button type="button" class="range active" data-range="24h" aria-pressed="true">24h</button>
+      <button type="button" class="range" data-range="7d" aria-pressed="false">7 Tage</button>
+      <button type="button" class="range" data-range="30d" aria-pressed="false">30 Tage</button>
+      <button type="button" class="range" data-range="1y" aria-pressed="false">1 Jahr</button>
+    </div></div>
+    <p id="dashboardHistoryState" class="dashboard-note" role="status">Verlauf wird geladen …</p>
+    <div class="dashboard-chart"><canvas id="overviewClimateChart" role="img" aria-label="Temperatur in Grad Celsius und relative Luftfeuchtigkeit in Prozent über die Zeit"></canvas></div>
+    <a class="dashboard-detail-link" href="#klimaverlauf">Alle Messverläufe ansehen →</a>
+  </article>
+  <article class="panel dashboard-light" aria-labelledby="dashboardLightHeading">
+    <div class="dashboard-panel-heading"><h2 id="dashboardLightHeading">Licht</h2><a href="#licht">Einstellen →</a></div>
+    <div class="dashboard-light-values">
+      <div><span>PPFD · Zentrum, geschätzt</span><strong id="dashboardPpfd">—</strong><small>µmol/m²/s</small></div>
+      <div><span>UV-A</span><strong id="dashboardUv">—</strong><small>mW/cm²</small></div>
+      <div><span>Lichtdauer heute</span><strong id="dashboardLightDuration">—</strong></div>
+      <div><span>DLI heute, geschätzt</span><strong id="dashboardDli">—</strong><small>mol/m²/Tag</small></div>
+    </div>
+    <p class="dashboard-note">Lichtverlauf · lx</p>
+    <div class="dashboard-chart dashboard-chart--light"><canvas id="overviewLuxChart" role="img" aria-label="Beleuchtungsstärke in Lux über die Zeit"></canvas></div>
+    <p class="dashboard-note">PPFD und DLI verwenden die hinterlegte Kalibrierung für die Mitte des Pflanzenbereichs.</p>
+  </article>
 </section>
 <section class="overview-pots" aria-label="Deine Pflanzen"><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg data-icon-theme="glass" viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-plant-9" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffd0"/><stop offset=".48" stop-color="#86e4aa"/><stop offset="1" stop-color="#358b70"/></linearGradient></defs><path d="M24 35C7 36 5 25 6 17c11-1 19 5 18 18Z" fill="url(#glass-plant-9)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 27c-1-13 7-19 18-19 1 12-7 20-18 19Z" fill="url(#glass-plant-9)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 43V25M24 34 13 24m11 3 10-10" fill="none" stroke="#e7ffdb" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/></svg><svg data-icon-theme="windows-2000" viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 33V17" stroke="#004000" stroke-width="2"/><path d="M24 25H16V21H12V12H17V15H21V19H24Zm0-7h7v-4h5V5h-6v4h-4v4h-2Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="M12 32h24v5h-3v7H15v-7h-3Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M15 34h18M17 38v4" stroke="#e8c890" stroke-width="2"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 01</p><h3 id="ovName1">Topf 1</h3></div><div class="pot-reading"><span class="reading-label"><svg data-icon-theme="glass" class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg><svg data-icon-theme="windows-2000" class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil1">—</strong><p id="ovSoilNote1">Messwert ausstehend</p><progress id="ovProgress1" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 1" hidden></progress></div><p id="ovWaterPot1" class="camera-meta overview-pot-water">—</p><a class="pot-control-link" href="#steuerung" data-control-target="irrigationControlSection">Topf &amp; Bewässerung einstellen →</a></article><article class="overview-pot"><span class="glass-icon glass-icon--plant" aria-hidden="true"><svg data-icon-theme="glass" viewBox="0 0 48 48" class="glass-glyph" focusable="false"><defs><linearGradient id="glass-plant-10" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4ffd0"/><stop offset=".48" stop-color="#86e4aa"/><stop offset="1" stop-color="#358b70"/></linearGradient></defs><path d="M24 35C7 36 5 25 6 17c11-1 19 5 18 18Z" fill="url(#glass-plant-10)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 27c-1-13 7-19 18-19 1 12-7 20-18 19Z" fill="url(#glass-plant-10)" stroke="#e4ffd0" stroke-opacity=".65" stroke-width="1.2"/><path d="M24 43V25M24 34 13 24m11 3 10-10" fill="none" stroke="#e7ffdb" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/></svg><svg data-icon-theme="windows-2000" viewBox="0 0 48 48" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 33V17" stroke="#004000" stroke-width="2"/><path d="M24 25H16V21H12V12H17V15H21V19H24Zm0-7h7v-4h5V5h-6v4h-4v4h-2Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="M12 32h24v5h-3v7H15v-7h-3Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M15 34h18M17 38v4" stroke="#e8c890" stroke-width="2"/></svg></span><div class="pot-title"><p class="eyebrow">PFLANZE 02</p><h3 id="ovName2">Topf 2</h3></div><div class="pot-reading"><span class="reading-label"><svg data-icon-theme="glass" class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg><svg data-icon-theme="windows-2000" class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M12 3S5 11 5 15a7 7 0 0 0 14 0c0-4-7-12-7-12Z"/><path d="M8 15a4 4 0 0 0 4 4"/></svg> Bodenfeuchtigkeit</span><strong id="ovSoil2">—</strong><p id="ovSoilNote2">Messwert ausstehend</p><progress id="ovProgress2" max="100" value="0" aria-label="Bodenfeuchtigkeit Topf 2" hidden></progress></div><p id="ovWaterPot2" class="camera-meta overview-pot-water">—</p><a class="pot-control-link" href="#steuerung" data-control-target="irrigationControlSection">Topf &amp; Bewässerung einstellen →</a></article></section><section class="overview-equipment" aria-labelledby="ovEquipmentHeading">
 <div class="overview-equipment-heading"><div><p class="eyebrow">VERSORGUNG &amp; TECHNIK</p><h2 id="ovEquipmentHeading">Versorgung im Blick</h2></div><p id="ovEquipmentUpdated" class="camera-meta">Status wird geladen …</p></div>
@@ -184,7 +225,163 @@
 <dl><div><dt>Zuluft · gespeichert</dt><dd id="ovFanIntake">—</dd></div><div><dt>Abluft · gespeichert</dt><dd id="ovFanExhaust">—</dd></div><div><dt>Tatsächliche Leistung</dt><dd id="ovFanActual">—</dd></div></dl><p class="camera-meta">Sollwerte sind Einstellungen, keine gemessenen Drehzahlen.</p><a href="#steuerung" data-control-target="fanControlSection">Zur Lüftersteuerung →</a>
 </article>
 </div></section>
-<section class="panel overview-analysis" id="overviewAnalysis" aria-labelledby="overviewAnalysisHeading"><h2 id="overviewAnalysisHeading">Klima- &amp; Lichtverlauf</h2><section class="panel history-panel">
+<div id="overviewCameraSlot"><article class="panel camera-panel" id="sharedCameraPanel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        KAMERA
+                    </p>
+
+                    <h2>
+                        Pflanzenansicht
+                    </h2>
+
+                </div>
+
+
+                <span class="badge">
+                    Kamera
+                </span>
+
+            </div>
+
+
+            <div class="camera-placeholder" id="cameraArea">
+
+                <div class="camera-empty" id="cameraEmpty">
+
+                    <span class="camera-icon">
+                        <span data-icon-theme="glass" aria-hidden="true">📷</span><svg data-icon-theme="windows-2000" class="line-icon classic-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 16h9l4-7h12l4 7h7v26H6Z" fill="#808080" stroke="#000000" stroke-width="2"/><circle cx="24" cy="29" r="9" fill="#000080" stroke="#000000" stroke-width="2"/><path d="M8 18h30M8 20v19" stroke="#ffffff" stroke-width="2"/></svg>
+                    </span>
+
+                    <h3>
+                        Kamera bereit
+                    </h3>
+
+                    <p id="cameraMessage">
+                        Livestream wird gestartet …
+                    </p>
+
+                </div>
+
+                <img id="cameraImage" class="camera-image" alt="Aktuelle Pflanzenansicht" hidden>
+
+            </div>
+
+
+            <div class="button-row">
+
+                <button class="primary" id="captureButton">
+                    <span data-icon-theme="glass" aria-hidden="true">📷</span><svg data-icon-theme="windows-2000" class="line-icon classic-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 16h9l4-7h12l4 7h7v26H6Z" fill="#808080" stroke="#000000" stroke-width="2"/><circle cx="24" cy="29" r="9" fill="#000080" stroke="#000000" stroke-width="2"/><path d="M8 18h30M8 20v19" stroke="#ffffff" stroke-width="2"/></svg> Foto aufnehmen
+                </button>
+
+                <button id="galleryButton">
+                    <span data-icon-theme="glass" aria-hidden="true">🖼️</span><svg data-icon-theme="windows-2000" class="line-icon classic-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 10h15l5 6h18v25H5Z" fill="#ffcc00" stroke="#806000" stroke-width="2"/><path d="M8 19h32v18H8Z" fill="#ffffff" stroke="#808080"/><path d="m10 34 10-10 7 7 6-5 6 8" fill="#008000"/></svg> Bilder
+                </button>
+
+                <button id="timelapseButton">
+                    <span data-icon-theme="glass" aria-hidden="true">⏱️</span><svg data-icon-theme="windows-2000" class="line-icon classic-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 3h14v5H17Z" fill="#808080" stroke="#404040" stroke-width="2"/><circle cx="24" cy="27" r="17" fill="#ffffff" stroke="#000080" stroke-width="3"/><path d="M24 15v12h10" fill="none" stroke="#000000" stroke-width="2"/></svg> Zeitraffer
+                </button>
+
+                <button id="fullscreenButton" disabled>
+                    Vollbild
+                </button>
+
+                <span class="camera-meta" id="cameraMeta">
+                    Kamera wird geprüft …
+                </span>
+
+            </div>
+
+        </article>
+
+
+        </div><div id="overviewHistorySlot"><section class="panel photo-history-panel" id="photoHistoryPanel" hidden>
+
+        <div class="panel-header history-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    KAMERA-ARCHIV
+                </p>
+
+                <h2>
+                    Bilder &amp; Zeitraffer
+                </h2>
+
+            </div>
+
+            <button id="closePhotoHistoryButton">
+                Schließen
+            </button>
+
+        </div>
+
+
+        <div class="timelapse-controls">
+
+            <label>
+                Automatische Aufnahme
+
+                <select id="timelapseInterval">
+                    <option value="60">jede Stunde</option>
+                    <option value="180">alle 3 Stunden</option>
+                    <option value="360">alle 6 Stunden</option>
+                    <option value="720" selected>alle 12 Stunden · 2/Tag</option>
+                    <option value="1440">alle 24 Stunden · 1/Tag</option>
+                    <option value="2880">alle 48 Stunden</option>
+                </select>
+            </label>
+
+            <button class="primary" id="timelapseToggleButton">
+                Zeitraffer starten
+            </button>
+
+            <button id="timelapsePlayButton">
+                ▶ Bilder abspielen
+            </button>
+
+            <span class="camera-meta" id="timelapseStatus">
+                Wird geladen …
+            </span>
+
+        </div>
+
+
+        <div class="timelapse-player" id="timelapsePlayer" hidden>
+
+            <img id="timelapseImage" alt="Zeitraffer">
+
+            <div class="timelapse-player-meta">
+
+                <span id="timelapsePlayerDate">
+                    --
+                </span>
+
+                <button id="timelapseStopButton">
+                    Stop
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="photo-grid" id="photoGrid"></div>
+
+        <p class="estimate-note" id="photoHistoryEmpty" hidden>
+            Noch keine gespeicherten Bilder vorhanden.
+        </p>
+
+    </section>
+
+
+    </div></main>
+<main id="historyView" hidden aria-label="Klima und Lichtverläufe"><section class="panel overview-analysis" id="overviewAnalysis" aria-labelledby="overviewAnalysisHeading"><h2 id="overviewAnalysisHeading">Klima- &amp; Lichtverlauf</h2><section class="panel history-panel">
 
         <div class="panel-header history-header">
 
@@ -203,21 +400,13 @@
 
             <div class="range-buttons">
 
-                <button class="range active">
-                    24h
-                </button>
+                <button type="button" class="range active" data-range="24h" aria-pressed="true">24h</button>
 
-                <button class="range">
-                    7 Tage
-                </button>
+                <button type="button" class="range" data-range="7d" aria-pressed="false">7 Tage</button>
 
-                <button class="range">
-                    30 Tage
-                </button>
+                <button type="button" class="range" data-range="30d" aria-pressed="false">30 Tage</button>
 
-                <button class="range">
-                    1 Jahr
-                </button>
+                <button type="button" class="range" data-range="1y" aria-pressed="false">1 Jahr</button>
 
             </div>
 
@@ -528,162 +717,7 @@
     </section>
 
 
-    </section><div id="overviewCameraSlot"><article class="panel camera-panel" id="sharedCameraPanel">
-
-            <div class="panel-header">
-
-                <div>
-
-                    <p class="eyebrow">
-                        KAMERA
-                    </p>
-
-                    <h2>
-                        Pflanzenansicht
-                    </h2>
-
-                </div>
-
-
-                <span class="badge">
-                    Kamera
-                </span>
-
-            </div>
-
-
-            <div class="camera-placeholder" id="cameraArea">
-
-                <div class="camera-empty" id="cameraEmpty">
-
-                    <span class="camera-icon">
-                        <span data-icon-theme="glass" aria-hidden="true">📷</span><svg data-icon-theme="windows-2000" class="line-icon classic-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 16h9l4-7h12l4 7h7v26H6Z" fill="#808080" stroke="#000000" stroke-width="2"/><circle cx="24" cy="29" r="9" fill="#000080" stroke="#000000" stroke-width="2"/><path d="M8 18h30M8 20v19" stroke="#ffffff" stroke-width="2"/></svg>
-                    </span>
-
-                    <h3>
-                        Kamera bereit
-                    </h3>
-
-                    <p id="cameraMessage">
-                        Livestream wird gestartet …
-                    </p>
-
-                </div>
-
-                <img id="cameraImage" class="camera-image" alt="Aktuelle Pflanzenansicht" hidden>
-
-            </div>
-
-
-            <div class="button-row">
-
-                <button class="primary" id="captureButton">
-                    <span data-icon-theme="glass" aria-hidden="true">📷</span><svg data-icon-theme="windows-2000" class="line-icon classic-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 16h9l4-7h12l4 7h7v26H6Z" fill="#808080" stroke="#000000" stroke-width="2"/><circle cx="24" cy="29" r="9" fill="#000080" stroke="#000000" stroke-width="2"/><path d="M8 18h30M8 20v19" stroke="#ffffff" stroke-width="2"/></svg> Foto aufnehmen
-                </button>
-
-                <button id="galleryButton">
-                    <span data-icon-theme="glass" aria-hidden="true">🖼️</span><svg data-icon-theme="windows-2000" class="line-icon classic-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 10h15l5 6h18v25H5Z" fill="#ffcc00" stroke="#806000" stroke-width="2"/><path d="M8 19h32v18H8Z" fill="#ffffff" stroke="#808080"/><path d="m10 34 10-10 7 7 6-5 6 8" fill="#008000"/></svg> Bilder
-                </button>
-
-                <button id="timelapseButton">
-                    <span data-icon-theme="glass" aria-hidden="true">⏱️</span><svg data-icon-theme="windows-2000" class="line-icon classic-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 3h14v5H17Z" fill="#808080" stroke="#404040" stroke-width="2"/><circle cx="24" cy="27" r="17" fill="#ffffff" stroke="#000080" stroke-width="3"/><path d="M24 15v12h10" fill="none" stroke="#000000" stroke-width="2"/></svg> Zeitraffer
-                </button>
-
-                <button id="fullscreenButton" disabled>
-                    Vollbild
-                </button>
-
-                <span class="camera-meta" id="cameraMeta">
-                    Kamera wird geprüft …
-                </span>
-
-            </div>
-
-        </article>
-
-
-        </div><div id="overviewHistorySlot"><section class="panel photo-history-panel" id="photoHistoryPanel" hidden>
-
-        <div class="panel-header history-header">
-
-            <div>
-
-                <p class="eyebrow">
-                    KAMERA-ARCHIV
-                </p>
-
-                <h2>
-                    Bilder &amp; Zeitraffer
-                </h2>
-
-            </div>
-
-            <button id="closePhotoHistoryButton">
-                Schließen
-            </button>
-
-        </div>
-
-
-        <div class="timelapse-controls">
-
-            <label>
-                Automatische Aufnahme
-
-                <select id="timelapseInterval">
-                    <option value="60">jede Stunde</option>
-                    <option value="180">alle 3 Stunden</option>
-                    <option value="360">alle 6 Stunden</option>
-                    <option value="720" selected>alle 12 Stunden · 2/Tag</option>
-                    <option value="1440">alle 24 Stunden · 1/Tag</option>
-                    <option value="2880">alle 48 Stunden</option>
-                </select>
-            </label>
-
-            <button class="primary" id="timelapseToggleButton">
-                Zeitraffer starten
-            </button>
-
-            <button id="timelapsePlayButton">
-                ▶ Bilder abspielen
-            </button>
-
-            <span class="camera-meta" id="timelapseStatus">
-                Wird geladen …
-            </span>
-
-        </div>
-
-
-        <div class="timelapse-player" id="timelapsePlayer" hidden>
-
-            <img id="timelapseImage" alt="Zeitraffer">
-
-            <div class="timelapse-player-meta">
-
-                <span id="timelapsePlayerDate">
-                    --
-                </span>
-
-                <button id="timelapseStopButton">
-                    Stop
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="photo-grid" id="photoGrid"></div>
-
-        <p class="estimate-note" id="photoHistoryEmpty" hidden>
-            Noch keine gespeicherten Bilder vorhanden.
-        </p>
-
-    </section>
-
-
-    </div></main>
+    </section></main>
 <div id="controlsView" hidden>
 
     <nav class="control-jump-nav" aria-label="Steuerungsbereiche"><button type="button" data-jump="lampControlSection">Licht</button><button type="button" data-jump="irrigationControlSection">Wasser &amp; Töpfe</button><button type="button" data-jump="fanControlSection">Lüftung</button><button type="button" data-jump="systemDiagnostics">System</button></nav><section class="panel lamp-control-panel" id="lampControlSection">
@@ -1553,19 +1587,20 @@
 
     </footer>
 
-</div>
+</div></div>
 
 
 <script src="/static/chart.umd.min.js?v=1"></script>
 
-<script src="/static/app.js?v=sensor-cleanup-1"></script>
+<script src="/static/dashboard.js?v=1"></script>
+<script src="/static/app.js?v=dashboard-1"></script>
 
-<script src="/static/overview.js?v=uv-1"></script>
+<script src="/static/overview.js?v=dashboard-1"></script>
 <script src="/static/tank-status.js?v=1"></script>
 <script src="/static/pump-icons.js?v=2"></script>
 <script src="/static/fans.js?v=2"></script>
 <script src="/static/overview-equipment.js?v=themes-1"></script>
-<script src="/static/layout.js?v=2"></script><script src="/static/lamp-visual.js?v=3"></script>
+<script src="/static/layout.js?v=dashboard-1"></script><script src="/static/lamp-visual.js?v=3"></script>
 </body>
 
 </html>
