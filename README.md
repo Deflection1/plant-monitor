@@ -168,6 +168,21 @@ Fehlende Messwerte erzeugen Lücken; Ladefehler werden gekennzeichnet.
 Systemdiagnose. Geräteeinstellungen und Kalibrierungen bleiben von den
 tatsächlichen Hardwarezuständen getrennt.
 
+### Layoutauswahl
+
+Neben dem Design lässt sich das **Layout** unabhängig umschalten:
+
+- **Klassisch:** bisheriger Aufbau mit Übersicht/Steuerung oben und den
+  vollständigen Verläufen auf der Übersichtsseite.
+- **Seitennavigation:** neuer Aufbau mit Seitenmenü, Klima-/Lichtzusammenfassung
+  und einer eigenen Ansicht für die vollständigen Verläufe (Voreinstellung).
+
+Die Auswahl wird unter `plant-monitor.layout` im Browser gespeichert. Sie gilt
+für alle drei Designs, wird auch in anderen Tabs desselben Browsers aktualisiert
+und verändert keine Geräteeinstellungen. Der Wechsel benötigt kein Neuladen;
+Messwerte, Diagramme und noch nicht gespeicherte Eingaben bleiben erhalten.
+Ist Browserspeicherung gesperrt, gilt die Auswahl für die aktuelle Seite.
+
 ### Designauswahl
 
 Oben lässt sich zwischen **Standard · Glasdesign**, **Windows 2000** und

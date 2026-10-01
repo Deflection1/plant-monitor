@@ -19,8 +19,10 @@
 <link rel="stylesheet" data-theme-stylesheet="botanical" href="/static/botanical.css?v=1" disabled>
 <link rel="stylesheet" href="/static/theme-switch.css?v=botanical-1">
 <meta name="theme-color" content="#102c2b">
-<link rel="stylesheet" href="/static/dashboard-layout.css?v=1">
+<link rel="stylesheet" id="sidebarLayoutStylesheet" href="/static/dashboard-layout.css?v=1">
+<link rel="stylesheet" href="/static/layout-choice.css?v=1">
 <script src="/static/theme.js?v=dashboard-1"></script>
+<script src="/static/layout-choice.js?v=1"></script>
 </head>
 
 
@@ -80,6 +82,8 @@
 
 <div class="appearance-settings">
 <label for="themeSelect">Design <select id="themeSelect"><option value="glass">Standard · Glasdesign</option><option value="windows-2000">Windows 2000</option><option value="botanical">Botanisch minimalistisch</option></select></label>
+<label for="layoutSelect">Layout <select id="layoutSelect"><option value="classic">Klassisch</option><option value="sidebar" selected>Seitennavigation</option></select></label>
+<span id="layoutPreferenceNote" role="status"></span>
 </div>
 <nav class="view-switch" aria-label="Dashboard-Ansicht">
     <button type="button" data-view="overview" aria-pressed="true"><svg data-icon-theme="glass" class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><svg data-icon-theme="windows-2000" class="line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="0"/><rect x="14" y="3" width="7" height="7" rx="0"/><rect x="3" y="14" width="7" height="7" rx="0"/><rect x="14" y="14" width="7" height="7" rx="0"/></svg>Übersicht</button>
@@ -225,7 +229,7 @@
 <dl><div><dt>Zuluft · gespeichert</dt><dd id="ovFanIntake">—</dd></div><div><dt>Abluft · gespeichert</dt><dd id="ovFanExhaust">—</dd></div><div><dt>Tatsächliche Leistung</dt><dd id="ovFanActual">—</dd></div></dl><p class="camera-meta">Sollwerte sind Einstellungen, keine gemessenen Drehzahlen.</p><a href="#steuerung" data-control-target="fanControlSection">Zur Lüftersteuerung →</a>
 </article>
 </div></section>
-<div id="overviewCameraSlot"><article class="panel camera-panel" id="sharedCameraPanel">
+<div id="classicHistorySlot"></div><div id="overviewCameraSlot"><article class="panel camera-panel" id="sharedCameraPanel">
 
             <div class="panel-header">
 
@@ -1595,12 +1599,12 @@
 <script src="/static/dashboard.js?v=1"></script>
 <script src="/static/app.js?v=dashboard-1"></script>
 
-<script src="/static/overview.js?v=dashboard-1"></script>
+<script src="/static/overview.js?v=layout-choice-1"></script>
 <script src="/static/tank-status.js?v=1"></script>
 <script src="/static/pump-icons.js?v=2"></script>
 <script src="/static/fans.js?v=2"></script>
 <script src="/static/overview-equipment.js?v=themes-1"></script>
-<script src="/static/layout.js?v=dashboard-1"></script><script src="/static/lamp-visual.js?v=3"></script>
+<script src="/static/layout.js?v=layout-choice-1"></script><script src="/static/lamp-visual.js?v=3"></script>
 </body>
 
 </html>

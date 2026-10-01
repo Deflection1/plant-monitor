@@ -12,7 +12,8 @@
     const targets = {licht: 'lampControlSection', bewaesserung: 'irrigationControlSection', lueftung: 'fanControlSection', system: 'systemDiagnostics', kamera: 'sharedCameraPanel'};
     function route() {
         const hash = location.hash.slice(1);
-        const view = hash === 'klimaverlauf' ? 'history' : hash === 'steuerung' || (targets[hash] && hash !== 'kamera') ? 'controls' : 'overview';
+        const classic = window.plantLayout?.current() === 'classic';
+        const view = hash === 'klimaverlauf' ? (classic ? 'overview' : 'history') : hash === 'steuerung' || (targets[hash] && hash !== 'kamera') ? 'controls' : 'overview';
         selectView(view);
         const activeRoute = hash === 'steuerung' ? 'system' : (targets[hash] || hash === 'klimaverlauf') ? hash : 'uebersicht';
         document.querySelectorAll('[data-route]').forEach(link => {
@@ -20,8 +21,9 @@
             if (active) link.setAttribute('aria-current', 'page');
             else link.removeAttribute('aria-current');
         });
-        if (targets[hash]) requestAnimationFrame(() => {
-            const target = el(targets[hash]);
+        const targetId = hash === 'klimaverlauf' && classic ? 'overviewAnalysis' : targets[hash];
+        if (targetId) requestAnimationFrame(() => {
+            const target = el(targetId);
             if (!target) return;
             if (target.tagName === 'DETAILS') target.open = true;
             target.scrollIntoView({block: 'start'});
@@ -37,6 +39,7 @@
         route();
     }));
     window.addEventListener('hashchange', route);
+    window.addEventListener('plant:layout', route);
     route();
     window.addEventListener('plant:current', event => {
         const data = event.detail;

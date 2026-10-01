@@ -22,6 +22,7 @@
         });
     }));
     window.addEventListener('hashchange', () => menu(false));
+    window.addEventListener('plant:layout', () => menu(false));
     document.addEventListener('keydown', event => {
         if (event.key === 'Escape' && sidebar?.dataset.open === 'true') { menu(false); toggle.focus(); }
     });
