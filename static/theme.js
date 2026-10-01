@@ -2,7 +2,7 @@
 (() => {
     "use strict";
     const key = "plant-monitor.design";
-    const valid = value => value === "windows-2000" ? value : "glass";
+    const valid = value => ["glass", "windows-2000", "botanical"].includes(value) ? value : "glass";
     let current = "glass";
     try { current = valid(localStorage.getItem(key)); } catch { /* Storage is optional. */ }
     const palettes = {
@@ -10,6 +10,11 @@
             tick: "#89988e", grid: "rgba(255,255,255,0.05)", barRadius: 3,
             water: ["#68d7ba", "#71b9ee"],
             series: {temperatureChart:"#67d391", humidityChart:"#6ebce4", vpdChart:"#e8bd6c", luxChart:"#f1dc78", uvChart:"#c59bff", soilMoisture1Chart:"#74c69d", soilMoisture2Chart:"#95d5b2"}
+        },
+        botanical: {
+            tick: "#626e60", grid: "#e3e5d9", barRadius: 4,
+            water: ["#526d50", "#b9654b"],
+            series: {temperatureChart:"#b75d43", humidityChart:"#4e756e", vpdChart:"#78804c", luxChart:"#a87623", uvChart:"#876080", soilMoisture1Chart:"#526d50", soilMoisture2Chart:"#8b774a"}
         },
         "windows-2000": {
             tick: "#404040", grid: "#d4d0c8", barRadius: 0,
@@ -19,7 +24,7 @@
     };
     const profileIcon = profile => {
         if (!["growth", "flower"].includes(profile)) return undefined;
-        return "/static/" + (current === "windows-2000" ? "windows-2000/" : "") + "profile-" + profile + ".svg?v=themes-1";
+        return "/static/" + (current === "windows-2000" ? "windows-2000/" : current === "botanical" ? "botanical/" : "") + "profile-" + profile + ".svg?v=themes-1";
     };
     function updateCharts() {
         if (!window.Chart?.getChart) return;
@@ -46,10 +51,12 @@
         current = valid(value);
         document.documentElement.dataset.theme = current;
         document.querySelectorAll("[data-theme-stylesheet]").forEach(link => {
-            link.disabled = link.dataset.themeStylesheet !== current;
+            // Botanical builds on the existing responsive layout and overrides its appearance.
+            const theme = link.dataset.themeStylesheet;
+            link.disabled = theme !== current && !(current === "botanical" && theme === "glass");
         });
         const meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.content = current === "glass" ? "#102c2b" : "#3a6ea5";
+        if (meta) meta.content = current === "botanical" ? "#f6f3ea" : current === "glass" ? "#102c2b" : "#3a6ea5";
         const select = document.getElementById("themeSelect");
         if (select) select.value = current;
         document.querySelectorAll("#lampProfileImage, #ovLampProfileIcon").forEach(img => {

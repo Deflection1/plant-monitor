@@ -14,7 +14,7 @@ SEN0501-Integration sind in den Hauptbranch übernommen.
 | Umgebungssensor | SEN0501 V2.0 auf Bus 3 / `0x22`; Temperatur, Feuchte, Lux, Luftdruck und UV ausgelesen | Referenzkalibrierung |
 | Klima | Livewerte, Luft-VPD und gespeicherter Verlauf | Zielbereiche und Warnungen |
 | Lichtmessung | Lux, Lichtstatus, geschätzte PPFD/DLI, Tagesmaximum und Beleuchtungsdauer | Spektrale Referenzmessung |
-| Oberfläche | Übersicht und Steuerung; Glasdesign und Windows 2000 | Weitere Designs |
+| Oberfläche | Übersicht und Steuerung; Glasdesign, Windows 2000 und Botanisch minimalistisch | — |
 | Kamera | IMX219: Livestream, Fotos, Galerie und Zeitraffer | — |
 | Bodenfeuchte | Zwei Topfkonfigurationen, Kalibrierung, Prozentberechnung und Verlauf vorbereitet | ADS1115-/SEN0308-Lesetreiber und Hardwaretest |
 | Pflanzenlampe | Getrennte Profile und Zeitpläne gespeichert; GP8600-Treiber und separates Testprogramm vorhanden | Ausgangsspannung messen, Dashboard-Ausgabe und Zeitplanausführung |
@@ -164,14 +164,20 @@ tatsächlichen Hardwarezuständen getrennt.
 
 ### Designauswahl
 
-Oben lässt sich zwischen **Standard · Glasdesign** und **Windows 2000**
-wechseln; Glas ist die Voreinstellung. Beide Designs gehören zu `main`
-und verwenden dieselben Funktionen und APIs.
+Oben lässt sich zwischen **Standard · Glasdesign**, **Windows 2000** und
+**Botanisch minimalistisch** wechseln; Glas ist die Voreinstellung.
+Das botanische Design wird auf `design/botanisch-minimalistisch` entwickelt.
+Alle drei Designs verwenden dieselben Funktionen und APIs.
 
 Die Auswahl gilt für beide Ansichten und wird im jeweiligen Browser unter
 `plant-monitor.design` gespeichert. Symbole, Profilbilder und Diagrammfarben
 wechseln mit. Ist Browserspeicherung blockiert, funktioniert der Wechsel
 für die aktuelle Seite trotzdem. Geräteeinstellungen bleiben davon unabhängig.
+
+Das botanische Design verwendet matte Cremeflächen, Waldgrün, Salbei und
+Terrakotta, reduzierte SVG-Symbole und eigene Diagrammfarben. Es baut auf den
+bestehenden responsiven Layoutregeln auf; `static/botanical.css` überschreibt
+nur die Gestaltung. Die Profil-SVGs liegen in `static/botanical/`.
 
 ### Aktualisierung
 
