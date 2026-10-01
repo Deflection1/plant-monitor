@@ -1,15 +1,15 @@
 /* Botanical minimalism: shared responsive layout, matte surfaces, no external assets. */
 html[data-theme="botanical"] {
     color-scheme: light;
-    --background: #f6f3ea;
-    --panel: #fffdf7;
-    --panel-light: #eeeee3;
+    --background: #dedbcb;
+    --panel: #eeece2;
+    --panel-light: #d7dacb;
     --text: #203c30;
-    --muted: #626e60;
+    --muted: #53604f;
     --green: #526d50;
     --green-light: #38573c;
-    --green-soft: #e7ecdf;
-    --border: #dcded0;
+    --green-soft: #d2dac6;
+    --border: #c4c9b8;
     --radius: 18px;
     --shadow: none;
     --glass-shadow: none;
@@ -47,12 +47,12 @@ html[data-theme="botanical"] :is(.panel,.sensor-card,.overview-pot,.overview-sta
 }
 html[data-theme="botanical"] :is(.soil-card,.soil-config-card,.chart-box,.light-stat,
     .lamp-control-card,.lamp-config-card,.advanced-settings,.photo-thumb,.timelapse-player) {
-    background: #f7f6ee;
+    background: #e3e4d6;
     border: 1px solid var(--border);
     border-radius: 13px;
     box-shadow: none;
 }
-html[data-theme="botanical"] .lamp-profile-card[data-profile="flower"] { background: #f8eee6; border-color: #e5d5c8; }
+html[data-theme="botanical"] .lamp-profile-card[data-profile="flower"] { background: #e9dcd0; border-color: #d2bdac; }
 html[data-theme="botanical"] :is(.overview-stat strong,.sensor-value,.pot-reading>strong,
     .lamp-control-card strong,.lamp-config-card>strong,.watering-today strong,
     .big-status--light-text strong,.big-status--light small,.lamp-range-row output,
@@ -67,7 +67,7 @@ html[data-theme="botanical"] :is(.pot-reading,.info-row,.soil-config,.lamp-confi
     .irrigation-history,.integrated-soil-reading,.overview-equipment-card dl>div) { border-color: var(--border); }
 html[data-theme="botanical"] .overview-equipment-card { padding: 24px; }
 html[data-theme="botanical"] :is(.view-switch,.control-jump-nav) {
-    background: #e9ecdf; border: 1px solid var(--border); border-radius: 14px;
+    background: #d0d7c4; border: 1px solid var(--border); border-radius: 14px;
     box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none;
 }
 html[data-theme="botanical"] :is(button,.range,.control-jump-nav button,.journal-heading button) {
@@ -76,14 +76,14 @@ html[data-theme="botanical"] :is(button,.range,.control-jump-nav button,.journal
 }
 html[data-theme="botanical"] .view-switch button { background: transparent; color: var(--muted); border-color: transparent; }
 html[data-theme="botanical"] :is(button.primary,.range.active,.view-switch button[aria-pressed="true"]) {
-    background: #526d50; color: #fffdf7; border-color: #526d50; box-shadow: none;
+    background: #526d50; color: #eeece2; border-color: #526d50; box-shadow: none;
 }
 html[data-theme="botanical"] button:disabled { opacity: .58; }
 html[data-theme="botanical"] :is(input:not([type="range"]):not([type="checkbox"]),select,
     .lamp-config-card select,.soil-config-card input,.fan-percent-input input[type="number"]) {
-    background: #fffdf7; color: var(--text); border: 1px solid #c6cdbd; border-radius: 8px;
+    background: #eeece2; color: var(--text); border: 1px solid #c6cdbd; border-radius: 8px;
 }
-html[data-theme="botanical"] select option { background: #fffdf7; color: var(--text); }
+html[data-theme="botanical"] select option { background: #eeece2; color: var(--text); }
 html[data-theme="botanical"] input { accent-color: #526d50; }
 html[data-theme="botanical"] :is(.lamp-range-row input[type="range"],.fan-range-row input[type="range"]) { accent-color: #b9654b; }
 html[data-theme="botanical"] :is(button,a,input,select,summary):focus-visible { outline: 3px solid #8c593c; outline-offset: 3px; }
@@ -91,17 +91,17 @@ html[data-theme="botanical"] :is(a,.overview-equipment-card>a,.pot-control-link)
 html[data-theme="botanical"] :is(.overview-analysis>summary,.system-diagnostics>summary,
     .advanced-settings>summary,.irrigation-history>summary,.lamp-config summary) { color: var(--text); }
 html[data-theme="botanical"] :is(.status,.badge) {
-    background: #e7ecdf; border-color: #cfd8c3; color: #38573c; box-shadow: none;
+    background: #d2dac6; border-color: #cfd8c3; color: #38573c; box-shadow: none;
     backdrop-filter: none; -webkit-backdrop-filter: none;
 }
 html[data-theme="botanical"] .status-dot { background: #66835e; box-shadow: none; }
 html[data-theme="botanical"] .glass-icon {
-    background: #e7ecdf; border: 0; border-radius: 50%; color: #526d50; box-shadow: none;
+    background: #d2dac6; border: 0; border-radius: 50%; color: #526d50; box-shadow: none;
 }
 html[data-theme="botanical"] .glass-icon::after { display: none; }
-html[data-theme="botanical"] .glass-icon--temperature { background: #f4e1d4; color: #b75d43; }
-html[data-theme="botanical"] .glass-icon--humidity { background: #e0ebe3; color: #4e756e; }
-html[data-theme="botanical"] :is(.glass-icon--light,.glass-icon--lamp-control) { background: #f3e7cd; color: #a87623; }
+html[data-theme="botanical"] .glass-icon--temperature { background: #e8cdbb; color: #b75d43; }
+html[data-theme="botanical"] .glass-icon--humidity { background: #cdded2; color: #4e756e; }
+html[data-theme="botanical"] :is(.glass-icon--light,.glass-icon--lamp-control) { background: #e4d4af; color: #a87623; }
 html[data-theme="botanical"] .glass-glyph { filter: none; }
 html[data-theme="botanical"] .glass-glyph :is(path,circle,rect,ellipse,line,polyline,polygon) {
     fill: none; stroke: currentColor; stroke-width: 1.7;
@@ -112,22 +112,22 @@ html[data-theme="botanical"] .glass-glyph defs { display: none; }
 html[data-theme="botanical"] :is(.js-light-state-icon,.live-lamp-icon,.lamp-control-state-icon) {
     box-shadow: none; filter: none;
 }
-html[data-theme="botanical"] :is(.live-lamp-icon,.lamp-control-state-icon)[data-state="on"] { background: #f3e7cd; color: #a87623; }
-html[data-theme="botanical"] :is(.live-lamp-icon,.lamp-control-state-icon)[data-state="off"] { background: #e9ebe3; color: #6c7769; }
-html[data-theme="botanical"] :is(.live-lamp-icon,.lamp-control-state-icon)[data-state="unknown"] { background: #eeeee8; color: #6c7769; opacity: .65; }
+html[data-theme="botanical"] :is(.live-lamp-icon,.lamp-control-state-icon)[data-state="on"] { background: #e4d4af; color: #a87623; }
+html[data-theme="botanical"] :is(.live-lamp-icon,.lamp-control-state-icon)[data-state="off"] { background: #d0d5c7; color: #6c7769; }
+html[data-theme="botanical"] :is(.live-lamp-icon,.lamp-control-state-icon)[data-state="unknown"] { background: #dadccf; color: #6c7769; opacity: .65; }
 html[data-theme="botanical"] :is(.live-lamp-icon,.lamp-control-state-icon) [class*="rays"] { stroke: currentColor; }
 html[data-theme="botanical"] :is(.pump-art,.fan-art,.tank-symbol svg) { filter: none; }
 html[data-theme="botanical"] :is(.pump-art,.fan-art) :is(path,circle,rect,ellipse) {
-    fill: #e7ecdf; stroke: #526d50; stroke-width: 1.5; filter: none;
+    fill: #d2dac6; stroke: #526d50; stroke-width: 1.5; filter: none;
 }
-html[data-theme="botanical"] .tank-symbol { --tank-light:#e7ecdf; --tank-dark:#8d9b7e; }
+html[data-theme="botanical"] .tank-symbol { --tank-light:#d2dac6; --tank-dark:#8d9b7e; }
 html[data-theme="botanical"] .tank-symbol[data-tank-state="ok"] { --tank-light:#cce2dc; --tank-dark:#4e756e; }
 html[data-theme="botanical"] .tank-symbol[data-tank-state="empty"] { --tank-light:#f2d5c9; --tank-dark:#b75d43; }
 html[data-theme="botanical"] :is(.tank-empty-mark,.tank-unknown-mark) { fill: #203c30; }
 html[data-theme="botanical"] :is(.lamp-profile-image,.overview-profile-icon img) { filter: none; }
-html[data-theme="botanical"] .lamp-profile-placeholder { background: #e7ecdf; color: #526d50; border-color: var(--border); box-shadow: none; }
-html[data-theme="botanical"] .pot-reading progress { background: #e4e6d9; }
-html[data-theme="botanical"] .pot-reading progress::-webkit-progress-bar { background: #e4e6d9; }
+html[data-theme="botanical"] .lamp-profile-placeholder { background: #d2dac6; color: #526d50; border-color: var(--border); box-shadow: none; }
+html[data-theme="botanical"] .pot-reading progress { background: #cbd0bd; }
+html[data-theme="botanical"] .pot-reading progress::-webkit-progress-bar { background: #cbd0bd; }
 html[data-theme="botanical"] .pot-reading progress::-webkit-progress-value { background: #66835e; }
 html[data-theme="botanical"] .pot-reading progress::-moz-progress-bar { background: #66835e; }
 html[data-theme="botanical"] .pot-one { background: #526d50; }
@@ -137,7 +137,7 @@ html[data-theme="botanical"] .chart-title--humidity .chart-title-icon { color: #
 html[data-theme="botanical"] :is(.chart-title--vpd,.chart-title--soil) .chart-title-icon { color: #526d50; }
 html[data-theme="botanical"] .chart-title--light .chart-title-icon { color: #a87623; }
 html[data-theme="botanical"] .chart-title--uv .chart-title-icon { color: #876080; }
-html[data-theme="botanical"] :is(#cameraArea,.photo-open img,.timelapse-player,.photo-thumb) { background: #eeeee3; border-color: var(--border); box-shadow: none; }
+html[data-theme="botanical"] :is(#cameraArea,.photo-open img,.timelapse-player,.photo-thumb) { background: #d7dacb; border-color: var(--border); box-shadow: none; }
 html[data-theme="botanical"] .system-only-grid { grid-template-columns: minmax(0,1fr); }
 @media (hover:hover) {
     html[data-theme="botanical"] button:hover:not(:disabled) { border-color: #8c9c7d; box-shadow: none; }
