@@ -84,6 +84,12 @@ html[data-theme="windows-xp"] .overview-stat { background: linear-gradient(#fffe
 html[data-theme="windows-xp"] .overview-stat strong { color: #1456ab; }
 html[data-theme="windows-xp"] .glass-icon { width: 42px; height: 42px; flex-basis: 42px; }
 html[data-theme="windows-xp"] .glass-glyph { width: 36px; height: 36px; filter: drop-shadow(1px 2px 1px #25497f33); }
+html[data-theme="windows-xp"] .xp-icon { filter: drop-shadow(1px 1px 1px #31527530); }
+html[data-theme="windows-xp"] .camera-icon .xp-icon { width: 40px; height: 40px; }
+html[data-theme="windows-xp"] .live-lamp-icon:not([data-state="on"]) .xp-icon .grow-lamp-emitter,
+html[data-theme="windows-xp"] .lamp-control-state-icon:not([data-state="on"]) .xp-icon .control-lamp-emitter { fill: #c5d0df; stroke: #617b98; }
+html[data-theme="windows-xp"] .lamp-control-state-icon:not([data-state="on"]) .xp-icon .control-lamp-body { fill: #b8c8db; stroke: #617b98; }
+html[data-theme="windows-xp"] .xp-icon .tank-unknown-mark { stroke: #537797; }
 html[data-theme="windows-xp"] :is(.pot-reading,.chart-box,.light-stat,.overview-equipment-card dl,.watering-chart-wrap) { border: 1px solid #a6b6ca; border-radius: 4px; background: #fffef8; box-shadow: inset 0 1px 2px #546e9214; }
 html[data-theme="windows-xp"] :is(.lamp-control-card,.lamp-config-card,.soil-config-card,.soil-card) { background: #f8f7ef; border-color: #b0bbcd; border-radius: 5px; box-shadow: inset 0 1px 0 white; }
 html[data-theme="windows-xp"] :is(.control-jump-nav,summary:hover) { background: #e2e9f3; }

@@ -29,7 +29,7 @@
     };
     const profileIcon = profile => {
         if (!["growth", "flower"].includes(profile)) return undefined;
-        return "/static/" + (current === "windows-xp" ? "windows-xp/" : current === "windows-2000" ? "windows-2000/" : current === "botanical" ? "botanical/" : "") + "profile-" + profile + ".svg?v=themes-1";
+        return "/static/" + (current === "windows-xp" ? "windows-xp/" : current === "windows-2000" ? "windows-2000/" : current === "botanical" ? "botanical/" : "") + "profile-" + profile + ".svg" + (current === "windows-xp" ? "?v=xp-icons-2" : "?v=themes-1");
     };
     function updateCharts() {
         if (!window.Chart?.getChart) return;

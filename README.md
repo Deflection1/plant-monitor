@@ -204,7 +204,10 @@ Messwert- und Verlaufsabfragen ohne zusätzliche API-Aufrufe. Die Profil-SVGs li
 
 Windows XP verwendet die blaue Luna-Gestaltung mit beigen Dialogflächen,
 blauen Titelleisten, abgerundeten Schaltflächen, grünen Fortschrittsbalken
-und eigenen Profilbildern und Diagrammfarben. `static/windows-xp.css` baut
+und eigenen Profilbildern und Diagrammfarben. XP verwendet eigene, deckende
+SVG-Symbole für Messwerte, Diagramme, Navigation, Lampen, Pumpen, Lüfter und
+Tank. Die XP-Varianten bewahren die Zustandsklassen für Licht, Tankfüllstand
+und Geräteanimationen; Glas- und Windows-2000-Symbole bleiben separat. `static/windows-xp.css` baut
 auf den Strukturregeln des klassischen Designs auf; dessen Gestaltung wird
 nur für XP überschrieben. XP unterstützt beide Layouts.
 

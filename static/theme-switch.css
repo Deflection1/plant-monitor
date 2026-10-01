@@ -1,11 +1,18 @@
 /* Shared design selector and SVG visibility; loaded after either theme. */
 [data-icon-theme="windows-2000"] { display: none !important; }
+[data-icon-theme="windows-xp"] { display: none !important; }
+html[data-theme="windows-xp"] [data-icon-theme="glass"] { display: none !important; }
+html[data-theme="windows-xp"] [data-icon-theme="shared"] { display: none !important; }
+html[data-theme="windows-xp"] [data-icon-theme="windows-xp"] { display: block !important; }
+html[data-theme="windows-xp"] .line-icon[data-icon-theme="windows-xp"] { display: inline-block !important; }
 html[data-theme="windows-2000"] [data-icon-theme="glass"] { display: none !important; }
 html[data-theme="windows-2000"] [data-icon-theme="windows-2000"] { display: block !important; }
 html[data-theme="windows-2000"] .line-icon[data-icon-theme="windows-2000"] { display: inline-block !important; }
 /* Light state rules must also apply to the selected SVG variant. */
 html[data-theme="windows-2000"] .js-light-state-icon[data-state="off"] .light-state-sun,
 html[data-theme="windows-2000"] .js-light-state-icon[data-state="on"] .light-state-moon { display: none !important; }
+html[data-theme="windows-xp"] .js-light-state-icon[data-state="off"] .light-state-sun,
+html[data-theme="windows-xp"] .js-light-state-icon[data-state="on"] .light-state-moon { display: none !important; }
 .appearance-settings { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px 16px; margin: 0 0 18px; }
 .appearance-settings label { display: flex; flex-direction: row; align-items: center; gap: 9px; color: var(--text); font-size: 12px; }
 .appearance-settings select { min-width: 195px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); color: var(--text); font: inherit; }
