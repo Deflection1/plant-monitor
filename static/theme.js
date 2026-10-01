@@ -36,12 +36,8 @@
         if (!["growth", "flower"].includes(profile)) return undefined;
         return "/static/" + (current === "osrs" ? "osrs/" : current === "windows-xp" ? "windows-xp/" : current === "windows-2000" ? "windows-2000/" : current === "botanical" ? "botanical/" : "") + "profile-" + profile + ".svg" + (current === "windows-xp" ? "?v=xp-icons-2" : "?v=themes-1");
     };
-    let standardChartFamily;
     function updateCharts() {
         if (!window.Chart?.getChart) return;
-        standardChartFamily ??= window.Chart.defaults?.font?.family || 'sans-serif';
-        const family = current === 'osrs' ? '"Plant Old School", monospace' : standardChartFamily;
-        if (window.Chart.defaults?.font) window.Chart.defaults.font.family = family;
         const palette = palettes[current];
         const ids = [...Object.keys(palette.series), "ovWaterChart", "overviewClimateChart", "overviewLuxChart"];
         ids.forEach(id => {
@@ -52,11 +48,8 @@
                 if (scale?.ticks) scale.ticks.color = palette.tick;
                 if (scale?.grid) scale.grid.color = palette.grid;
                 if (scale?.title) scale.title.color = palette.tick;
-                if (scale?.ticks) scale.ticks.font = {...scale.ticks.font, family};
-                if (scale?.title) scale.title.font = {...scale.title.font, family};
             }
             if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = palette.tick;
-            if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.font = {...chart.options.plugins.legend.labels.font, family};
             chart.data.datasets.forEach((dataset, i) => {
                 const color = id === "overviewClimateChart" ? [palette.series.temperatureChart, palette.series.humidityChart][i] : id === "overviewLuxChart" ? palette.series.luxChart : palette.series[id];
                 dataset.backgroundColor = id === "ovWaterChart" ? palette.water[i] : color;
@@ -84,15 +77,12 @@
             if (match) img.setAttribute("src", profileIcon(match[1]));
         });
         updateCharts();
-        if (current === 'osrs' && document.fonts) document.fonts.load('18px "Plant Old School"').then(updateCharts).catch(() => {});
         window.dispatchEvent(new Event("resize"));
     }
     window.plantTheme = {palette: () => palettes[current], profileIcon};
     // Runs in the head, before the body is painted.
     apply(current);
     document.addEventListener("DOMContentLoaded", () => {
-        updateCharts();
-        document.fonts?.ready.then(updateCharts);
         const select = document.getElementById("themeSelect");
         if (!select) return;
         select.value = current;
