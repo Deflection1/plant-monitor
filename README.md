@@ -15,7 +15,7 @@ SEN0501-Integration sind in den Hauptbranch übernommen.
 | Umgebungssensor | SEN0501 V2.0 auf Bus 3 / `0x22`; Temperatur, Feuchte, Lux, Luftdruck und UV ausgelesen | Referenzkalibrierung |
 | Klima | Livewerte, Luft-VPD und gespeicherter Verlauf | Zielbereiche und Warnungen |
 | Lichtmessung | Lux, Lichtstatus, geschätzte PPFD/DLI, Tagesmaximum und Beleuchtungsdauer | Spektrale Referenzmessung |
-| Oberfläche | Übersicht und Steuerung; Glasdesign, Windows 2000, Windows XP und Botanisch minimalistisch | — |
+| Oberfläche | Übersicht und Steuerung; Glasdesign, Windows 2000, Windows XP, OSRS und Botanisch minimalistisch | — |
 | Kamera | IMX219: Livestream, Fotos, Galerie und Zeitraffer | — |
 | Bodenfeuchte | Zwei Topfkonfigurationen, Kalibrierung, Prozentberechnung und Verlauf vorbereitet | ADS1115-/SEN0308-Lesetreiber und Hardwaretest |
 | Pflanzenlampe | Getrennte Profile und Zeitpläne gespeichert; GP8600-Treiber und separates Testprogramm vorhanden | Ausgangsspannung messen, Dashboard-Ausgabe und Zeitplanausführung |
@@ -178,7 +178,7 @@ Neben dem Design lässt sich das **Layout** unabhängig umschalten:
   und einer eigenen Ansicht für die vollständigen Verläufe (Voreinstellung).
 
 Die Auswahl wird unter `plant-monitor.layout` im Browser gespeichert. Sie gilt
-für alle vier Designs, wird auch in anderen Tabs desselben Browsers aktualisiert
+für alle fünf Designs, wird auch in anderen Tabs desselben Browsers aktualisiert
 und verändert keine Geräteeinstellungen. Der Wechsel benötigt kein Neuladen;
 Messwerte, Diagramme und noch nicht gespeicherte Eingaben bleiben erhalten.
 Ist Browserspeicherung gesperrt, gilt die Auswahl für die aktuelle Seite.
@@ -186,9 +186,9 @@ Ist Browserspeicherung gesperrt, gilt die Auswahl für die aktuelle Seite.
 ### Designauswahl
 
 Oben lässt sich zwischen **Standard · Glasdesign**, **Windows 2000**,
-**Windows XP · Luna** und **Botanisch minimalistisch** wechseln; Glas ist die Voreinstellung.
+**Windows XP · Luna**, **OSRS · Old School** und **Botanisch minimalistisch** wechseln; Glas ist die Voreinstellung.
 Das botanische Design wird auf `design/botanisch-minimalistisch` entwickelt.
-Alle vier Designs verwenden dieselben Funktionen und APIs.
+Alle fünf Designs verwenden dieselben Funktionen und APIs.
 
 Die Auswahl gilt für alle Ansichten und wird im jeweiligen Browser unter
 `plant-monitor.design` gespeichert. Symbole, Profilbilder und Diagrammfarben
@@ -210,6 +210,13 @@ Tank. Die XP-Varianten bewahren die Zustandsklassen für Licht, Tankfüllstand
 und Geräteanimationen; Glas- und Windows-2000-Symbole bleiben separat. `static/windows-xp.css` baut
 auf den Strukturregeln des klassischen Designs auf; dessen Gestaltung wird
 nur für XP überschrieben. XP unterstützt beide Layouts.
+
+OSRS orientiert sich an der graubraunen Spieloberfläche: eingefasste
+Steinkacheln, goldene Überschriften, gelbe Messwerte und eigene Pixel-SVGs
+für alle Symbole und Profile. Die Grafiken sind selbst erstellt; es werden
+keine Spielassets oder externen Schriftarten geladen. `static/osrs.css`
+verwendet die responsive Struktur des klassischen Designs. Beide Layouts,
+Gerätezustände und Animationen bleiben verfügbar.
 
 ### Aktualisierung
 

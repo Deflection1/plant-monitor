@@ -20,7 +20,7 @@ function boot(saved,blocked=false,theme='botanical') {
     callbacks.DOMContentLoaded();
     return {window,document,stylesheet,select,note,analysis,form,classic,history,storage,callbacks,events,headLayout,choose(value){select.value=value;listeners.change();}};
 }
-for(const theme of ['glass','botanical','windows-2000','windows-xp']) {
+for(const theme of ['glass','botanical','windows-2000','windows-xp','osrs']) {
     const a=boot(undefined,false,theme);
     assert.equal(a.headLayout,'sidebar');assert.equal(a.select.value,'sidebar');assert.equal(a.stylesheet.disabled,false);
     a.choose('classic');assert.equal(a.document.documentElement.dataset.layout,'classic');assert.equal(a.stylesheet.disabled,true);

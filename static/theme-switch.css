@@ -1,6 +1,12 @@
 /* Shared design selector and SVG visibility; loaded after either theme. */
 [data-icon-theme="windows-2000"] { display: none !important; }
 [data-icon-theme="windows-xp"] { display: none !important; }
+[data-icon-theme="osrs"] { display: none !important; }
+html[data-theme="osrs"] :is([data-icon-theme="glass"],[data-icon-theme="shared"],[data-icon-theme="windows-2000"],[data-icon-theme="windows-xp"]) { display: none !important; }
+html[data-theme="osrs"] [data-icon-theme="osrs"] { display: block !important; }
+html[data-theme="osrs"] .line-icon[data-icon-theme="osrs"] { display: inline-block !important; }
+html[data-theme="osrs"] .js-light-state-icon[data-state="off"] .light-state-sun,
+html[data-theme="osrs"] .js-light-state-icon[data-state="on"] .light-state-moon { display: none !important; }
 html[data-theme="windows-xp"] [data-icon-theme="glass"] { display: none !important; }
 html[data-theme="windows-xp"] [data-icon-theme="shared"] { display: none !important; }
 html[data-theme="windows-xp"] [data-icon-theme="windows-xp"] { display: block !important; }

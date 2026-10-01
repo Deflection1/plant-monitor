@@ -1,0 +1,75 @@
+/* Original game-inspired stone, inventory tiles and pixel sprites. */
+html[data-theme="osrs"] {
+    color-scheme: dark;
+    --desktop: #24231c; --background: #24231c; --face: #484538;
+    --panel: #484538; --panel-light: #36352c; --text: #eee1bd;
+    --muted: #c8bea3; --border: #242119; --title: #514936; --title-end: #39362c;
+    --green: #8eb95a; --green-light: #ffdf57; --green-soft: #655333;
+    --radius: 2px;
+    --raised: inset 2px 2px 0 #746c55,inset -2px -2px 0 #26241c;
+    --sunken: inset 2px 2px 0 #211f18,inset -1px -1px 0 #716953;
+    --stone: repeating-linear-gradient(7deg,#ffffff03 0 1px,transparent 1px 5px),repeating-linear-gradient(93deg,#0000000a 0 1px,transparent 1px 7px),#484538;
+}
+html[data-theme="osrs"] body { background: radial-gradient(ellipse at top,#454132,#211f19 75%); color: var(--text); font-family: "Lucida Console","Courier New",monospace; font-size: 13px; }
+html[data-theme="osrs"] .page { background: var(--stone); border: 3px solid #1c1a14; box-shadow: inset 0 0 0 2px #79715a,0 4px 16px #0008; }
+html[data-theme="osrs"] :is(h1,h2,h3) { color: #ffdf57; font-family: inherit; text-shadow: 1px 2px #15130c; letter-spacing: 0; }
+html[data-theme="osrs"] :is(.header,.panel-header,.bottom-panel-heading,.lamp-control-heading,.overview-equipment-card header,.overview-analysis>h2,.dashboard-panel-heading) {
+    color: #ffdf57; background: linear-gradient(#615844,#393529); border: 2px solid #252117;
+    box-shadow: inset 1px 1px #8b7e61,inset -1px -1px #1b1912; border-radius: 2px; padding: 10px;
+}
+html[data-theme="osrs"] .header h1 { font-size: 20px; }
+html[data-theme="osrs"] :is(.panel,.overview-pot,.overview-stat,.sensor-card) { background: var(--stone); border: 2px solid #211f18; border-radius: 2px; box-shadow: var(--raised); }
+html[data-theme="osrs"] :is(.status,.overview-freshness) { background: #2e2d25; color: #ded4b6; border: 1px solid #7c7256; box-shadow: var(--sunken); padding: 6px 9px; }
+html[data-theme="osrs"] .status-dot { background: #79c947; border-color: #355825; }
+html[data-theme="osrs"] :is(a,a:visited) { color: #ffdf57; }
+html[data-theme="osrs"] a:hover { color: #fff1a0; }
+html[data-theme="osrs"] :is(.overview-stat strong,.pot-reading>strong,.sensor-value,.dashboard-light-values strong,.light-stat strong,.lamp-control-card>strong) { color: #ffff00; font-variant-numeric: tabular-nums; text-shadow: 1px 2px #111; }
+html[data-theme="osrs"] :is(.overview-stat small,.reading-label,.chart-title,.camera-meta,.lamp-control-label,.light-stat span,.light-stat small,.estimate-note,.overview-equipment-card dt,.overview-heading>p) { color: var(--muted); }
+html[data-theme="osrs"] :is(.pot-reading,.chart-box,.light-stat,.overview-equipment-card dl,.watering-chart-wrap,.lamp-control-card,.lamp-config-card,.soil-config-card,.soil-card,.dashboard-light-values>div,.camera-placeholder,.photo-thumb) { background: #36352c; color: var(--text); border: 1px solid #716952; border-radius: 1px; box-shadow: var(--sunken); }
+html[data-theme="osrs"] :is(button,select,input,textarea) { font-family: inherit; }
+html[data-theme="osrs"] button { color: #eee1bd; background: linear-gradient(#645a43,#40392a); border: 1px solid #17150f; border-radius: 2px; box-shadow: inset 1px 1px #948565,inset -1px -1px #29251a; min-height: 32px; }
+html[data-theme="osrs"] button:hover:not(:disabled) { background: #786744; color: #ffff00; }
+html[data-theme="osrs"] button:active:not(:disabled) { background: #3d3122; box-shadow: var(--sunken); }
+html[data-theme="osrs"] :is(.range.active,button.primary,.view-switch button[aria-pressed="true"]) { background: linear-gradient(#784533,#4e241b); color: #ffdf57; outline: 0; border-color: #1d150e; box-shadow: inset 1px 1px #a57653,inset -1px -1px #2a1711; }
+html[data-theme="osrs"] button:disabled { color: #aaa28d; background: #39372e; text-shadow: none; }
+html[data-theme="osrs"] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),select,textarea) { color: #eee1bd; background: #28271f; border: 1px solid #948565; border-radius: 1px; box-shadow: var(--sunken); }
+html[data-theme="osrs"] select option { color: #eee1bd; background: #28271f; }
+html[data-theme="osrs"] :is(a,button,input,select,summary):focus-visible { outline: 2px solid #ffdf57; outline-offset: 3px; }
+html[data-theme="osrs"] :is(.view-switch,.control-jump-nav) { background: #36332a; border-color: #7c7256; }
+html[data-theme="osrs"] .view-switch button { background: #484538; border-color: #7c7256; }
+html[data-theme="osrs"] :is(summary:hover,.badge) { background: #625236; color: #ffdf57; }
+html[data-theme="osrs"] :is(.panel-header .badge,.ov-equipment-status) { color: #ded4b6; }
+html[data-theme="osrs"] .history-panel { border: 0; box-shadow: none; }
+html[data-theme="osrs"] .history-panel .panel-header { background: transparent; color: var(--text); border: 0; box-shadow: none; }
+html[data-theme="osrs"] .panel-header .lamp-control-heading { background: transparent; border: 0; box-shadow: none; }
+html[data-theme="osrs"] :is(.climate-state,.climate-state.warning) { background: #57462a; color: #ffe08a; border-color: #a48745; }
+html[data-theme="osrs"] .climate-state.good { background: #33452b; color: #b5e384; border-color: #6c8b4e; }
+html[data-theme="osrs"] :is(fieldset,.advanced-settings,.lamp-config,.soil-config,.irrigation-history,.overview-equipment-card dl>div) { border-color: #7c7256; }
+html[data-theme="osrs"] .photo-thumb span { color: var(--text); }
+html[data-theme="osrs"] progress { height: 14px; background: #211f19; border: 1px solid #8a7e5f; border-radius: 0; box-shadow: none; }
+html[data-theme="osrs"] progress::-webkit-progress-bar { background: #211f19; }
+html[data-theme="osrs"] progress::-webkit-progress-value { background: repeating-linear-gradient(90deg,#54a33c 0 7px,#84c652 7px 9px); }
+html[data-theme="osrs"] progress::-moz-progress-bar { background: repeating-linear-gradient(90deg,#54a33c 0 7px,#84c652 7px 9px); }
+html[data-theme="osrs"] input[type="range"]::-webkit-slider-runnable-track { background: #29251a; border: 1px solid #8a7e5f; }
+html[data-theme="osrs"] input[type="range"]::-moz-range-track { background: #29251a; border: 1px solid #8a7e5f; }
+html[data-theme="osrs"] input[type="range"]::-webkit-slider-thumb { background: #bb9951; box-shadow: inset 1px 1px #e3c77e,inset -1px -1px #665027; }
+html[data-theme="osrs"] input[type="range"]::-moz-range-thumb { background: #bb9951; box-shadow: inset 1px 1px #e3c77e,inset -1px -1px #665027; }
+html[data-theme="osrs"] :is(.osrs-icon,.lamp-profile-image,.overview-profile-icon img) { image-rendering: pixelated; filter: none; }
+html[data-theme="osrs"] .sidebar { background: var(--stone); border-right: 4px ridge #756b52; box-shadow: inset -2px 0 #1b1913; }
+html[data-theme="osrs"] .sidebar-brand { padding: 10px 6px; border-bottom: 3px ridge #756b52; }
+html[data-theme="osrs"] .sidebar-brand>a { color: #ffdf57; font-family: inherit; font-size: 17px; text-shadow: 1px 2px #111; }
+html[data-theme="osrs"] .sidebar nav a { color: #eee1bd; background: var(--stone); border: 2px solid #211f18; border-radius: 2px; box-shadow: var(--raised); font-size: 12px; padding: 12px 8px; }
+html[data-theme="osrs"] .sidebar nav a:hover { color: #ffdf57; background: #625236; }
+html[data-theme="osrs"] .sidebar nav a[aria-current="page"] { background: #633526; color: #ffff00; box-shadow: inset 1px 1px #a27651,inset -1px -1px #301a13; }
+html[data-theme="osrs"] .dashboard-panel-heading a { color: #ffdf57; }
+html[data-theme="osrs"] .camera-icon .osrs-icon { width: 40px; height: 40px; }
+html[data-theme="osrs"] .pot-one { background: #73b6d7; }
+html[data-theme="osrs"] .pot-two { background: #83ba51; }
+html[data-theme="osrs"] .live-lamp-icon:not([data-state="on"]) .grow-lamp-emitter,
+html[data-theme="osrs"] .lamp-control-state-icon:not([data-state="on"]) .control-lamp-emitter { opacity: .45; }
+html[data-theme="osrs"] .live-lamp-icon[data-state="on"] .grow-lamp-emitter rect,
+html[data-theme="osrs"] .lamp-control-state-icon[data-state="on"] .control-lamp-emitter rect { fill: #ffe052; }
+@media (forced-colors:active) {
+    html[data-theme="osrs"] :is(.header,.panel,.sidebar,.sidebar nav a,.dashboard-panel-heading,button) { background: Canvas; color: CanvasText; box-shadow: none; border: 1px solid CanvasText; }
+    html[data-theme="osrs"] :is(h1,h2,h3,.overview-stat strong,.sensor-value,.dashboard-light-values strong) { color: CanvasText; text-shadow: none; }
+}
