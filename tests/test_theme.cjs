@@ -35,6 +35,7 @@ for(const theme of ['glass','botanical','windows-2000','windows-xp','osrs']) {
  assert.equal(a.light.data.datasets[0].borderColor,p.series.luxChart);
  assert.equal(a.climate.options.scales.yHumidity.ticks.color,p.tick);
  assert.equal(a.climate.options.scales.yHumidity.title.color,p.tick);
+ assert.equal(a.climate.options.scales.yHumidity.ticks.font.family,theme==='osrs'?'"Plant Old School", monospace':'sans-serif');
  assert.equal(a.climate.options.plugins.legend.labels.color,p.tick);
  assert.deepEqual(a.climate.data.datasets[1].data,[60,70]);
 }

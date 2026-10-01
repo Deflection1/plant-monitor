@@ -1,3 +1,10 @@
+@font-face {
+    font-family: "Plant Old School";
+    src: url("/static/osrs/plant-old-school.ttf?v=1") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
 /* Original game-inspired stone, inventory tiles and pixel sprites. */
 html[data-theme="osrs"] {
     color-scheme: dark;
@@ -8,9 +15,9 @@ html[data-theme="osrs"] {
     --radius: 2px;
     --raised: inset 2px 2px 0 #746c55,inset -2px -2px 0 #26241c;
     --sunken: inset 2px 2px 0 #211f18,inset -1px -1px 0 #716953;
-    --stone: repeating-linear-gradient(7deg,#ffffff03 0 1px,transparent 1px 5px),repeating-linear-gradient(93deg,#0000000a 0 1px,transparent 1px 7px),#484538;
+    --stone: url("/static/osrs/stone-texture.svg?v=1") repeat #484538;
 }
-html[data-theme="osrs"] body { background: radial-gradient(ellipse at top,#454132,#211f19 75%); color: var(--text); font-family: "Lucida Console","Courier New",monospace; font-size: 13px; }
+html[data-theme="osrs"] body { background: radial-gradient(ellipse at top,#454132,#211f19 75%); color: var(--text); font-family: "Plant Old School","Courier New",monospace; font-size: 18px; line-height: 1.45; }
 html[data-theme="osrs"] .page { background: var(--stone); border: 3px solid #1c1a14; box-shadow: inset 0 0 0 2px #79715a,0 4px 16px #0008; }
 html[data-theme="osrs"] :is(h1,h2,h3) { color: #ffdf57; font-family: inherit; text-shadow: 1px 2px #15130c; letter-spacing: 0; }
 html[data-theme="osrs"] :is(.header,.panel-header,.bottom-panel-heading,.lamp-control-heading,.overview-equipment-card header,.overview-analysis>h2,.dashboard-panel-heading) {
@@ -69,7 +76,35 @@ html[data-theme="osrs"] .live-lamp-icon:not([data-state="on"]) .grow-lamp-emitte
 html[data-theme="osrs"] .lamp-control-state-icon:not([data-state="on"]) .control-lamp-emitter { opacity: .45; }
 html[data-theme="osrs"] .live-lamp-icon[data-state="on"] .grow-lamp-emitter rect,
 html[data-theme="osrs"] .lamp-control-state-icon[data-state="on"] .control-lamp-emitter rect { fill: #ffe052; }
+/* Rough nine-slice frames keep their corners at every card size. */
+html[data-theme="osrs"] :is(.page,.panel,.overview-pot,.overview-stat,.sensor-card,.sidebar) {
+    border: 6px solid #544d3b;
+    border-image: url("/static/osrs/stone-frame.svg?v=1") 12 / 6px / 0 stretch;
+    border-radius: 0;
+    box-shadow: inset 1px 1px #181710, inset -1px -1px #807557;
+}
+html[data-theme="osrs"] :is(.header,.panel-header,.bottom-panel-heading,.lamp-control-heading,.overview-equipment-card header,.overview-analysis>h2,.dashboard-panel-heading) {
+    background: url("/static/osrs/stone-texture.svg?v=1") repeat #484538;
+    border: 4px solid #544d3b;
+    border-image: url("/static/osrs/stone-frame.svg?v=1") 12 / 4px / 0 stretch;
+}
+html[data-theme="osrs"] :is(h1,h2,h3,button,strong) { font-weight: 400; }
+html[data-theme="osrs"] :is(h1,h2,h3) { text-shadow: 2px 2px 0 #111; }
+html[data-theme="osrs"] .header h1 { font-size: 28px; }
+html[data-theme="osrs"] :is(.reading-label,.overview-stat p,.overview-stat small,.camera-meta,.lamp-control-label,.light-stat span,.light-stat small,.estimate-note,.ov-equipment-status,.dashboard-note,.dashboard-light-values span,.dashboard-light-values small,.sidebar nav a,.appearance-settings label,.watering-estimate,.watering-history-heading,.soil-details,footer) { font-size: 16px; line-height: 1.45; }
+html[data-theme="osrs"] :is(.sidebar-brand>a,.overview-heading h2,.panel-header h2,.overview-equipment-card h3,.pot-title h3,.dashboard-panel-heading h2) { font-size: 24px; }
+html[data-theme="osrs"] :is(.overview-stat strong,.pot-reading>strong,.dashboard-light-values strong) { font-family: "Plant Old School",monospace; font-size: 40px; letter-spacing: 0; text-shadow: 2px 2px #111; }
+html[data-theme="osrs"] :is(.overview-equipment-card dl>div,.lamp-config-card label,.soil-config-card label,.lamp-safety-note,.pot-control-link,.overview-pot-water,.status,.overview-freshness) { font-size: 16px; }
+html[data-theme="osrs"] .sidebar nav a { border: 4px solid #544d3b; border-image: url("/static/osrs/stone-frame.svg?v=1") 12 / 4px / 0 stretch; }
+html[data-theme="osrs"] .osrs-icon { filter: drop-shadow(1px 0 #15140f) drop-shadow(-1px 0 #15140f) drop-shadow(0 1px #15140f); }
+html[data-theme="osrs"] .history-panel { border: 0; border-image: none; box-shadow: none; }
+html[data-theme="osrs"] .history-panel .panel-header,
+html[data-theme="osrs"] .panel-header .lamp-control-heading { border: 0; border-image: none; background: transparent; }
+@media (max-width:600px) {
+    html[data-theme="osrs"] :is(.overview-stat strong,.dashboard-light-values strong) { font-size: 30px; }
+    html[data-theme="osrs"] .sidebar-brand>a { font-size: 20px; }
+}
 @media (forced-colors:active) {
-    html[data-theme="osrs"] :is(.header,.panel,.sidebar,.sidebar nav a,.dashboard-panel-heading,button) { background: Canvas; color: CanvasText; box-shadow: none; border: 1px solid CanvasText; }
+    html[data-theme="osrs"] :is(.header,.panel,.sidebar,.sidebar nav a,.dashboard-panel-heading,button) { background: Canvas; color: CanvasText; box-shadow: none; border: 1px solid CanvasText; border-image: none; }
     html[data-theme="osrs"] :is(h1,h2,h3,.overview-stat strong,.sensor-value,.dashboard-light-values strong) { color: CanvasText; text-shadow: none; }
 }

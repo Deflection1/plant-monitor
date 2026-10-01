@@ -214,7 +214,10 @@ nur für XP überschrieben. XP unterstützt beide Layouts.
 OSRS orientiert sich an der graubraunen Spieloberfläche: eingefasste
 Steinkacheln, goldene Überschriften, gelbe Messwerte und eigene Pixel-SVGs
 für alle Symbole und Profile. Die Grafiken sind selbst erstellt; es werden
-keine Spielassets oder externen Schriftarten geladen. `static/osrs.css`
+keine Spielassets oder externen Schriftarten geladen. Die eigene Pixelschrift
+`Plant Old School` liegt lokal als TTF vor; `scripts/build_osrs_font.py` kann
+sie mit fontTools aus den enthaltenen Glyphen neu erzeugen. Die Steinflächen
+und groben Rahmen verwenden eigene gekachelte SVG-Texturen. `static/osrs.css`
 verwendet die responsive Struktur des klassischen Designs. Beide Layouts,
 Gerätezustände und Animationen bleiben verfügbar.
 
