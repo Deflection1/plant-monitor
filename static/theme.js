@@ -2,7 +2,7 @@
 (() => {
     "use strict";
     const key = "plant-monitor.design";
-    const valid = value => ["glass", "windows-2000", "botanical"].includes(value) ? value : "glass";
+    const valid = value => ["glass", "windows-2000", "botanical", "windows-xp"].includes(value) ? value : "glass";
     let current = "glass";
     try { current = valid(localStorage.getItem(key)); } catch { /* Storage is optional. */ }
     const palettes = {
@@ -16,6 +16,11 @@
             water: ["#526d50", "#b9654b"],
             series: {temperatureChart:"#b75d43", humidityChart:"#4e756e", vpdChart:"#78804c", luxChart:"#a87623", uvChart:"#876080", soilMoisture1Chart:"#526d50", soilMoisture2Chart:"#8b774a"}
         },
+        "windows-xp": {
+            tick: "#505d71", grid: "#d8e1ed", barRadius: 3,
+            water: ["#1769c2", "#43972d"],
+            series: {temperatureChart:"#d45731", humidityChart:"#1769c2", vpdChart:"#43972d", luxChart:"#b67c12", uvChart:"#8753b7", soilMoisture1Chart:"#43972d", soilMoisture2Chart:"#1769c2"}
+        },
         "windows-2000": {
             tick: "#404040", grid: "#d4d0c8", barRadius: 0,
             water: ["#000080", "#008000"],
@@ -24,7 +29,7 @@
     };
     const profileIcon = profile => {
         if (!["growth", "flower"].includes(profile)) return undefined;
-        return "/static/" + (current === "windows-2000" ? "windows-2000/" : current === "botanical" ? "botanical/" : "") + "profile-" + profile + ".svg?v=themes-1";
+        return "/static/" + (current === "windows-xp" ? "windows-xp/" : current === "windows-2000" ? "windows-2000/" : current === "botanical" ? "botanical/" : "") + "profile-" + profile + ".svg?v=themes-1";
     };
     function updateCharts() {
         if (!window.Chart?.getChart) return;
@@ -37,6 +42,7 @@
                 const scale = chart.options.scales?.[axis];
                 if (scale?.ticks) scale.ticks.color = palette.tick;
                 if (scale?.grid) scale.grid.color = palette.grid;
+                if (scale?.title) scale.title.color = palette.tick;
             }
             if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = palette.tick;
             chart.data.datasets.forEach((dataset, i) => {
@@ -53,12 +59,12 @@
         current = valid(value);
         document.documentElement.dataset.theme = current;
         document.querySelectorAll("[data-theme-stylesheet]").forEach(link => {
-            // Botanical builds on the existing responsive layout and overrides its appearance.
+            // Each appearance enables only its own styles and its shared structural base.
             const theme = link.dataset.themeStylesheet;
-            link.disabled = theme !== current && !(current === "botanical" && theme === "glass");
+            link.disabled = theme !== current && !((current === "botanical" && theme === "glass") || (current === "windows-xp" && theme === "windows-2000"));
         });
         const meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.content = current === "botanical" ? "#f6f3ea" : current === "glass" ? "#102c2b" : "#3a6ea5";
+        if (meta) meta.content = current === "botanical" ? "#f6f3ea" : current === "glass" ? "#102c2b" : current === "windows-xp" ? "#0054e3" : "#3a6ea5";
         const select = document.getElementById("themeSelect");
         if (select) select.value = current;
         document.querySelectorAll("#lampProfileImage, #ovLampProfileIcon").forEach(img => {

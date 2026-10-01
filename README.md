@@ -15,7 +15,7 @@ SEN0501-Integration sind in den Hauptbranch übernommen.
 | Umgebungssensor | SEN0501 V2.0 auf Bus 3 / `0x22`; Temperatur, Feuchte, Lux, Luftdruck und UV ausgelesen | Referenzkalibrierung |
 | Klima | Livewerte, Luft-VPD und gespeicherter Verlauf | Zielbereiche und Warnungen |
 | Lichtmessung | Lux, Lichtstatus, geschätzte PPFD/DLI, Tagesmaximum und Beleuchtungsdauer | Spektrale Referenzmessung |
-| Oberfläche | Übersicht und Steuerung; Glasdesign, Windows 2000 und Botanisch minimalistisch | — |
+| Oberfläche | Übersicht und Steuerung; Glasdesign, Windows 2000, Windows XP und Botanisch minimalistisch | — |
 | Kamera | IMX219: Livestream, Fotos, Galerie und Zeitraffer | — |
 | Bodenfeuchte | Zwei Topfkonfigurationen, Kalibrierung, Prozentberechnung und Verlauf vorbereitet | ADS1115-/SEN0308-Lesetreiber und Hardwaretest |
 | Pflanzenlampe | Getrennte Profile und Zeitpläne gespeichert; GP8600-Treiber und separates Testprogramm vorhanden | Ausgangsspannung messen, Dashboard-Ausgabe und Zeitplanausführung |
@@ -178,17 +178,17 @@ Neben dem Design lässt sich das **Layout** unabhängig umschalten:
   und einer eigenen Ansicht für die vollständigen Verläufe (Voreinstellung).
 
 Die Auswahl wird unter `plant-monitor.layout` im Browser gespeichert. Sie gilt
-für alle drei Designs, wird auch in anderen Tabs desselben Browsers aktualisiert
+für alle vier Designs, wird auch in anderen Tabs desselben Browsers aktualisiert
 und verändert keine Geräteeinstellungen. Der Wechsel benötigt kein Neuladen;
 Messwerte, Diagramme und noch nicht gespeicherte Eingaben bleiben erhalten.
 Ist Browserspeicherung gesperrt, gilt die Auswahl für die aktuelle Seite.
 
 ### Designauswahl
 
-Oben lässt sich zwischen **Standard · Glasdesign**, **Windows 2000** und
-**Botanisch minimalistisch** wechseln; Glas ist die Voreinstellung.
+Oben lässt sich zwischen **Standard · Glasdesign**, **Windows 2000**,
+**Windows XP · Luna** und **Botanisch minimalistisch** wechseln; Glas ist die Voreinstellung.
 Das botanische Design wird auf `design/botanisch-minimalistisch` entwickelt.
-Alle drei Designs verwenden dieselben Funktionen und APIs.
+Alle vier Designs verwenden dieselben Funktionen und APIs.
 
 Die Auswahl gilt für alle Ansichten und wird im jeweiligen Browser unter
 `plant-monitor.design` gespeichert. Symbole, Profilbilder und Diagrammfarben
@@ -201,6 +201,12 @@ bestehenden responsiven Layoutregeln auf; `static/botanical.css` überschreibt
 nur die Gestaltung. `static/dashboard-layout.css` stellt den gemeinsamen
 Seitenaufbau bereit; `static/dashboard.js` verwendet die vorhandenen
 Messwert- und Verlaufsabfragen ohne zusätzliche API-Aufrufe. Die Profil-SVGs liegen in `static/botanical/`.
+
+Windows XP verwendet die blaue Luna-Gestaltung mit beigen Dialogflächen,
+blauen Titelleisten, abgerundeten Schaltflächen, grünen Fortschrittsbalken
+und eigenen Profilbildern und Diagrammfarben. `static/windows-xp.css` baut
+auf den Strukturregeln des klassischen Designs auf; dessen Gestaltung wird
+nur für XP überschrieben. XP unterstützt beide Layouts.
 
 ### Aktualisierung
 
@@ -577,6 +583,7 @@ Beispiel eines aktuellen Sensorwertsatzes mit berechneten Lichtwerten
 | `static/` | Stylesheets, JavaScript, SVGs und lokale Chart.js-Bibliothek |
 | `static/theme.js`, `static/theme-switch.css` | Designwechsel |
 | `static/windows-2000.css`, `static/windows-2000/` | Klassisches Design und Profil-SVGs |
+| `static/windows-xp.css`, `static/windows-xp/` | XP-Luna-Design und Profil-SVGs |
 | `tests/` | Hardwareunabhängige Prüfungen |
 
 Python-Tests vom Repository-Verzeichnis aus:
