@@ -4,7 +4,8 @@ Web-Dashboard für einen Pflanzenschrank auf einem Raspberry Pi 4.
 FastAPI erfasst Klima- und Lichtwerte, SQLite speichert den Verlauf und
 das responsive Dashboard zeigt Messwerte, Kamera und Geräteeinstellungen.
 
-Stand: **01.10.2026 · `main`**. Das Windows-2000-Design und die
+Stand: **01.10.2026 · `design/botanisch-minimalistisch`**. Dieser Branch
+ergänzt das botanische Design und den neuen Aufbau mit Seitennavigation. Das Windows-2000-Design und die
 SEN0501-Integration sind in den Hauptbranch übernommen.
 
 ## Funktionsstand
@@ -14,7 +15,7 @@ SEN0501-Integration sind in den Hauptbranch übernommen.
 | Umgebungssensor | SEN0501 V2.0 auf Bus 3 / `0x22`; Temperatur, Feuchte, Lux, Luftdruck und UV ausgelesen | Referenzkalibrierung |
 | Klima | Livewerte, Luft-VPD und gespeicherter Verlauf | Zielbereiche und Warnungen |
 | Lichtmessung | Lux, Lichtstatus, geschätzte PPFD/DLI, Tagesmaximum und Beleuchtungsdauer | Spektrale Referenzmessung |
-| Oberfläche | Übersicht und Steuerung; Glasdesign und Windows 2000 | Weitere Designs |
+| Oberfläche | Übersicht und Steuerung; Glasdesign, Windows 2000, Windows XP, OSRS und Botanisch minimalistisch | — |
 | Kamera | IMX219: Livestream, Fotos, Galerie und Zeitraffer | — |
 | Bodenfeuchte | Zwei Topfkonfigurationen, Kalibrierung, Prozentberechnung und Verlauf vorbereitet | ADS1115-/SEN0308-Lesetreiber und Hardwaretest |
 | Pflanzenlampe | GP8600-Ausgabe, manuelle Leistung und getrennte Profile mit Zeitplänen | Auf dem Pi nach Update aktivieren und prüfen |
@@ -152,25 +153,69 @@ server {
 
 ## Oberfläche
 
-**Übersicht:** Livewerte für Temperatur, Feuchte, VPD und Licht, zwei Töpfe,
-Versorgungskarten für Lampe/Bewässerung/Lüfter, Messverläufe und Kamera.
-UV steht im Verlauf nach den beiden Bodenfeuchtediagrammen.
-Galerie und Zeitraffer sind bei Bedarf aufklappbar.
+**Übersicht:** Vier Livekarten, ein gemeinsames Temperatur-/Feuchtediagramm
+mit getrennten Achsen sowie eine Lichtkarte mit PPFD, UV-A, Tageswerten und
+Luxverlauf. Darunter folgen zwei Töpfe, Versorgungskarten und Kamera.
+Die Seitennavigation führt zu den vollständigen Messverläufen, Licht,
+Bewässerung, Lüftung, Kamera und Einstellungen. Auf kleinen Bildschirmen
+lässt sich die Navigation über den Menüknopf öffnen. Galerie und Zeitraffer
+sind bei Bedarf aufklappbar. Die vorhandenen Zeiträume (24h, 7/30 Tage,
+1 Jahr) gelten gemeinsam für Übersicht und vollständige Verläufe.
+Fehlende Messwerte erzeugen Lücken; Ladefehler werden gekennzeichnet.
 
 **Steuerung:** Sprungnavigation zu Licht, Wasser & Töpfen, Lüftung und
 Systemdiagnose. Geräteeinstellungen und Kalibrierungen bleiben von den
 tatsächlichen Hardwarezuständen getrennt.
 
+### Layoutauswahl
+
+Neben dem Design lässt sich das **Layout** unabhängig umschalten:
+
+- **Klassisch:** bisheriger Aufbau mit Übersicht/Steuerung oben und den
+  vollständigen Verläufen auf der Übersichtsseite.
+- **Seitennavigation:** neuer Aufbau mit Seitenmenü, Klima-/Lichtzusammenfassung
+  und einer eigenen Ansicht für die vollständigen Verläufe (Voreinstellung).
+
+Die Auswahl wird unter `plant-monitor.layout` im Browser gespeichert. Sie gilt
+für alle fünf Designs, wird auch in anderen Tabs desselben Browsers aktualisiert
+und verändert keine Geräteeinstellungen. Der Wechsel benötigt kein Neuladen;
+Messwerte, Diagramme und noch nicht gespeicherte Eingaben bleiben erhalten.
+Ist Browserspeicherung gesperrt, gilt die Auswahl für die aktuelle Seite.
+
 ### Designauswahl
 
-Oben lässt sich zwischen **Standard · Glasdesign** und **Windows 2000**
-wechseln; Glas ist die Voreinstellung. Beide Designs gehören zu `main`
-und verwenden dieselben Funktionen und APIs.
+Oben lässt sich zwischen **Standard · Glasdesign**, **Windows 2000**,
+**Windows XP · Luna**, **OSRS · Old School** und **Botanisch minimalistisch** wechseln; Glas ist die Voreinstellung.
+Das botanische Design wird auf `design/botanisch-minimalistisch` entwickelt.
+Alle fünf Designs verwenden dieselben Funktionen und APIs.
 
-Die Auswahl gilt für beide Ansichten und wird im jeweiligen Browser unter
+Die Auswahl gilt für alle Ansichten und wird im jeweiligen Browser unter
 `plant-monitor.design` gespeichert. Symbole, Profilbilder und Diagrammfarben
 wechseln mit. Ist Browserspeicherung blockiert, funktioniert der Wechsel
 für die aktuelle Seite trotzdem. Geräteeinstellungen bleiben davon unabhängig.
+
+Das botanische Design verwendet matte Cremeflächen, Waldgrün, Salbei und
+Terrakotta, reduzierte SVG-Symbole und eigene Diagrammfarben. Es baut auf den
+bestehenden responsiven Layoutregeln auf; `static/botanical.css` überschreibt
+nur die Gestaltung. `static/dashboard-layout.css` stellt den gemeinsamen
+Seitenaufbau bereit; `static/dashboard.js` verwendet die vorhandenen
+Messwert- und Verlaufsabfragen ohne zusätzliche API-Aufrufe. Die Profil-SVGs liegen in `static/botanical/`.
+
+Windows XP verwendet die blaue Luna-Gestaltung mit beigen Dialogflächen,
+blauen Titelleisten, abgerundeten Schaltflächen, grünen Fortschrittsbalken
+und eigenen Profilbildern und Diagrammfarben. XP verwendet eigene, deckende
+SVG-Symbole für Messwerte, Diagramme, Navigation, Lampen, Pumpen, Lüfter und
+Tank. Die XP-Varianten bewahren die Zustandsklassen für Licht, Tankfüllstand
+und Geräteanimationen; Glas- und Windows-2000-Symbole bleiben separat. `static/windows-xp.css` baut
+auf den Strukturregeln des klassischen Designs auf; dessen Gestaltung wird
+nur für XP überschrieben. XP unterstützt beide Layouts.
+
+OSRS orientiert sich an der graubraunen Spieloberfläche: eingefasste
+Steinkacheln, goldene Überschriften, gelbe Messwerte und eigene Pixel-SVGs
+für alle Symbole und Profile. Die Grafiken sind selbst erstellt; es werden
+keine Spielassets oder externen Schriftarten geladen. `static/osrs.css`
+verwendet die responsive Struktur des klassischen Designs. Beide Layouts,
+Gerätezustände und Animationen bleiben verfügbar.
 
 ### Aktualisierung
 
@@ -572,6 +617,7 @@ Beispiel eines aktuellen Sensorwertsatzes mit berechneten Lichtwerten
 | `static/` | Stylesheets, JavaScript, SVGs und lokale Chart.js-Bibliothek |
 | `static/theme.js`, `static/theme-switch.css` | Designwechsel |
 | `static/windows-2000.css`, `static/windows-2000/` | Klassisches Design und Profil-SVGs |
+| `static/windows-xp.css`, `static/windows-xp/` | XP-Luna-Design und Profil-SVGs |
 | `tests/` | Hardwareunabhängige Prüfungen |
 
 Python-Tests vom Repository-Verzeichnis aus:

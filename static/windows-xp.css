@@ -1,0 +1,124 @@
+/* Windows XP Luna. Uses the classic theme's responsive structure and device states. */
+html[data-theme="windows-xp"] {
+    color-scheme: light;
+    --desktop: #3d77b8;
+    --face: #ece9d8;
+    --panel: #ece9d8;
+    --panel-light: #fffef8;
+    --background: #3d77b8;
+    --text: #1a2942;
+    --muted: #505d71;
+    --border: #9aaac2;
+    --title: #0054e3;
+    --title-end: #3d95ff;
+    --green: #318b2e;
+    --green-light: #1555a3;
+    --green-soft: #dceafd;
+    --radius: 8px;
+    --raised: inset 0 1px 0 #fff, 0 1px 2px #243c6026;
+    --sunken: inset 0 1px 3px #3b547526;
+    --xp-title: linear-gradient(180deg,#419aff 0%,#0866ec 12%,#0054e3 55%,#0868f2 90%,#003fc1 100%);
+}
+html[data-theme="windows-xp"] body {
+    background: linear-gradient(150deg,#559bdb,#356eac 65%,#225491);
+    background-attachment: fixed;
+    font-family: Tahoma,"Segoe UI",Arial,sans-serif;
+    color: var(--text);
+}
+html[data-theme="windows-xp"] .page {
+    border: 3px solid #0054e3;
+    border-radius: 9px 9px 3px 3px;
+    background: var(--face);
+    box-shadow: 0 8px 24px #173a6a55;
+    padding: 5px;
+}
+html[data-theme="windows-xp"] .header {
+    background: var(--xp-title);
+    border-radius: 5px 5px 0 0;
+    padding: 9px 12px;
+    min-height: 40px;
+    box-shadow: inset 0 1px 0 #a1ceff;
+}
+html[data-theme="windows-xp"] .header h1 { font-size: 19px; font-weight: 700; color: white; text-shadow: 1px 1px 1px #174f96; }
+html[data-theme="windows-xp"] .status { background: #f1f8ff; border: 1px solid #124a96; border-radius: 4px; padding: 4px 8px; box-shadow: inset 0 1px 0 white; color: #1a2942; }
+html[data-theme="windows-xp"] .status-dot { border-radius: 50%; background: #59b344; border-color: #2d7b1c; }
+html[data-theme="windows-xp"] :is(a,a:visited) { color: #1555a3; }
+html[data-theme="windows-xp"] a:hover { color: #0039a6; }
+html[data-theme="windows-xp"] :is(.panel,.overview-pot,.overview-stat,.sensor-card) { border: 1px solid #a5b5cd; border-radius: 7px; box-shadow: inset 0 1px 0 white,0 2px 4px #1e47751a; }
+html[data-theme="windows-xp"] :is(.panel-header,.lamp-control-heading,.bottom-panel-heading,.overview-equipment-card header,.overview-analysis>h2) {
+    background: var(--xp-title);
+    color: white;
+    border-radius: 5px 5px 0 0;
+    padding: 8px 10px;
+    box-shadow: inset 0 1px 0 #96c4ff;
+}
+html[data-theme="windows-xp"] :is(.panel-header h2,.lamp-control-heading h2,.bottom-panel-heading h2,.overview-equipment-card h3,.overview-analysis>h2) { color: white; font-weight: 700; }
+html[data-theme="windows-xp"] .history-panel { border: 0; box-shadow: none; }
+html[data-theme="windows-xp"] .history-panel .panel-header { background: transparent; box-shadow: none; color: var(--text); }
+html[data-theme="windows-xp"] .history-panel .panel-header h2 { color: var(--text); }
+html[data-theme="windows-xp"] .panel-header .lamp-control-heading { background: transparent; box-shadow: none; }
+html[data-theme="windows-xp"] button {
+    background: linear-gradient(#fff,#f5f4ea 50%,#e6e2d0);
+    color: #1a2942;
+    border: 1px solid #003c74;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 white;
+    min-height: 30px;
+}
+html[data-theme="windows-xp"] button:hover:not(:disabled) { background: linear-gradient(#fffaf0,#f2e6c1); box-shadow: inset 0 0 0 2px #f6c55b; }
+html[data-theme="windows-xp"] button:active:not(:disabled) { background: #dce7f4; box-shadow: inset 0 1px 3px #41658c66; }
+html[data-theme="windows-xp"] button.primary { outline: 0; box-shadow: inset 0 0 0 2px #a4c5ef; }
+html[data-theme="windows-xp"] .range.active { background: linear-gradient(#2c83f8,#0054cf); color: white; border-color: #003c9a; box-shadow: inset 0 1px 0 #9dccff; }
+html[data-theme="windows-xp"] button:disabled { color: #6c747e; border-color: #a9adb2; background: #e7e5dc; text-shadow: none; }
+html[data-theme="windows-xp"] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),select,textarea) { border: 1px solid #7f9db9; border-radius: 3px; box-shadow: inset 0 1px 2px #35567c14; }
+html[data-theme="windows-xp"] :is(button,a,input,select,summary):focus-visible { outline: 2px solid #d99519; outline-offset: 2px; }
+html[data-theme="windows-xp"] input[type="range"]::-webkit-slider-runnable-track { background: #e2e4dc; border: 1px solid #9ca7b2; box-shadow: inset 0 1px 2px #7f93a233; border-radius: 4px; }
+html[data-theme="windows-xp"] input[type="range"]::-moz-range-track { background: #e2e4dc; border: 1px solid #9ca7b2; box-shadow: inset 0 1px 2px #7f93a233; border-radius: 4px; }
+html[data-theme="windows-xp"] input[type="range"]::-webkit-slider-thumb { background: linear-gradient(90deg,#fff,#dceafd); border: 1px solid #3973ac; border-radius: 3px; box-shadow: inset 0 3px 0 #59a93c; }
+html[data-theme="windows-xp"] input[type="range"]::-moz-range-thumb { background: linear-gradient(90deg,#fff,#dceafd); border: 1px solid #3973ac; border-radius: 3px; box-shadow: inset 0 3px 0 #59a93c; }
+html[data-theme="windows-xp"] .view-switch { border-color: #91a9cb; }
+html[data-theme="windows-xp"] .view-switch button { border: 1px solid #91a9cb; border-bottom: 0; border-radius: 5px 5px 0 0; background: #f4f3eb; box-shadow: none; }
+html[data-theme="windows-xp"] .view-switch button[aria-pressed="true"] { background: #fffef8; box-shadow: inset 0 3px 0 #f4b546; }
+html[data-theme="windows-xp"] .overview-freshness { background: #fffef8; border-color: #91a9cb; color: var(--muted); border-radius: 0 0 4px 4px; }
+html[data-theme="windows-xp"] .overview-stat { background: linear-gradient(#fffefb,#eeeadd); }
+html[data-theme="windows-xp"] .overview-stat strong { color: #1456ab; }
+html[data-theme="windows-xp"] .glass-icon { width: 42px; height: 42px; flex-basis: 42px; }
+html[data-theme="windows-xp"] .glass-glyph { width: 36px; height: 36px; filter: drop-shadow(1px 2px 1px #25497f33); }
+html[data-theme="windows-xp"] .xp-icon { filter: drop-shadow(1px 1px 1px #31527530); }
+html[data-theme="windows-xp"] .camera-icon .xp-icon { width: 40px; height: 40px; }
+html[data-theme="windows-xp"] .live-lamp-icon:not([data-state="on"]) .xp-icon .grow-lamp-emitter,
+html[data-theme="windows-xp"] .lamp-control-state-icon:not([data-state="on"]) .xp-icon .control-lamp-emitter { fill: #c5d0df; stroke: #617b98; }
+html[data-theme="windows-xp"] .lamp-control-state-icon:not([data-state="on"]) .xp-icon .control-lamp-body { fill: #b8c8db; stroke: #617b98; }
+html[data-theme="windows-xp"] .xp-icon .tank-unknown-mark { stroke: #537797; }
+html[data-theme="windows-xp"] :is(.pot-reading,.chart-box,.light-stat,.overview-equipment-card dl,.watering-chart-wrap) { border: 1px solid #a6b6ca; border-radius: 4px; background: #fffef8; box-shadow: inset 0 1px 2px #546e9214; }
+html[data-theme="windows-xp"] :is(.lamp-control-card,.lamp-config-card,.soil-config-card,.soil-card) { background: #f8f7ef; border-color: #b0bbcd; border-radius: 5px; box-shadow: inset 0 1px 0 white; }
+html[data-theme="windows-xp"] :is(.control-jump-nav,summary:hover) { background: #e2e9f3; }
+html[data-theme="windows-xp"] :is(.advanced-settings,fieldset,.soil-config,.irrigation-history,.lamp-config) { border-color: #acb8ca; }
+html[data-theme="windows-xp"] progress { border: 1px solid #7f9db9; border-radius: 3px; background: #fff; box-shadow: inset 0 1px 2px #35567c22; }
+html[data-theme="windows-xp"] progress::-webkit-progress-bar { background: white; }
+html[data-theme="windows-xp"] progress::-webkit-progress-value { background: repeating-linear-gradient(90deg,#58b535 0 8px,#8ad363 8px 10px,transparent 10px 12px); }
+html[data-theme="windows-xp"] progress::-moz-progress-bar { background: repeating-linear-gradient(90deg,#58b535 0 8px,#8ad363 8px 10px,transparent 10px 12px); }
+html[data-theme="windows-xp"] .pot-one { background: #1769c2; }
+html[data-theme="windows-xp"] .pot-two { background: #43972d; }
+html[data-theme="windows-xp"] .tank-symbol[data-tank-state="ok"] { --tank-light: #78ccfa; --tank-dark: #1769c2; }
+html[data-theme="windows-xp"] .appearance-settings { margin-top: 12px; }
+html[data-theme="windows-xp"] .sidebar { background: linear-gradient(#dceaff,#c5dcfa); border-right: 2px solid #0054e3; box-shadow: inset -1px 0 0 #a1cbff; }
+html[data-theme="windows-xp"] .sidebar-brand { background: var(--xp-title); border-radius: 5px; padding: 12px 9px; box-shadow: inset 0 1px 0 #a1ceff; }
+html[data-theme="windows-xp"] .sidebar-brand>a,
+html[data-theme="windows-xp"] .sidebar-brand>a>span { color: white; }
+html[data-theme="windows-xp"] .sidebar nav a { border-radius: 4px; color: #174b8d; }
+html[data-theme="windows-xp"] .sidebar nav a:hover { background: #edf5ff; }
+html[data-theme="windows-xp"] .sidebar nav a[aria-current="page"] { background: var(--xp-title); color: white; border-color: #0054d1; box-shadow: inset 0 1px 0 #9acaff; }
+html[data-theme="windows-xp"] .dashboard-panel-heading { background: var(--xp-title); color: white; padding: 9px 12px; border-radius: 5px; }
+html[data-theme="windows-xp"] .dashboard-panel-heading :is(h2,a) { color: white; }
+html[data-theme="windows-xp"] .dashboard-light-values>div { border-radius: 4px; }
+html[data-theme="windows-xp"] .dashboard-light-values strong { color: #1456ab; }
+@media (max-width:600px) {
+    html[data-theme="windows-xp"] .header { align-items: flex-start; flex-wrap: wrap; }
+    html[data-theme="windows-xp"] .header h1 { font-size: 17px; }
+    html[data-theme="windows-xp"] .sidebar-brand { padding: 6px 9px; }
+}
+@media (forced-colors:active) {
+    html[data-theme="windows-xp"] :is(.header,.panel-header,.sidebar-brand,.sidebar nav a[aria-current="page"],.dashboard-panel-heading,.range.active) { background: Canvas; color: CanvasText; box-shadow: none; border: 1px solid CanvasText; }
+    html[data-theme="windows-xp"] :is(.header,.panel-header,.sidebar-brand,.dashboard-panel-heading) :is(h1,h2,a,span) { color: CanvasText; text-shadow: none; }
+}

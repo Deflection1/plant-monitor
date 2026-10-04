@@ -1,0 +1,4 @@
+/* Always loaded; classic delegates its structure to the original theme styles. */
+html[data-layout="classic"] :is(.sidebar,.dashboard-primary,.skip-link) { display: none; }
+#layoutPreferenceNote { color: var(--muted); font-size: 12px; }
+#layoutPreferenceNote:empty { display: none; }

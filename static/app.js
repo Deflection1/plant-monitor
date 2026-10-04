@@ -388,7 +388,9 @@ async function loadLightToday() {
             );
 
 
+        window.dispatchEvent(new CustomEvent("plant:light-today", {detail: data}));
     } catch (error) {
+        window.dispatchEvent(new Event("plant:light-today-error"));
 
         console.error(
             "Light today API error:",
@@ -658,13 +660,14 @@ function formatTime(
 
 async function loadHistory() {
 
+    const requestedRange = historyRange;
     try {
 
         const response =
             await fetch(
 
                 "/api/history?range="
-                + historyRange,
+                + requestedRange,
 
                 {
                     cache:
@@ -685,6 +688,8 @@ async function loadHistory() {
         const result =
             await response.json();
 
+
+        if (requestedRange !== historyRange) return;
 
         const points =
             result.points || [];
@@ -836,7 +841,9 @@ async function loadHistory() {
         soilMoisture2Chart.update();
 
 
+        window.dispatchEvent(new CustomEvent("plant:history", {detail: {range: requestedRange, points, labels}}));
     } catch (error) {
+        if (requestedRange === historyRange) window.dispatchEvent(new Event("plant:history-error"));
 
         console.error(
             "History API error:",
@@ -851,80 +858,20 @@ async function loadHistory() {
 // =====================================================
 
 function setupRangeButtons() {
-
-    document
-        .querySelectorAll(
-            ".range"
-        )
-        .forEach(
-            function(button) {
-
-
-                button.addEventListener(
-                    "click",
-                    function() {
-
-
-                        document
-                            .querySelectorAll(
-                                ".range"
-                            )
-                            .forEach(
-                                function(item) {
-
-                                    item.classList.remove(
-                                        "active"
-                                    );
-                                }
-                            );
-
-
-                        button.classList.add(
-                            "active"
-                        );
-
-
-                        const value =
-                            button
-                            .textContent
-                            .trim();
-
-
-                        if (
-                            value === "24h"
-                        ) {
-
-                            historyRange =
-                                "24h";
-
-                        } else if (
-                            value ===
-                            "7 Tage"
-                        ) {
-
-                            historyRange =
-                                "7d";
-
-                        } else if (
-                            value ===
-                            "30 Tage"
-                        ) {
-
-                            historyRange =
-                                "30d";
-
-                        } else {
-
-                            historyRange =
-                                "1y";
-                        }
-
-
-                        loadHistory();
-                    }
-                );
-            }
-        );
+    const buttons = document.querySelectorAll(".range");
+    const rangeOf = button => button.dataset.range || ({"24h":"24h", "7 Tage":"7d", "30 Tage":"30d", "1 Jahr":"1y"}[button.textContent.trim()]);
+    buttons.forEach(button => button.addEventListener("click", () => {
+        const range = rangeOf(button);
+        if (!["24h", "7d", "30d", "1y"].includes(range)) return;
+        historyRange = range;
+        buttons.forEach(item => {
+            const active = rangeOf(item) === range;
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-pressed", String(active));
+        });
+        window.dispatchEvent(new CustomEvent("plant:history-loading", {detail: {range}}));
+        loadHistory();
+    }));
 }
 
 
