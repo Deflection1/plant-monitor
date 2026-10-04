@@ -102,7 +102,7 @@
 <path d="M28 69q12 0 20 9m20-9q-12 0-20 9v10" fill="none" stroke="#d1ffe4" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/>
 <path d="M12 89q16-3 36-1t36-2" fill="none" stroke="#aacfc4" stroke-opacity=".6" stroke-width="1.4" stroke-linecap="round"/>
 <path d="M19 66q9-4 19 4M59 70q10-8 17-5" fill="none" stroke="white" stroke-opacity=".45" stroke-width="1" stroke-linecap="round"/>
-</svg><svg data-icon-theme="windows-2000" viewBox="0 0 96 96" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 5v17M72 5v17" stroke="#404040" stroke-width="2"/><path d="M12 22h72v15H12Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M15 25h66" stroke="#ffffff" stroke-width="3"/><path class="grow-lamp-emitter" d="M16 37h64v6H16Z" fill="#808080" stroke="#000000" stroke-width="2"/><g class="grow-lamp-rays" stroke="#a08000" stroke-width="3"><path d="m24 47-5 9m29-9v11m24-11 5 9"/></g><g transform="translate(24 42) scale(1)"><path d="M24 33V17" stroke="#004000" stroke-width="2"/><path d="M24 25H16V21H12V12H17V15H21V19H24Zm0-7h7v-4h5V5h-6v4h-4v4h-2Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="M12 32h24v5h-3v7H15v-7h-3Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M15 34h18M17 38v4" stroke="#e8c890" stroke-width="2"/></g></svg></span><div><h3 id="ovLampTitle">Pflanzenlampe</h3><p id="ovLampStatus" class="ov-equipment-status">Wird geladen …</p></div></header><dl><div><dt>Profil</dt><dd class="overview-profile-value"><span class="overview-profile-icon"><img id="ovLampProfileIcon" src="/static/profile-growth.svg?v=1" alt="" hidden><span id="ovLampFallback" aria-hidden="true">◇</span></span><span id="ovLampProfile">—</span></dd></div><div><dt>Beleuchtungsstärke</dt><dd id="ovLampLiveNote" aria-live="polite">— Lux</dd></div><div><dt>Gespeicherte Leistung</dt><dd id="ovLampPower">—</dd></div><div><dt>Zeitplan</dt><dd id="ovLampSchedule">—</dd></div><div><dt>Tatsächlicher Ausgang</dt><dd id="ovLampActual">—</dd></div></dl><a href="#steuerung" data-control-target="lampControlSection">Zur Lampensteuerung →</a>
+</svg><svg data-icon-theme="windows-2000" viewBox="0 0 96 96" class="glass-glyph classic-icon" aria-hidden="true" focusable="false"><path d="M24 5v17M72 5v17" stroke="#404040" stroke-width="2"/><path d="M12 22h72v15H12Z" fill="#d4d0c8" stroke="#000000" stroke-width="2"/><path d="M15 25h66" stroke="#ffffff" stroke-width="3"/><path class="grow-lamp-emitter" d="M16 37h64v6H16Z" fill="#808080" stroke="#000000" stroke-width="2"/><g class="grow-lamp-rays" stroke="#a08000" stroke-width="3"><path d="m24 47-5 9m29-9v11m24-11 5 9"/></g><g transform="translate(24 42) scale(1)"><path d="M24 33V17" stroke="#004000" stroke-width="2"/><path d="M24 25H16V21H12V12H17V15H21V19H24Zm0-7h7v-4h5V5h-6v4h-4v4h-2Z" fill="#008000" stroke="#004000" stroke-width="2"/><path d="M12 32h24v5h-3v7H15v-7h-3Z" fill="#b08040" stroke="#402000" stroke-width="2"/><path d="M15 34h18M17 38v4" stroke="#e8c890" stroke-width="2"/></g></svg></span><div><h3 id="ovLampTitle">Pflanzenlampe</h3><p id="ovLampStatus" class="ov-equipment-status">Wird geladen …</p></div></header><dl><div><dt>Profil</dt><dd class="overview-profile-value"><span class="overview-profile-icon"><img id="ovLampProfileIcon" src="/static/profile-growth.svg?v=1" alt="" hidden><span id="ovLampFallback" aria-hidden="true">◇</span></span><span id="ovLampProfile">—</span></dd></div><div><dt>Beleuchtungsstärke</dt><dd id="ovLampLiveNote" aria-live="polite">— Lux</dd></div><div><dt>Gespeicherte Leistung</dt><dd id="ovLampPower">—</dd></div><div><dt>Zeitplan</dt><dd id="ovLampSchedule">—</dd></div><div><dt>Gesendeter Dimmwert</dt><dd id="ovLampActual">—</dd></div></dl><a href="#steuerung" data-control-target="lampControlSection">Zur Lampensteuerung →</a>
 </article>
 <article class="panel overview-equipment-card">
 <header><div class="ov-equipment-icon"><svg data-icon-theme="glass" class="pump-art" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
@@ -740,7 +740,7 @@
 
 
             <span class="badge" id="lampControlStatus">
-                Hardware ausstehend
+                Status wird geladen
             </span>
 
         </div>
@@ -885,6 +885,11 @@
                     </strong>
 
                     <label class="lamp-toggle-row">
+                        <input id="lampControlEnabled" type="checkbox">
+                        <span>Lampensteuerung aktivieren</span>
+                    </label>
+
+                    <label class="lamp-toggle-row">
                         <input id="lampScheduleEnabled" type="checkbox">
                         <span>
                             Zeitplan aktivieren
@@ -906,8 +911,11 @@
                     </div>
 
                     <p class="lamp-safety-note">
-                        Sicher vorbereitet: Standardmässig 0 % und Zeitplan aus.
+                        Steuerung aus: 0 V. Ohne Zeitplan gilt die Leistung dauerhaft;
+                        mit Zeitplan nur zwischen den Schaltzeiten (Europe/Zurich).
+                        Gleiche Zeiten halten die Lampe aus. Speichern übernimmt die Änderungen.
                     </p>
+                    <p id="lampOutputStatus" class="camera-meta" role="status" aria-live="polite">Ausgang wird geladen …</p>
 
                 </div>
 
@@ -1557,13 +1565,13 @@
 
 <script src="/static/chart.umd.min.js?v=1"></script>
 
-<script src="/static/app.js?v=sensor-cleanup-1"></script>
+<script src="/static/app.js?v=lamp-control-1"></script>
 
 <script src="/static/overview.js?v=uv-1"></script>
 <script src="/static/tank-status.js?v=1"></script>
 <script src="/static/pump-icons.js?v=2"></script>
 <script src="/static/fans.js?v=2"></script>
-<script src="/static/overview-equipment.js?v=themes-1"></script>
+<script src="/static/overview-equipment.js?v=lamp-control-1"></script>
 <script src="/static/layout.js?v=2"></script><script src="/static/lamp-visual.js?v=3"></script>
 </body>
 

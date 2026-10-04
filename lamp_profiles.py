@@ -1,4 +1,4 @@
-"""Independent, user-configurable lamp profiles; no hardware output."""
+"""Independent lamp profiles and explicit activation; no hardware access here."""
 import copy
 import re
 
@@ -36,6 +36,9 @@ def normalize_lamp_config(data):
     if not isinstance(data, dict):
         raise ValueError('Ungültige Lampenkonfiguration')
     active = data.get('profile', 'custom')
+    enabled = data.get('control_enabled', False)
+    if not isinstance(enabled, bool):
+        raise ValueError('Ungültiger Steuerungsstatus')
     if active not in PROFILE_IDS:
         raise ValueError('Ungültiges Lichtprofil')
     bank = {key: default_settings() for key in PROFILE_IDS}
@@ -47,7 +50,7 @@ def normalize_lamp_config(data):
     else:
         # Preserve the old single set of settings under its selected profile.
         bank[active] = settings(data, bank[active])
-    return {'name': str(data.get('name', 'Pflanzenlampe'))[:40], 'profile': active,
+    return {'name': str(data.get('name', 'Pflanzenlampe'))[:40], 'profile': active, 'control_enabled': enabled,
             'profiles': bank, **bank[active]}
 
 
@@ -55,6 +58,10 @@ def update_lamp_profile(previous, payload):
     if not isinstance(payload, dict):
         raise ValueError('Ungültige Lampenkonfiguration')
     result = copy.deepcopy(normalize_lamp_config(previous))
+    enabled = payload.get('control_enabled', result['control_enabled'])
+    if not isinstance(enabled, bool):
+        raise ValueError('Ungültiger Steuerungsstatus')
+    result['control_enabled'] = enabled
     active = payload.get('profile', result['profile'])
     if active not in PROFILE_IDS:
         raise ValueError('Ungültiges Lichtprofil')

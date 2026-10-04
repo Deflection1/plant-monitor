@@ -1238,7 +1238,7 @@ function updateLampControlPreview() {
     const start = toMinutes(onTime), end = toMinutes(offTime);
     const duration = start === null || end === null ? null : (end - start + 1440) % 1440;
     $("lampDurationPreview").textContent = duration === null ? "Dauer nicht verfügbar"
-        : duration === 0 ? "Gleiche Schaltzeiten · Dauer nicht eindeutig"
+        : duration === 0 ? "Gleiche Schaltzeiten · Lampe bleibt aus"
         : Math.floor(duration / 60) + " h " + String(duration % 60).padStart(2, "0") + " min Einschaltzeit";
 
     $("lampProfilePreview").textContent =
@@ -1277,7 +1277,7 @@ function updateLampControlPreview() {
 let lampProfiles = {};
 let lampDrafts = {};
 let currentLampProfile = "custom";
-const lampFieldIds = ["lampNameInput", "lampProfileInput", "lampPowerInput", "lampScheduleEnabled", "lampOnTime", "lampOffTime", "saveLampConfigButton"];
+const lampFieldIds = ["lampControlEnabled", "lampNameInput", "lampProfileInput", "lampPowerInput", "lampScheduleEnabled", "lampOnTime", "lampOffTime", "saveLampConfigButton"];
 
 function lockLampForm(locked) {
     lampFieldIds.forEach(id => { $(id).disabled = locked; });
@@ -1310,6 +1310,7 @@ async function loadLampConfig() {
         if (!data.profiles) throw new Error("Bitte den Dienst plant-monitor neu starten.");
         lampProfiles = data.profiles;
         lampDrafts = {};
+        $("lampControlEnabled").checked = data.control_enabled === true;
         $("lampNameInput").value = data.name;
         $("lampControlName").textContent = data.name;
         showLampProfile(data.profile);
@@ -1341,10 +1342,10 @@ async function loadLampStatus() {
         const data =
             await response.json();
 
-        $("lampControlStatus").textContent =
-            data.hardware_connected
-                ? "GP8600 verbunden"
-                : "Hardware ausstehend";
+        $("lampControlStatus").textContent = data.message || "Status unbekannt";
+        $("lampOutputStatus").textContent = data.output_available
+            ? "Gesendet: " + data.output_percent + " % · " + data.output_voltage + " V (Sollwert)"
+            : "Ausgang unbekannt · keine bestätigte Ausgabe";
 
     } catch (error) {
 
@@ -1355,6 +1356,7 @@ async function loadLampStatus() {
 
         $("lampControlStatus").textContent =
             "Status unbekannt";
+        $("lampOutputStatus").textContent = "Ausgang unbekannt · Status nicht erreichbar";
     }
 }
 
@@ -1367,7 +1369,8 @@ async function saveLampConfig() {
     try {
         const response = await fetch("/api/light/config", {
             method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({name: $("lampNameInput").value.trim() || "Pflanzenlampe", profile, ...draft})
+            body: JSON.stringify({name: $("lampNameInput").value.trim() || "Pflanzenlampe", profile,
+                control_enabled: $("lampControlEnabled").checked, ...draft})
         });
         const data = await response.json();
         if (!response.ok || data.status === "error") {
@@ -1377,6 +1380,8 @@ async function saveLampConfig() {
         delete lampDrafts[profile];
         showLampProfile(profile);
         $("lampConfigMessage").textContent = lampProfileLabel(profile) + " gespeichert · bleibt nach Neustart erhalten";
+        if (data.output_state?.error) $("lampConfigMessage").textContent = "Gespeichert, aber Ausgabe fehlgeschlagen: " + data.output_state.error;
+        await loadLampStatus();
     } catch (error) {
         $("lampConfigMessage").textContent = error.message || "Speichern fehlgeschlagen";
     } finally {
@@ -1385,7 +1390,7 @@ async function saveLampConfig() {
 }
 
 function setupLampControl() {
-    ["lampPowerInput", "lampScheduleEnabled", "lampOnTime", "lampOffTime"].forEach(id => {
+    ["lampControlEnabled", "lampPowerInput", "lampScheduleEnabled", "lampOnTime", "lampOffTime"].forEach(id => {
         $(id).addEventListener("input", () => {
             updateLampControlPreview();
             $("lampConfigMessage").textContent = "Ungespeicherte Änderungen · Profil speichern";
@@ -1404,6 +1409,7 @@ function setupLampControl() {
     $("saveLampConfigButton").addEventListener("click", saveLampConfig);
     loadLampConfig();
     loadLampStatus();
+    setInterval(loadLampStatus, 5000);
 }
 
 

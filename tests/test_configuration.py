@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from configuration import atomic_write_json, next_capture_time, validate_soil_config
 from lamp_profiles import normalize_lamp_config, update_lamp_profile
+from unittest.mock import Mock
 
 
 class HTTPException(Exception):
@@ -48,7 +49,8 @@ def load_functions(directory):
               validate_soil_config=validate_soil_config, HTTPException=HTTPException,
               normalize_lamp_config=normalize_lamp_config, update_lamp_profile=update_lamp_profile,
               Body=lambda *a: None, CONFIG_LOCK=threading.RLock(),
-              TIMELAPSE_DEFAULT_INTERVAL_MINUTES=720)
+              TIMELAPSE_DEFAULT_INTERVAL_MINUTES=720,
+              LAMP_CONTROLLER=Mock(apply=Mock(return_value={"output_available": False})))
     for prefix in ('SOIL', 'LAMP', 'TIMELAPSE'):
         ns[prefix + '_CONFIG_FILE'] = directory / (prefix.lower() + '.json')
     exec(compile(ast.Module(body=nodes, type_ignores=[]), str(ROOT / 'app.py'), 'exec'), ns)

@@ -30,12 +30,13 @@
         const c = status?.config;
         if (!c || typeof c.profile !== "string") throw new Error("Invalid lamp configuration");
         set("ovLampTitle", c.name || "Pflanzenlampe");
-        set("ovLampStatus", hardware(status));
+        set("ovLampStatus", status.message || hardware(status));
         set("ovLampProfile", {growth:"Wachstum",flower:"Blüte",custom:"Benutzerdefiniert"}[c.profile] || "—");
         set("ovLampPower", percent(c.power_percent) + " Sollwert");
         const scheduled = c.schedule_enabled === true;
-        set("ovLampSchedule", scheduled ? "Vorgemerkt" : "Deaktiviert");
-        set("ovLampActual", available(status) ? percent(status.output_percent) : "Nicht verfügbar");
+        set("ovLampSchedule", !c.control_enabled ? "Steuerung aus" : scheduled
+            ? c.on_time + "–" + c.off_time + " · Zürich" : "Manuell");
+        set("ovLampActual", available(status) ? percent(status.output_percent) + " gesendet" : "Unbekannt");
         const path = window.plantTheme.profileIcon(c.profile);
         $("ovLampProfileIcon").hidden = !path;
         $("ovLampFallback").hidden = !!path;
@@ -185,4 +186,3 @@
     setInterval(refresh, 15000);
     refresh();
 })();
-

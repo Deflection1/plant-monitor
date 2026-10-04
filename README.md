@@ -17,15 +17,14 @@ SEN0501-Integration sind in den Hauptbranch übernommen.
 | Oberfläche | Übersicht und Steuerung; Glasdesign und Windows 2000 | Weitere Designs |
 | Kamera | IMX219: Livestream, Fotos, Galerie und Zeitraffer | — |
 | Bodenfeuchte | Zwei Topfkonfigurationen, Kalibrierung, Prozentberechnung und Verlauf vorbereitet | ADS1115-/SEN0308-Lesetreiber und Hardwaretest |
-| Pflanzenlampe | Getrennte Profile und Zeitpläne gespeichert; GP8600-Treiber und separates Testprogramm vorhanden | Ausgangsspannung messen, Dashboard-Ausgabe und Zeitplanausführung |
+| Pflanzenlampe | GP8600-Ausgabe, manuelle Leistung und getrennte Profile mit Zeitplänen | Auf dem Pi nach Update aktivieren und prüfen |
 | Bewässerung | Einstellungen, Dosierberechnung, Entscheidungsvorschau und Ereignisspeicher vorhanden | Pumpen-/Tanktreiber und aktive Regelung |
 | Lüftung | Getrennte Sollwerte für Zu- und Abluft gespeichert | Pi-PWM, Drehzahlerfassung und Automatik |
 | E-Ink | Externes Statusdisplay geplant | Modell, Anschluss und Umsetzung |
 
-**Die Website steuert derzeit keine Lampen-, Pumpen- oder Lüfterausgänge.**
-Das separate GP8600-Testprogramm kann mit ausdrücklich gesetzten Testflags
-einen Ausgang ansteuern. Gespeicherte Automatik- und Zeitplaneinstellungen
-aktivieren noch keine Hardware.
+**Die Website steuert die Lampe über den GP8600, sobald die Lampensteuerung
+aktiviert und gespeichert wird.** Pumpen- und Lüfterausgänge sind weiterhin
+vorbereitet; deren gespeicherte Einstellungen aktivieren noch keine Hardware.
 
 Der Enviro+ ist entfernt und wird vom Sensorcode nicht mehr verwendet.
 Die frühere CPU-basierte Temperatur-/Feuchtekorrektur ist entfallen.
@@ -342,14 +341,39 @@ Protokoll-/Umrechnungsreferenzen:
 Die Profile **Benutzerdefiniert, Wachstum und Blüte** besitzen getrennte
 Leistungs-/Zeitplaneinstellungen. Neue Profile beginnen mit 0 %,
 08:00–20:00 Uhr und deaktiviertem Zeitplan. Zeiträume über Mitternacht
-werden angezeigt; eine aktive Schaltung erfolgt noch nicht.
-Einstellungen werden über den Speichern-Button gesichert.
+werden ausgeführt. Einstellungen werden über den Speichern-Button gesichert
+und auf den Ausgang angewendet. **Lampensteuerung aktivieren** ist die globale
+Freigabe: ohne Freigabe wird 0 V gesendet. Sie ist bei neuen und bisher nur
+vorbereiteten Konfigurationen standardmässig deaktiviert. Bestehende Profilwerte
+bleiben erhalten; zum ersten Betrieb Freigabe setzen und speichern.
+
+Ohne Zeitplan gilt die gespeicherte Leistung dauerhaft. Mit Zeitplan gilt sie
+zwischen Einschaltzeit (inklusive) und Ausschaltzeit (exklusive), sonst 0 V.
+Die Auswertung erfolgt jede Sekunde in **Europe/Zurich**, einschliesslich
+Sommerzeit. Gleiche Schaltzeiten bedeuten aus. 0–100 % entsprechen
+0–10 V Dimm-Sollspannung, nicht einer gemessenen elektrischen Leistung.
+Keine automatische Lux-Regelung oder Sonnenaufgangsrampe.
 
 `gp8600.py` implementiert den 16-Bit-DAC auf Bus 1 / `0x58`.
 Für 0–10 V schreibt er Register `0x01 = 0x08`; der Ausgangswert
 geht an `0x02`, Low-Byte zuerst, 0–65535. EEPROM-Befehle werden nicht gesendet.
 Grundlage: [DFRobot_GP8XXX](https://github.com/DFRobot/DFRobot_GP8XXX).
-Die Website ruft diesen Treiber noch nicht auf.
+`lamp_control.py` bindet den Treiber an FastAPI an. Beim Start wird zunächst
+0 V gesendet, dann die freigegebene Konfiguration angewendet. Freigabe und
+Profile bleiben nach Neustart erhalten. Beim geordneten Dienstende wird
+0 V gesendet. `/api/light/status` zeigt den zuletzt erfolgreich gesendeten
+Sollwert, Fehler und Zeitstempel; es gibt keine Spannungsrückmessung.
+Die Licht-Symbole bleiben an den Lux-Sensor gekoppelt.
+
+Bei I2C-Fehlern versucht die Steuerung 0 V zu senden, meldet den Ausgang
+als unbekannt und stoppt weitere Ausgabeversuche. Nach Prüfung der Hardware
+erneut speichern, um den Fehler zurückzusetzen. Ein Busfehler, SIGKILL oder
+Stromausfall kann den letzten DAC-Wert bestehen lassen; Software ist kein
+garantierter Ausschalter.
+
+Nur **einen Uvicorn-Worker** verwenden, kein `--reload`. Dienst und Testprogramm
+teilen `data/gp8600-test.lock`; parallele Prozesse erhalten keinen Zugriff.
+Für separate Ausgangstests zuerst `sudo systemctl stop plant-monitor` ausführen.
 
 **Simulation ohne Hardwarezugriff:**
 
@@ -541,7 +565,7 @@ Beispiel eines aktuellen Sensorwertsatzes mit berechneten Lichtwerten
 | `database.py` | SQLite, Historie, Lichtstatistik und Bewässerungsereignisse |
 | `configuration.py` | Validierung und atomare JSON-Speicherung |
 | `lamp_profiles.py` | Getrennte Lampenprofile |
-| `gp8600.py`, `lamp_dac_test.py` | DAC-Treiber und manueller Ausgangstest |
+| `gp8600.py`, `lamp_control.py`, `lamp_dac_test.py` | DAC-Treiber, laufende Lampensteuerung und separater Ausgangstest |
 | `irrigation.py` | Bewässerungseinstellungen und reine Entscheidungsvorschau |
 | `fan_control.py` | Lüftereinstellungen ohne PWM-Ausgabe |
 | `templates/index.html` | Dashboard |
@@ -561,10 +585,12 @@ JavaScript-Prüfungen mit Node.js:
 ```bash
 node tests/test_theme.cjs
 node tests/test_uv_ui.cjs
+node tests/test_lamp_ui.cjs
 ```
 
 Die Tests prüfen unter anderem Sensor-/UV-Umrechnung, Datenbankmigration,
-GP8600-Registerbefehle, Konfigurationsvalidierung und Bewässerungssperren.
+GP8600-Registerbefehle, Lampenzeitpläne, Start/Stop, Ausgabefehler,
+Konfigurationsvalidierung und Bewässerungssperren.
 Sie ersetzen keine Messung der Ausgangsspannung oder reale Pumpen-/Lüftertests.
 
 Lokale API-Prüfung bei laufendem Dienst:
@@ -573,13 +599,14 @@ Lokale API-Prüfung bei laufendem Dienst:
 curl http://127.0.0.1:8000/api/current
 curl 'http://127.0.0.1:8000/api/history?range=24h'
 curl http://127.0.0.1:8000/api/light/today
+curl http://127.0.0.1:8000/api/light/status
 curl http://127.0.0.1:8000/api/irrigation/status
 ```
 
 ## Nächste Schritte
 
-- GP8600-Ausgang bei abgetrennter DIM-Verbindung mit Multimeter prüfen;
-  danach Lampensteuerung, Zeitpläne und Ein/Aus-Verhalten anbinden.
+- Lampensteuerung nach Update im Dashboard aktivieren; Zeitplan und
+  Ein/Aus-Verhalten auf dem Pi prüfen.
 - ADS1115 und beide SEN0308 auslesen und separat kalibrieren.
 - Pumpen, MOSFETs und Tank-Schalter anschliessen; Fördermenge je Pumpe messen.
 - Reale Bewässerung mit Laufzeit-/Tankabschaltung, Tageslimit, Pause und

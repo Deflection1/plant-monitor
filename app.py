@@ -5,6 +5,7 @@ import time
 from functools import wraps
 from configuration import atomic_write_json, next_capture_time, validate_soil_config
 from lamp_profiles import normalize_lamp_config, update_lamp_profile
+from lamp_control import LampController
 from irrigation import default_irrigation_config, validate_irrigation_config, irrigation_status, plan_watering
 from fan_control import default_fan_config, validate_fan_config, fan_status
 import shutil
@@ -350,6 +351,26 @@ def save_lamp_config(config):
 
 
 LAMP_CONFIG = load_lamp_config()
+LAMP_CONTROLLER = LampController(BASE_DIR / "data" / "gp8600-test.lock")
+
+
+@configuration_locked
+def apply_lamp_output():
+    return LAMP_CONTROLLER.apply(LAMP_CONFIG)
+
+
+@configuration_locked
+def close_lamp_output():
+    LAMP_CONTROLLER.close()
+
+
+async def lamp_worker(stop):
+    while not stop.is_set():
+        await asyncio.to_thread(apply_lamp_output)
+        try:
+            await asyncio.wait_for(stop.wait(), timeout=1)
+        except asyncio.TimeoutError:
+            pass
 
 
 # =====================================================
@@ -700,6 +721,9 @@ async def lifespan(
 ):
 
     init_db()
+    await asyncio.to_thread(apply_lamp_output)
+    lamp_stop = asyncio.Event()
+    lamp_task = asyncio.create_task(lamp_worker(lamp_stop))
 
     try:
 
@@ -723,24 +747,21 @@ async def lifespan(
         timelapse_worker()
     )
 
-    yield
-
-    worker.cancel()
-    timelapse_task.cancel()
-
-    with suppress(
-        asyncio.CancelledError
-    ):
-        await worker
-
-    with suppress(
-        asyncio.CancelledError
-    ):
-        await timelapse_task
-
-    await asyncio.to_thread(
-        stop_camera
-    )
+    try:
+        yield
+    finally:
+        lamp_stop.set()
+        try:
+            await lamp_task
+        finally:
+            await asyncio.to_thread(close_lamp_output)
+            worker.cancel()
+            timelapse_task.cancel()
+            with suppress(asyncio.CancelledError):
+                await worker
+            with suppress(asyncio.CancelledError):
+                await timelapse_task
+            await asyncio.to_thread(stop_camera)
 
 
 # =====================================================
@@ -984,33 +1005,16 @@ def lamp_config_update(payload: dict = Body(...)):
         raise HTTPException(status_code=422, detail=str(error)) from error
     save_lamp_config(updated)
     LAMP_CONFIG = updated
-    return {"status": "ok", **LAMP_CONFIG}
+    output = LAMP_CONTROLLER.apply(LAMP_CONFIG, reset_fault=True)
+    return {"status": "ok", **LAMP_CONFIG, "output_state": output}
 
 
 @app.get(
     "/api/light/status"
 )
+@configuration_locked
 def lamp_status():
-
-    return {
-        "hardware_connected":
-            False,
-
-        "controller":
-            "DFRobot GP8600",
-
-        "output_available":
-            False,
-
-        "output_percent":
-            None,
-
-        "message":
-            "GP8600 noch nicht angebunden",
-
-        "config":
-            LAMP_CONFIG
-    }
+    return LAMP_CONTROLLER.status(LAMP_CONFIG)
 
 
 # =====================================================
@@ -1319,4 +1323,3 @@ def soil_status():
             }
         ]
     }
-
