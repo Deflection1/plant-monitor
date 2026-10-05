@@ -123,7 +123,27 @@ html[data-theme="botanical"] :is(.pump-art,.fan-art) :is(path,circle,rect,ellips
 html[data-theme="botanical"] .tank-symbol { --tank-light:#d2dac6; --tank-dark:#8d9b7e; }
 html[data-theme="botanical"] .tank-symbol[data-tank-state="ok"] { --tank-light:#cce2dc; --tank-dark:#4e756e; }
 html[data-theme="botanical"] .tank-symbol[data-tank-state="empty"] { --tank-light:#f2d5c9; --tank-dark:#b75d43; }
-html[data-theme="botanical"] :is(.tank-empty-mark,.tank-unknown-mark) { fill: #203c30; }
+/* Keep open contours open: filling highlight paths cuts holes into the blades. */
+html[data-theme="botanical"] :is(.pump-art,.fan-art) [fill="none"] { fill: none; }
+html[data-theme="botanical"] :is(.pump-art,.fan-art) :is(path,circle,rect,ellipse) {
+    fill-opacity: 1; stroke-opacity: 1; stroke-linecap: round; stroke-linejoin: round;
+}
+html[data-theme="botanical"] :is(.pump-art,.fan-art) .device-reflection { display: none; }
+/* A tank with unknown level shows a question mark, never a filled open path. */
+html[data-theme="botanical"] .tank-symbol svg > :is(path,rect) {
+    fill: var(--tank-light); stroke: #526d50; stroke-opacity: 1; fill-opacity: 1;
+}
+html[data-theme="botanical"] .tank-symbol :is(.tank-fill-full,.tank-fill-empty) {
+    fill: var(--tank-dark); stroke: none; fill-opacity: .65;
+}
+html[data-theme="botanical"] .tank-symbol .tank-wave-full {
+    fill: none; stroke: #526d50;
+}
+html[data-theme="botanical"] .tank-symbol .device-reflection { display: none; }
+html[data-theme="botanical"] .tank-symbol :is(.tank-empty-mark,.tank-unknown-mark) {
+    fill: none; stroke: #203c30; stroke-opacity: 1; stroke-linecap: round; stroke-linejoin: round;
+}
+html[data-theme="botanical"] .tank-symbol :is(.tank-empty-mark,.tank-unknown-mark) path { fill: none; }
 html[data-theme="botanical"] :is(.lamp-profile-image,.overview-profile-icon img) { filter: none; }
 html[data-theme="botanical"] .lamp-profile-placeholder { background: #d2dac6; color: #526d50; border-color: var(--border); box-shadow: none; }
 html[data-theme="botanical"] .pot-reading progress { background: #cbd0bd; }
