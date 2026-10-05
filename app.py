@@ -10,6 +10,7 @@ from irrigation import default_irrigation_config, validate_irrigation_config, ir
 from fan_control import default_fan_config, validate_fan_config, fan_status
 import shutil
 import threading
+from photo_archive import photo_variant
 
 from io import BufferedIOBase
 
@@ -201,6 +202,9 @@ def photo_info(
 
         "size_bytes":
             stat.st_size,
+
+        "thumbnail_url": f"/api/camera/photos/{path.name}/thumb",
+        "preview_url": f"/api/camera/photos/{path.name}/preview",
 
         "url":
             (
@@ -1129,7 +1133,8 @@ def camera_photos(
         default=100,
         ge=1,
         le=1000
-    )
+    ),
+    offset: int = Query(default=0, ge=0)
 ):
 
     files = photo_files()
@@ -1143,9 +1148,23 @@ def camera_photos(
                 photo_info(
                     path
                 )
-                for path in files[:limit]
+                for path in files[offset:offset + limit]
             ]
     }
+
+
+@app.get("/api/camera/photos/{filename}/{variant}")
+def camera_photo_variant(filename: str, variant: str):
+    try:
+        path = photo_variant(PHOTO_DIR, filename, variant)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    except FileNotFoundError as error:
+        raise HTTPException(status_code=404, detail="Bild nicht gefunden") from error
+    except OSError as error:
+        raise HTTPException(status_code=503, detail="Vorschau konnte nicht geladen werden") from error
+    return FileResponse(path, media_type="image/jpeg",
+                        headers={"Cache-Control": "private, max-age=86400"})
 
 
 @app.get(
@@ -1323,3 +1342,4 @@ def soil_status():
             }
         ]
     }
+

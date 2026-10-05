@@ -1,0 +1,18 @@
+.photo-gallery-footer { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-top:1rem; }
+.photo-gallery-footer [hidden], .photo-viewer [hidden] { display:none !important; }
+.photo-viewer { box-sizing:border-box; width:min(96vw, 1400px); max-width:96vw; max-height:94dvh; padding:1rem; border:1px solid #536958; border-radius:12px; background:#17251f; color:#f1f3e9; box-shadow:0 20px 80px #0008; }
+.photo-viewer::backdrop { background:#000b; }
+.photo-viewer-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:.75rem; }
+.photo-viewer .photo-viewer-header button { color:#f1f3e9; background:#35483d; border:1px solid #8d9a8b; padding:.6rem .9rem; border-radius:6px; cursor:pointer; }
+.photo-viewer button:focus-visible { outline:3px solid #e4cc83; outline-offset:3px; }
+.photo-viewer #photoViewerImage { display:block; width:100%; height:auto; max-height:calc(94dvh - 7rem); object-fit:contain; }
+.photo-viewer #photoViewerStatus:empty { display:none; }
+.photo-grid .photo-thumb img { aspect-ratio:4/3; object-fit:cover; }
+[data-theme="botanical"] .photo-viewer { background:#d9ddcd; color:#223c30; border-color:#87917f; }
+[data-theme="botanical"] .photo-viewer .photo-viewer-header button { background:#c7d0bb; color:#223c30; border-color:#87917f; }
+[data-theme="windows-2000"] .photo-viewer { background:#c0c0c0; color:#000; border:3px outset #fff; border-radius:0; }
+[data-theme="windows-2000"] .photo-viewer .photo-viewer-header button { background:#c0c0c0; color:#000; border:2px outset #fff; border-radius:0; }
+[data-theme="windows-xp"] .photo-viewer { background:#ece9d8; color:#172242; border:3px solid #2464d4; border-radius:8px; }
+[data-theme="windows-xp"] .photo-viewer .photo-viewer-header button { background:#f6f4eb; color:#172242; border-color:#2464d4; }
+[data-theme="osrs"] .photo-viewer { background:#423a2b; color:#e6d4a2; border:3px ridge #938363; border-radius:0; }
+[data-theme="osrs"] .photo-viewer .photo-viewer-header button { background:#514530; color:#e6d4a2; border:2px ridge #938363; border-radius:0; }

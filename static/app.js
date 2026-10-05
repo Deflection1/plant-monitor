@@ -14,6 +14,10 @@ let soilMoisture1Chart;
 let soilMoisture2Chart;
 
 let photoHistory = [];
+let photoTotal = 0;
+let photoHistoryLoading = false;
+let photoHistoryGeneration = 0;
+let timelapseGeneration = 0;
 let timelapsePlaying = false;
 let timelapseTimer = null;
 let timelapseIndex = 0;
@@ -1587,87 +1591,78 @@ function formatPhotoDate(
 }
 
 
-async function loadPhotoHistory() {
-
-    try {
-
-        const response = await fetch(
-            "/api/camera/photos?limit=200",
-            {
-                cache: "no-store"
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                "HTTP "
-                + response.status
-            );
-        }
-
-        const data =
-            await response.json();
-
-        photoHistory =
-            data.photos || [];
-
-        const grid =
-            $("photoGrid");
-
-        grid.innerHTML =
-            "";
-
-        $("photoHistoryEmpty").hidden =
-            photoHistory.length > 0;
-
-
-        photoHistory.forEach(
-            function(photo) {
-
-                const item =
-                    document.createElement(
-                        "button"
-                    );
-
-                item.className =
-                    "photo-thumb";
-
-                item.innerHTML =
-                    '<img loading="lazy" src="'
-                    + photo.url
-                    + '" alt="Pflanzenfoto">'
-                    + '<span>'
-                    + formatPhotoDate(
-                        photo.captured_at
-                    )
-                    + '</span>';
-
-                item.addEventListener(
-                    "click",
-                    function() {
-
-                        window.open(
-                            photo.url,
-                            "_blank"
-                        );
-                    }
-                );
-
-                grid.appendChild(
-                    item
-                );
-            }
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Photo history error:",
-            error
-        );
-    }
+function openPhotoViewer(photo) {
+    stopTimelapsePlayback();
+    const dialog = $("photoViewer");
+    const image = $("photoViewerImage");
+    $("photoViewerDate").textContent = formatPhotoDate(photo.captured_at);
+    $("photoViewerStatus").textContent = "Original wird geladen …";
+    image.hidden = true;
+    image.onload = () => {
+        image.hidden = false;
+        $("photoViewerStatus").textContent = "";
+    };
+    image.onerror = () => {
+        $("photoViewerStatus").textContent = "Bild konnte nicht geladen werden.";
+    };
+    image.src = photo.url;
+    if (!dialog.open) dialog.showModal();
 }
 
+async function loadPhotoHistory(append = false) {
+    if (photoHistoryLoading && append) return;
+    const generation = ++photoHistoryGeneration;
+    photoHistoryLoading = true;
+    const more = $("photoHistoryMore");
+    more.disabled = true;
+    if (!append) {
+        photoHistory = [];
+        $("photoGrid").replaceChildren();
+        more.hidden = true;
+    }
+    $("photoHistoryMessage").textContent = "Bilder werden geladen …";
+    try {
+        const response = await fetch(
+            "/api/camera/photos?limit=12&offset=" + photoHistory.length,
+            {cache: "no-store"}
+        );
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        if (generation !== photoHistoryGeneration) return;
+        photoTotal = data.count;
+        const photos = data.photos || [];
+        photoHistory.push(...photos);
+        $("photoHistoryEmpty").hidden = photoTotal > 0;
+        photos.forEach(photo => {
+            const item = document.createElement("button");
+            item.type = "button";
+            item.className = "photo-thumb";
+            const image = document.createElement("img");
+            image.loading = "lazy";
+            image.decoding = "async";
+            image.src = photo.thumbnail_url;
+            image.alt = "Pflanzenfoto vom " + formatPhotoDate(photo.captured_at);
+            const date = document.createElement("span");
+            date.textContent = formatPhotoDate(photo.captured_at);
+            item.append(image, date);
+            item.addEventListener("click", () => openPhotoViewer(photo));
+            $("photoGrid").appendChild(item);
+        });
+        more.hidden = photoHistory.length >= photoTotal;
+        $("photoHistoryMessage").textContent = photoTotal
+            ? photoHistory.length + " von " + photoTotal + " Bildern" : "";
+    } catch (error) {
+        if (generation !== photoHistoryGeneration) return;
+        $("photoHistoryMessage").textContent = "Bilder konnten nicht geladen werden. Bitte erneut versuchen.";
+        more.hidden = false;
+        console.error("Photo history error:", error);
+    } finally {
+        if (generation === photoHistoryGeneration) {
+            photoHistoryLoading = false;
+            more.disabled = false;
+        }
+    }
+}
 
 async function loadTimelapseStatus() {
 
@@ -1777,91 +1772,62 @@ async function toggleTimelapse() {
 
 
 function stopTimelapsePlayback() {
-
-    timelapsePlaying =
-        false;
-
-    if (timelapseTimer) {
-
-        clearInterval(
-            timelapseTimer
-        );
-
-        timelapseTimer =
-            null;
-    }
-
-    $("timelapsePlayer").hidden =
-        true;
+    timelapsePlaying = false;
+    ++timelapseGeneration;
+    if (timelapseTimer) clearTimeout(timelapseTimer);
+    timelapseTimer = null;
+    const image = $("timelapseImage");
+    image.onload = image.onerror = null;
+    image.removeAttribute("src");
+    $("timelapsePlayer").hidden = true;
 }
 
-
-function playTimelapse() {
-
-    if (
-        !photoHistory
-        || photoHistory.length < 2
-    ) {
-
-        $("timelapseStatus").textContent =
-            "Für die Wiedergabe werden mindestens 2 Bilder benötigt.";
-
-        return;
-    }
-
-
+async function playTimelapse() {
     stopTimelapsePlayback();
-
-    const frames =
-        [...photoHistory].reverse();
-
-    timelapsePlaying =
-        true;
-
-    timelapseIndex =
-        0;
-
-    $("timelapsePlayer").hidden =
-        false;
-
-
-    function showFrame() {
-
-        const photo =
-            frames[
-                timelapseIndex
-            ];
-
-        $("timelapseImage").src =
-            photo.url;
-
-        $("timelapsePlayerDate").textContent =
-            formatPhotoDate(
-                photo.captured_at
-            );
-
-        timelapseIndex +=
-            1;
-
-        if (
-            timelapseIndex
-            >= frames.length
-        ) {
-            timelapseIndex =
-                0;
+    const generation = timelapseGeneration;
+    $("timelapseStatus").textContent = "Zeitraffer wird geladen …";
+    try {
+        // Metadata only: images are fetched one at a time during playback.
+        const response = await fetch("/api/camera/photos?limit=1000", {cache: "no-store"});
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        if (generation !== timelapseGeneration) return;
+        const frames = (data.photos || []).reverse();
+        if (frames.length < 2) {
+            $("timelapseStatus").textContent = "Für die Wiedergabe werden mindestens 2 Bilder benötigt.";
+            return;
         }
+        timelapsePlaying = true;
+        timelapseIndex = 0;
+        $("timelapsePlayer").hidden = false;
+        $("timelapseStatus").textContent = frames.length + " Bilder im Zeitraffer";
+        const image = $("timelapseImage");
+        function showFrame() {
+            if (!timelapsePlaying || generation !== timelapseGeneration) return;
+            const photo = frames[timelapseIndex];
+            let completed = false;
+            function nextFrame(failed) {
+                if (completed || generation !== timelapseGeneration) return;
+                completed = true;
+                clearTimeout(timelapseTimer);
+                image.onload = image.onerror = null;
+                if (failed) $("timelapseStatus").textContent = "Ein Bild konnte nicht geladen werden; Wiedergabe läuft weiter.";
+                else $("timelapsePlayerDate").textContent = formatPhotoDate(photo.captured_at);
+                timelapseIndex = (timelapseIndex + 1) % frames.length;
+                timelapseTimer = setTimeout(showFrame, 500);
+            }
+            image.onload = () => nextFrame(false);
+            image.onerror = () => nextFrame(true);
+            timelapseTimer = setTimeout(() => nextFrame(true), 15000);
+            image.src = photo.preview_url;
+        }
+        showFrame();
+    } catch (error) {
+        if (generation === timelapseGeneration)
+            $("timelapseStatus").textContent = "Zeitraffer konnte nicht geladen werden.";
+        console.error("Timelapse playback error:", error);
     }
-
-
-    showFrame();
-
-    timelapseTimer =
-        setInterval(
-            showFrame,
-            350
-        );
 }
-
 
 function openPhotoHistory() {
 
@@ -1881,6 +1847,25 @@ function openPhotoHistory() {
 
 
 function setupPhotoHistory() {
+    $("photoHistoryMore").addEventListener("click", () => loadPhotoHistory(true));
+    const viewer = $("photoViewer");
+    $("photoViewerClose").addEventListener("click", () => viewer.close());
+    viewer.addEventListener("click", event => {
+        if (event.target === viewer) {
+            const bounds = viewer.getBoundingClientRect();
+            if (event.clientX < bounds.left || event.clientX > bounds.right ||
+                event.clientY < bounds.top || event.clientY > bounds.bottom) viewer.close();
+        }
+    });
+    viewer.addEventListener("close", () => {
+        const image = $("photoViewerImage");
+        image.onload = image.onerror = null;
+        image.removeAttribute("src");
+    });
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stopTimelapsePlayback();
+    });
+    window.addEventListener("hashchange", stopTimelapsePlayback);
 
     $("galleryButton")
         .addEventListener(
@@ -1956,9 +1941,7 @@ function setupPhotoHistory() {
             "click",
             async function() {
 
-                await loadPhotoHistory();
-
-                playTimelapse();
+                await playTimelapse();
             }
         );
 
@@ -2129,3 +2112,4 @@ function setupIrrigation() {
     retry.addEventListener("click", load);
     load();
 }
+

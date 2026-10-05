@@ -50,7 +50,7 @@ keine vollständige Neuinstallation.
 
 ```bash
 cd ~/plant-monitor
-/home/pi/.virtualenvs/pimoroni/bin/python -m pip install fastapi uvicorn jinja2 smbus2
+/home/pi/.virtualenvs/pimoroni/bin/python -m pip install fastapi uvicorn jinja2 smbus2 Pillow
 /home/pi/.virtualenvs/pimoroni/bin/python -c 'from picamera2 import Picamera2; from sensor import read_sensors; print(read_sensors())'
 ```
 
@@ -450,7 +450,11 @@ vor der Umsetzung geprüft werden. Die 12-V-Versorgung bleibt extern.
 | MJPEG-Livestream | 1280 × 720, konfigurierte 15 Bilder/s |
 | Gespeicherte Fotos | 3280 × 2464 |
 | Zeitraffer | Wählbares Intervall, Standard 720 Minuten |
-| Bedienung | Fotoaufnahme, Galerie, Browser-Wiedergabe und Vollbild |
+| Bedienung | Fotoaufnahme, Galerie mit „Mehr laden“, Browser-Wiedergabe und Großansicht auf derselben Seite |
+| Galerie | 12 Bilder pro Abruf, gecachte JPEG-Vorschaubilder mit maximal 320 Pixeln |
+| Zeitraffer-Wiedergabe | Vorschauen mit maximal 960 Pixeln, nächstes Bild erst nach dem Laden; bis zu 1000 neueste Fotos |
+
+Die Originalfotos bleiben unverändert. Beim Anklicken wird das Original in einer Großansicht auf derselben Seite geladen; „Schließen“ oder Escape kehrt zur Galerie zurück. Verkleinerte Bilder werden bei Bedarf einmalig erzeugt und unter `photos/.cache/` gespeichert. Die Wiedergabe stoppt beim Schließen des Archivs, Seitenwechsel oder Wechsel in den Hintergrund.
 
 ## Daten und API
 
@@ -494,7 +498,7 @@ PPFD und DLI werden aus Lux berechnet und nicht als eigene Messspalten gespeiche
 | Entscheidungsvorschau | `POST /api/irrigation/preview` |
 | Lüfter | `GET/POST /api/fans/config`, `GET /api/fans/status` |
 | Kamera | `GET /api/camera/status`, `GET /api/camera/stream`, `GET /api/camera/image`, `POST /api/camera/capture` |
-| Fotos | `GET /api/camera/photos`, `GET /api/camera/photos/{filename}` |
+| Fotos | `GET /api/camera/photos`, `GET /api/camera/photos/{filename}`, `GET /api/camera/photos/{filename}/{thumb|preview}`; Liste unterstützt `limit` und `offset` |
 | Zeitraffer | `GET/POST /api/camera/timelapse` |
 
 Die Entscheidungsvorschau erwartet `pot_id`, `moisture`, `sensor_age_seconds`,
@@ -642,4 +646,5 @@ Verbindungsklemmen und weiteres Montagematerial werden bei Bedarf lokal beschaff
 ## Lizenz
 
 Noch nicht festgelegt. Eine Lizenzdatei wurde bisher nicht ergänzt.
+
 

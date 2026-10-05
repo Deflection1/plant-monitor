@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="/static/layout-choice.css?v=1">
 <script src="/static/theme.js?v=osrs-1"></script>
 <script src="/static/layout-choice.js?v=1"></script>
+<link rel="stylesheet" href="/static/photo-gallery.css?v=1">
 </head>
 
 
@@ -378,6 +379,10 @@
 
 
         <div class="photo-grid" id="photoGrid"></div>
+        <div class="photo-gallery-footer">
+            <button id="photoHistoryMore" type="button" hidden>Mehr laden</button>
+            <span id="photoHistoryMessage" role="status" aria-live="polite"></span>
+        </div>
 
         <p class="estimate-note" id="photoHistoryEmpty" hidden>
             Noch keine gespeicherten Bilder vorhanden.
@@ -1604,10 +1609,18 @@
 </div></div>
 
 
+<dialog id="photoViewer" class="photo-viewer" aria-labelledby="photoViewerDate">
+    <div class="photo-viewer-header">
+        <span id="photoViewerDate">Pflanzenfoto</span>
+        <button id="photoViewerClose" type="button" aria-label="Bild schließen" autofocus>Schließen ✕</button>
+    </div>
+    <p id="photoViewerStatus" role="status" aria-live="polite"></p>
+    <img id="photoViewerImage" alt="Pflanzenfoto in Originalauflösung" hidden>
+</dialog>
 <script src="/static/chart.umd.min.js?v=1"></script>
 
 <script src="/static/dashboard.js?v=1"></script>
-<script src="/static/app.js?v=lamp-design-merge-1"></script>
+<script src="/static/app.js?v=photo-gallery-1"></script>
 
 <script src="/static/overview.js?v=layout-choice-1"></script>
 <script src="/static/tank-status.js?v=1"></script>
@@ -1618,4 +1631,5 @@
 </body>
 
 </html>
+
 
