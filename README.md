@@ -23,9 +23,6 @@ Die Oberfläche verbindet Messwerte, Geräteeinstellungen, Kamera und Zeitraffer
 Pumpen- und Lüftereinstellungen werden bisher nur gespeichert und ausgewertet;
 sie schalten keine Ausgänge. Die Geräteanimationen sind Symbolvorschauen.
 
-Der Enviro+ wurde aus dem aktiven Aufbau entfernt. Seine frühere CPU-basierte
-Temperatur-/Feuchtekorrektur wird nicht mehr verwendet.
-
 ## Inhalt
 
 - [Betrieb auf dem Raspberry Pi](#betrieb-auf-dem-raspberry-pi)
@@ -247,8 +244,8 @@ getrennt, Versorgung und Masse gemeinsam.
 
 ### Klima und VPD
 
-Temperatur und Feuchte werden ohne CPU-Korrektur geliefert. Die
-CPU-Temperatur ist ein separater Diagnosewert. VPD wird aus ungerundeter
+Temperatur und relative Luftfeuchte stammen vom SEN0501.
+Die CPU-Temperatur ist ein separater Diagnosewert. VPD wird aus ungerundeter
 Lufttemperatur und relativer Feuchte berechnet:
 
 ```text
@@ -278,17 +275,14 @@ DLI (mol/m²) = Summe(PPFD × Intervall in Sekunden) / 1 000 000
 Die Konstanten liegen in `database.py`. Der Positionsfaktor **4,68** stammt
 vom Vergleich am 30.09.2026 bei gleicher Dimmung: ca. 4060 Lux an der festen
 Wandposition und 18 000–20 000 Lux mittig, 24 cm über dem Topf, Messseite
-nach oben. Arbeitswert: 19 000 / 4060 ≈ 4,68. Er ersetzt den früheren Faktor
-1,72 und gilt für diese Geometrie. Nach Änderung der Lampen-/Sensorposition
+nach oben. Arbeitswert: 19 000 / 4060 ≈ 4,68. Der Faktor gilt für diese Geometrie. Nach Änderung der Lampen-/Sensorposition
 oder Referenzhöhe muss erneut gemessen werden.
 
 DLI integriert pro Messwert höchstens **120 Sekunden**, damit grössere
 Datenlücken nicht vollständig als Beleuchtung zählen. Tagesstatistiken
 werden aus gespeicherten Luxwerten mit den aktuellen Faktoren berechnet.
-Alte Enviro+- und neue SEN0501-Messungen bleiben in derselben Historie.
 
-Eine prozentuale PPFD-Genauigkeit wurde nicht ermittelt. Der frühere
-±20-%-Hinweis ist aus der Oberfläche entfernt; das verbliebene API-Feld
+Eine prozentuale PPFD-Genauigkeit wurde nicht ermittelt. Das API-Feld
 `uncertainty_percent: 20` ist keine verifizierte Genauigkeitsangabe.
 
 ### UV und Luftdruck
@@ -464,7 +458,7 @@ vor der Umsetzung geprüft werden. Die 12-V-Versorgung bleibt extern.
 
 | Datei / Tabelle | Inhalt |
 |---|---|
-| `data/plant.db` → `measurements` | Klima, Lux, CPU-Temperatur, Bodenfeuchte, UV und historische Rohwerte |
+| `data/plant.db` → `measurements` | Klima, Lux, CPU-Temperatur, Bodenfeuchte und UV |
 | `data/plant.db` → `watering_events` | Vorgangs-ID, Zeit, Topf, Laufzeit, Fördermenge und Auslöser |
 | `data/soil_moisture.json` | Topfnamen und Sensorkalibrierung |
 | `data/lamp_control.json` | Globale Freigabe, Lichtprofile und Zeitpläne |
@@ -477,10 +471,7 @@ Konfigurationen werden validiert und atomar ersetzt. Sie bleiben nach
 Neustarts erhalten. Design und Layout werden nur im Browser gespeichert.
 Vor manuellen Änderungen `data/` und `photos/` sichern.
 
-Fehlende Messwerte werden als `NULL` gespeichert. Die alten Spalten
-`raw_temperature` und `raw_humidity` bleiben für Enviro+-Historie erhalten,
-werden bei neuen Messungen aber nicht befüllt und fehlen in der Live-API.
-UV-Spalten werden bei Bedarf beim Start ergänzt; alte Werte bleiben leer.
+Fehlende Messwerte werden als `NULL` gespeichert.
 PPFD und DLI werden aus Lux berechnet und nicht als eigene Messspalten gespeichert.
 
 | History-Zeitraum | Aggregation |
@@ -583,7 +574,7 @@ Licht-/UV-Auswertungen, CSV-Export und automatische Backups.
 
 Aktiver Bestand: Raspberry Pi 4, SEN0501 V2.0, GP8600, IMX219,
 120-W-Quantum-Board mit XLG-150-H-AB sowie zwei Noctua-Lüfter mit NA-FC1
-und separatem 12-V-Lüfternetzteil. Der Enviro+ gehört nicht mehr zur aktiven Sensorik.
+und separatem 12-V-Lüfternetzteil.
 
 Die folgende Bestellliste dokumentiert die Materialplanung. Das Bestelldatum
 belegt weder Lieferung noch Inbetriebnahme.
