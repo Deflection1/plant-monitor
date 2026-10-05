@@ -1,57 +1,55 @@
 # Plant Monitor
 
-Web-Dashboard für einen Pflanzenschrank auf einem Raspberry Pi 4.
-FastAPI erfasst Klima- und Lichtwerte, SQLite speichert den Verlauf und
-das responsive Dashboard zeigt Messwerte, Kamera und Geräteeinstellungen.
+Web-Dashboard für einen Pflanzenschrank auf einem **Raspberry Pi 4**.
+FastAPI liefert Klima- und Lichtwerte, SQLite speichert die Messhistorie.
+Die Oberfläche verbindet Messwerte, Geräteeinstellungen, Kamera und Zeitraffer.
 
-Stand: **01.10.2026 · `design/botanisch-minimalistisch`**. Dieser Branch
-ergänzt das botanische Design und den neuen Aufbau mit Seitennavigation. Das Windows-2000-Design und die
-SEN0501-Integration sind in den Hauptbranch übernommen.
+**Dokumentationsstand: 05.10.2026 · `main`**
 
 ## Funktionsstand
 
-| Bereich | Aktueller Stand | Noch offen |
+| Bereich | Implementiert | Noch offen |
 |---|---|---|
-| Umgebungssensor | SEN0501 V2.0 auf Bus 3 / `0x22`; Temperatur, Feuchte, Lux, Luftdruck und UV ausgelesen | Referenzkalibrierung |
-| Klima | Livewerte, Luft-VPD und gespeicherter Verlauf | Zielbereiche und Warnungen |
-| Lichtmessung | Lux, Lichtstatus, geschätzte PPFD/DLI, Tagesmaximum und Beleuchtungsdauer | Spektrale Referenzmessung |
-| Oberfläche | Übersicht und Steuerung; Glasdesign, Windows 2000, Windows XP, OSRS und Botanisch minimalistisch | — |
-| Kamera | IMX219: Livestream, Fotos, Galerie und Zeitraffer | — |
-| Bodenfeuchte | Zwei Topfkonfigurationen, Kalibrierung, Prozentberechnung und Verlauf vorbereitet | ADS1115-/SEN0308-Lesetreiber und Hardwaretest |
-| Pflanzenlampe | GP8600-Ausgabe, manuelle Leistung und getrennte Profile mit Zeitplänen | Auf dem Pi nach Update aktivieren und prüfen |
-| Bewässerung | Einstellungen, Dosierberechnung, Entscheidungsvorschau und Ereignisspeicher vorhanden | Pumpen-/Tanktreiber und aktive Regelung |
-| Lüftung | Getrennte Sollwerte für Zu- und Abluft gespeichert | Pi-PWM, Drehzahlerfassung und Automatik |
-| E-Ink | Externes Statusdisplay geplant | Modell, Anschluss und Umsetzung |
+| Umgebungssensor | SEN0501 V2.0: Temperatur, Luftfeuchte, Lux, Luftdruck und UV | Referenzkalibrierung |
+| Klima und Licht | Livewerte, Luft-VPD, Messverläufe, geschätzte PPFD/DLI und Licht-Tagesstatistik | Zielbereiche und Warnungen |
+| Pflanzenlampe | GP8600-Ausgabe 0–10 V, manuelle Dimmung, getrennte Profile und Zeitpläne | Prüfung am realen Aufbau nach Änderungen |
+| Bodenfeuchte | Zwei Topfkonfigurationen, Kalibrierung und relative Prozentberechnung | ADS1115-/SEN0308-Lesetreiber |
+| Bewässerung | Einstellungen, Dosierberechnung, Entscheidungsvorschau und Ereignishistorie | Pumpen-/Tanktreiber und ausführende Automatik |
+| Lüftung | Getrennte Einstellungen und Sollwerte für Zu- und Abluft | Pi-PWM, Drehzahlerfassung und Automatik |
+| Kamera | IMX219-Livestream, Fotos, Galerie und Zeitraffer | — |
+| Oberfläche | Fünf Designs und zwei unabhängig wählbare Layouts | — |
 
-**Die Website steuert die Lampe über den GP8600, sobald die Lampensteuerung
-aktiviert und gespeichert wird.** Pumpen- und Lüfterausgänge sind weiterhin
-vorbereitet; deren gespeicherte Einstellungen aktivieren noch keine Hardware.
+**Die aktivierte Lampensteuerung kann reale Hardware ansteuern.**
+Pumpen- und Lüftereinstellungen werden bisher nur gespeichert und ausgewertet;
+sie schalten keine Ausgänge. Die Geräteanimationen sind Symbolvorschauen.
 
-Der Enviro+ ist entfernt und wird vom Sensorcode nicht mehr verwendet.
-Die frühere CPU-basierte Temperatur-/Feuchtekorrektur ist entfallen.
+Der Enviro+ wurde aus dem aktiven Aufbau entfernt. Seine frühere CPU-basierte
+Temperatur-/Feuchtekorrektur wird nicht mehr verwendet.
 
 ## Inhalt
 
 - [Betrieb auf dem Raspberry Pi](#betrieb-auf-dem-raspberry-pi)
 - [Oberfläche](#oberfläche)
-- [Sensor und Messgrundlagen](#sensor-und-messgrundlagen)
-- [Gerätevorbereitung](#gerätevorbereitung)
+- [Sensoranschlüsse und Messwerte](#sensoranschlüsse-und-messwerte)
+- [Geräte und Steuerung](#geräte-und-steuerung)
 - [Daten und API](#daten-und-api)
-- [Projektdateien und Prüfungen](#projektdateien-und-prüfungen)
-- [Nächste Schritte](#nächste-schritte)
-- [Hardwarebestand und Bestellungen](#hardwarebestand-und-bestellungen)
+- [Projektaufbau und Prüfungen](#projektaufbau-und-prüfungen)
+- [Geplante Erweiterungen](#geplante-erweiterungen)
+- [Hardware und Materialliste](#hardware-und-materialliste)
 
 ## Betrieb auf dem Raspberry Pi
 
-### Umgebung und Abhängigkeiten
+### Umgebung
 
-Die vorhandene Installation verwendet Raspberry Pi OS Bookworm und
-`/home/pi/.virtualenvs/pimoroni`. Benutzername und Pfade in den Beispielen
-bei einer anderen Installation anpassen.
+Die bestehende Installation verwendet **Raspberry Pi OS Bookworm**, das
+Repository unter `/home/pi/plant-monitor` und die Python-Umgebung
+`/home/pi/.virtualenvs/pimoroni`. Benutzername und Pfade bei einer anderen
+Installation entsprechend anpassen.
 
-`app.py` benötigt zusätzlich **Picamera2** und dessen Raspberry-Pi-Systembibliotheken.
-Diese müssen in der Python-Umgebung verfügbar sein; die folgenden
-Web-/I²C-Pakete allein reichen für eine Neuinstallation nicht aus.
+Benötigt werden FastAPI, Uvicorn, Jinja2, smbus2 sowie **Picamera2 mit den
+Raspberry-Pi-Systembibliotheken**. Picamera2 muss in der verwendeten
+Python-Umgebung verfügbar sein; die folgenden pip-Pakete allein ergeben
+keine vollständige Neuinstallation.
 
 ```bash
 cd ~/plant-monitor
@@ -59,11 +57,17 @@ cd ~/plant-monitor
 /home/pi/.virtualenvs/pimoroni/bin/python -c 'from picamera2 import Picamera2; from sensor import read_sensors; print(read_sensors())'
 ```
 
-Dashboard im lokalen Netz: [http://raspberrypi.local/](http://raspberrypi.local/).
+I²C-Konfiguration: siehe [Sensoranschlüsse](#sensoranschlüsse).
+Für die Licht-Tagesstatistik sollte die lokale Pi-Zeitzone `Europe/Zurich` sein.
+Lampenzeitpläne und Bewässerungshistorie verwenden diese Zeitzone ausdrücklich.
+
+Mit der folgenden Nginx-Konfiguration ist das Dashboard im lokalen Netz unter
+[http://raspberrypi.local/](http://raspberrypi.local/) erreichbar, sofern dieser
+Hostname auf den Pi aufgelöst wird.
 
 ### Aktualisieren
 
-Lokale Änderungen vor einem Branchwechsel mit `git status` prüfen.
+Vor dem Update lokale Änderungen prüfen:
 
 ```bash
 cd ~/plant-monitor
@@ -72,18 +76,18 @@ git switch main
 git pull --ff-only
 ```
 
-Nach Python-Änderungen:
+Nach Änderungen am Python-Code:
 
 ```bash
 sudo systemctl restart plant-monitor
 sudo systemctl status plant-monitor --no-pager -l
 ```
 
-Anschließend die Website mit **Strg+F5** neu laden.
-Reine CSS-/JavaScript-Änderungen benötigen normalerweise nur einen Browser-Reload.
-**README-Änderungen benötigen keinen Dienstneustart.**
+CSS-/JavaScript-Änderungen benötigen normalerweise nur **Strg+F5** im Browser.
+README-Änderungen benötigen keinen Dienstneustart. Gespeicherte Daten und
+Konfigurationen werden durch ein normales Update nicht zurückgesetzt.
 
-### systemd
+### systemd-Dienst
 
 Beispiel für `/etc/systemd/system/plant-monitor.service`:
 
@@ -104,7 +108,7 @@ RestartSec=5
 WantedBy=multi-user.target
 ```
 
-Nach einer Änderung der Unit:
+Nach Änderungen an der Unit:
 
 ```bash
 sudo systemctl daemon-reload
@@ -112,14 +116,13 @@ sudo systemctl enable --now plant-monitor
 sudo systemctl restart plant-monitor
 ```
 
-Dienstprotokoll:
+Protokoll anzeigen:
 
 ```bash
 journalctl -u plant-monitor -f
 ```
 
-Für einen manuellen Start den bestehenden Dienst zunächst stoppen, damit
-Port und Kamera nicht gleichzeitig von zwei Prozessen verwendet werden:
+Für einen manuellen Start zuerst den Dienst stoppen:
 
 ```bash
 sudo systemctl stop plant-monitor
@@ -127,12 +130,14 @@ cd ~/plant-monitor
 /home/pi/.virtualenvs/pimoroni/bin/uvicorn app:app --host 127.0.0.1 --port 8000
 ```
 
-Nach Ende des manuellen Starts den Dienst wieder mit
-`sudo systemctl start plant-monitor` starten.
+Nach Ende des manuellen Starts den Dienst mit
+`sudo systemctl start plant-monitor` wieder starten.
+**Nur einen Uvicorn-Worker verwenden, kein `--reload`**: Kamera und DAC sollen
+jeweils von einem Prozess verwaltet werden.
 
-### Nginx
+### Nginx und Zugriff
 
-Uvicorn lauscht auf `127.0.0.1:8000`; Nginx stellt das Dashboard auf Port 80 bereit.
+Uvicorn lauscht lokal auf Port 8000; Nginx stellt die Website auf Port 80 bereit:
 
 ```nginx
 server {
@@ -151,96 +156,65 @@ server {
 }
 ```
 
+Die Anwendung enthält derzeit keine Anmeldung oder Zugriffskontrolle.
+Dieses Beispiel richtet auch kein HTTPS ein. Für einen Zugriff ausserhalb
+des lokalen Netzes muss ein geschützter Zugang separat eingerichtet werden.
+
 ## Oberfläche
 
-**Übersicht:** Vier Livekarten, ein gemeinsames Temperatur-/Feuchtediagramm
-mit getrennten Achsen sowie eine Lichtkarte mit PPFD, UV-A, Tageswerten und
-Luxverlauf. Darunter folgen zwei Töpfe, Versorgungskarten und Kamera.
-Die Seitennavigation führt zu den vollständigen Messverläufen, Licht,
-Bewässerung, Lüftung, Kamera und Einstellungen. Auf kleinen Bildschirmen
-lässt sich die Navigation über den Menüknopf öffnen. Galerie und Zeitraffer
-sind bei Bedarf aufklappbar. Die vorhandenen Zeiträume (24h, 7/30 Tage,
-1 Jahr) gelten gemeinsam für Übersicht und vollständige Verläufe.
-Fehlende Messwerte erzeugen Lücken; Ladefehler werden gekennzeichnet.
+Die **Übersicht** zeigt Livewerte, ein gemeinsames Temperatur-/Feuchtediagramm
+mit zwei Achsen, eine Lichtkarte mit Luxverlauf und Tageswerten, zwei Töpfe,
+Versorgungskarten und Kamera. Die **Steuerung** bündelt Licht, Bewässerung,
+Bodenfeuchte, Lüftung und Systemdiagnose. Fehlende Messwerte bleiben leer;
+Abruffehler werden angezeigt.
 
-**Steuerung:** Sprungnavigation zu Licht, Wasser & Töpfen, Lüftung und
-Systemdiagnose. Geräteeinstellungen und Kalibrierungen bleiben von den
-tatsächlichen Hardwarezuständen getrennt.
+### Designs und Layouts
 
-### Layoutauswahl
+Alle Varianten sind in `main` enthalten und verwenden dieselben Funktionen:
 
-Neben dem Design lässt sich das **Layout** unabhängig umschalten:
+| Auswahl | Varianten | Voreinstellung |
+|---|---|---|
+| Design | Glas, Windows 2000, Windows XP · Luna, OSRS · Old School, Botanisch minimalistisch | Glas |
+| Layout | Klassisch, Seitennavigation | Seitennavigation |
 
-- **Klassisch:** bisheriger Aufbau mit Übersicht/Steuerung oben und den
-  vollständigen Verläufen auf der Übersichtsseite.
-- **Seitennavigation:** neuer Aufbau mit Seitenmenü, Klima-/Lichtzusammenfassung
-  und einer eigenen Ansicht für die vollständigen Verläufe (Voreinstellung).
+Im klassischen Layout liegen die vollständigen Verläufe auf der Übersicht.
+Die Seitennavigation bietet dafür eine eigene Ansicht und auf kleinen
+Bildschirmen ein aufklappbares Menü. Beide Layouts unterstützen alle Designs.
+Die Gestaltung umfasst auch Symbole, Profilbilder und Diagrammfarben.
+OSRS verwendet selbst erstellte Pixel-SVGs ohne externe Spielassets.
 
-Die Auswahl wird unter `plant-monitor.layout` im Browser gespeichert. Sie gilt
-für alle fünf Designs, wird auch in anderen Tabs desselben Browsers aktualisiert
-und verändert keine Geräteeinstellungen. Der Wechsel benötigt kein Neuladen;
-Messwerte, Diagramme und noch nicht gespeicherte Eingaben bleiben erhalten.
-Ist Browserspeicherung gesperrt, gilt die Auswahl für die aktuelle Seite.
+Design und Layout lassen sich ohne Neuladen wechseln. Messwerte, Diagramme
+und noch nicht gespeicherte Formulareingaben bleiben erhalten.
+Die Auswahl wird im Browser unter `plant-monitor.design` und
+`plant-monitor.layout` gespeichert und mit anderen Tabs synchronisiert.
+Bei gesperrter Browserspeicherung gilt sie für die aktuelle Seite.
+Geräteeinstellungen werden unabhängig davon auf dem Pi gespeichert.
 
-### Designauswahl
-
-Oben lässt sich zwischen **Standard · Glasdesign**, **Windows 2000**,
-**Windows XP · Luna**, **OSRS · Old School** und **Botanisch minimalistisch** wechseln; Glas ist die Voreinstellung.
-Das botanische Design wird auf `design/botanisch-minimalistisch` entwickelt.
-Alle fünf Designs verwenden dieselben Funktionen und APIs.
-
-Die Auswahl gilt für alle Ansichten und wird im jeweiligen Browser unter
-`plant-monitor.design` gespeichert. Symbole, Profilbilder und Diagrammfarben
-wechseln mit. Ist Browserspeicherung blockiert, funktioniert der Wechsel
-für die aktuelle Seite trotzdem. Geräteeinstellungen bleiben davon unabhängig.
-
-Das botanische Design verwendet matte Cremeflächen, Waldgrün, Salbei und
-Terrakotta, reduzierte SVG-Symbole und eigene Diagrammfarben. Es baut auf den
-bestehenden responsiven Layoutregeln auf; `static/botanical.css` überschreibt
-nur die Gestaltung. `static/dashboard-layout.css` stellt den gemeinsamen
-Seitenaufbau bereit; `static/dashboard.js` verwendet die vorhandenen
-Messwert- und Verlaufsabfragen ohne zusätzliche API-Aufrufe. Die Profil-SVGs liegen in `static/botanical/`.
-
-Windows XP verwendet die blaue Luna-Gestaltung mit beigen Dialogflächen,
-blauen Titelleisten, abgerundeten Schaltflächen, grünen Fortschrittsbalken
-und eigenen Profilbildern und Diagrammfarben. XP verwendet eigene, deckende
-SVG-Symbole für Messwerte, Diagramme, Navigation, Lampen, Pumpen, Lüfter und
-Tank. Die XP-Varianten bewahren die Zustandsklassen für Licht, Tankfüllstand
-und Geräteanimationen; Glas- und Windows-2000-Symbole bleiben separat. `static/windows-xp.css` baut
-auf den Strukturregeln des klassischen Designs auf; dessen Gestaltung wird
-nur für XP überschrieben. XP unterstützt beide Layouts.
-
-OSRS orientiert sich an der graubraunen Spieloberfläche: eingefasste
-Steinkacheln, goldene Überschriften, gelbe Messwerte und eigene Pixel-SVGs
-für alle Symbole und Profile. Die Grafiken sind selbst erstellt; es werden
-keine Spielassets oder externen Schriftarten geladen. `static/osrs.css`
-verwendet die responsive Struktur des klassischen Designs. Beide Layouts,
-Gerätezustände und Animationen bleiben verfügbar.
-
-### Aktualisierung
+### Aktualisierung und Status
 
 | Anzeige | Intervall |
 |---|---|
 | Livewerte | 5 Sekunden |
-| Verläufe und Licht-Tagesstatistik | 60 Sekunden |
+| Messverläufe und Licht-Tagesstatistik | 60 Sekunden |
 | Versorgungskarten der sichtbaren Übersicht | 15 Sekunden |
-| Neue Messung in SQLite | ungefähr 60 Sekunden, zuzüglich Auslesedauer |
+| Neue Messung in SQLite | ungefähr 60 Sekunden zuzüglich Auslesedauer |
 
-Die Browserabfrage ist kein Nachweis für das interne Messintervall des Sensors.
-Gleichbleibende gerundete Temperatur-/Feuchtewerte sind möglich.
+Die Zeiträume **24 Stunden, 7 Tage, 30 Tage und 1 Jahr** werden gemeinsam
+für Übersicht und vollständige Verläufe gewählt.
 
-Das Lichtsymbol folgt gültigen Lux-/Lichtstatuswerten. Nach einem Abruffehler
-oder mehr als 20 Sekunden ohne gültigen Empfang wird sein Zustand unbekannt.
-Die Frischeprüfung beruht auf dem Empfang im Browser.
-`/api/status` meldet derzeit pauschal „online“; es ist kein umfassender
-Nachweis für Sensorzustand und erfolgreiche Datenaufzeichnung.
+Das Lichtsymbol folgt dem Luxwert am Sensor. Bei einem Abruffehler oder
+mehr als 20 Sekunden ohne gültigen Empfang im Browser wird sein Zustand
+unbekannt. Es bestätigt nicht den elektrischen Lampenzustand.
+`/api/status` meldet pauschal „online“ und prüft weder die Sensoren noch die
+Datenaufzeichnung vollständig.
 
-## Sensor und Messgrundlagen
+## Sensoranschlüsse und Messwerte
 
-### SEN0501 V2.0 anschließen
+### Sensoranschlüsse
 
-Aktive Messquelle: **DFRobot SEN0501 V2.0**, I²C-Bus **3**, Adresse **`0x22`**.
-Die folgende Belegung dokumentiert den bestehenden Aufbau:
+Aktiver Umgebungssensor: **DFRobot SEN0501 V2.0**, I²C-Bus **3**, Adresse
+**`0x22`**. Der GP8600 verwendet Bus **1**, Adresse **`0x58`** bei A0/A1/A2 = 0.
+Die Tabelle dokumentiert den bestehenden Anschluss:
 
 | Gerät | Signal | BCM-GPIO | Physischer Pi-Pin |
 |---|---|---:|---:|
@@ -253,276 +227,236 @@ Die folgende Belegung dokumentiert den bestehenden Aufbau:
 | GP8600 | D / SDA | 2 | 3 |
 | GP8600 | C / SCL | 3 | 5 |
 
-SEN0501-Schalter auf I²C. In `/boot/firmware/config.txt` unter `[all]`:
+Den SEN0501-Schalter auf I²C stellen. In `/boot/firmware/config.txt` unter
+`[all]` müssen die beiden Busse aktiviert sein:
 
 ```ini
 dtparam=i2c_arm=on
 dtoverlay=i2c3,pins_4_5
 ```
 
-Nach einer Änderung neu starten. Bei angeschlossenen Modulen prüfen:
+Nach Änderungen neu starten. Angeschlossene Module prüfen:
 
 ```bash
 i2cdetect -y 3
 i2cdetect -y 1
 ```
 
-Erwartet: `22` auf Bus 3; beim GP8600 mit A0/A1/A2 auf 0: `58` auf Bus 1.
-Die beiden Busse haben getrennte Datenleitungen und gemeinsame Versorgung/Masse.
+Erwartet werden `22` auf Bus 3 und `58` auf Bus 1. Die Datenleitungen sind
+getrennt, Versorgung und Masse gemeinsam.
 
-### Temperatur, Feuchte und VPD
+### Klima und VPD
 
-Temperatur und Feuchte werden ohne CPU-Korrektur als `temperature` und
-`humidity` geliefert. Die früheren doppelten Felder `raw_temperature` und
-`raw_humidity` entfallen in der Live-API und Diagnose. Die CPU-Temperatur
-bleibt als `cpu_temperature` für die Pi-Diagnose erhalten.
-
-Beim ersten Vergleich lieferte der SEN0501 **25,1 °C / 51,2 % RH**,
-das analoge Gerät ungefähr **25 °C / 53 % RH**. Das ist ein
-Plausibilitätsvergleich, keine abgeschlossene Referenzkalibrierung.
-
-VPD wird aus ungerundeter Lufttemperatur und Feuchte berechnet:
+Temperatur und Feuchte werden ohne CPU-Korrektur geliefert. Die
+CPU-Temperatur ist ein separater Diagnosewert. VPD wird aus ungerundeter
+Lufttemperatur und relativer Feuchte berechnet:
 
 ```text
 es(T) = 0,6108 × exp(17,27 × T / (T + 237,3))
 VPD = es(T) × (1 − RH / 100)
 ```
 
-Ergebnis in kPa. Es handelt sich um **Luft-VPD**; eine Blatttemperatur wird
-nicht gemessen. Der Wert übernimmt die Unsicherheit der Eingangsmessungen.
+Das Ergebnis ist **Luft-VPD in kPa**; eine Blatttemperatur wird nicht gemessen.
+Der erste Vergleich von SEN0501 (25,1 °C / 51,2 % RH) und analogem Gerät
+(ca. 25 °C / 53 % RH) war ein Plausibilitätsvergleich, keine Kalibrierung.
 
-Sensorzugriffe erfolgen erst bei einer Messung, nicht beim Import.
-Ein nicht erreichbarer Sensor verhindert deshalb nicht den Website-Start.
-Betroffene Liveabfragen liefern HTTP 503; der Messworker protokolliert Fehler
-und speichert keine erfundenen Ersatzmessungen.
+Ein nicht erreichbarer Sensor verhindert den Website-Start nicht.
+Betroffene Liveabfragen liefern HTTP 503; der Messworker protokolliert
+Fehler und speichert keine erfundenen Ersatzwerte.
 
 ### Lux, PPFD und DLI
 
-Lux wird direkt vom SEN0501 gelesen und umgerechnet.
-Ab **100 Lux** gilt Licht als erkannt. Das ist ein optischer Status am Sensor,
-keine elektrische Rückmeldung des Lampentreibers; Fremdlicht kann ihn beeinflussen.
-
-Die spektrale Umrechnung bleibt eine unbestätigte Schätzung:
+Ab **100 Lux** gilt Licht am Sensor als erkannt. Fremdlicht kann diesen
+Status beeinflussen. Die PPFD-Werte sind Schätzungen aus Lux:
 
 ```text
 PPFD Sensor ≈ Lux / 52,5
 PPFD Referenzpunkt ≈ PPFD Sensor × 4,68
-```
-
-Konstanten in `database.py`: `LUX_PER_PPFD = 52.5`,
-`CENTER_FACTOR = 4.68`, `LIGHT_ON_LUX = 100.0`.
-
-Der Positionsfaktor stammt aus dem SEN0501-Vergleich vom 30.09.2026
-bei gleicher Dimmung:
-
-| Messposition | Lux |
-|---|---:|
-| Feste Wandposition | ca. 4060 |
-| Mittig, 24 cm über dem Topf, Messseite nach oben | 18 000–20 000 |
-
-Arbeitswert: **19 000 / 4060 ≈ 4,68**, gemessene Spanne etwa 4,43–4,93.
-Bei 4060 Lux ergeben sich ungefähr 77,3 µmol/m²/s am Sensor und
-361,9 µmol/m²/s am Referenzpunkt.
-
-Der Faktor ersetzt den früheren Wert 1,72 und gilt nur für die verglichene
-Geometrie und Sensorausrichtung. Bei Änderung von Lampenposition,
-Sensorposition oder Referenzhöhe erneut messen. Er beschreibt keine
-allgemeine Lichtverteilung über alle Pflanzen.
-
-DLI integriert die geschätzte PPFD über die aufgezeichnete Zeit:
-
-```text
 DLI (mol/m²) = Summe(PPFD × Intervall in Sekunden) / 1 000 000
 ```
 
-Pro Messwert werden höchstens **120 Sekunden** integriert.
-Grössere Datenlücken werden dadurch nicht vollständig als Beleuchtung gezählt.
-Licht-Tagesgrenzen verwenden die lokale Zeitzone des Pi; für diesen Aufbau
-sollte sie `Europe/Zurich` sein.
+Die Konstanten liegen in `database.py`. Der Positionsfaktor **4,68** stammt
+vom Vergleich am 30.09.2026 bei gleicher Dimmung: ca. 4060 Lux an der festen
+Wandposition und 18 000–20 000 Lux mittig, 24 cm über dem Topf, Messseite
+nach oben. Arbeitswert: 19 000 / 4060 ≈ 4,68. Er ersetzt den früheren Faktor
+1,72 und gilt für diese Geometrie. Nach Änderung der Lampen-/Sensorposition
+oder Referenzhöhe muss erneut gemessen werden.
 
-Tageswerte werden mit den aktuellen Faktoren aus gespeicherten Luxwerten
-berechnet. Der Sensorwechsel oder ein neuer Faktor löscht keine Historie:
-Tage mit alten Enviro+- und neuen SEN0501-Werten bleiben gemischte Messreihen.
+DLI integriert pro Messwert höchstens **120 Sekunden**, damit grössere
+Datenlücken nicht vollständig als Beleuchtung zählen. Tagesstatistiken
+werden aus gespeicherten Luxwerten mit den aktuellen Faktoren berechnet.
+Alte Enviro+- und neue SEN0501-Messungen bleiben in derselben Historie.
 
-Eine belastbare prozentuale Genauigkeit wurde nicht ermittelt.
-Der frühere ±20-%-Hinweis ist aus der Oberfläche entfernt; die API
-`/api/light/today` liefert derzeit noch das alte Feld
-`uncertainty_percent: 20`. Dieses Feld ist keine verifizierte Genauigkeitsangabe.
-Für eine Referenzkalibrierung der PPFD ist eine passende Referenzmessung nötig.
+Eine prozentuale PPFD-Genauigkeit wurde nicht ermittelt. Der frühere
+±20-%-Hinweis ist aus der Oberfläche entfernt; das verbliebene API-Feld
+`uncertainty_percent: 20` ist keine verifizierte Genauigkeitsangabe.
 
 ### UV und Luftdruck
 
-`/api/current` liefert `pressure_hpa`, `uv_raw`, `uv_mw_cm2`,
-`uv_saturated` und `sensor_model`.
-UV wird live, in der Diagnose und als eigener Verlauf angezeigt.
-Luftdruck ist vorerst nur über die API verfügbar und wird nicht als eigene
-Zeitreihe gespeichert.
+Die Live-API liefert `pressure_hpa`, `uv_raw`, `uv_mw_cm2`, `uv_saturated`
+und `sensor_model`. UV erscheint auch in Diagnose und Verlauf; Luftdruck
+wird bisher nur über die API ausgegeben und nicht als Zeitreihe gespeichert.
 
-Die UV-Umrechnung in `sensor.py` folgt der DFRobot-verlinkten V2-Bibliothek:
+Die Umrechnung folgt der DFRobot-verlinkten V2-Bibliothek (20 Bit, Gain 6):
 
 ```text
 uv_mw_cm2 = uv_raw / (2300 / 3) × (0,23 × 1,58 / 3,35)
 ```
 
-Sie setzt deren V2-Konfiguration voraus (20 Bit, Gain 6) und liefert eine
-**geschätzte äquivalente UV-A-Bestrahlungsstärke in mW/cm²**, keinen UV-Index.
-Ein Rohwert von 0 wird als Null angezeigt, ein fehlender Wert als nicht verfügbar.
-65535 wird vorsorglich als Sättigung markiert; die umgerechnete Stärke bleibt
-dann unbekannt. Ein einzelner UV-Lesefehler lässt die übrigen Messwerte verfügbar.
+Das Ergebnis ist eine **geschätzte äquivalente UV-A-Bestrahlungsstärke in
+mW/cm²**, kein UV-Index. Rohwert 0 bedeutet Null; fehlende Werte bleiben
+unbekannt. 65535 wird vorsorglich als Sättigung markiert, ohne umgerechneten
+Wert. Ein einzelner UV-Lesefehler lässt die übrigen Messwerte verfügbar.
+Der kurze Lampentest mit Rohwert 8 bei Licht und 0 bei ausgeschalteter Lampe
+bestätigte eine Reaktion, keine absolute Messgenauigkeit.
 
-Im kurzen Lampentest: zweimal Rohwert **8** bei ungefähr **4060 Lux**,
-Rohwert **0** bei ausgeschalteter Lampe. Rohwert 8 ergibt **0,001132 mW/cm²**.
-Das bestätigt die Reaktion auf die Lampe, keine absolute UV-Genauigkeit.
-
-Protokoll-/Umrechnungsreferenzen:
-[DFRobot SEN0501](https://wiki.dfrobot.com/sen0501/docs/21745),
+Referenzen: [DFRobot SEN0501](https://wiki.dfrobot.com/sen0501/docs/21745),
 [DFRobot EnvironmentalSensor](https://github.com/DFRobot/DFRobot_EnvironmentalSensor/tree/7b49ec64e605dd764f0897b9a5cde4eec1afa3c4),
 [V2-Bibliothek](https://github.com/cdjq/DFRobot_EnvironmentalSensor).
 
-## Gerätevorbereitung
+## Geräte und Steuerung
 
-### Pflanzenlampe und GP8600
+### Pflanzenlampe
 
-Die Profile **Benutzerdefiniert, Wachstum und Blüte** besitzen getrennte
-Leistungs-/Zeitplaneinstellungen. Neue Profile beginnen mit 0 %,
-08:00–20:00 Uhr und deaktiviertem Zeitplan. Zeiträume über Mitternacht
-werden ausgeführt. Einstellungen werden über den Speichern-Button gesichert
-und auf den Ausgang angewendet. **Lampensteuerung aktivieren** ist die globale
-Freigabe: ohne Freigabe wird 0 V gesendet. Sie ist bei neuen und bisher nur
-vorbereiteten Konfigurationen standardmässig deaktiviert. Bestehende Profilwerte
-bleiben erhalten; zum ersten Betrieb Freigabe setzen und speichern.
+Hardware: **120-W-Quantum-Board**, Mean Well **XLG-150-H-AB** und
+**DFRobot GP8600** für die 0–10-V-Dimmung. Die 120 W sind eine Nennangabe,
+keine gemessene Steckdosenaufnahme.
 
-Ohne Zeitplan gilt die gespeicherte Leistung dauerhaft. Mit Zeitplan gilt sie
-zwischen Einschaltzeit (inklusive) und Ausschaltzeit (exklusive), sonst 0 V.
-Die Auswertung erfolgt jede Sekunde in **Europe/Zurich**, einschliesslich
-Sommerzeit. Gleiche Schaltzeiten bedeuten aus. 0–100 % entsprechen
-0–10 V Dimm-Sollspannung, nicht einer gemessenen elektrischen Leistung.
-Keine automatische Lux-Regelung oder Sonnenaufgangsrampe.
+Die Profile **Benutzerdefiniert, Wachstum und Blüte** speichern getrennte
+Leistungs- und Zeitplaneinstellungen. Neue Profile beginnen mit 0 %,
+08:00–20:00 Uhr und deaktiviertem Zeitplan. Die globale Freigabe
+**Lampensteuerung aktivieren** ist standardmässig aus. Zum ersten Betrieb
+Freigabe setzen und speichern; ohne Freigabe wird 0 V gesendet.
 
-`gp8600.py` implementiert den 16-Bit-DAC auf Bus 1 / `0x58`.
-Für 0–10 V schreibt er Register `0x01 = 0x08`; der Ausgangswert
-geht an `0x02`, Low-Byte zuerst, 0–65535. EEPROM-Befehle werden nicht gesendet.
-Grundlage: [DFRobot_GP8XXX](https://github.com/DFRobot/DFRobot_GP8XXX).
-`lamp_control.py` bindet den Treiber an FastAPI an. Beim Start wird zunächst
-0 V gesendet, dann die freigegebene Konfiguration angewendet. Freigabe und
-Profile bleiben nach Neustart erhalten. Beim geordneten Dienstende wird
-0 V gesendet. `/api/light/status` zeigt den zuletzt erfolgreich gesendeten
-Sollwert, Fehler und Zeitstempel; es gibt keine Spannungsrückmessung.
-Die Licht-Symbole bleiben an den Lux-Sensor gekoppelt.
+- Ohne Zeitplan gilt die gespeicherte Dimmung dauerhaft.
+- Mit Zeitplan gilt sie ab Einschaltzeit bis vor Ausschaltzeit, sonst 0 V.
+- Zeiten über Mitternacht werden unterstützt; gleiche Schaltzeiten bedeuten aus.
+- Auswertung jede Sekunde in `Europe/Zurich`, einschliesslich Sommerzeit.
+- 0–100 % entsprechen 0–10 V Sollspannung, keiner gemessenen Leistung.
 
-Bei I2C-Fehlern versucht die Steuerung 0 V zu senden, meldet den Ausgang
-als unbekannt und stoppt weitere Ausgabeversuche. Nach Prüfung der Hardware
-erneut speichern, um den Fehler zurückzusetzen. Ein Busfehler, SIGKILL oder
-Stromausfall kann den letzten DAC-Wert bestehen lassen; Software ist kein
-garantierter Ausschalter.
+Speichern wendet die Konfiguration auf den Ausgang an. Beim Dienststart
+wird zunächst 0 V gesendet und danach die gespeicherte Freigabe angewendet.
+Eine zuvor aktivierte Steuerung kann daher nach einem Neustart wieder dimmen.
+Beim geordneten Dienstende wird 0 V gesendet. Eine Lux-Regelung oder
+Sonnenaufgangsrampe ist nicht implementiert.
 
-Nur **einen Uvicorn-Worker** verwenden, kein `--reload`. Dienst und Testprogramm
-teilen `data/gp8600-test.lock`; parallele Prozesse erhalten keinen Zugriff.
-Für separate Ausgangstests zuerst `sudo systemctl stop plant-monitor` ausführen.
+`/api/light/status` zeigt den zuletzt erfolgreich gesendeten Sollwert,
+Zeitstempel und Fehler. **Es gibt keine Spannungsrückmessung.** Bei I²C-Fehlern
+versucht der Controller 0 V zu senden, markiert den Ausgang als unbekannt
+und stoppt weitere Ausgabeversuche. Nach Prüfung erneut speichern, um den
+Fehler zurückzusetzen. Busausfall, SIGKILL oder Stromprobleme können das
+Rücksetzen verhindern; ein 0-V-Sollwert bestätigt keinen gemessenen Aus-Zustand.
 
-**Simulation ohne Hardwarezugriff:**
+`gp8600.py` verwendet den 16-Bit-DAC auf Bus 1 / `0x58`, Bereichsregister
+`0x01 = 0x08` und Ausgangsregister `0x02` (Low-Byte zuerst). Es werden keine
+EEPROM-Befehle gesendet. Grundlage:
+[DFRobot_GP8XXX](https://github.com/DFRobot/DFRobot_GP8XXX).
+
+#### Separater DAC-Test
+
+Dienst und Testprogramm teilen `data/gp8600-test.lock` für exklusiven Zugriff.
+Vor einem Hardwaretest den Dienst stoppen. Simulation ohne Hardwarezugriff:
 
 ```bash
 cd ~/plant-monitor
 /home/pi/.virtualenvs/pimoroni/bin/python lamp_dac_test.py --volts 5
 ```
 
-**Ausgangstest erst mit Multimeter und abgetrenntem Lampen-DIM-Eingang:**
+Ausgangstest mit Multimeter und **abgetrenntem Lampen-DIM-Eingang**:
 
 ```bash
+sudo systemctl stop plant-monitor
 /home/pi/.virtualenvs/pimoroni/bin/python lamp_dac_test.py --volts 1 --seconds 20 --apply --output-disconnected
 ```
 
-Danach separat mit `--volts 5` und `--volts 10` wiederholen.
-DC-Spannung zwischen OUT und GND messen. `--output-disconnected`
-ist eine manuelle Bestätigung; die Software erkennt die Trennung nicht.
-
-Das Programm setzt den Sollwert vor/nach der Bereichswahl auf Null,
-gibt die Prüfspannung für höchstens 60 Sekunden aus und versucht bei Ende,
-Strg+C, SIGTERM oder Fehler auf Null zurückzusetzen. Parallele Tests sind gesperrt.
-Bei Busausfall, SIGKILL oder Stromproblemen ist das Rücksetzen nicht garantiert.
-Es gibt keine Spannungsrückmessung; ein 0-V-Sollwert bestätigt weder
-eine gemessene Ausgangsspannung noch den Aus-Zustand der Lampe.
+DC-Spannung zwischen OUT und GND messen; danach separat mit `--volts 5`
+und `--volts 10` wiederholen. `--output-disconnected` ist eine manuelle
+Bestätigung, keine automatische Erkennung. Der Test läuft höchstens
+60 Sekunden und versucht bei normalem Ende, Strg+C, SIGTERM oder Fehler
+auf Null zurückzusetzen. Danach den Dienst wieder starten.
 
 ### Bodenfeuchte
 
-Geplant: **SEN0308 Topf 1 → ADS1115 A0**, **Topf 2 → A1**.
-Namen, getrennte Trocken-/Nassreferenzen, Prozentberechnung und Verlauf sind
-vorbereitet. Der ADS1115-Treiber muss noch gültige `soil_raw_1` und
-`soil_raw_2` bereitstellen. Bis dahin bleiben Messwerte unbekannt.
+Vorgesehen: **SEN0308 Topf 1 → ADS1115 A0**, **Topf 2 → A1**.
+Topfnamen, getrennte Trocken-/Nassreferenzen und Prozentberechnung sind
+vorbereitet. Der Lesetreiber fehlt; `soil_raw_1` und `soil_raw_2` und die
+abgeleiteten Werte bleiben ohne Messquelle unbekannt.
 
-Die Kalibrierreferenzen müssen verschieden sein. Die Prozentanzeige ist
-eine relative Sensorkalibrierung, kein volumetrischer Wassergehalt.
+Die Referenzen müssen verschieden sein. Angezeigt wird eine relative
+Sensorkalibrierung, kein volumetrischer Wassergehalt.
 
 ### Bewässerung und Tank
 
-Je Topf speicherbar: Name, vorgemerkte Automatik, Feuchteschwelle,
-Einzelmenge, Tageslimit, Einziehpause, maximale Laufzeit und Pumpenkalibrierung.
-Automatik ist anfangs AUS; Pause 30 Minuten und Laufzeitgrenze 60 Sekunden
-sind technische Startwerte. Pflanzenspezifische Mengen/Schwellen sind nicht vorgegeben.
+Geplanter Wasserkreis: Kanister → T-Verteiler → zwei **PPFL-1-12-V-Pumpen**
+→ je ein Netafim NetBow. Versorgung: **Mean Well GST36E12-P1J, 12 V / 3 A**,
+je Pumpe eine Sicherung und ein MOSFET-Modul, Elektronik ausserhalb des Schranks.
+Der Pi liefert die Steuersignale; die endgültige GPIO-Belegung ist noch offen.
+
+Das ausgewählte MOSFET-Modul ist der **Purecrea-Treiber mit AOD4184**,
+Bastelgarage **Artikel 420985**: Steuereingang 3,3–5 V, Lastversorgung
+5–36 V DC. Die Produktbezeichnung lautet „15A 400W MOSFET Treiber“;
+diese Händlerangabe ist keine Bestätigung der zulässigen Dauerlast im Aufbau.
+[Produkt und technische Angaben](https://www.bastelgarage.ch/15a-400w-mosfet-treiber-5-36v-dc).
+Der Freilaufschutz für die Pumpen ist am tatsächlichen Modul noch zu prüfen.
+
+Je Topf speicherbar: Automatikfreigabe, Feuchteschwelle, Einzelmenge,
+Tageslimit, Einziehpause, maximale Laufzeit und Pumpenkalibrierung.
+Startwerte: Automatik aus, Pause 30 Minuten, Laufzeitgrenze 60 Sekunden;
+Mengen und Schwellen sind nicht pflanzenspezifisch vorgegeben.
 
 ```text
 Fördermenge (ml/s) = aufgefangene Menge / gemessene Sekunden
 Pumpdauer (s) = gewünschte Menge / Fördermenge
 ```
 
-Das Formular führt keinen Kalibrierlauf aus. Werte müssen für jede Pumpe
-separat gemessen werden. Unvollständige Kalibrierung und eine berechnete
-Dauer oberhalb der Laufzeitgrenze werden beim Speichern abgelehnt.
-Derzeit lassen sich Laufzeitgrenzen bis 600 Sekunden konfigurieren.
+Die Kalibrierung ist derzeit **eine Eingabe von gemessenen ml und Sekunden
+pro Pumpe**, kein automatisch gestarteter Lauf. Unvollständige Kalibrierung
+und eine Dosierdauer oberhalb der Laufzeitgrenze werden abgelehnt.
+Die konfigurierbare Grenze beträgt **1–600 Sekunden**; ein 20-Minuten-Lauf
+ist damit aktuell nicht konfigurierbar.
 
-Die Entscheidungsvorschau prüft Tank, Sensoralter (maximal 120 Sekunden),
-Feuchteschwelle, Pause, Tageslimit und berechnete Dauer.
-`POST /api/irrigation/preview` ist ausschliesslich eine Simulation:
-`simulation: true`, `output_available: false`.
+Die Entscheidungsvorschau prüft Tankstatus, Sensoralter (höchstens 120 Sekunden),
+Feuchteschwelle, Pause, Tageslimit und Laufzeit. Sie liefert
+`simulation: true` und `output_available: false` und startet keine Pumpe.
+**Die ausführende Bewässerungsautomatik fehlt noch.**
 
-Der SQLite-Ereignisspeicher und die Historie sind vorhanden.
-`record_watering_event` muss nach realen Pumpenläufen angebunden werden;
-Vorschauen und Animationstests erzeugen keine Ereignisse.
+Die Historie zeigt Tagesmengen und einen 7-Tage-Verlauf in `Europe/Zurich`.
+`record_watering_event` muss nach realen Pumpenläufen angebunden werden.
 Mengen werden aus tatsächlicher Laufzeit und kalibrierter Fördermenge berechnet,
-nicht per Durchflusssensor gemessen. Kalibrierläufe zählen nicht als Topfbewässerung.
-Die Historie zeigt Tagesmengen und einen 7-Tage-Verlauf mit Tagesgrenzen
-in `Europe/Zurich`.
+nicht durch einen Durchflusssensor gemessen. Kalibrierläufe zählen nicht als
+Topfbewässerung; Vorschauen und Animationen erzeugen keine Ereignisse.
 
-Tankstatus bleibt ohne Live-Schalter unbekannt. Der geplante WLSW1 erkennt
-einen Schaltzustand, keinen Füllstand in Prozent. Die aktive Überwachung,
-Abschaltungen und Erhaltung von Verbrauch/Einziehpause über Neustarts fehlen noch.
-
-Geplanter Wasserkreis: Kanister → T-Verteiler → zwei PPFL-1-Pumpen →
-je ein Netafim NetBow. Pumpenversorgung über Mean Well 12 V / 3 A,
-je Pumpe Sicherung und MOSFET-Treiber; die Technik kommt ausserhalb des Schranks.
-Der Pi liefert nur Steuersignale. GPIO-Zuordnung ist noch festzulegen.
+Der geplante **WLSW1-Schwimmerschalter** liefert einen Schaltzustand,
+keinen Prozentfüllstand. Ohne Live-Treiber bleibt der Tankstatus unbekannt.
+Aktive Abschaltungen sowie eine an reale Läufe gekoppelte Verwaltung von
+Verbrauch und Einziehpause über Neustarts fehlen noch.
 
 ### Lüftung
 
-Vorhanden: zwei **Noctua NF-F12 industrialPPC-3000 PWM, 12 V**,
-Zuluft unten und Abluft oben. Aktuell werden sie gemeinsam über
-einen NA-FC1 mit separatem Lüfternetzteil geregelt.
+Vorhanden sind zwei **Noctua NF-F12 industrialPPC-3000 PWM, 12 V**:
+Zuluft unten, Abluft oben. Aktuell regelt ein **NA-FC1** beide gemeinsam,
+mit separatem 12-V-Lüfternetzteil.
 
-Die Website speichert je Lüfter Name, AUS/MANUELL, gewünschte Leistung
-und Mindestleistung. Positive manuelle Sollwerte verwenden den grösseren
-Wert aus Wunsch- und Mindestleistung; AUS oder 0 % ergibt 0 % Sollwert.
-Diese Werte sind keine gemessene Drehzahl. AUTO und PWM-Ausgabe fehlen.
+Die Website speichert getrennt Name, AUS/MANUELL, gewünschte Leistung und
+Mindestleistung. Bei einem positiven Sollwert gilt der grössere Wert aus
+Wunsch- und Mindestleistung; AUS oder 0 % ergibt 0 % Sollwert.
+Das ist keine gemessene Drehzahl. AUTO, PWM-Ausgabe und Drehzahlerfassung fehlen.
 
-Für eine spätere unabhängige Regelung sind BCM GPIO18 / Pin 12 und
-BCM GPIO13 / Pin 33 als Kandidaten vorgesehen, ungefähr 25 kHz.
-**Das ist noch keine bestätigte Verdrahtungsbelegung.**
-Die Signalschnittstelle, Gesamtpinbelegung und das Verhalten bei stromlosem Pi
-müssen vor der Integration geprüft werden. Die 12-V-Versorgung bleibt extern.
-Bis zur geprüften Umstellung bleibt der NA-FC1 die bestehende Steuerung.
-
-**Animation testen** bei Pumpen und Lüftern ist nur eine Symbolvorschau,
-keine Hardwareansteuerung.
+BCM GPIO18 / Pin 12 und GPIO13 / Pin 33 sind Kandidaten für getrennte
+PWM-Kanäle bei ungefähr 25 kHz, **keine bestätigte Anschlussbelegung**.
+Signalschnittstelle, Pinbelegung und Verhalten bei stromlosem Pi müssen
+vor der Umsetzung geprüft werden. Die 12-V-Versorgung bleibt extern.
 
 ### Kamera
 
-Raspberry Pi Camera Module v2.1 / IMX219 mit Picamera2:
+**Raspberry Pi Camera Module v2.1 / IMX219**, betrieben mit Picamera2:
 
-- MJPEG-Livestream: 1280 × 720, konfigurierte 15 Bilder/s.
-- Gespeicherte Fotos: 3280 × 2464.
-- Manueller Foto-Button, Galerie und Zeitraffer-Wiedergabe im Browser.
-- Zeitraffer mit wählbarem Intervall; Standard 720 Minuten.
-- Vorschau bis 320 px breit, Vollbild verfügbar.
+| Funktion | Einstellung |
+|---|---|
+| MJPEG-Livestream | 1280 × 720, konfigurierte 15 Bilder/s |
+| Gespeicherte Fotos | 3280 × 2464 |
+| Zeitraffer | Wählbares Intervall, Standard 720 Minuten |
+| Bedienung | Fotoaufnahme, Galerie, Browser-Wiedergabe und Vollbild |
 
 ## Daten und API
 
@@ -530,149 +464,129 @@ Raspberry Pi Camera Module v2.1 / IMX219 mit Picamera2:
 
 | Datei / Tabelle | Inhalt |
 |---|---|
-| `data/plant.db` → `measurements` | Zeitstempel, Klima, Lux, Rohwerte, CPU-Temperatur, Bodenfeuchte und UV |
-| `data/plant.db` → `watering_events` | Vorgangs-ID, Zeit, Topf, tatsächliche Laufzeit, Fördermenge und Auslöser |
+| `data/plant.db` → `measurements` | Klima, Lux, CPU-Temperatur, Bodenfeuchte, UV und historische Rohwerte |
+| `data/plant.db` → `watering_events` | Vorgangs-ID, Zeit, Topf, Laufzeit, Fördermenge und Auslöser |
 | `data/soil_moisture.json` | Topfnamen und Sensorkalibrierung |
-| `data/lamp_control.json` | Lichtprofile und Zeitpläne |
+| `data/lamp_control.json` | Globale Freigabe, Lichtprofile und Zeitpläne |
 | `data/irrigation.json` | Tank-/Pumpeneinstellungen |
 | `data/fan_control.json` | Lüftereinstellungen |
 | `data/timelapse.json` | Zeitrafferkonfiguration |
-| `photos/` | Fotos |
+| `photos/` | Aufgenommene Fotos |
 
-JSON-Konfigurationen werden validiert und atomar ersetzt.
-Geräteeinstellungen bleiben nach Browser- und Pi-Neustart erhalten.
-Die Designauswahl wird dagegen nur im Browser gespeichert.
+Konfigurationen werden validiert und atomar ersetzt. Sie bleiben nach
+Neustarts erhalten. Design und Layout werden nur im Browser gespeichert.
+Vor manuellen Änderungen `data/` und `photos/` sichern.
 
-Die alten Spalten `raw_temperature` und `raw_humidity` bleiben für historische
-Enviro+-Messungen erhalten; neue Messungen befüllen sie nicht mehr (`NULL`).
-UV- und Bodenfeuchte-Rohwerte bleiben Bestandteil der aktuellen Messungen.
-
-Fehlende Bodenfeuchtewerte sind `NULL`. UV-Spalten werden beim Dienststart
-automatisch ergänzt; alte Messungen ohne UV bleiben im UV-Verlauf leer.
+Fehlende Messwerte werden als `NULL` gespeichert. Die alten Spalten
+`raw_temperature` und `raw_humidity` bleiben für Enviro+-Historie erhalten,
+werden bei neuen Messungen aber nicht befüllt und fehlen in der Live-API.
+UV-Spalten werden bei Bedarf beim Start ergänzt; alte Werte bleiben leer.
 PPFD und DLI werden aus Lux berechnet und nicht als eigene Messspalten gespeichert.
 
-| History-Zeitraum | Aggregationsintervall |
+| History-Zeitraum | Aggregation |
 |---|---|
-| 24 Stunden (`24h`) | 1 Minute |
-| 7 Tage (`7d`) | 10 Minuten |
-| 30 Tage (`30d`) | 1 Stunde |
-| 1 Jahr (`1y`) | 1 Tag |
-
-Messdaten, Konfiguration und Fotos vor manuellen Änderungen sichern.
-Ein Update setzt die Datenbank nicht automatisch zurück.
+| `24h` | 1 Minute |
+| `7d` | 10 Minuten |
+| `30d` | 1 Stunde |
+| `1y` | 1 Tag |
 
 ### Endpunkte
 
 | Bereich | Endpunkte |
 |---|---|
-| Status / Livewerte | `GET /api/status`, `GET /api/current` |
+| Status und Livewerte | `GET /api/status`, `GET /api/current` |
 | Messverlauf | `GET /api/history?range=24h` (auch `7d`, `30d`, `1y`) |
 | Lichtstatistik | `GET /api/light/today` |
-| Lampeneinstellungen | `GET/POST /api/light/config`, `GET /api/light/status` |
+| Lampe | `GET/POST /api/light/config`, `GET /api/light/status` |
 | Bodenfeuchte | `GET/POST /api/soil/config`, `GET /api/soil/status` |
 | Bewässerung | `GET/POST /api/irrigation/config`, `GET /api/irrigation/status`, `GET /api/irrigation/history` |
 | Entscheidungsvorschau | `POST /api/irrigation/preview` |
 | Lüfter | `GET/POST /api/fans/config`, `GET /api/fans/status` |
 | Kamera | `GET /api/camera/status`, `GET /api/camera/stream`, `GET /api/camera/image`, `POST /api/camera/capture` |
-| Fotos / Zeitraffer | `GET /api/camera/photos`, `GET /api/camera/photos/{filename}`, `GET/POST /api/camera/timelapse` |
+| Fotos | `GET /api/camera/photos`, `GET /api/camera/photos/{filename}` |
+| Zeitraffer | `GET/POST /api/camera/timelapse` |
 
-Für die Entscheidungsvorschau werden `pot_id`, `moisture`,
-`sensor_age_seconds`, `tank_ok`, `seconds_since_last` und
-`used_today_ml` übergeben. Es wird kein Pumpenlauf gestartet.
+Die Entscheidungsvorschau erwartet `pot_id`, `moisture`, `sensor_age_seconds`,
+`tank_ok`, `seconds_since_last` und `used_today_ml`; sie startet keinen Lauf.
 
-Beispiel eines aktuellen Sensorwertsatzes mit berechneten Lichtwerten
-(zusätzliche Bodenfeuchtefelder sind hier weggelassen):
-
-```json
-{
-  "temperature": 25.9,
-  "humidity": 58.8,
-  "cpu_temperature": 47.2,
-  "vpd": 1.38,
-  "lux": 4073.0,
-  "pressure_hpa": 973,
-  "uv_raw": 8,
-  "uv_mw_cm2": 0.001132,
-  "uv_saturated": false,
-  "sensor_model": "SEN0501 V2.0",
-  "ppfd_sensor": 77.6,
-  "ppfd_center": 363.1,
-  "light_on": true
-}
-```
-
-## Projektdateien und Prüfungen
-
-| Datei / Verzeichnis | Aufgabe |
-|---|---|
-| `app.py` | FastAPI, Worker, Kamera und Konfigurationsendpunkte |
-| `sensor.py` | SEN0501-Auslesung und VPD-/UV-Umrechnung |
-| `database.py` | SQLite, Historie, Lichtstatistik und Bewässerungsereignisse |
-| `configuration.py` | Validierung und atomare JSON-Speicherung |
-| `lamp_profiles.py` | Getrennte Lampenprofile |
-| `gp8600.py`, `lamp_control.py`, `lamp_dac_test.py` | DAC-Treiber, laufende Lampensteuerung und separater Ausgangstest |
-| `irrigation.py` | Bewässerungseinstellungen und reine Entscheidungsvorschau |
-| `fan_control.py` | Lüftereinstellungen ohne PWM-Ausgabe |
-| `templates/index.html` | Dashboard |
-| `static/` | Stylesheets, JavaScript, SVGs und lokale Chart.js-Bibliothek |
-| `static/theme.js`, `static/theme-switch.css` | Designwechsel |
-| `static/windows-2000.css`, `static/windows-2000/` | Klassisches Design und Profil-SVGs |
-| `static/windows-xp.css`, `static/windows-xp/` | XP-Luna-Design und Profil-SVGs |
-| `tests/` | Hardwareunabhängige Prüfungen |
-
-Python-Tests vom Repository-Verzeichnis aus:
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-JavaScript-Prüfungen mit Node.js:
-
-```bash
-node tests/test_theme.cjs
-node tests/test_uv_ui.cjs
-node tests/test_lamp_ui.cjs
-```
-
-Die Tests prüfen unter anderem Sensor-/UV-Umrechnung, Datenbankmigration,
-GP8600-Registerbefehle, Lampenzeitpläne, Start/Stop, Ausgabefehler,
-Konfigurationsvalidierung und Bewässerungssperren.
-Sie ersetzen keine Messung der Ausgangsspannung oder reale Pumpen-/Lüftertests.
-
-Lokale API-Prüfung bei laufendem Dienst:
+Lokale Abfragen bei laufendem Dienst:
 
 ```bash
 curl http://127.0.0.1:8000/api/current
 curl 'http://127.0.0.1:8000/api/history?range=24h'
-curl http://127.0.0.1:8000/api/light/today
 curl http://127.0.0.1:8000/api/light/status
 curl http://127.0.0.1:8000/api/irrigation/status
 ```
 
-## Nächste Schritte
+## Projektaufbau und Prüfungen
 
-- Lampensteuerung nach Update im Dashboard aktivieren; Zeitplan und
-  Ein/Aus-Verhalten auf dem Pi prüfen.
-- ADS1115 und beide SEN0308 auslesen und separat kalibrieren.
-- Pumpen, MOSFETs und Tank-Schalter anschliessen; Fördermenge je Pumpe messen.
-- Reale Bewässerung mit Laufzeit-/Tankabschaltung, Tageslimit, Pause und
-  Ereignisprotokollierung implementieren.
-- Lüfterschnittstelle und Pinbelegung festlegen; beide PWM-Kanäle einzeln testen.
-- E-Ink-Modell und Statuslayout auswählen.
+| Datei / Verzeichnis | Aufgabe |
+|---|---|
+| `app.py` | FastAPI, Hintergrundworker, Kamera und Endpunkte |
+| `sensor.py` | SEN0501-Auslesung, VPD und UV-Umrechnung |
+| `database.py` | SQLite, Messverlauf, Lichtstatistik und Bewässerungsereignisse |
+| `configuration.py` | Validierung und atomare Konfigurationsspeicherung |
+| `lamp_profiles.py` | Getrennte Lampenprofile |
+| `gp8600.py`, `lamp_control.py`, `lamp_dac_test.py` | DAC-Treiber, Lampencontroller und Ausgangstest |
+| `irrigation.py`, `fan_control.py` | Einstellungen und Vorschau ohne Pumpen-/Lüfterausgabe |
+| `templates/index.html` | Dashboard |
+| `static/theme.js`, `static/layout-choice.js` | Unabhängiger Design-/Layoutwechsel |
+| `static/dashboard-layout.css`, `static/dashboard.js` | Seitenaufbau und Übersicht |
+| `static/` | Designs, weitere Skripte, SVGs und lokale Chart.js-Bibliothek |
+| `tests/` | Hardwareunabhängige Regressionstests |
 
-Spätere Erweiterungen: Zielbereiche und Warnungen, Benachrichtigungen,
-UV-Tagesstatistik, weitere Lichtauswertungen, CSV-Export und automatische Backups.
+Vom Repository-Verzeichnis aus:
 
-## Hardwarebestand und Bestellungen
+```bash
+python -m unittest discover -s tests -v
+node tests/test_theme.cjs
+node tests/test_layout_choice.cjs
+node tests/test_dashboard.cjs
+node tests/test_uv_ui.cjs
+node tests/test_lamp_ui.cjs
+```
 
-Aktuell vorhanden: Raspberry Pi 4, SEN0501 V2.0, GP8600, IMX219,
-120-W-Quantum-Board mit Mean Well XLG-150-H-AB sowie die beiden Noctua-Lüfter
-mit NA-FC1 und separatem 12-V-Lüfternetzteil.
-Die 120 W sind eine Nennangabe, keine gemessene Steckdosenaufnahme.
-Der ehemalige Enviro+ gehört nicht mehr zur aktiven Sensorik.
+JavaScript-Syntax prüfen (Node.js erforderlich):
 
-Die Bestellliste bleibt als Aufbau-/Materialreferenz erhalten; das Bestelldatum
-sagt nichts über den aktuellen Liefer- oder Inbetriebnahmestatus aus.
+```bash
+for file in static/*.js; do
+    node --check "$file" || exit 1
+done
+```
+
+Bei der Prüfung vom **05.10.2026** bestanden **53 Python-Tests**, alle
+**fünf JavaScript-Testprogramme** und die Syntaxprüfungen.
+Die Tests decken unter anderem Sensorumrechnung, Datenbankmigration,
+Konfiguration, Bewässerungsentscheidungen, GP8600-Registerbefehle,
+Lampenzeitpläne, Start/Stop, Fehlerbehandlung und UI-Wechsel ab.
+Hardwarezugriffe werden nachgebildet; reale Spannungsmessungen,
+Pumpen-/Lüftertests und eine visuelle Browserprüfung werden dadurch nicht ersetzt.
+
+## Geplante Erweiterungen
+
+- ADS1115 und beide SEN0308 auslesen und je Topf kalibrieren.
+- Pumpen-, MOSFET- und Tankanschlüsse festlegen und reale Treiber implementieren.
+- Geführte Pumpenkalibrierung: Schlauch befüllen, 60 Sekunden laufen lassen,
+  aufgefangene ml eingeben; bisher noch nicht implementiert.
+- Laufzeitgrenze an die benötigten Dosiermengen und zulässige Pumpenlaufzeit anpassen.
+- Bewässerungsautomatik mit Tank-/Laufzeitabschaltung, Tageslimit,
+  Einziehpause und Protokollierung realer Läufe umsetzen.
+- Überlaufsensor in der Auffangwanne zur Abschaltung beider Pumpen ergänzen;
+  Sensorwahl und Umsetzung sind noch offen.
+- Lüfterschnittstelle prüfen und getrennte PWM-Kanäle mit Drehzahlerfassung umsetzen.
+- E-Ink-Modell und Statusanzeige auswählen.
+
+Weitere Ideen: Zielbereiche, Warnungen, Benachrichtigungen, zusätzliche
+Licht-/UV-Auswertungen, CSV-Export und automatische Backups.
+
+## Hardware und Materialliste
+
+Aktiver Bestand: Raspberry Pi 4, SEN0501 V2.0, GP8600, IMX219,
+120-W-Quantum-Board mit XLG-150-H-AB sowie zwei Noctua-Lüfter mit NA-FC1
+und separatem 12-V-Lüfternetzteil. Der Enviro+ gehört nicht mehr zur aktiven Sensorik.
+
+Die folgende Bestellliste dokumentiert die Materialplanung. Das Bestelldatum
+belegt weder Lieferung noch Inbetriebnahme.
 
 <details>
 <summary>Materialbestellungen und geplante Gehäuseaufteilung</summary>
@@ -713,7 +627,7 @@ BerryBase-Bestellung: **22 Positionen / 29 Einzelartikel**.
 | Bereich | Komponente | Menge |
 |---|---|---:|
 | Bodenfeuchte | DFRobot SEN0308 wasserdichter kapazitiver Bodenfeuchtesensor | 2 |
-| Pumpensteuerung | 15-A-/400-W-MOSFET-Treiber, 5–36 V DC, 3,3-V-steuerbar | 2 |
+| Pumpensteuerung | Purecrea MOSFET-Treiber mit AOD4184, Artikel 420985, 5–36 V DC, 3,3–5 V Steuereingang | 2 |
 | Lampendimmung | DFRobot GP8600, 1-Kanal I²C/PWM zu 0–10 V | 1 |
 
 ### Gehäuseaufteilung
@@ -732,9 +646,9 @@ Pumpenanschlüsse und Hauptschalter.
 
 Verbindungsklemmen und weiteres Montagematerial werden bei Bedarf lokal beschafft.
 
-
 </details>
 
 ## Lizenz
 
 Noch nicht festgelegt. Eine Lizenzdatei wurde bisher nicht ergänzt.
+
