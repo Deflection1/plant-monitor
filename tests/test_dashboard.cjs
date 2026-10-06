@@ -66,18 +66,17 @@ toggle.click();handlers.hashchange();assert.equal(toggle.attrs['aria-expanded'],
     // A late response for the old range must not overwrite a newer selection.
     const app = source('app.js');
     const extract = name => {const start=app.indexOf('function '+name+'(');const end=app.indexOf('// =====================================================',start);return app.slice(start,end);};
-    const requests=[],events=[];let rendered;
+    const requests=[],events=[];
     const chart = () => ({data:{datasets:[{}]},update(){}});
     const context = {historyRange:'24h',window:{dispatchEvent:e=>events.push(e)},console,
         fetch:url=>new Promise(resolve=>requests.push({url,resolve})),formatTime:value=>value,
-        renderHistoryCharts:(points,labels)=>{rendered={points,labels}},
         CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}},Event:class{constructor(type){this.type=type;}}};
     for (const name of ['temperature','humidity','vpd','lux','soilMoisture1','soilMoisture2','uv']) context[name+'Chart']=chart();
     vm.createContext(context);vm.runInContext('async '+extract('loadHistory'),context);
     const old = context.loadHistory();context.historyRange='7d';const fresh=context.loadHistory();
     requests[1].resolve({ok:true,json:async()=>({points:[{timestamp:'new',temperature:25}]})});await fresh;
     requests[0].resolve({ok:true,json:async()=>({points:[{timestamp:'old',temperature:10}]})});await old;
-    assert.deepEqual(Array.from(rendered.labels),['new']);assert.equal(events.length,1);assert.equal(events[0].detail.range,'7d');
+    assert.deepEqual(Array.from(context.temperatureChart.data.labels),['new']);assert.equal(events.length,1);assert.equal(events[0].detail.range,'7d');
     const buttons=['24h','7d','24h','7d'].map(range=>({dataset:{range},classList:{toggle(k,on){this.active=on;}},setAttribute(k,v){this[k]=v;},addEventListener(k,fn){this.click=fn;}}));
     context.document={querySelectorAll:()=>buttons};context.loadHistory=()=>{};
     vm.runInContext(extract('setupRangeButtons'),context);context.setupRangeButtons();buttons[1].click();

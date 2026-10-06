@@ -648,7 +648,3 @@ Verbindungsklemmen und weiteres Montagematerial werden bei Bedarf lokal beschaff
 Noch nicht festgelegt. Eine Lizenzdatei wurde bisher nicht ergänzt.
 
 
-
-### Darstellung der Klima-Verläufe
-
-Die großen Verlaufsdiagramme werden erst erzeugt, wenn sie in die Nähe des sichtbaren Bereichs kommen. Neue Messdaten bleiben für verborgene Diagramme zwischengespeichert und werden beim Anzeigen übernommen. Aktualisierungen erfolgen ohne Animation; die Canvas-Pixeldichte ist auf 1,5 begrenzt. Das gilt sowohl für die Navigationsansicht als auch für das klassische Layout. Messwerte und gespeicherte Historie werden dabei nicht reduziert.

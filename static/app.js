@@ -5,6 +5,14 @@ const $ = (id) =>
 let historyRange = "24h";
 
 
+let temperatureChart;
+let humidityChart;
+let vpdChart;
+let luxChart;
+let uvChart;
+let soilMoisture1Chart;
+let soilMoisture2Chart;
+
 let photoHistory = [];
 let photoTotal = 0;
 let photoHistoryLoading = false;
@@ -409,9 +417,6 @@ function chartOptions(
         responsive: true,
 
         maintainAspectRatio: false,
-        animation: false,
-        resizeDelay: 120,
-        devicePixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),
 
         interaction: { mode: "nearest", axis: "x", intersect: false },
 
@@ -456,7 +461,6 @@ function chartOptions(
                     color:
                         window.plantTheme.palette().tick,
 
-                    sampleSize: 12,
                     maxTicksLimit: 6,
                     autoSkip: true,
                     maxRotation: 0,
@@ -553,65 +557,56 @@ function makeChart(
 }
 
 
-const historyChartSpecs = [
-    ["temperatureChart", "temperature", "°C", "#b02020"],
-    ["humidityChart", "humidity", "%", "#000080"],
-    ["vpdChart", "vpd", "kPa", "#008000"],
-    ["luxChart", "lux", "Lux", "#a08000"],
-    ["uvChart", "uv_mw_cm2", "mW/cm²", "#8050b0"],
-    ["soilMoisture1Chart", "soil_moisture_1", "%", "#000080"],
-    ["soilMoisture2Chart", "soil_moisture_2", "%", "#008000"]
-];
-const historyCharts = new Map();
-const historyChartVisible = new Set();
-let historySnapshot = null;
-let historyRevision = 0;
-let historyObserver = null;
-
-function refreshHistoryCharts() {
-    if (document.hidden || !historySnapshot) return;
-    historyChartSpecs.forEach(([id, key, unit, color]) => {
-        const canvas = $(id);
-        if (!canvas || !canvas.getClientRects().length ||
-            (historyObserver && !historyChartVisible.has(id))) return;
-        let state = historyCharts.get(id);
-        if (!state) {
-            state = {chart: makeChart(id, unit, color), revision: -1};
-            historyCharts.set(id, state);
-        }
-        if (state.revision === historyRevision) return;
-        const {points, labels} = historySnapshot;
-        state.chart.data.labels = labels;
-        state.chart.data.datasets[0].data = points.map(point => point[key] ?? null);
-        state.chart.update("none");
-        state.revision = historyRevision;
-    });
-}
-
-function renderHistoryCharts(points, labels) {
-    historySnapshot = {points, labels};
-    ++historyRevision;
-    refreshHistoryCharts();
-}
-
 function createCharts() {
-    if (typeof IntersectionObserver !== "undefined") {
-        historyObserver = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) historyChartVisible.add(entry.target.id);
-                else historyChartVisible.delete(entry.target.id);
-            });
-            refreshHistoryCharts();
-        }, {rootMargin: "100px 0px"});
-        historyChartSpecs.forEach(([id]) => historyObserver.observe($(id)));
-    }
-    const refresh = () => requestAnimationFrame(refreshHistoryCharts);
-    window.addEventListener("hashchange", refresh);
-    window.addEventListener("plant:layout", refresh);
-    document.addEventListener("visibilitychange", refresh);
-    window.addEventListener("plant:history-loading", () => {
-        renderHistoryCharts([], []);
-    });
+
+    temperatureChart =
+        makeChart(
+            "temperatureChart",
+            "°C",
+            "#b02020"
+        );
+
+
+    humidityChart =
+        makeChart(
+            "humidityChart",
+            "%",
+            "#000080"
+        );
+
+
+    vpdChart =
+        makeChart(
+            "vpdChart",
+            "kPa",
+            "#008000"
+        );
+
+
+    luxChart =
+        makeChart(
+            "luxChart",
+            "Lux",
+            "#a08000"
+        );
+
+
+    uvChart = makeChart("uvChart", "mW/cm²", "#8050b0");
+
+    soilMoisture1Chart =
+        makeChart(
+            "soilMoisture1Chart",
+            "%",
+            "#000080"
+        );
+
+
+    soilMoisture2Chart =
+        makeChart(
+            "soilMoisture2Chart",
+            "%",
+            "#008000"
+        );
 }
 
 
@@ -715,7 +710,140 @@ async function loadHistory() {
             );
 
 
-        renderHistoryCharts(points, labels);
+        temperatureChart
+            .data
+            .labels =
+                labels;
+
+
+        temperatureChart
+            .data
+            .datasets[0]
+            .data =
+                points.map(
+                    function(point) {
+
+                        return (
+                            point.temperature
+                        );
+                    }
+                );
+
+
+        humidityChart
+            .data
+            .labels =
+                labels;
+
+
+        humidityChart
+            .data
+            .datasets[0]
+            .data =
+                points.map(
+                    function(point) {
+
+                        return (
+                            point.humidity
+                        );
+                    }
+                );
+
+
+        vpdChart
+            .data
+            .labels =
+                labels;
+
+
+        vpdChart
+            .data
+            .datasets[0]
+            .data =
+                points.map(
+                    function(point) {
+
+                        return (
+                            point.vpd
+                        );
+                    }
+                );
+
+
+        luxChart
+            .data
+            .labels =
+                labels;
+
+
+        luxChart
+            .data
+            .datasets[0]
+            .data =
+                points.map(
+                    function(point) {
+
+                        return (
+                            point.lux
+                        );
+                    }
+                );
+
+
+        soilMoisture1Chart
+            .data
+            .labels =
+                labels;
+
+        soilMoisture1Chart
+            .data
+            .datasets[0]
+            .data =
+                points.map(
+                    function(point) {
+
+                        return (
+                            point.soil_moisture_1
+                        );
+                    }
+                );
+
+
+        soilMoisture2Chart
+            .data
+            .labels =
+                labels;
+
+        soilMoisture2Chart
+            .data
+            .datasets[0]
+            .data =
+                points.map(
+                    function(point) {
+
+                        return (
+                            point.soil_moisture_2
+                        );
+                    }
+                );
+
+
+        uvChart.data.labels = labels;
+        uvChart.data.datasets[0].data = points.map(point => point.uv_mw_cm2 ?? null);
+        uvChart.update();
+
+        temperatureChart.update();
+
+        humidityChart.update();
+
+        vpdChart.update();
+
+        luxChart.update();
+
+        soilMoisture1Chart.update();
+
+        soilMoisture2Chart.update();
+
 
         window.dispatchEvent(new CustomEvent("plant:history", {detail: {range: requestedRange, points, labels}}));
     } catch (error) {
