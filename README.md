@@ -4,7 +4,7 @@ Web-Dashboard für einen Pflanzenschrank auf einem **Raspberry Pi 4**.
 FastAPI liefert Klima- und Lichtwerte, SQLite speichert die Messhistorie.
 Die Oberfläche verbindet Messwerte, Geräteeinstellungen, Kamera und Zeitraffer.
 
-**Dokumentationsstand: 05.10.2026 · `main`**
+**Dokumentationsstand: 06.10.2026 · `main`**
 
 ## Funktionsstand
 
@@ -14,7 +14,7 @@ Die Oberfläche verbindet Messwerte, Geräteeinstellungen, Kamera und Zeitraffer
 | Klima und Licht | Livewerte, Luft-VPD, Messverläufe, geschätzte PPFD/DLI und Licht-Tagesstatistik | Zielbereiche und Warnungen |
 | Pflanzenlampe | GP8600-Ausgabe 0–10 V, manuelle Dimmung, getrennte Profile und Zeitpläne | Prüfung am realen Aufbau nach Änderungen |
 | Bodenfeuchte | Zwei Topfkonfigurationen, Kalibrierung und relative Prozentberechnung | ADS1115-/SEN0308-Lesetreiber |
-| Bewässerung | Einstellungen, Dosierberechnung, Entscheidungsvorschau und Ereignishistorie | Pumpen-/Tanktreiber und ausführende Automatik |
+| Bewässerung | Einstellungen, Dosierberechnung, Entscheidungsvorschau, Ereignishistorie und WLSW1-Tank-Eingang an GPIO22 | Pumpentreiber und ausführende Automatik |
 | Lüftung | Getrennte Einstellungen und Sollwerte für Zu- und Abluft | Pi-PWM, Drehzahlerfassung und Automatik |
 | Kamera | IMX219-Livestream, Fotos, Galerie und Zeitraffer | — |
 | Oberfläche | Fünf Designs und zwei unabhängig wählbare Layouts | — |
@@ -50,7 +50,7 @@ keine vollständige Neuinstallation.
 
 ```bash
 cd ~/plant-monitor
-/home/pi/.virtualenvs/pimoroni/bin/python -m pip install fastapi uvicorn jinja2 smbus2 Pillow
+/home/pi/.virtualenvs/pimoroni/bin/python -m pip install fastapi uvicorn jinja2 smbus2 Pillow gpiozero lgpio
 /home/pi/.virtualenvs/pimoroni/bin/python -c 'from picamera2 import Picamera2; from sensor import read_sensors; print(read_sensors())'
 ```
 
@@ -500,6 +500,7 @@ PPFD und DLI werden aus Lux berechnet und nicht als eigene Messspalten gespeiche
 | Kamera | `GET /api/camera/status`, `GET /api/camera/stream`, `GET /api/camera/image`, `POST /api/camera/capture` |
 | Fotos | `GET /api/camera/photos`, `GET /api/camera/photos/{filename}`, `GET /api/camera/photos/{filename}/{thumb|preview}`; Liste unterstützt `limit` und `offset` |
 | Zeitraffer | `GET/POST /api/camera/timelapse` |
+| Schwimmerschalter | `GET /api/tank/status` |
 
 Die Entscheidungsvorschau erwartet `pot_id`, `moisture`, `sensor_age_seconds`,
 `tank_ok`, `seconds_since_last` und `used_today_ml`; sie startet keinen Lauf.
@@ -648,3 +649,31 @@ Verbindungsklemmen und weiteres Montagematerial werden bei Bedarf lokal beschaff
 Noch nicht festgelegt. Eine Lizenzdatei wurde bisher nicht ergänzt.
 
 
+
+
+### WLSW1-Schwimmerschalter testen
+
+Der WLSW1 wird zwischen **BCM GPIO22 (physischer Pin 15)** und **GND (Pin 14)** angeschlossen. Der Eingang verwendet einen internen Pull-up. Keine externe Spannung anlegen. Die Software liest nur diesen Eingang; Pumpenausgänge werden dadurch nicht aktiviert.
+
+| Kontakt | Anzeige | Logik |
+|---|---|---|
+| Geschlossen, stabil seit mindestens 300 ms | Wasser vorhanden | GPIO LOW, `tank_ok: true` |
+| Offen / Kabel unterbrochen | Tank leer | GPIO HIGH, `tank_ok: false` |
+| GPIO nicht verfügbar oder Lesung älter als 2 Sekunden | Tankstatus unbekannt | `tank_ok: false` |
+
+Der Schwimmer muss so montiert bzw. umgedreht werden, dass der Kontakt bei ausreichend Wasser geschlossen ist. Ein offener Kontakt kann nicht von einem unterbrochenen Kabel unterschieden werden. Ein erfolgreich lesbarer GPIO bestätigt nicht, dass der Schalter angeschlossen ist. GPIO-Fehler werden nach zehn Sekunden automatisch erneut geprüft.
+
+Abhängigkeiten in der Dienstumgebung installieren und den Dienst neu starten:
+
+```bash
+/home/pi/.virtualenvs/pimoroni/bin/python -m pip install gpiozero lgpio
+sudo systemctl restart plant-monitor
+```
+
+In der Oberfläche unter Bewässerung den Tankzustand beobachten (Aktualisierung ungefähr alle fünf Sekunden). Für einen schnellen Test direkt auf dem Pi:
+
+```bash
+watch -n 1 'curl -s http://127.0.0.1:8000/api/tank/status'
+```
+
+Schwimmer hoch- und herunterbewegen. `tank_state` muss zwischen `ok` und `empty` wechseln; `contact_closed` und `gpio_level` zeigen das rohe Kontaktsignal. Bei `unknown` den Wert `error` prüfen, insbesondere GPIO-Bibliotheken, Zugriffsrechte und eine mögliche anderweitige Belegung von GPIO22.

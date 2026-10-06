@@ -20,7 +20,7 @@ class LampAppTests(unittest.TestCase):
         self.assertTrue(self.ns["load_lamp_config"]()["control_enabled"])
 
         tree = ast.parse((test_configuration.ROOT / "app.py").read_text())
-        wanted = {"lamp_status", "apply_lamp_output", "close_lamp_output", "lamp_worker", "lifespan"}
+        wanted = {"lamp_status", "apply_lamp_output", "close_lamp_output", "lamp_worker", "tank_worker", "lifespan"}
         nodes = [n for n in tree.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and n.name in wanted]
         for node in nodes:
             node.decorator_list = [d for d in node.decorator_list if isinstance(d, ast.Name)]
@@ -29,7 +29,8 @@ class LampAppTests(unittest.TestCase):
         self.ns.update(asyncio=asyncio, asynccontextmanager=asynccontextmanager,
                        suppress=suppress, FastAPI=object, init_db=Mock(),
                        start_camera=Mock(), stop_camera=Mock(),
-                       measurement_worker=idle, timelapse_worker=idle)
+                       measurement_worker=idle, timelapse_worker=idle,
+                       TANK_SWITCH=Mock())
         exec(compile(ast.Module(body=nodes, type_ignores=[]), str(test_configuration.ROOT / "app.py"), "exec"), self.ns)
         async def run():
             async with self.ns["lifespan"](None):
@@ -39,6 +40,8 @@ class LampAppTests(unittest.TestCase):
         bus.write_i2c_block_data.assert_called_with(0x58, 0x02, [0,0])
         self.assertIsNone(controller.lock)
         self.ns["stop_camera"].assert_called_once()
+        self.ns["TANK_SWITCH"].sample.assert_called()
+        self.ns["TANK_SWITCH"].close.assert_called_once()
 
     def test_hardware_failure_keeps_saved_config_and_reports_error(self):
         def unavailable():

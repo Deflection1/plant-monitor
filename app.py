@@ -6,6 +6,7 @@ from functools import wraps
 from configuration import atomic_write_json, next_capture_time, validate_soil_config
 from lamp_profiles import normalize_lamp_config, update_lamp_profile
 from lamp_control import LampController
+from tank_switch import TankSwitch
 from irrigation import default_irrigation_config, validate_irrigation_config, irrigation_status, plan_watering
 from fan_control import default_fan_config, validate_fan_config, fan_status
 import shutil
@@ -356,6 +357,17 @@ def save_lamp_config(config):
 
 LAMP_CONFIG = load_lamp_config()
 LAMP_CONTROLLER = LampController(BASE_DIR / "data" / "gp8600-test.lock")
+TANK_SWITCH = TankSwitch()
+
+
+async def tank_worker(stop):
+    while not stop.is_set():
+        await asyncio.to_thread(TANK_SWITCH.sample)
+        try:
+            await asyncio.wait_for(stop.wait(), timeout=0.1)
+        except asyncio.TimeoutError:
+            pass
+
 
 
 @configuration_locked
@@ -725,6 +737,9 @@ async def lifespan(
 ):
 
     init_db()
+    await asyncio.to_thread(TANK_SWITCH.sample)
+    tank_stop = asyncio.Event()
+    tank_task = asyncio.create_task(tank_worker(tank_stop))
     await asyncio.to_thread(apply_lamp_output)
     lamp_stop = asyncio.Event()
     lamp_task = asyncio.create_task(lamp_worker(lamp_stop))
@@ -754,6 +769,9 @@ async def lifespan(
     try:
         yield
     finally:
+        tank_stop.set()
+        await tank_task
+        await asyncio.to_thread(TANK_SWITCH.close)
         lamp_stop.set()
         try:
             await lamp_task
@@ -982,7 +1000,14 @@ def irrigation_history_read():
 
 @app.get("/api/irrigation/status")
 def irrigation_status_read():
-    return irrigation_status()
+    tank = TANK_SWITCH.status()
+    return {**irrigation_status(), "tank_state": tank["tank_state"],
+            "tank_ok": tank["tank_ok"], "tank_sensor": tank}
+
+
+@app.get("/api/tank/status")
+def tank_status_read():
+    return TANK_SWITCH.status()
 
 
 # =====================================================
@@ -1342,4 +1367,5 @@ def soil_status():
             }
         ]
     }
+
 
