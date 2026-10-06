@@ -418,6 +418,8 @@ function chartOptions(
 
         maintainAspectRatio: false,
 
+        animation: { duration: 800 },
+
         interaction: { mode: "nearest", axis: "x", intersect: false },
 
 
