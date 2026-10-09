@@ -8,6 +8,7 @@ from lamp_profiles import normalize_lamp_config, update_lamp_profile
 from lamp_control import LampController
 from tank_switch import TankSwitch
 from irrigation import default_irrigation_config, validate_irrigation_config, irrigation_status, plan_watering
+from pump_control import PumpController
 from fan_control import default_fan_config, validate_fan_config, fan_status
 import shutil
 import threading
@@ -363,6 +364,7 @@ def save_lamp_config(config):
 LAMP_CONFIG = load_lamp_config()
 LAMP_CONTROLLER = LampController(BASE_DIR / "data" / "gp8600-test.lock")
 TANK_SWITCH = TankSwitch()
+PUMP_CONTROLLER = PumpController(TANK_SWITCH)
 
 
 async def tank_worker(stop):
@@ -747,6 +749,7 @@ async def lifespan(
 
     init_db()
     await asyncio.to_thread(TANK_SWITCH.sample)
+    await asyncio.to_thread(PUMP_CONTROLLER.initialize)
     tank_stop = asyncio.Event()
     tank_task = asyncio.create_task(tank_worker(tank_stop))
     await asyncio.to_thread(apply_lamp_output)
@@ -778,6 +781,7 @@ async def lifespan(
     try:
         yield
     finally:
+        await asyncio.to_thread(PUMP_CONTROLLER.close)
         tank_stop.set()
         await tank_task
         await asyncio.to_thread(TANK_SWITCH.close)
@@ -1024,8 +1028,23 @@ def irrigation_history_read():
 @app.get("/api/irrigation/status")
 def irrigation_status_read():
     tank = TANK_SWITCH.status()
-    return {**irrigation_status(), "tank_state": tank["tank_state"],
+    return {**PUMP_CONTROLLER.status(), "tank_state": tank["tank_state"],
             "tank_ok": tank["tank_ok"], "tank_sensor": tank}
+
+
+@app.post("/api/irrigation/test")
+def irrigation_test(payload: dict = Body(...)):
+    try:
+        return PUMP_CONTROLLER.start(payload.get("pump_id"), payload.get("seconds", 5))
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+
+
+@app.post("/api/irrigation/stop")
+def irrigation_stop():
+    return PUMP_CONTROLLER.stop()
 
 
 @app.get("/api/tank/status")

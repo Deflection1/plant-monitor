@@ -14,16 +14,42 @@ Die Oberfläche verbindet Messwerte, Geräteeinstellungen, Kamera und Zeitraffer
 | Klima und Licht | Livewerte, Luft-VPD, Messverläufe, geschätzte PPFD/DLI und Licht-Tagesstatistik | Zielbereiche und Warnungen |
 | Pflanzenlampe | GP8600-Ausgabe 0–10 V, manuelle Dimmung, getrennte Profile und Zeitpläne | Prüfung am realen Aufbau nach Änderungen |
 | Bodenfeuchte | ADS1115 A0/A1 auf Bus 4, Rohwerte, Spannung, getrennte Kalibrierung und relative Prozentberechnung | Prüfung und Kalibrierung beider SEN0308 am Aufbau |
-| Bewässerung | Einstellungen, Dosierberechnung, Entscheidungsvorschau, Ereignishistorie und WLSW1-Tank-Eingang an GPIO22 | Pumpentreiber und ausführende Automatik |
+| Bewässerung | Einstellungen, Dosierberechnung, Entscheidungsvorschau, WLSW1-Tank-Eingang und manuelle Pumpentests | Ausführende Automatik |
 | Lüftung | Getrennte Einstellungen und Sollwerte für Zu- und Abluft | Pi-PWM, Drehzahlerfassung und Automatik |
 | Kamera | IMX219-Livestream, Fotos, Galerie und Zeitraffer | — |
 | Oberfläche | Fünf Designs und zwei unabhängig wählbare Layouts | — |
 
 **Die aktivierte Lampensteuerung kann reale Hardware ansteuern.**
-Pumpen- und Lüftereinstellungen werden bisher nur gespeichert und ausgewertet;
-sie schalten keine Ausgänge. Die Geräteanimationen sind Symbolvorschauen.
+Pumpen können über die ausdrücklich beschrifteten Testknöpfe real laufen.
+Automatik-Einstellungen und Lüftereinstellungen schalten keine Ausgänge.
+„Animation testen“ bleibt eine reine Symbolvorschau.
 
 ## Inhalt
+
+### Manueller Pumpentest
+
+| MOSFET-Anschluss | Raspberry Pi (physische Pinnummer) |
+| --- | --- |
+| Pumpe 1 TRIG/PWM | Pin 11, BCM GPIO17 |
+| Pumpe 2 TRIG/PWM | Pin 13, BCM GPIO27 |
+| Beide Signal-GND, gemeinsam mit 12-V-Minus | Pin 14, GND |
+
+12 V versorgen nur die Lastanschlüsse der MOSFET-Module, niemals einen Pi-GPIO.
+Die Pumpen bleiben bei Software-Initialisierung aus. Unter **Bewässerung**
+startet „Pumpe 5 Sekunden testen“ einen echten Lauf. „Beide Pumpen stoppen“
+schaltet beide Ausgänge ab. Es läuft höchstens eine Pumpe gleichzeitig.
+Ein eigener Hintergrundthread überwacht alle 100 ms die Testzeit und den
+Schwimmerschalter; leerer oder unbekannter Tank blockiert bzw. beendet den Test.
+Die GPIO-Verfügbarkeit bestätigt keine angeschlossene Pumpe.
+Ein 10-kΩ-Pulldown zwischen jedem TRIG/PWM und GND hält den Eingang auch
+bei freigegebenem GPIO definiert auf LOW, sofern kein solcher Widerstand
+im Modul vorhanden ist. Für den ersten Test Wasser ansaugen und den
+Ausgangsschlauch in einen Auffangbehälter legen.
+
+`POST /api/irrigation/test` akzeptiert `{"pump_id":1,"seconds":5}`
+(Pumpe 1 oder 2, 1–10 Sekunden). `POST /api/irrigation/stop` stoppt beide.
+Tests werden noch nicht als dosierte Bewässerung in der Historie erfasst.
+Die Automatik bleibt eine Entscheidungsvorschau.
 
 - [Betrieb auf dem Raspberry Pi](#betrieb-auf-dem-raspberry-pi)
 - [Oberfläche](#oberfläche)
@@ -650,7 +676,7 @@ Pumpen-/Lüftertests und eine visuelle Browserprüfung werden dadurch nicht erse
 ## Geplante Erweiterungen
 
 - Beide SEN0308 am Aufbau prüfen und je Topf kalibrieren.
-- Pumpen-, MOSFET- und Tankanschlüsse festlegen und reale Treiber implementieren.
+- Bewässerungsautomatik und Mengenprotokollierung an den Pumpentreiber anbinden.
 - Geführte Pumpenkalibrierung: Schlauch befüllen, 60 Sekunden laufen lassen,
   aufgefangene ml eingeben; bisher noch nicht implementiert.
 - Laufzeitgrenze an die benötigten Dosiermengen und zulässige Pumpenlaufzeit anpassen.

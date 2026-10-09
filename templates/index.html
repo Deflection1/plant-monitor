@@ -1076,7 +1076,7 @@
                 <span class="lamp-control-label" id="irrigationPumpName1">Pumpe Topf 1</span>
                 <strong id="pumpState1">Nicht verbunden</strong>
                 <small>PPFL-1 · Topf 1 · letzte Bewässerung: —</small>
-                <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
+                <button type="button" disabled data-pump-test="1">Pumpe 5 Sekunden testen</button>
                 <button type="button" class="pump-preview-button" data-pump-preview="1" aria-describedby="pumpPreviewNote1">Animation testen</button>
                 <small id="pumpPreviewNote1" role="status">Symbolvorschau ohne Pumpenansteuerung</small>
             </article>
@@ -1147,7 +1147,7 @@
                 <span class="lamp-control-label" id="irrigationPumpName2">Pumpe Topf 2</span>
                 <strong id="pumpState2">Nicht verbunden</strong>
                 <small>PPFL-1 · Topf 2 · letzte Bewässerung: —</small>
-                <button type="button" disabled aria-describedby="irrigationUnavailable">Bewässerung starten</button>
+                <button type="button" disabled data-pump-test="2">Pumpe 5 Sekunden testen</button>
                 <button type="button" class="pump-preview-button" data-pump-preview="2" aria-describedby="pumpPreviewNote2">Animation testen</button>
                 <small id="pumpPreviewNote2" role="status">Symbolvorschau ohne Pumpenansteuerung</small>
             </article>
@@ -1175,7 +1175,7 @@
                 <small>WLSW1 noch nicht angebunden. Der Schalter erkennt den Tankzustand, keinen Füllstand in Prozent.</small>
             </article>
         </div>
-        <p class="camera-meta" id="irrigationUnavailable">Ausgabe gesperrt: GPIO-Anbindung, Live-Tankstatus und Pumpentreiber fehlen. Gespeicherte Automatik-Einstellungen starten keine Bewässerung.</p>
+        <button type="button" id="pumpStop">Beide Pumpen stoppen</button><p class="camera-meta" id="pumpTestMessage" role="status" aria-live="polite"></p><p class="camera-meta" id="irrigationUnavailable">Manueller Test: jeweils eine Pumpe für 5 Sekunden, nur mit Wasser im Tank. Automatik-Einstellungen starten keine Bewässerung.</p>
         <details class="lamp-config">
             <summary>Bewässerung einrichten</summary>
             <form id="irrigationForm">
@@ -1625,7 +1625,7 @@
 
 <script src="/static/overview.js?v=partial-sensors-1"></script>
 <script src="/static/tank-status.js?v=1"></script>
-<script src="/static/pump-icons.js?v=2"></script>
+<script src="/static/pump-icons.js?v=pump-test-1"></script>
 <script src="/static/fans.js?v=2"></script>
 <script src="/static/overview-equipment.js?v=lamp-control-1"></script>
 <script src="/static/layout.js?v=layout-choice-1"></script><script src="/static/lamp-visual.js?v=3"></script>
