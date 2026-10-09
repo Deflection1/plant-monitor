@@ -434,6 +434,30 @@ gesetzt sind, bleibt dessen Prozentwert unbekannt. Kalibrierwerte sind
 ADC-Zählwerte, keine Voltwerte. Für vergleichbare Ergebnisse dieselbe
 Einstecktiefe und das spätere Substrat verwenden.
 
+Vorläufige Startkalibrierung aus dem Coco-Test vom 09.10.2026:
+
+| Topf / Kanal | Trockenreferenz (0 %) | Nassreferenz (100 %) |
+|---|---:|---:|
+| Topf 1 / A0 | 17670 | 3143 |
+| Topf 2 / A1 | 18359 | 2892 |
+
+Diese Werte sind die Standardkonfiguration, wenn noch keine gespeicherte
+Bodenfeuchte-Konfiguration vorhanden ist. Bestehende Einstellungen bleiben
+erhalten. Um die Referenzen am laufenden Aufbau ausdrücklich zu übernehmen,
+die vier Felder im Dashboard speichern oder lokal diesen Befehl ausführen
+(setzt auch die Topfnamen auf Topf 1 und Topf 2):
+
+```bash
+curl -sS -X POST http://127.0.0.1:8000/api/soil/config \
+  -H 'Content-Type: application/json' \
+  -d '{"pots":[{"name":"Topf 1","dry_raw":17670,"wet_raw":3143},{"name":"Topf 2","dry_raw":18359,"wet_raw":2892}]}'
+```
+
+Die Nassreferenzen stammen aus der letzten gemeinsamen Messreihe und sind
+vorläufig: Neueinstecken und Andrücken haben im Versuch deutliche
+Änderungen verursacht. Ähnliche Werte zwischen den Sensoren allein belegen
+keine bessere Kalibrierung. Nach endgültigem Einbau erneut prüfen.
+
 Die Referenzen müssen verschieden sein. Angezeigt wird eine relative
 Sensorkalibrierung, kein volumetrischer Wassergehalt.
 

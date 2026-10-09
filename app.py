@@ -228,15 +228,15 @@ def default_soil_config():
                 "id": 1,
                 "name": "Topf 1",
                 "channel": "A0",
-                "dry_raw": None,
-                "wet_raw": None
+                "dry_raw": 17670,
+                "wet_raw": 3143
             },
             {
                 "id": 2,
                 "name": "Topf 2",
                 "channel": "A1",
-                "dry_raw": None,
-                "wet_raw": None
+                "dry_raw": 18359,
+                "wet_raw": 2892
             }
         ]
     }
@@ -249,7 +249,11 @@ def load_soil_config():
         return validate_soil_config(json.loads(SOIL_CONFIG_FILE.read_text()))
     except (OSError, ValueError, TypeError) as error:
         print("Ungültige Bodenfeuchte-Konfiguration:", error)
-        return default_soil_config()
+        config = default_soil_config()
+        for pot in config["pots"]:
+            pot["dry_raw"] = None
+            pot["wet_raw"] = None
+        return config
 
 
 def save_soil_config(config):

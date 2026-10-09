@@ -66,6 +66,18 @@ class ConfigTests(unittest.TestCase):
         self.path = Path(self.temp.name)
         self.ns = load_functions(self.path)
 
+    def test_initial_soil_references_and_percentages(self):
+        pots = self.ns['SOIL_CONFIG']['pots']
+        self.assertEqual([(p['dry_raw'], p['wet_raw']) for p in pots],
+                         [(17670, 3143), (18359, 2892)])
+        convert = self.ns['raw_to_soil_percent']
+        for pot in pots:
+            dry, wet = pot['dry_raw'], pot['wet_raw']
+            self.assertEqual(convert(dry, dry, wet), 0.0)
+            self.assertEqual(convert(wet, dry, wet), 100.0)
+            self.assertEqual(convert((dry + wet) / 2, dry, wet), 50.0)
+
+
     def test_atomic_write_and_replace_failure(self):
         target = self.path / 'config.json'
         atomic_write_json(target, {'value': 1})
