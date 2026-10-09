@@ -4,7 +4,7 @@ Web-Dashboard für einen Pflanzenschrank auf einem **Raspberry Pi 4**.
 FastAPI liefert Klima- und Lichtwerte, SQLite speichert die Messhistorie.
 Die Oberfläche verbindet Messwerte, Geräteeinstellungen, Kamera und Zeitraffer.
 
-**Dokumentationsstand: 06.10.2026 · `main`**
+**Dokumentationsstand: 09.10.2026 · `main`**
 
 ## Funktionsstand
 
@@ -13,7 +13,7 @@ Die Oberfläche verbindet Messwerte, Geräteeinstellungen, Kamera und Zeitraffer
 | Umgebungssensor | SEN0501 V2.0: Temperatur, Luftfeuchte, Lux, Luftdruck und UV | Referenzkalibrierung |
 | Klima und Licht | Livewerte, Luft-VPD, Messverläufe, geschätzte PPFD/DLI und Licht-Tagesstatistik | Zielbereiche und Warnungen |
 | Pflanzenlampe | GP8600-Ausgabe 0–10 V, manuelle Dimmung, getrennte Profile und Zeitpläne | Prüfung am realen Aufbau nach Änderungen |
-| Bodenfeuchte | Zwei Topfkonfigurationen, Kalibrierung und relative Prozentberechnung | ADS1115-/SEN0308-Lesetreiber |
+| Bodenfeuchte | ADS1115 A0/A1 auf Bus 4, Rohwerte, Spannung, getrennte Kalibrierung und relative Prozentberechnung | Prüfung und Kalibrierung beider SEN0308 am Aufbau |
 | Bewässerung | Einstellungen, Dosierberechnung, Entscheidungsvorschau, Ereignishistorie und WLSW1-Tank-Eingang an GPIO22 | Pumpentreiber und ausführende Automatik |
 | Lüftung | Getrennte Einstellungen und Sollwerte für Zu- und Abluft | Pi-PWM, Drehzahlerfassung und Automatik |
 | Kamera | IMX219-Livestream, Fotos, Galerie und Zeitraffer | — |
@@ -371,10 +371,68 @@ auf Null zurückzusetzen. Danach den Dienst wieder starten.
 
 ### Bodenfeuchte
 
-Vorgesehen: **SEN0308 Topf 1 → ADS1115 A0**, **Topf 2 → A1**.
-Topfnamen, getrennte Trocken-/Nassreferenzen und Prozentberechnung sind
-vorbereitet. Der Lesetreiber fehlt; `soil_raw_1` und `soil_raw_2` und die
-abgeleiteten Werte bleiben ohne Messquelle unbekannt.
+**SEN0308 Topf 1 → ADS1115 A0**, **Topf 2 → A1**. `soil_sensor.py`
+liest beide Kanäle einzeln gegen GND: 128 SPS, Messbereich ±4,096 V,
+125 µV pro Rohwertschritt. Die Anwendung verwendet Bus **4**, Adresse
+**0x48** (Aufdruck auf dem Soldered-Modul). Gleichzeitige API-Abfragen
+teilen sich einen für eine Sekunde zwischengespeicherten Messwert.
+Bei ADC-Fehlern bleiben Rohwerte und Prozentwerte `null`; Klimamessungen
+laufen weiter. `/api/soil/status` funktioniert auch ohne Umgebungssensor
+und enthält ADC-Diagnose sowie Spannung pro Topf.
+
+| ADS1115 | Raspberry Pi (physische Pins) |
+|---|---|
+| VCC | 3,3 V von Pin 17 über Verteiler, gemeinsam mit SEN0501 |
+| GND | Pin 20 |
+| SDA | Pin 16 / BCM23 |
+| SCL | Pin 18 / BCM24 |
+| ALERT | Nicht angeschlossen |
+
+Je SEN0308: Rot an dieselben 3,3 V, beide schwarzen Masse-/Schirmleitungen
+an gemeinsame Masse, Gelb an A0 bzw. A1. Beide GND-Anschlüsse des Moduls
+sind verbunden; eine Masseleitung zum Pi reicht. Nur stromlos umstecken.
+
+Separaten Bus aktivieren: In `/boot/firmware/config.txt` (bei älteren
+Systemen `/boot/config.txt`) unter `[all]` zusätzlich eintragen. Die
+bestehenden Bus-1-/Bus-3-Einträge beibehalten; Bus 4 muss frei sein.
+
+```ini
+dtoverlay=i2c-gpio,bus=4,i2c_gpio_sda=23,i2c_gpio_scl=24
+```
+
+Danach neu starten und prüfen:
+
+```bash
+sudo apt install i2c-tools
+i2cdetect -l
+i2cdetect -y 4 0x48 0x48
+```
+
+Erwartet wird `48`. Fehlende Adresse zuerst anhand Versorgung und
+Verdrahtung prüfen. Der bestehende Python-Bedarf `smbus2` reicht.
+Test über den laufenden Dienst:
+
+```bash
+curl -s http://127.0.0.1:8000/api/soil/status | python3 -m json.tool
+```
+
+Alternativ unabhängig vom Dienst testen; währenddessen den Dienst stoppen,
+damit zwei Prozesse nicht gleichzeitig die ADC-Kanäle umschalten:
+
+```bash
+sudo systemctl stop plant-monitor
+/home/pi/.virtualenvs/pimoroni/bin/python soil_sensor.py --samples 5
+sudo systemctl start plant-monitor
+```
+
+Ein antwortender ADC beweist nicht, dass die Sensoren angeschlossen oder
+unbeschädigt sind: Offene Analogeingänge können ebenfalls Zahlen liefern.
+Beide Sensoren einzeln in trockenem und feuchtem Substrat prüfen.
+In der Bodenfeuchte-Ansicht die stabilen **Rohwerte** als Trocken- und
+Nassreferenz für den jeweiligen Topf speichern. Bis beide Referenzen
+gesetzt sind, bleibt dessen Prozentwert unbekannt. Kalibrierwerte sind
+ADC-Zählwerte, keine Voltwerte. Für vergleichbare Ergebnisse dieselbe
+Einstecktiefe und das spätere Substrat verwenden.
 
 Die Referenzen müssen verschieden sein. Angezeigt wird eine relative
 Sensorkalibrierung, kein volumetrischer Wassergehalt.
@@ -560,7 +618,7 @@ Pumpen-/Lüftertests und eine visuelle Browserprüfung werden dadurch nicht erse
 
 ## Geplante Erweiterungen
 
-- ADS1115 und beide SEN0308 auslesen und je Topf kalibrieren.
+- Beide SEN0308 am Aufbau prüfen und je Topf kalibrieren.
 - Pumpen-, MOSFET- und Tankanschlüsse festlegen und reale Treiber implementieren.
 - Geführte Pumpenkalibrierung: Schlauch befüllen, 60 Sekunden laufen lassen,
   aufgefangene ml eingeben; bisher noch nicht implementiert.
@@ -677,3 +735,4 @@ watch -n 1 'curl -s http://127.0.0.1:8000/api/tank/status'
 ```
 
 Schwimmer hoch- und herunterbewegen. `tank_state` muss zwischen `ok` und `empty` wechseln; `contact_closed` und `gpio_level` zeigen das rohe Kontaktsignal. Bei `unknown` den Wert `error` prüfen, insbesondere GPIO-Bibliotheken, Zugriffsrechte und eine mögliche anderweitige Belegung von GPIO22.
+

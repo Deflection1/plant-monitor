@@ -34,6 +34,11 @@ class FakeBus:
 
 
 class SensorTests(unittest.TestCase):
+    def setUp(self):
+        self.soil_patch = patch.object(sensor, "read_soil", return_value={})
+        self.soil_patch.start()
+        self.addCleanup(self.soil_patch.stop)
+
     def test_uv_zero_missing_and_saturation(self):
         self.assertEqual(sensor.uv_irradiance(0), 0.0)
         self.assertIsNone(sensor.uv_irradiance(None))
@@ -43,6 +48,18 @@ class SensorTests(unittest.TestCase):
         for invalid in (-1, 65536, float('nan'), True):
             with self.assertRaises(ValueError):
                 sensor.uv_irradiance(invalid)
+
+    def test_adc_failure_preserves_climate_and_missing_soil(self):
+        fake = types.SimpleNamespace(SMBus=FakeBus)
+        with patch.dict(sys.modules, {"smbus2": fake}), \
+                patch.object(sensor, "get_cpu_temperature", return_value=40), \
+                patch.object(sensor, "read_soil", return_value={
+                    "soil_raw_1": None, "soil_raw_2": None,
+                    "soil_adc_connected": False, "soil_adc_error": "offline"}):
+            result = sensor.read_sensors()
+        self.assertEqual(result['temperature'], 25.0)
+        self.assertIsNone(result['soil_raw_1'])
+        self.assertEqual(result['soil_adc_error'], 'offline')
 
     def test_uv_failure_preserves_climate_readings(self):
         fake = types.SimpleNamespace(SMBus=FakeBus)

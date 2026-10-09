@@ -44,6 +44,7 @@ from fastapi.staticfiles import (
 
 
 from sensor import read_sensors
+from soil_sensor import read_soil
 from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
@@ -1318,10 +1319,13 @@ def soil_config_update(payload: dict = Body(...)):
 def soil_status():
 
     data = add_soil_values(
-        read_available_sensors()
+        read_soil()
     )
 
     return {
+        "adc": {"connected": data["soil_adc_connected"],
+                "bus": data["soil_adc_bus"], "address": data["soil_adc_address"],
+                "error": data["soil_adc_error"]},
         "connected":
             (
                 data.get(
@@ -1339,6 +1343,7 @@ def soil_status():
                 **SOIL_CONFIG[
                     "pots"
                 ][0],
+                "voltage": data.get("soil_voltage_1"),
 
                 "raw":
                     data.get(
@@ -1354,6 +1359,7 @@ def soil_status():
                 **SOIL_CONFIG[
                     "pots"
                 ][1],
+                "voltage": data.get("soil_voltage_2"),
 
                 "raw":
                     data.get(
@@ -1367,5 +1373,6 @@ def soil_status():
             }
         ]
     }
+
 
 

@@ -7,6 +7,7 @@ result is estimated equivalent UVA irradiance, not a calibrated UV index.
 import math
 import subprocess
 import threading
+from soil_sensor import read_soil
 
 SENSOR_BUS = 3
 SENSOR_ADDRESS = 0x22
@@ -92,4 +93,6 @@ def read_sensors():
         "uv_mw_cm2": uv_irradiance(uv_raw),
         "uv_saturated": uv_raw == 65535,
         "sensor_model": "SEN0501 V2.0",
+        **read_soil(),
     }
+
