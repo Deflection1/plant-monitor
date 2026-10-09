@@ -102,6 +102,42 @@ class SoilTests(unittest.TestCase):
         self.assertIsNone(result['pots'][0]['moisture_percent'])
         self.assertEqual(result['pots'][1]['moisture_percent'], 50.0)
 
+    def test_current_survives_climate_failure_and_recovers(self):
+        tree = ast.parse(Path('app.py').read_text())
+        names = {'current', 'add_soil_values', 'raw_to_soil_percent', 'add_light_values'}
+        functions = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in names]
+        for node in functions:
+            node.decorator_list = []
+        class HTTPException(Exception):
+            def __init__(self, status_code, detail):
+                self.status_code, self.detail = status_code, detail
+        import math
+        climate = Mock(side_effect=HTTPException(503, 'climate unavailable'))
+        ns = {'read_soil': self.reader(Bus()).read, 'math': math,
+              'HTTPException': HTTPException, 'read_available_sensors': climate,
+              'lux_to_ppfd': lambda lux: lux / 50, 'CENTER_FACTOR': 1,
+              'LIGHT_ON_LUX': 100,
+              'SOIL_CONFIG': {'pots': [{'dry_raw': 20000, 'wet_raw': 0},
+                                       {'dry_raw': 16000, 'wet_raw': 0}]}}
+        exec(compile(ast.Module(body=functions, type_ignores=[]), 'app.py', 'exec'), ns)
+        data = ns['current']()
+        self.assertFalse(data['environment_available'])
+        self.assertEqual(data['soil_moisture_1'], 20.0)
+        self.assertEqual(data['soil_moisture_2'], 50.0)
+        for key in ('temperature', 'humidity', 'lux', 'ppfd_sensor', 'ppfd_center', 'light_on'):
+            self.assertIsNone(data[key])
+        climate.side_effect = None
+        climate.return_value = {'temperature': 25, 'lux': 0, 'soil_raw_1': 16000}
+        data = ns['current']()
+        self.assertTrue(data['environment_available'])
+        self.assertIsNone(data['environment_error'])
+        self.assertEqual(data['lux'], 0)
+        self.assertEqual(data['ppfd_center'], 0)
+        self.assertFalse(data['light_on'])
+        climate.side_effect = HTTPException(400, 'other error')
+        with self.assertRaises(HTTPException):
+            ns['current']()
+
 
 if __name__ == '__main__':
     unittest.main()

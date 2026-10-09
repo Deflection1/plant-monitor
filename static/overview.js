@@ -51,7 +51,9 @@
         el('ovUv').textContent = valid(data.uv_mw_cm2)
             ? data.uv_mw_cm2.toLocaleString('de-CH', {minimumFractionDigits: 4, maximumFractionDigits: 4})
             : data.uv_saturated ? 'Bereich überschritten' : '—';
-        el('overviewFreshness').textContent = 'Verbunden · letzte Messung ' + new Date().toLocaleTimeString('de-CH');
+        el('overviewFreshness').textContent = (data.environment_available === false
+            ? 'Umgebungssensor nicht erreichbar · verfügbare Werte aktualisiert '
+            : 'Verbunden · letzte Messung ') + new Date().toLocaleTimeString('de-CH');
         for (const i of [1, 2]) {
             const moisture = data['soil_moisture_' + i];
             el('ovSoil' + i).textContent = valueText(moisture) + (valid(moisture) ? ' %' : '');
@@ -70,3 +72,4 @@
         el('ovProgress' + (index + 1)).setAttribute('aria-label', 'Bodenfeuchtigkeit ' + pot.name);
     }));
 })();
+

@@ -160,9 +160,7 @@ async function loadCurrent() {
 
 
         $("lux").textContent =
-            Math.round(
-                data.lux || 0
-            );
+            number(data.lux, 0);
 
 
         $("uvIntensity").textContent = data.uv_saturated
@@ -245,7 +243,13 @@ async function loadCurrent() {
 
         // LICHT AN / AUS
 
-        if (data.light_on) {
+        if (data.light_on === null || data.light_on === undefined) {
+            $("lightStatus").textContent = "Lichtmessung nicht verfügbar";
+            $("lightText").textContent = "--";
+            document.querySelectorAll(".js-light-state-icon").forEach(icon => {
+                icon.dataset.state = "unknown";
+            });
+        } else if (data.light_on) {
 
             $("lightStatus").textContent =
                 "Beleuchtung aktiv";
@@ -276,11 +280,7 @@ async function loadCurrent() {
 
 
         $("lightValue").textContent =
-            Math.round(
-                data.lux || 0
-            )
-            +
-            " Lux";
+            number(data.lux, 0) + " Lux";
 
 
         // KLIMA
@@ -312,7 +312,9 @@ async function loadCurrent() {
             '<span class="status-dot"></span>'
 
             +
-            '<span>Online</span>';
+            (data.environment_available === false
+                ? '<span>Umgebungssensor nicht erreichbar</span>'
+                : '<span>Online</span>');
 
 
     } catch (error) {
@@ -2114,4 +2116,5 @@ function setupIrrigation() {
     retry.addEventListener("click", load);
     load();
 }
+
 

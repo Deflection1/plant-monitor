@@ -630,6 +630,10 @@ async def timelapse_worker():
 
 def add_light_values(data):
 
+    if data.get("lux") is None:
+        data.update(ppfd_sensor=None, ppfd_center=None, light_on=None)
+        return data
+
     lux = float(
         data.get(
             "lux",
@@ -868,7 +872,21 @@ def read_available_sensors():
 )
 def current():
 
-    data = read_available_sensors()
+    try:
+        data = read_available_sensors()
+        data["environment_available"] = True
+        data["environment_error"] = None
+    except HTTPException as error:
+        if error.status_code != 503:
+            raise
+        # Soil ADC is independent of the climate sensor. Do not turn missing
+        # light measurements into zero lux or report the lamp as off.
+        data = {key: None for key in (
+            "temperature", "humidity", "vpd", "lux", "pressure_hpa",
+            "uv_raw", "uv_mw_cm2", "cpu_temperature")}
+        data.update(read_soil())
+        data.update(environment_available=False, environment_error=error.detail,
+                    sensor_model="SEN0501 V2.0", uv_saturated=False)
 
     data = add_soil_values(
         data

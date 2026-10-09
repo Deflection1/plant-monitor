@@ -380,6 +380,13 @@ Bei ADC-Fehlern bleiben Rohwerte und Prozentwerte `null`; Klimamessungen
 laufen weiter. `/api/soil/status` funktioniert auch ohne Umgebungssensor
 und enthält ADC-Diagnose sowie Spannung pro Topf.
 
+Auch `/api/current` liefert bei SEN0501-Ausfall die verfügbaren Bodenwerte.
+`environment_available: false` und `environment_error` kennzeichnen die
+Störung; Klima, Lux, PPFD und Lichtzustand bleiben dann `null`. Das Dashboard
+zeigt die Bodenfeuchte weiter an und meldet die Umgebungssensor-Störung.
+Eine ausgefallene Luxmessung wird nicht als 0 Lux oder ausgeschaltete Lampe
+interpretiert. Gespeicherte Klimamessungen erfordern weiterhin den SEN0501.
+
 | ADS1115 | Raspberry Pi (physische Pins) |
 |---|---|
 | VCC | 3,3 V von Pin 17 über Verteiler, gemeinsam mit SEN0501 |
