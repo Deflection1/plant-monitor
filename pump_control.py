@@ -11,7 +11,8 @@ def open_output(pin):
 
 
 class PumpController:
-    def __init__(self, tank, factory=open_output, clock=time.monotonic):
+    def __init__(self, tank, factory=open_output, clock=time.monotonic, require_tank=True):
+        self.require_tank = require_tank
         self.tank = tank
         self.factory = factory
         self.clock = clock
@@ -50,9 +51,10 @@ class PumpController:
                 raise RuntimeError("Pumpenausgänge nicht verfügbar")
             if self.active is not None:
                 raise RuntimeError("Eine Pumpe läuft bereits")
-            self.tank.sample()
-            if not self.tank.status()["tank_ok"]:
-                raise RuntimeError("Tank leer oder Tankstatus unbekannt")
+            if self.require_tank:
+                self.tank.sample()
+                if not self.tank.status()["tank_ok"]:
+                    raise RuntimeError("Tank leer oder Tankstatus unbekannt")
             self.active = id
             self.deadline = self.clock() + seconds
             try:
@@ -79,8 +81,9 @@ class PumpController:
         with self.lock:
             if self.active is None:
                 return
-            self.tank.sample()
-            if not self.tank.status()["tank_ok"]:
+            if self.require_tank:
+                self.tank.sample()
+            if self.require_tank and not self.tank.status()["tank_ok"]:
                 self.stop("Test gestoppt: Tank leer oder unbekannt")
             elif self.clock() >= self.deadline:
                 self.stop("Pumpentest abgeschlossen")
@@ -99,6 +102,7 @@ class PumpController:
             ready = len(self.outputs) == 2 and not self.closed and not self.error
             return {"hardware_connected": ready, "output_available": ready,
                     "mode": "manual_test", "active_pump": self.active,
+                    "test_requires_tank": self.require_tank,
                     "message": self.message, "error": self.error,
                     "pumps": [{"id": id, "gpio_bcm": pin,
                                "state": "running" if self.active == id else

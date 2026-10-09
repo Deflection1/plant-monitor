@@ -38,8 +38,11 @@ Automatik-Einstellungen und Lüftereinstellungen schalten keine Ausgänge.
 Die Pumpen bleiben bei Software-Initialisierung aus. Unter **Bewässerung**
 startet „Pumpe 5 Sekunden testen“ einen echten Lauf. „Beide Pumpen stoppen“
 schaltet beide Ausgänge ab. Es läuft höchstens eine Pumpe gleichzeitig.
-Ein eigener Hintergrundthread überwacht alle 100 ms die Testzeit und den
-Schwimmerschalter; leerer oder unbekannter Tank blockiert bzw. beendet den Test.
+Ein eigener Hintergrundthread überwacht alle 100 ms die Testzeit.
+Die Tankprüfung ist für manuelle Tests vorläufig deaktiviert; der WLSW1
+bleibt als Statusanzeige aktiv. Mit der Service-Umgebungsvariable
+`PUMP_TEST_REQUIRE_TANK=1` und einem Neustart wird die Tankprüfung wieder
+aktiviert: leerer oder unbekannter Tank blockiert bzw. beendet dann den Test.
 Die GPIO-Verfügbarkeit bestätigt keine angeschlossene Pumpe.
 Ein 10-kΩ-Pulldown zwischen jedem TRIG/PWM und GND hält den Eingang auch
 bei freigegebenem GPIO definiert auf LOW, sofern kein solcher Widerstand

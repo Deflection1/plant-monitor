@@ -24,7 +24,7 @@
         const connected = status?.hardware_connected === true;
         const available = connected && status?.output_available === true;
         document.querySelectorAll("[data-pump-test]").forEach(button => {
-            button.disabled = !available || !status?.tank_ok || status?.active_pump != null;
+            button.disabled = !available || (status?.test_requires_tank !== false && !status?.tank_ok) || status?.active_pump != null;
         });
         document.getElementById("pumpTestMessage").textContent =
             status ? (status.error || status.message) : "Pumpenstatus nicht erreichbar";

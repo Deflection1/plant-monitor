@@ -44,6 +44,23 @@ class PumpTests(unittest.TestCase):
         self.tank.ok = False
         self.controller.check()
         self.assertFalse(self.controller.outputs[1].value)
+    def test_tank_bypass_keeps_time_limit_and_serialization(self):
+        self.controller.close()
+        self.controller = PumpController(self.tank, Output, lambda: self.now,
+                                         require_tank=False)
+        self.controller.initialize()
+        self.tank.ok = False
+        def fail(): raise RuntimeError("Sensor absent")
+        self.tank.sample = fail
+        self.controller.start(1, 5)
+        self.controller.check()
+        self.assertTrue(self.controller.outputs[1].value)
+        self.assertFalse(self.controller.status()["test_requires_tank"])
+        with self.assertRaises(RuntimeError): self.controller.start(2)
+        self.now = 5
+        self.controller.check()
+        self.assertFalse(self.controller.outputs[1].value)
+
     def test_validation(self):
         for id, seconds in [(True, 5), (3, 5), (1, 0), (1, 11), (1, float("nan"))]:
             with self.assertRaises(ValueError): self.controller.start(id, seconds)

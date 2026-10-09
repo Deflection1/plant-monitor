@@ -10,6 +10,7 @@ from tank_switch import TankSwitch
 from irrigation import default_irrigation_config, validate_irrigation_config, irrigation_status, plan_watering
 from pump_control import PumpController
 from fan_control import default_fan_config, validate_fan_config, fan_status
+import os
 import shutil
 import threading
 from photo_archive import photo_variant
@@ -364,7 +365,9 @@ def save_lamp_config(config):
 LAMP_CONFIG = load_lamp_config()
 LAMP_CONTROLLER = LampController(BASE_DIR / "data" / "gp8600-test.lock")
 TANK_SWITCH = TankSwitch()
-PUMP_CONTROLLER = PumpController(TANK_SWITCH)
+PUMP_CONTROLLER = PumpController(
+    TANK_SWITCH, require_tank=os.getenv("PUMP_TEST_REQUIRE_TANK", "0") != "0"
+)
 
 
 async def tank_worker(stop):
